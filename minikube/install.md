@@ -1,6 +1,5 @@
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://yq.aliyun.com/articles/221687
 
-![](https://github.com/kubernetes/minikube/raw/master/logo/logo.png)
 
 为了方便大家开发和体验 Kubernetes，社区提供了可以在本地部署的 [Minikube](https://github.com/kubernetes/minikube)。由于网络访问原因，很多朋友无法使用 minikube 进行实验。为此我们提供了一个修改版的 Minikube，可以从阿里云的镜像地址来获取所需 Docker 镜像和配置。
 
