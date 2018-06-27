@@ -1,5 +1,5 @@
-###RKE安装kubernetes集群
-###准备工作
+### RKE安装kubernetes集群
+### 准备工作
 * 1,将普通用户加入到Docker组
 ```
 sudo usermod -aG docker catty
@@ -16,7 +16,7 @@ ssh-copy-id <节点用户名>@<节点IP>
 ```
 ssh 192.168.3.162
 ```
-###安装步骤
+### 安装步骤
 * 1,从github rke的仓库中下载rke文件
 * 2,在rke同级文件夹下创建cluster.yml
 ```
