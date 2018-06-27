@@ -1,5 +1,5 @@
-`helm init --service-account tiller --tiller-image rancher/tiller:v2.8.2 --skip-refresh`
-`
+```helm init --service-account tiller --tiller-image rancher/tiller:v2.8.2 --skip-refresh```
+```
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -17,4 +17,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: tiller
-    namespace: kube-system`
+    namespace: kube-system```
