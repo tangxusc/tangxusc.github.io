@@ -6,7 +6,9 @@ sudo usermod -aG docker catty
 sudo reboot
 ```
 * 2,关闭防火墙
-```sudo ufw disable```
+```
+sudo ufw disable
+```
 * 3,建立ssh单向通道
 ```
 ssh-keygen  #三次回车，生成ssh公钥和私钥文件
