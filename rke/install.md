@@ -30,6 +30,9 @@ nodes:
 #    flannel_iface: enp3s0
 ```
 * 3,授予执行权限
-```chmod 777 rke```
+```
+chmod 777 rke
+```
 * 4,执行安装
-```./rke up --config cluster.yml
+```
+./rke up --config cluster.yml
