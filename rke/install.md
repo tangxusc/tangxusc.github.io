@@ -38,3 +38,5 @@ chmod 777 rke
 * 4,执行安装
 ```
 ./rke up --config cluster.yml
+### 已知的问题
+* 在单节点下(未测试多节点),k8s POD中的容器无法ping通dns,无法访问外部网络,不知道是何原因.
