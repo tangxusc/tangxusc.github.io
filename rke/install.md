@@ -19,10 +19,12 @@ apt-get install openssh-server
 ```
 ssh-keygen  #三次回车，生成ssh公钥和私钥文件
 ssh-copy-id <节点用户名>@<节点IP>
+例如: ssh-copy-id demo@1.2.3.4
 ```
 * 4,验证ssh
 ```
 ssh 192.168.3.162
+exit
 ```
 * 5,禁用selinux(CentOS7)
 ```
@@ -42,8 +44,8 @@ https://github.com/rancher/rke/releases/
 * 2,在rke同级文件夹下创建cluster.yml
 ```
 nodes:
-  - address: 10.6.73.55
-    user: tangxu
+  - address: 节点IP(例如:1.2.3.4)
+    user: 节点用户名(例如:demo)
     role: [controlplane,worker,etcd]
 #network:
 #  plugin: flannel
