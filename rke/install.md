@@ -2,8 +2,7 @@
 ### 准备工作
 * 1,将普通用户加入到Docker组
 ```
-sudo usermod -aG docker catty
-sudo reboot
+sudo usermod -aG docker 用户名
 ```
 * 2,关闭防火墙
 ```
