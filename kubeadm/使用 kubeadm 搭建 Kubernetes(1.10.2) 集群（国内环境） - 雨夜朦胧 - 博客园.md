@@ -110,6 +110,11 @@ docker pull reg.qiniu.com/k8s/k8s-dns-dnsmasq-nanny-amd64:1.14.10
 docker tag reg.qiniu.com/k8s/k8s-dns-sidecar-amd64:1.14.10 k8s.gcr.io/k8s-dns-sidecar-amd64:1.14.10
 docker tag reg.qiniu.com/k8s/k8s-dns-kube-dns-amd64:1.14.10 k8s.gcr.io/k8s-dns-kube-dns-amd64:1.14.10
 docker tag reg.qiniu.com/k8s/k8s-dns-dnsmasq-nanny-amd64:1.14.10 k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64:1.14.10
+
+## 如果使用coreDns 那么则需要以下镜像
+docker pull coredns/coredns:1.1.3
+docker tag coredns/coredns:1.1.3 k8s.gcr.io/coredns:1.1.3
+
 ```
 
 > 据说 kubeadm 可以自定义镜像 Registry，但我并没有实验成功。
