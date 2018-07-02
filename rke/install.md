@@ -60,5 +60,7 @@ chmod 777 rke
 ```
 ./rke up --config cluster.yml
 ```
+### 参照
+* [rke] (https://rancher.com/docs/rke/v0.1.x/en/installation/os/)
 ### 已知的问题
 * 在单节点下(未测试多节点),k8s POD中的容器无法ping通dns,无法访问外部网络,不知道是何原因.
