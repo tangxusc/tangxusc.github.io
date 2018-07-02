@@ -57,6 +57,7 @@ Kubunetes 建议使用老版本的`docker.io`，如果需要使用最新版的`d
 *   kubelet: 在群集中的所有计算机上运行的组件, 并用来执行如启动 pods 和 containers 等操作。
 *   kubectl: 用于操作运行中的集群的命令行工具。
 
+
 ```
 sudo apt-get update && sudo apt-get install -y apt-transport-https
 curl -s http://packages.faasx.com/google/apt/doc/apt-key.gpg | sudo apt-key add -
@@ -64,7 +65,17 @@ sudo cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
 deb http://mirrors.ustc.edu.cn/kubernetes/apt/ kubernetes-xenial main
 EOF
 sudo apt-get update
-sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-get install -y kubelet=1.10.2-00 kubeadm kubectl
+```
+* 注意:我们安装kubectl一定要注意版本问题,如果不知道版本可以使用apt搜索
+```
+apt-cache madison <软件名称>
+apt-get install <软件名称>=<软件版本>
+```
+例如:
+```
+apt-cache madison kubelet
+apt-get install kubelet=1.10.2-00
 ```
 
 > apt-key 下载地址使用了国内镜像，官方地址为：[https://packages.cloud.google.com/apt/doc/apt-key.gpg](https://packages.cloud.google.com/apt/doc/apt-key.gpg)。
