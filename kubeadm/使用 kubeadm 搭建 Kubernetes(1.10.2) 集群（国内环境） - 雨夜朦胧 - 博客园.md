@@ -213,6 +213,9 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
+##### 注意事项
+* 请注意:在此时请使用 `kubectl get all --all-namespaces`来关注各容器运行情况,默认情况下应该除了DNS容器,其他均会到running状态,如果未能在此状态,请检查pod运行状态
+* 错误情况1: pod一直未pedding状态(或者block状态),使用`kubectl describe pod名字` 查看后发现 `pod with UID "xxx"  specified privileged container, but is disallowed`,请依次检查`/etc/systemd/system/kubelet.service.d/10-kubeadm.conf`中`ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_KUBEADM_ARGS $KUBELET_EXTRA_ARGS --allow_privileged` 这命令中是否加入了--allow_privileged 和 `/etc/kubernetes/manifests/kube-apiserver.yaml` apiServer是否启用了 `--allow-privileged=true`
 
 kubeadm init 输出的 token 用于 master 和加入节点间的身份认证，token 是机密的，需要保证它的安全，因为拥有此标记的人都可以随意向集群中添加节点。你也可以使用`kubeadm`命令列出，创建，删除 Token，有关详细信息, 请参阅[官方引用文档](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-token)。
 
