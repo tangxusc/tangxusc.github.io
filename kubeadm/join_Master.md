@@ -11,5 +11,5 @@ openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outfor
 ```
 3. 节点加入集群
 ```
-kubeadm join --token 36iajs.t016zpxbyqdmivcq --discovery-token-ca-cert-hash sha256:0fd95a9bc67a7bf0ef42da968a0d55d92e52898ec37c971bd77ee501d845b538  <节点IP>:6443 --skip-preflight-checks
+kubeadm join <节点IP>:6443 --token 36iajs.t016zpxbyqdmivcq --discovery-token-ca-cert-hash sha256:19246ce11ba3fc633fe0b21f2f8aaaebd7df9103ae47138dc0dd615f61a32d99
 ```
