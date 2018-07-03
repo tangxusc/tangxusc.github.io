@@ -255,6 +255,18 @@ kubectl apply -f <add-on.yaml>
 在本文中，我使用的是 **Calico** 网络，安装如下：
 
 ```
+#下载镜像
+docker pull calico/typha:v0.7.4
+docker pull calico/node:v3.1.3
+docker pull calico/cni:v3.1.3
+#tag转换
+docker tag calico/typha:v0.7.4 quay.io/calico/typha:v0.7.4
+docker tag calico/node:v3.1.3 quay.io/calico/node:v3.1.3
+docker tag calico/cni:v3.1.3 quay.io/calico/cni:v3.1.3
+#创建
+kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
+kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
+
 # 使用国内镜像
 kubectl apply -f http://mirror.faasx.com/kubernetes/installation/hosted/kubeadm/1.7/calico.yaml
 ```
