@@ -158,9 +158,3 @@ BASE 是 Basically Available（基本可用）、Soft state（软状态）和 Ev
 最终一致性强调的是所有的数据副本，在经过一段时间的同步之后，最终都能够达到一个一致的状态。因此，最终一致性的本质是需要系统保证最终数据能够达到一致，而不需要实时保证系统数据的强一致性。
 
 总的来说，BASE 理论面向的是大型高可用可扩展的分布式系统，和传统的事物 ACID 特性是相反的，**它完全不同于 ACID 的强一致性模型，而是通过牺牲强一致性来获得可用性，并允许数据在一段时间内是不一致的，但最终达到一致状态**。但同时，在实际的分布式场景中，不同业务单元和组件对数据一致性的要求是不同的，因此在具体的分布式系统架构设计过程中，ACID 特性和 BASE 理论往往又会结合在一起。
-
-分类: [多线程](http://www.cnblogs.com/szlbm/category/830567.html) [好文要顶](javascript:void(0);) [关注我](javascript:void(0);) [收藏该文](javascript:void(0);) [![](https://common.cnblogs.com/images/icon_weibo_24.png)](javascript:void(0); "分享至新浪微博") [![](https://common.cnblogs.com/images/wechat.png)](javascript:void(0); "分享至微信") [![](https://pic.cnblogs.com/face/930062/20161014161916.png)](http://home.cnblogs.com/u/szlbm/) [IT· 达人](http://home.cnblogs.com/u/szlbm/)
-[关注 - 0](http://home.cnblogs.com/u/szlbm/followees)
-[粉丝 - 115](http://home.cnblogs.com/u/szlbm/followers) [+ 加关注](javascript:void(0);) 7 0 <script type="text/javascript">currentDiggType = 0;</script> [«](http://www.cnblogs.com/szlbm/p/5588532.html) 上一篇：[Java 多线程 21：多线程下的其他组件之 CyclicBarrier、Callable、Future 和 FutureTask](http://www.cnblogs.com/szlbm/p/5588532.html "发布于2016-06-15 18:24")
-[»](http://www.cnblogs.com/szlbm/p/5588545.html) 下一篇：[NoSQL：从关系型数据库到非关系型数据库](http://www.cnblogs.com/szlbm/p/5588545.html "发布于2016-06-15 18:28")
-posted @ 2016-06-15 18:27 [IT· 达人](http://www.cnblogs.com/szlbm/) 阅读 (6064) 评论 (0) [编辑](https://i.cnblogs.com/EditPosts.aspx?postid=5588543) [收藏](#)
