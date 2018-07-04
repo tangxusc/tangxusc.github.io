@@ -15,7 +15,6 @@
     *   [(4/4) 加入其他节点](#加入其他节点)
     *   [(可选) 在非主节点上管理集群](#可选在非主节点上管理集群)
     *   [(可选) 映射 API 服务到本地](#可选映射api服务到本地)
-    *   [(可选) 部署一个微服务](#可选部署一个微服务)
 4.  [卸载集群](#卸载集群)
 
 ## 目标
@@ -39,7 +38,7 @@
 ```
 curl https://releases.rancher.com/install-docker/17.03.sh | sh
 ```
-* 参照:(RKE安装docker)[https://rancher.com/docs/rke/v0.1.x/en/installation/os/]
+* 参照:[RKE安装docker](https://rancher.com/docs/rke/v0.1.x/en/installation/os/)
 
 #### 禁用 swap 文件
 
