@@ -1,7 +1,5 @@
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://segmentfault.com/a/1190000008361945
 
-转载请注明出处，原文链接 [http://tailnode.tk/2017/01/%E...](http://tailnode.tk/2017/01/%E4%BA%86%E8%A7%A3etcd/)
-
 ## 说明
 
 这是一篇非常入门的文章，让你大概了解一下 etcd。写这篇文章时使用 etcd 的版本是 3.1.0。
