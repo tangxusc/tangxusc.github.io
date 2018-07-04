@@ -77,6 +77,7 @@ apt-get install kubelet=1.10.2-00
 
 > apt-key 下载地址使用了国内镜像，官方地址为：[https://packages.cloud.google.com/apt/doc/apt-key.gpg](https://packages.cloud.google.com/apt/doc/apt-key.gpg)。
 > apt 安装包地址使用了中科大的镜像，官方地址为：[http://apt.kubernetes.io/](http://apt.kubernetes.io/)。
+> 对于centos用户可以使用[阿里云的源](https://mirrors.aliyun.com/kubernetes/)
 
 ### (2/4) 初始化 master 节点
 
