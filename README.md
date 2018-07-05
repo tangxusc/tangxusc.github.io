@@ -1,13 +1,14 @@
-# kubernetes-test
+# blog
 
 #### 项目介绍
-该项目是我自己在kubernetes下做的一些实践,文件夹以每个组件的名称命名
+该项目是我自己在工作中遇到的问题,做的一些实践,文件夹以每个组件的名称命名
 
 
-#### 安装组件
+#### kubernetes安装组件
 
 1. minikube
 2. rke
+3. kubeadm
 
 #### API网关
 
