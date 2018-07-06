@@ -16,18 +16,18 @@
 
 #### 3. 解决方案
 
-> 状态模式：允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。<br/> 
-> 在很多情况下，一个对象的行为取决于一个或多个动态变化的属性，这样的属性叫做状态，这样的对象叫做有状态的 (stateful) 对象，这样的对象状态是从事先定义好的一系列值中取出的。当一个这样的对象与外部事件产生互动时，其内部状态就会改变，从而使得系统的行为也随之发生变化。
+状态模式：允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。<br/> 
+在很多情况下，一个对象的行为取决于一个或多个动态变化的属性，这样的属性叫做状态，这样的对象叫做有状态的 (stateful) 对象，这样的对象状态是从事先定义好的一系列值中取出的。当一个这样的对象与外部事件产生互动时，其内部状态就会改变，从而使得系统的行为也随之发生变化。
 
 #### 4. 适用性
 
 在下面的两种情况下均可使用 State 模式:
-> 1) • 一个对象的行为取决于它的状态, 并且它必须在运行时刻根据状态改变它的行为。
-> 2) • 代码中包含大量与对象状态有关的条件语句: 一个操作中含有庞大的多分支的条件（if else(或 switch case) 语句，且这些分支依赖于该对象的状态。这个状态通常用一个或多个枚举常量表示。通常 , 有多个操作包含这一相同的条件结构。 State 模式将每一个条件分支放入一个独立的类中。这使得你可以根据对象自身的情况将对象的状态作为一个对象，这一对象可以不依赖于其他对象而独立变化。
+1. 一个对象的行为取决于它的状态, 并且它必须在运行时刻根据状态改变它的行为。
+2. 代码中包含大量与对象状态有关的条件语句: 一个操作中含有庞大的多分支的条件（if else(或 switch case) 语句，且这些分支依赖于该对象的状态。这个状态通常用一个或多个枚举常量表示。通常 , 有多个操作包含这一相同的条件结构。 State 模式将每一个条件分支放入一个独立的类中。这使得你可以根据对象自身的情况将对象的状态作为一个对象，这一对象可以不依赖于其他对象而独立变化。
 
 #### 5. 结构
 
-> ![](http://my.csdn.net/uploads/201205/11/1336719144_5496.jpg)
+![](http://my.csdn.net/uploads/201205/11/1336719144_5496.jpg)
 
 #### 6. 模式的组成
 
@@ -54,8 +54,142 @@ State 模式有下面一些效果:
 我们用电梯的例子来说明： 
 简单地实现代码：
 ```
-<?phpabstract class ILift {	//电梯的四个状态	const OPENING_STATE = 1;  //门敞状态	const CLOSING_STATE = 2;  //门闭状态	const RUNNING_STATE = 3;  //运行状态	const STOPPING_STATE = 4; //停止状态； 		//设置电梯的状态	public abstract function setState($state); 	//首先电梯门开启动作	public abstract function open(); 	//电梯门有开启，那当然也就有关闭了	public abstract function close(); 	//电梯要能上能下，跑起来	public abstract function run(); 	//电梯还要能停下来，停不下来那就扯淡了	public abstract function stop();} /** * 电梯的实现类  */ class Lift extends  ILift {	private $state; 	public function setState($state) {		$this->state = $state;	}	//电梯门关闭	public function close() {		//电梯在什么状态下才能关闭		switch($this->state){			case ILift::OPENING_STATE:  //如果是则可以关门，同时修改电梯状态				$this->setState(ILift::CLOSING_STATE);			break;			case ILift::CLOSING_STATE:  //如果电梯就是关门状态，则什么都不做				//do nothing;				return ;			break;			case ILift::RUNNING_STATE: //如果是正在运行，门本来就是关闭的，也说明都不做				//do nothing;				return ;			break;			case ILift::STOPPING_STATE:  //如果是停止状态，本也是关闭的，什么也不做				//do nothing;				return ;			break;		}				echo 'Lift colse <br>';	} 	//电梯门开启	public function open() {		//电梯在什么状态才能开启		switch($this->state){			case ILift::OPENING_STATE: //如果已经在门敞状态，则什么都不做				//do nothing;				return ;			break;			case ILift::CLOSING_STATE: //如是电梯时关闭状态，则可以开启				$this->setState(ILift::OPENING_STATE);			break;			case ILift::RUNNING_STATE: //正在运行状态，则不能开门，什么都不做			//do nothing;				return ;			break;			case ILift::STOPPING_STATE: //停止状态，淡然要开门了				$this->setState(ILift::OPENING_STATE);			break;		}		echo 'Lift open <br>';	}	///电梯开始跑起来	public function run() {		switch($this->state){			case ILift::OPENING_STATE: //如果已经在门敞状态，则不你能运行，什么都不做				//do nothing;				return ;			break;			case ILift::CLOSING_STATE: //如是电梯时关闭状态，则可以运行				$this->setState(ILift::RUNNING_STATE);			break;			case ILift::RUNNING_STATE: //正在运行状态，则什么都不做				//do nothing;				return ;			break;			case ILift::STOPPING_STATE: //停止状态，可以运行				$this->setState(ILift::RUNNING_STATE);		}		echo 'Lift run <br>';	} 	//电梯停止	public function stop() {		switch($this->state){			case ILift::OPENING_STATE: //如果已经在门敞状态，那肯定要先停下来的，什么都不做				//do nothing;				return ;			break;			case ILift::CLOSING_STATE: //如是电梯时关闭状态，则当然可以停止了				$this->setState(ILift::CLOSING_STATE);			break;			case ILift::RUNNING_STATE: //正在运行状态，有运行当然那也就有停止了				$this->setState(ILift::CLOSING_STATE);			break;			case ILift::STOPPING_STATE: //停止状态，什么都不做				//do nothing;				return ;			break;		}		echo 'Lift stop <br>';	}	}$lift = new Lift();    //电梯的初始条件应该是停止状态 $lift->setState(ILift::STOPPING_STATE); //首先是电梯门开启，人进去 $lift->open();    //然后电梯门关闭 $lift->close();    //再然后，电梯跑起来，向上或者向下 $lift->run();     //最后到达目的地，电梯挺下来 $lift->stop();
-> ```
+<?php
+abstract class ILift {
+	//电梯的四个状态
+	const OPENING_STATE = 1;  //门敞状态
+	const CLOSING_STATE = 2;  //门闭状态
+	const RUNNING_STATE = 3;  //运行状态
+	const STOPPING_STATE = 4; //停止状态；
+ 
+	
+	//设置电梯的状态
+	public abstract function setState($state);
+ 
+	//首先电梯门开启动作
+	public abstract function open();
+ 
+	//电梯门有开启，那当然也就有关闭了
+	public abstract function close();
+ 
+	//电梯要能上能下，跑起来
+	public abstract function run();
+ 
+	//电梯还要能停下来，停不下来那就扯淡了
+	public abstract function stop();
+}
+ 
+/**
+ * 电梯的实现类 
+ */ 
+class Lift extends  ILift {
+	private $state;
+ 
+	public function setState($state) {
+		$this->state = $state;
+	}
+	//电梯门关闭
+	public function close() {
+		//电梯在什么状态下才能关闭
+		switch($this->state){
+			case ILift::OPENING_STATE:  //如果是则可以关门，同时修改电梯状态
+				$this->setState(ILift::CLOSING_STATE);
+			break;
+			case ILift::CLOSING_STATE:  //如果电梯就是关门状态，则什么都不做
+				//do nothing;
+				return ;
+			break;
+			case ILift::RUNNING_STATE: //如果是正在运行，门本来就是关闭的，也说明都不做
+				//do nothing;
+				return ;
+			break;
+			case ILift::STOPPING_STATE:  //如果是停止状态，本也是关闭的，什么也不做
+				//do nothing;
+				return ;
+			break;
+		}
+				echo 'Lift colse <br>';
+	}
+ 
+	//电梯门开启
+	public function open() {
+		//电梯在什么状态才能开启
+		switch($this->state){
+			case ILift::OPENING_STATE: //如果已经在门敞状态，则什么都不做
+				//do nothing;
+				return ;
+			break;
+			case ILift::CLOSING_STATE: //如是电梯时关闭状态，则可以开启
+				$this->setState(ILift::OPENING_STATE);
+			break;
+			case ILift::RUNNING_STATE: //正在运行状态，则不能开门，什么都不做
+			//do nothing;
+				return ;
+			break;
+			case ILift::STOPPING_STATE: //停止状态，淡然要开门了
+				$this->setState(ILift::OPENING_STATE);
+			break;
+		}
+		echo 'Lift open <br>';
+	}
+	///电梯开始跑起来
+	public function run() {
+		switch($this->state){
+			case ILift::OPENING_STATE: //如果已经在门敞状态，则不你能运行，什么都不做
+				//do nothing;
+				return ;
+			break;
+			case ILift::CLOSING_STATE: //如是电梯时关闭状态，则可以运行
+				$this->setState(ILift::RUNNING_STATE);
+			break;
+			case ILift::RUNNING_STATE: //正在运行状态，则什么都不做
+				//do nothing;
+				return ;
+			break;
+			case ILift::STOPPING_STATE: //停止状态，可以运行
+				$this->setState(ILift::RUNNING_STATE);
+		}
+		echo 'Lift run <br>';
+	}
+ 
+	//电梯停止
+	public function stop() {
+		switch($this->state){
+			case ILift::OPENING_STATE: //如果已经在门敞状态，那肯定要先停下来的，什么都不做
+				//do nothing;
+				return ;
+			break;
+			case ILift::CLOSING_STATE: //如是电梯时关闭状态，则当然可以停止了
+				$this->setState(ILift::CLOSING_STATE);
+			break;
+			case ILift::RUNNING_STATE: //正在运行状态，有运行当然那也就有停止了
+				$this->setState(ILift::CLOSING_STATE);
+			break;
+			case ILift::STOPPING_STATE: //停止状态，什么都不做
+				//do nothing;
+				return ;
+			break;
+		}
+		echo 'Lift stop <br>';
+	}
+	
+}
+$lift = new Lift(); 
+   
+//电梯的初始条件应该是停止状态 
+$lift->setState(ILift::STOPPING_STATE); 
+//首先是电梯门开启，人进去 
+$lift->open(); 
+   
+//然后电梯门关闭 
+$lift->close(); 
+   
+//再然后，电梯跑起来，向上或者向下 
+$lift->run();    
+ //最后到达目的地，电梯挺下来 
+$lift->stop();
+
+```
 
 显然我们已经完成了我们的基本业务操作，但是，我们在程序中使用了大量的 switch…case 这样的判断（if…else 也是一样), 首先是程序的可阅读性很差，其次扩展非常不方便。一旦我们有新的状态加入的话，例如新加通电和断点状态。我们势必要在每个业务方法里边增加相应的 case 语句。也就是四个函数 open，close，run，stop 都需要修改相应 case 语句。
 
@@ -65,8 +199,222 @@ State 模式有下面一些效果:
 
 代码实现：
 ```
-<?php/** *  * 定义一个电梯的接口  */ abstract class LiftState{ 	//定义一个环境角色，也就是封装状态的变换引起的功能变化	protected  $_context; 	public function setContext(Context $context){		$this->_context = $context;	} 	//首先电梯门开启动作	public abstract function open(); 	//电梯门有开启，那当然也就有关闭了	public abstract function close(); 	//电梯要能上能下，跑起来	public abstract function run(); 	//电梯还要能停下来，停不下来那就扯淡了	public abstract function stop(); }  /** * 环境类:定义客户感兴趣的接口。维护一个ConcreteState子类的实例，这个实例定义当前状态。 */ class Context {	//定义出所有的电梯状态	static  $openningState = null;	static  $closeingState = null;	static  $runningState  = null;	static  $stoppingState = null;     public function __construct() {		self::$openningState = new OpenningState();		self::$closeingState = new ClosingState();		self::$runningState =  new RunningState();		self::$stoppingState = new StoppingState(); 	} 	//定一个当前电梯状态	private  $_liftState; 	public function getLiftState() {		return $this->_liftState;	} 	public function setLiftState($liftState) {		$this->_liftState = $liftState;		//把当前的环境通知到各个实现类中		$this->_liftState->setContext($this);	}  	public function open(){		$this->_liftState->open();	} 	public function close(){		$this->_liftState->close();	} 	public function run(){		$this->_liftState->run();	} 	public function stop(){		$this->_liftState->stop();	}} /** * 在电梯门开启的状态下能做什么事情  */ class OpenningState extends LiftState { 	/**	 * 开启当然可以关闭了，我就想测试一下电梯门开关功能	 *	 */	public function close() {		//状态修改		$this->_context->setLiftState(Context::$closeingState);		//动作委托为CloseState来执行		$this->_context->getLiftState()->close();	} 	//打开电梯门	public function open() {		echo 'lift open...', '<br/>';	}	//门开着电梯就想跑，这电梯，吓死你！	public function run() {		//do nothing;	} 	//开门还不停止？	public function stop() {		//do nothing;	} } /** * 电梯门关闭以后，电梯可以做哪些事情  */ class ClosingState extends LiftState { 	//电梯门关闭，这是关闭状态要实现的动作	public function close() {		echo 'lift close...', '<br/>'; 	}	//电梯门关了再打开，逗你玩呢，那这个允许呀	public function open() {		$this->_context->setLiftState(Context::$openningState);  //置为门敞状态		$this->_context->getLiftState()->open();	} 	//电梯门关了就跑，这是再正常不过了	public function run() {		$this->_context->setLiftState(Context::$runningState); //设置为运行状态；		$this->_context->getLiftState()->run();	} 	//电梯门关着，我就不按楼层		public function stop() {		$this->_context->setLiftState(Context::$stoppingState);  //设置为停止状态；		$this->_context->getLiftState()->stop();	} } /** * 电梯在运行状态下能做哪些动作  */ class RunningState extends LiftState { 	//电梯门关闭？这是肯定了	public function close() {		//do nothing	} 	//运行的时候开电梯门？你疯了！电梯不会给你开的	public function open() {		//do nothing	} 	//这是在运行状态下要实现的方法	public function run() {		echo 'lift run...', '<br/>';	} 	//这个事绝对是合理的，光运行不停止还有谁敢做这个电梯？！估计只有上帝了	public function stop() {		$this->_context->setLiftState(Context::$stoppingState); //环境设置为停止状态；		$this->_context->getLiftState()->stop();	} }   /** * 在停止状态下能做什么事情  */ class StoppingState extends LiftState { 	//停止状态关门？电梯门本来就是关着的！	public function close() {		//do nothing;	} 	//停止状态，开门，那是要的！	public function open() {		$this->_context->setLiftState(Context::$openningState);		$this->_context->getLiftState()->open();	}	//停止状态再跑起来，正常的很	public function run() {		$this->_context->setLiftState(Context::$runningState);		$this->_context->getLiftState()->run();	}	//停止状态是怎么发生的呢？当然是停止方法执行了	public function stop() {		echo 'lift stop...', '<br/>';	} } /** * 模拟电梯的动作  */ class Client { 	public static function main() {		$context = new Context();		$context->setLiftState(new ClosingState()); 		$context->open();		$context->close();		$context->run();		$context->stop();	}}Client::main();
-> ```
+
+<?php
+/**
+ * 
+ * 定义一个电梯的接口 
+ */ 
+abstract class LiftState{
+ 
+	//定义一个环境角色，也就是封装状态的变换引起的功能变化
+	protected  $_context;
+ 
+	public function setContext(Context $context){
+		$this->_context = $context;
+	}
+ 
+	//首先电梯门开启动作
+	public abstract function open();
+ 
+	//电梯门有开启，那当然也就有关闭了
+	public abstract function close();
+ 
+	//电梯要能上能下，跑起来
+	public abstract function run();
+ 
+	//电梯还要能停下来，停不下来那就扯淡了
+	public abstract function stop();
+ 
+}
+ 
+ 
+/**
+ * 环境类:定义客户感兴趣的接口。维护一个ConcreteState子类的实例，这个实例定义当前状态。
+ */ 
+class Context {
+	//定义出所有的电梯状态
+	static  $openningState = null;
+	static  $closeingState = null;
+	static  $runningState  = null;
+	static  $stoppingState = null;
+ 
+    public function __construct() {
+		self::$openningState = new OpenningState();
+		self::$closeingState = new ClosingState();
+		self::$runningState =  new RunningState();
+		self::$stoppingState = new StoppingState();
+ 
+	}
+ 
+	//定一个当前电梯状态
+	private  $_liftState;
+ 
+	public function getLiftState() {
+		return $this->_liftState;
+	}
+ 
+	public function setLiftState($liftState) {
+		$this->_liftState = $liftState;
+		//把当前的环境通知到各个实现类中
+		$this->_liftState->setContext($this);
+	}
+ 
+ 
+	public function open(){
+		$this->_liftState->open();
+	}
+ 
+	public function close(){
+		$this->_liftState->close();
+	}
+ 
+	public function run(){
+		$this->_liftState->run();
+	}
+ 
+	public function stop(){
+		$this->_liftState->stop();
+	}
+}
+ 
+/**
+ * 在电梯门开启的状态下能做什么事情 
+ */ 
+class OpenningState extends LiftState {
+ 
+	/**
+	 * 开启当然可以关闭了，我就想测试一下电梯门开关功能
+	 *
+	 */
+	public function close() {
+		//状态修改
+		$this->_context->setLiftState(Context::$closeingState);
+		//动作委托为CloseState来执行
+		$this->_context->getLiftState()->close();
+	}
+ 
+	//打开电梯门
+	public function open() {
+		echo 'lift open...', '<br/>';
+	}
+	//门开着电梯就想跑，这电梯，吓死你！
+	public function run() {
+		//do nothing;
+	}
+ 
+	//开门还不停止？
+	public function stop() {
+		//do nothing;
+	}
+ 
+}
+ 
+/**
+ * 电梯门关闭以后，电梯可以做哪些事情 
+ */ 
+class ClosingState extends LiftState {
+ 
+	//电梯门关闭，这是关闭状态要实现的动作
+	public function close() {
+		echo 'lift close...', '<br/>';
+ 
+	}
+	//电梯门关了再打开，逗你玩呢，那这个允许呀
+	public function open() {
+		$this->_context->setLiftState(Context::$openningState);  //置为门敞状态
+		$this->_context->getLiftState()->open();
+	}
+ 
+	//电梯门关了就跑，这是再正常不过了
+	public function run() {
+		$this->_context->setLiftState(Context::$runningState); //设置为运行状态；
+		$this->_context->getLiftState()->run();
+	}
+ 
+	//电梯门关着，我就不按楼层
+	
+	public function stop() {
+		$this->_context->setLiftState(Context::$stoppingState);  //设置为停止状态；
+		$this->_context->getLiftState()->stop();
+	}
+ 
+}
+ 
+/**
+ * 电梯在运行状态下能做哪些动作 
+ */ 
+class RunningState extends LiftState {
+ 
+	//电梯门关闭？这是肯定了
+	public function close() {
+		//do nothing
+	}
+ 
+	//运行的时候开电梯门？你疯了！电梯不会给你开的
+	public function open() {
+		//do nothing
+	}
+ 
+	//这是在运行状态下要实现的方法
+	public function run() {
+		echo 'lift run...', '<br/>';
+	}
+ 
+	//这个事绝对是合理的，光运行不停止还有谁敢做这个电梯？！估计只有上帝了
+	public function stop() {
+		$this->_context->setLiftState(Context::$stoppingState); //环境设置为停止状态；
+		$this->_context->getLiftState()->stop();
+	}
+ 
+}
+ 
+ 
+ 
+/**
+ * 在停止状态下能做什么事情 
+ */ 
+class StoppingState extends LiftState {
+ 
+	//停止状态关门？电梯门本来就是关着的！
+	public function close() {
+		//do nothing;
+	}
+ 
+	//停止状态，开门，那是要的！
+	public function open() {
+		$this->_context->setLiftState(Context::$openningState);
+		$this->_context->getLiftState()->open();
+	}
+	//停止状态再跑起来，正常的很
+	public function run() {
+		$this->_context->setLiftState(Context::$runningState);
+		$this->_context->getLiftState()->run();
+	}
+	//停止状态是怎么发生的呢？当然是停止方法执行了
+	public function stop() {
+		echo 'lift stop...', '<br/>';
+	}
+ 
+}
+ 
+/**
+ * 模拟电梯的动作 
+ */ 
+class Client {
+ 
+	public static function main() {
+		$context = new Context();
+		$context->setLiftState(new ClosingState());
+ 
+		$context->open();
+		$context->close();
+		$context->run();
+		$context->stop();
+	}
+}
+Client::main();
+```
 
 #### 9. 与其他相关模式
 
