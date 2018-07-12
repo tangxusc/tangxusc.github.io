@@ -41,7 +41,8 @@ cd /tmp/jgit/git clone repo clientcd client
 ```
 输入`git status`应该能够看到 **Initial commit**，这样环境就没有问题了。然后提交一个文件，给仓库里来点库存：
 ```
-echo hello > hello.txtgit add hello.txtgit commit -m "hello"git push
+echo hello > hello.txtgit add hello.txtgit commit -m "hello"
+git push
 ```
 ## [](#动手 "动手")动手
 
