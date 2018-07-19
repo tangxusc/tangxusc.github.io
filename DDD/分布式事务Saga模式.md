@@ -40,7 +40,7 @@ Saga是一系列本地交易，每笔事务都会更新单个服务中的数据�
 当最后一个服务执行本地事务并且不发布任何事件时，意味着分布式事务结束，或者它发布的事件没有被任何Saga参与者听到都意味着事务结束。
 
 让我们看看它在我们的电子商务示例中的外观：
-![Alt text](https://gitee.com/tanx/kubernetes-test/blob/master/DDD/images/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1Saga%E6%A8%A1%E5%BC%8F_image_2.jpg)
+![Alt text](images/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1Saga%E6%A8%A1%E5%BC%8F_image_2.jpg)
 步骤如下：
 1. 订单服务保存新订单，将状态设置为pengding挂起状态，并发布名为ORDER_CREATED_EVENT的事件。
 
@@ -76,7 +76,7 @@ Saga是一系列本地交易，每笔事务都会更新单个服务中的数据�
 ### Saga的命令/协调模式
 这里我们定义了一项新服务，全权负责告诉每个参与者该做什么以及什么时候该做什么。saga协调器orchestrator以命令/回复的方式与每项服务进行通信，告诉他们应该执行哪些操作。
 
-![Alt text](https://gitee.com/tanx/kubernetes-test/blob/master/DDD/images/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1Saga%E6%A8%A1%E5%BC%8F_image_3.jpg)
+![Alt text](images/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1Saga%E6%A8%A1%E5%BC%8F_image_3.jpg)
 
 
 1. 订单服务保存pending状态，并要求订单Saga协调器（简称OSO）开始启动订单事务。
