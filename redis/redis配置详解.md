@@ -1,3 +1,4 @@
+```
 #redis.conf
 # Redis configuration file example.
 # ./redis-server /path/to/redis.conf
@@ -276,3 +277,4 @@ hz 10
 
 #在aof重写的时候，如果打开了aof-rewrite-incremental-fsync开关，系统会每32MB执行一次fsync。这对于把文件写入磁盘是有帮助的，可以避免过大的延迟峰值。
 aof-rewrite-incremental-fsync yes
+```
