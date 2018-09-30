@@ -1,20 +1,19 @@
-```helm init --service-account tiller --tiller-image rancher/tiller:v2.8.2 --skip-refresh```
+###安装
 ```
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: tiller
-  namespace: kube-system
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
-metadata:
-  name: tiller
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-  - kind: ServiceAccount
-    name: tiller
-    namespace: kube-system```
+helm init --upgrade -i registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.8.2 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+###卸载
+```
+helm reset 或helm reset -f(强制删除 k8s 集群上的 pod.)
+```
+###添加仓库
+```
+helm repo add fabric8 https://fabric8.io/helm
+```
+###搜索
+```
+helm search fabric8
+```
+###安装应用
+```
+helm install monocular/monocular -f custom-repos.yaml
+```
