@@ -2,6 +2,10 @@
 
 # 使用 kubeadm 搭建 Kubernetes(1.10.2) 集群（国内环境）
 
+[TOC]
+
+
+
 ## 目标
 
 *   在您的机器上建立一个安全的 Kubernetes 集群。
@@ -424,8 +428,3 @@ kubeadm reset
 
 *   [install-kubeadm](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 *   [google-containers](https://console.cloud.google.com/gcr/images/google-containers)
-
-# 分类: [Kubernetes](http://www.cnblogs.com/RainingNight/category/1209537.html) 标签: [k8s](http://www.cnblogs.com/RainingNight/tag/k8s/), [kubeadm](http://www.cnblogs.com/RainingNight/tag/kubeadm/) [«](http://www.cnblogs.com/RainingNight/p/first-docker-note.html) 上一篇：[Docker 初体验](http://www.cnblogs.com/RainingNight/p/first-docker-note.html "发布于2018-05-01 12:49")
-
-[»](http://www.cnblogs.com/RainingNight/p/deploying-k8s-dashboard-ui.html) 下一篇：[kubernetes-dashboard(1.8.3) 部署与踩坑](http://www.cnblogs.com/RainingNight/p/deploying-k8s-dashboard-ui.html "发布于2018-05-03 18:31")
-posted @ 2018-05-02 10:38 [雨夜朦胧](http://www.cnblogs.com/RainingNight/) 阅读 (2796) 评论 (...) [编辑](https://i.cnblogs.com/EditPosts.aspx?postid=8975838) [收藏](#)
