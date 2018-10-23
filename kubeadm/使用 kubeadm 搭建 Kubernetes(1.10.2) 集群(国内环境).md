@@ -1,21 +1,6 @@
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://www.cnblogs.com/RainingNight/p/using-kubeadm-to-create-a-cluster.html
 
-# [使用 kubeadm 搭建 Kubernetes(1.10.2) 集群（国内环境）]
-
-**目录**
-
-1.  [目标](#目标)
-2.  [准备](#准备)
-    *   [主机](#主机)
-    *   [软件](#软件)
-3.  [步骤](#步骤)
-    *   [(1/4) 安装 kubeadm, kubelet and kubectl](#安装-kubeadm-kubelet-and-kubectl)
-    *   [(2/4) 初始化 master 节点](#初始化master节点)
-    *   [(3/4) 安装网络插件](#安装网络插件)
-    *   [(4/4) 加入其他节点](#加入其他节点)
-    *   [(可选) 在非主节点上管理集群](#可选在非主节点上管理集群)
-    *   [(可选) 映射 API 服务到本地](#可选映射api服务到本地)
-4.  [卸载集群](#卸载集群)
+# 使用 kubeadm 搭建 Kubernetes(1.10.2) 集群（国内环境）
 
 ## 目标
 
@@ -36,9 +21,11 @@
 #### 安装 Docker
 
 ```
-curl https://releases.rancher.com/install-docker/17.03.sh | sh
+sudo apt-get update
+sudo apt-get install -y docker.io
 ```
-* 参照:[RKE安装docker](https://rancher.com/docs/rke/v0.1.x/en/installation/os/)
+
+Kubunetes 建议使用老版本的`docker.io`，如果需要使用最新版的`docker-ce`，可参考上一篇博客：[Docker 初体验](http://www.cnblogs.com/RainingNight/p/first-docker-note.html#安装)。
 
 #### 禁用 swap 文件
 
@@ -56,28 +43,18 @@ curl https://releases.rancher.com/install-docker/17.03.sh | sh
 
 ```
 sudo apt-get update && sudo apt-get install -y apt-transport-https
-curl -s http://packages.faasx.com/google/apt/doc/apt-key.gpg | sudo apt-key add -
-sudo vim /etc/apt/sources.list.d/kubernetes.list
-#在文件中添加并保存以下文本
+curl -s https://gitee.com/tanx/kubernetes-test/raw/master/kubeadm/apt-key.gpg | sudo apt-key add -
+
+sudo cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
 deb http://mirrors.ustc.edu.cn/kubernetes/apt/ kubernetes-xenial main
-#然后执行
+EOF
+
 sudo apt-get update
-sudo apt-get install -y kubelet=1.10.2-00 kubeadm kubectl
-```
-* 注意:我们安装kubectl一定要注意版本问题,如果不知道版本可以使用apt搜索
-```
-apt-cache madison <软件名称>
-apt-get install <软件名称>=<软件版本>
-```
-例如:
-```
-apt-cache madison kubelet
-apt-get install kubelet=1.10.2-00
+sudo apt-get install -y kubelet=1.10.2-00 kubeadm=1.10.2-00 kubectl=1.10.2-00
 ```
 
 > apt-key 下载地址使用了国内镜像，官方地址为：[https://packages.cloud.google.com/apt/doc/apt-key.gpg](https://packages.cloud.google.com/apt/doc/apt-key.gpg)。
 > apt 安装包地址使用了中科大的镜像，官方地址为：[http://apt.kubernetes.io/](http://apt.kubernetes.io/)。
-> 对于centos用户可以使用[阿里云的源](https://mirrors.aliyun.com/kubernetes/)
 
 ### (2/4) 初始化 master 节点
 
@@ -108,14 +85,16 @@ docker pull reg.qiniu.com/k8s/k8s-dns-dnsmasq-nanny-amd64:1.14.10
 docker tag reg.qiniu.com/k8s/k8s-dns-sidecar-amd64:1.14.10 k8s.gcr.io/k8s-dns-sidecar-amd64:1.14.10
 docker tag reg.qiniu.com/k8s/k8s-dns-kube-dns-amd64:1.14.10 k8s.gcr.io/k8s-dns-kube-dns-amd64:1.14.10
 docker tag reg.qiniu.com/k8s/k8s-dns-dnsmasq-nanny-amd64:1.14.10 k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64:1.14.10
-
-## 如果使用coreDns 那么则需要以下镜像
-docker pull coredns/coredns:1.1.3
-docker tag coredns/coredns:1.1.3 k8s.gcr.io/coredns:1.1.3
-
 ```
 
-> 据说 kubeadm 可以自定义镜像 Registry，但我并没有实验成功。
+> 据说 kubeadm 可以自定义镜像 Registry，但我并没有找到选项。
+
+#### **注意事项**
+
+* 请注意:在此时请使用 `kubectl get all --all-namespaces`来关注各容器运行情况,默认情况下应该除了DNS容器,其他均会到running状态,如果未能在此状态,请检查pod运行状态
+* 错误情况1: pod一直未pedding状态(或者block状态),使用`kubectl describe pod名字` 查看后发现 `pod with UID "xxx"  specified privileged container, but is disallowed`,请依次检查中```
+  ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_KUBEADM_ARGS $KUBELET_EXTRA_ARGS --allow_privileged
+  ``` 这命令中是否加入了--allow_privileged 和 `/etc/kubernetes/manifests/kube-apiserver.yaml` apiServer是否启用了 `--allow-privileged=true` 参照 [kubelet privileged](https://github.com/kubernetes/kubernetes/issues/6530)
 
 Master 节点就是运行着控制组件的机器，包括 etcd(集群数据库) 和 API 服务 (kubectl CLI 通讯服务)。
 初始化 master 节点, 只需随便在一台装过 kubeadm 的机器上运行如下命令:
@@ -139,7 +118,7 @@ init 常用主要参数：
 最终输出如下：
 
 ```
-ubuntu@ubuntu:~$ sudo kubeadm init --kubernetes-version=v1.10.2 --feature-gates=CoreDNS=true --pod-network-cidr=192.168.0.0/16
+raining@raining-ubuntu:~$ sudo kubeadm init --kubernetes-version=v1.10.2 --feature-gates=CoreDNS=true --pod-network-cidr=192.168.0.0/16
 [sudo] password for raining: 
 [init] Using Kubernetes version: v1.10.2
 [init] Using Authorization modes: [Node RBAC]
@@ -211,11 +190,6 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
-##### 注意事项
-* 请注意:在此时请使用 `kubectl get all --all-namespaces`来关注各容器运行情况,默认情况下应该除了DNS容器,其他均会到running状态,如果未能在此状态,请检查pod运行状态
-* 错误情况1: pod一直未pedding状态(或者block状态),使用`kubectl describe pod名字` 查看后发现 `pod with UID "xxx"  specified privileged container, but is disallowed`,请依次检查`/etc/systemd/system/kubelet.service.d/10-kubeadm.conf`中```
-ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_KUBEADM_ARGS $KUBELET_EXTRA_ARGS --allow_privileged
-``` 这命令中是否加入了--allow_privileged 和 `/etc/kubernetes/manifests/kube-apiserver.yaml` apiServer是否启用了 `--allow-privileged=true` 参照 [kubelet privileged](https://github.com/kubernetes/kubernetes/issues/6530)
 
 kubeadm init 输出的 token 用于 master 和加入节点间的身份认证，token 是机密的，需要保证它的安全，因为拥有此标记的人都可以随意向集群中添加节点。你也可以使用`kubeadm`命令列出，创建，删除 Token，有关详细信息, 请参阅[官方引用文档](https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-token)。
 
@@ -266,9 +240,6 @@ docker tag calico/cni:v3.1.3 quay.io/calico/cni:v3.1.3
 #创建
 kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
 kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
-
-# 使用国内镜像
-kubectl apply -f http://mirror.faasx.com/kubernetes/installation/hosted/kubeadm/1.7/calico.yaml
 ```
 
 > 为了 Calico 可以正常运行，必须在执行 kubeadm init 时使用 `--pod-network-cidr=192.168.0.0/16`。
@@ -325,7 +296,7 @@ taint key="dedicated" and effect="" not found.
 执行后输出类似这样:
 
 ```
-ubuntu@ubuntu1:~$ sudo kubeadm join 192.168.0.8:6443 --token vtyk9m.g4afak37myq3rsdi --discovery-token-ca-cert-hash sha256:19246ce11ba3fc633fe0b21f2f8aaaebd7df9103ae47138dc0dd615f61a32d99
+raining@ubuntu1:~$ sudo kubeadm join 192.168.0.8:6443 --token vtyk9m.g4afak37myq3rsdi --discovery-token-ca-cert-hash sha256:19246ce11ba3fc633fe0b21f2f8aaaebd7df9103ae47138dc0dd615f61a32d99
 [preflight] Running pre-flight checks.
     [WARNING SystemVerification]: docker version is greater than the most recently validated version. Docker version: 17.12.1-ce. Max validated version: 17.03
     [WARNING Service-Docker]: docker service is not enabled, please run 'systemctl enable docker.service'
@@ -350,7 +321,7 @@ Run 'kubectl get nodes' on the master to see this node join the cluster.
 
 ```
 NAME             STATUS    ROLES     AGE       VERSION
-ubuntu           Ready     master    1h        v1.10.2
+raining-ubuntu   Ready     master    1h        v1.10.2
 ubuntu1          Ready     <none>    2m        v1.10.2
 ```
 
@@ -373,6 +344,62 @@ kubectl --kubeconfig ./admin.conf proxy
 ```
 
 这样就可以在本地这样 `http://localhost:8001/api/v1` 访问到 API 服务了。
+
+### (可选) 部署一个微服务
+
+现在可以测试你新搭建的集群了，Sock Shop 就是一个微服务的样本，它体现了在 Kubernetes 里如何运行和连接一系列的服务。想了解更多关于微服务的内容，请查看 [GitHub README](https://github.com/microservices-demo/microservices-demo)。
+
+```
+kubectl create namespace sock-shop
+kubectl apply -n sock-shop -f "https://github.com/microservices-demo/microservices-demo/blob/master/deploy/kubernetes/complete-demo.yaml?raw=true"
+```
+
+可以通过以下命令来查看前端服务是否有开放对应的端口：
+
+```
+kubectl -n sock-shop get svc front-end
+```
+
+输出类似:
+
+```
+NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+front-end   NodePort   10.107.207.35   <none>        80:30001/TCP   31s
+```
+
+可能需要几分钟时间来下载和启用所有的容器，通过`kubectl get pods -n sock-shop`来获取服务的状态。
+
+输出如下：
+
+```
+raining@raining-ubuntu:~$ kubectl get pods -n sock-shop
+NAME                            READY     STATUS    RESTARTS   AGE
+carts-6cd457d86c-wdbsg          1/1       Running   0          1m
+carts-db-784446fdd6-9gsrs       1/1       Running   0          1m
+catalogue-779cd58f9b-nf6n4      1/1       Running   0          1m
+catalogue-db-6794f65f5d-kwc2x   1/1       Running   0          1m
+front-end-679d7bcb77-4hbjq      1/1       Running   0          1m
+orders-755bd9f786-gbspz         1/1       Running   0          1m
+orders-db-84bb8f48d6-98wsm      1/1       Running   0          1m
+payment-674658f686-xc7gk        1/1       Running   0          1m
+queue-master-5f98bbd67-xgqr6    1/1       Running   0          1m
+rabbitmq-86d44dd846-nf2g6       1/1       Running   0          1m
+shipping-79786fb956-bs7jn       1/1       Running   0          1m
+user-6995984547-nvqw4           1/1       Running   0          1m
+user-db-fc7b47fb9-zcf5r         1/1       Running   0          1m
+```
+
+然后在你的浏览器里访问集群节点的 IP 和对应的端口，比如`http://<master_ip>/<cluster-ip>:<port>`。 在这个例子里，可能是 30001，但是它可能跟你的不一样。如果有防火墙的话，确保在你访问之前开放了对应的端口。
+
+![](https://images2018.cnblogs.com/blog/347047/201805/347047-20180502084227253-1773772236.png)
+
+> 需要注意的是，如果在多节点部署时，要使用节点的 IP 进行访问，而不是 Master 服务器的 IP。
+
+最后，卸载 _socks shop_, 只需要在主节点上运行:
+
+```
+kubectl delete namespace sock-shop
+```
 
 ## 卸载集群
 
@@ -397,3 +424,8 @@ kubeadm reset
 
 *   [install-kubeadm](https://kubernetes.io/docs/setup/independent/install-kubeadm/)
 *   [google-containers](https://console.cloud.google.com/gcr/images/google-containers)
+
+# 分类: [Kubernetes](http://www.cnblogs.com/RainingNight/category/1209537.html) 标签: [k8s](http://www.cnblogs.com/RainingNight/tag/k8s/), [kubeadm](http://www.cnblogs.com/RainingNight/tag/kubeadm/) [«](http://www.cnblogs.com/RainingNight/p/first-docker-note.html) 上一篇：[Docker 初体验](http://www.cnblogs.com/RainingNight/p/first-docker-note.html "发布于2018-05-01 12:49")
+
+[»](http://www.cnblogs.com/RainingNight/p/deploying-k8s-dashboard-ui.html) 下一篇：[kubernetes-dashboard(1.8.3) 部署与踩坑](http://www.cnblogs.com/RainingNight/p/deploying-k8s-dashboard-ui.html "发布于2018-05-03 18:31")
+posted @ 2018-05-02 10:38 [雨夜朦胧](http://www.cnblogs.com/RainingNight/) 阅读 (2796) 评论 (...) [编辑](https://i.cnblogs.com/EditPosts.aspx?postid=8975838) [收藏](#)
