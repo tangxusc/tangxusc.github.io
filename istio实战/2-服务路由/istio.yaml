@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: nginx
+  name: test
   namespace: test
 spec:
   selector:
@@ -23,16 +23,25 @@ spec:
   hosts:
   - "*"
   gateways:
-  - nginx
+  - test
   http:
   - match:
     - uri:
-        prefix: /test
+        prefix: /nginx
     rewrite:
       uri: "/"
     route:
     - destination:
        host: nginx
+       subset: v1
+  - match:
+    - uri:
+        prefix: /tomcat
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+       host: tomcat
        subset: v1
 ---
 apiVersion: networking.istio.io/v1alpha3
@@ -46,4 +55,17 @@ spec:
   - name: v1
     labels:
       app: nginx
+      version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: tomcat
+  namespace: test
+spec:
+  host: tomcat
+  subsets:
+  - name: v1
+    labels:
+      app: tomcat
       version: v1
