@@ -1,4 +1,4 @@
-# istio安装
+# istio-安装
 
 [TOC]
 
@@ -16,6 +16,10 @@ export PATH=$PWD/bin:$PATH
 ```shell
 wget https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz
 tar zxvf helm-v2.11.0-linux-amd64.tar.gz
+#或者使用我给你下载的
+wget https://gitee.com/tanx/kubernetes-test/raw/master/helm/helm-v2.11.0-linux-amd64.tar
+tar zxvf helm-v2.11.0-linux-amd64.tar.gz
+
 export PATH=$PWD/linux-amd64/:$PATH
 ```
 
@@ -141,178 +145,6 @@ pod/servicegraph-749b5b897c-wfb79               1/1     Running     3          4
 ```
 
 所有组件都running后,则标示安装成功.
-
-## demo示例
-
-本文中以nginx为例,在istio中运行一个应用
-
-nginx.yaml文件如下:
-
-```yaml
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
- name: nginx
- namespace: test
- labels:
-   app: nginx
-   version: v1
-spec:
- template:
-    metadata:
-     labels:
-       app: nginx
-       version: v1
-    spec:
-     containers:
-     - name: nginx
-       image: nginx
-       ports:
-       - containerPort: 80
-         name: http
-         protocol: TCP
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: nginx
-  namespace: test
-spec:
-  type: ClusterIP
-  selector:
-    app: nginx
-  ports:
-    - port: 7890
-      protocol: TCP
-      targetPort: 80
-```
-### 在kubernetes中创建命名空间test
-
-```shell
-$ kubectl create namespace test
-```
-### 使用istioctl注入sidecar
-
-```shell
-$ istioctl kube-inject -f nginx.yaml -o nginx-injected.yaml 
-```
-### 部署应用
-
-```shell
-$ kubectl create -f nginx-injected.yaml 
-```
-
-### 查看应用情况
-
-```shell
-tangxu@tangxu-pc:~$ kubectl get all -n test
-NAME                        READY   STATUS    RESTARTS   AGE
-pod/nginx-78cf67dbd-cfdh8   2/2     Running   0          2h
-
-NAME            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-service/nginx   ClusterIP   10.99.33.160   <none>        7890/TCP   2h
-
-NAME                    DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/nginx   1         1         1            1           3h
-
-NAME                               DESIRED   CURRENT   READY   AGE
-replicaset.apps/nginx-6c7ccc4d45   0         0         0       3h
-replicaset.apps/nginx-78cf67dbd    1         1         1       2h
-```
-
-> 一定注意,pod中的容器是2个.
-
-### 使用istio流量管理
-
-创建文件nginx-istio.yaml
-
-```yaml
-#声明网关
-apiVersion: networking.istio.io/v1alpha3
-kind: Gateway
-metadata:
-  name: nginxgateway
-  namespace: test #
-spec:
-  selector:
-    istio: ingressgateway
-  servers:
-  - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    hosts:
-    - "*"
----
-#声明路由
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: nginxvirtualservice
-  namespace: test
-spec:
-  hosts:
-  - "*"
-  gateways:
-  - nginxgateway
-  http:
-  - match:
-    - uri:
-        prefix: /test #路由
-    rewrite:
-      uri: "/" #重写url
-    route:
-    - destination:
-       host: nginx
-       subset: v1
----
-apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-  name: nginxdestinationrule
-  namespace: test
-spec:
-  host: nginx
-  subsets:
-  - name: v1
-    labels:
-      app: nginx
-      version: v1
-```
-
-### 使用istio部署此文件
-
-```
-$ istioctl create -f nginx-istio.yaml
-```
-
-验证应用是否部署成功
-
-```yaml
-tangxu@tangxu-pc:~$ curl http://10.6.73.55:31380/test -v
-*   Trying 10.6.73.55...
-* TCP_NODELAY set
-* Connected to 10.6.73.55 (10.6.73.55) port 31380 (#0)
-> GET /test HTTP/1.1
-> Host: 10.6.73.55:31380
-> User-Agent: curl/7.60.0
-> Accept: */*
-> 
-< HTTP/1.1 200 OK
-< server: envoy
-< date: Tue, 23 Oct 2018 09:54:29 GMT
-< content-type: text/html
-< content-length: 612
-< last-modified: Tue, 02 Oct 2018 14:49:27 GMT
-< etag: "5bb38577-264"
-< accept-ranges: bytes
-< x-envoy-upstream-service-time: 3
-< 
-<!DOCTYPE html>
-<html>
-<head>
-<title>Welcome to nginx!</title>
-```
 
 ### 查看istio各种仪表盘
 
