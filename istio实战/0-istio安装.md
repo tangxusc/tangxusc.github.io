@@ -104,6 +104,31 @@ $ kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml
        internalPort: 9411
    ```
 
+7. (可选) 修改追踪
+
+   ```yaml
+   pilot:
+     enabled: true
+     replicaCount: 1
+     autoscaleMin: 1
+     autoscaleMax: 5
+     image: pilot
+     sidecar: true
+     traceSampling: 1.0 #修改为100.0,默认采样1%,但是在测试阶段 可以采取大量采样模式
+   ```
+
+8. (可选) 启用kiali
+
+   ```yaml
+   kiali:
+     enabled: false #修改为true
+     replicaCount: 1
+     hub: docker.io/kiali
+     tag: v0.9
+     ingress:
+   ```
+
+
    修改完成后保存文件
 
 ```shell
@@ -114,13 +139,6 @@ $ kubectl apply -f ./istio.yaml
 
 > 在安装istio的过程中某一些镜像下载的时间过长,请耐心等待.
 
-如果quay.io/coreos:v1.7.6_coreos.0这个镜像下载不下来,请在values.yaml中修改
-
-```yaml
-  hyperkube:
-    hub: quay.io/coreos #修改为zhenyuyang/hyperkube-v1.7.6_coreos.0
-    tag: v1.7.6_coreos.0 #修改为latest
-```
 
 ## 确认安装
 
