@@ -1,0 +1,91 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: target
+  namespace: test
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: target
+  namespace: test
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - target
+  http:
+  - match:
+    - uri:
+        prefix: /target/
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+       host: target
+       subset: v1
+#---
+#apiVersion: networking.istio.io/v1alpha3
+#kind: VirtualService
+#metadata:
+#  name: httpbin
+#  namespace: test
+#spec:
+#  hosts:
+#  - "*"
+#  gateways:
+#  - httpbin-gateway
+#  http:
+#  - route:
+#    - destination:
+#       host: httpbin
+#       subset: v1
+#---
+#apiVersion: "authentication.istio.io/v1alpha1"
+#kind: "MeshPolicy"
+#metadata:
+#  name: "default"
+#spec:
+#  peers:
+#  - mtls: {}
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: target
+  namespace: test
+spec:
+  host: target
+  subsets:
+  - name: v1
+    labels:
+      app: target
+      version: v1
+#  trafficPolicy:
+#    tls:
+#      mode: ISTIO_MUTUAL
+---
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: "jwt-example"
+  namespace: "test"
+spec:
+  targets:
+  - name: target
+  origins:
+  - jwt:
+      issuer: "testing@secure.istio.io"
+      jwksUri: "https://raw.githubusercontent.com/istio/istio/master/security/tools/jwt/samples/jwks.json"
+#  originIsOptional: true
+  principalBinding: USE_ORIGIN
