@@ -200,6 +200,12 @@ servicegraph		http://node:32756
 tracing				http://node:31037
 ```
 
+### 仪表盘预览
+
+![仪表盘预览](istio+Naftis+Kiali.gif)
+
+
+
 
 
 [Installation with Helm]: https://istio.io/docs/setup/kubernetes/helm-install/	"istio安装"
