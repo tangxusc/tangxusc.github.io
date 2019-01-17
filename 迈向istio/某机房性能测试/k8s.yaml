@@ -1,0 +1,75 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: target
+ namespace: test
+ labels:
+   app: target
+   version: v1
+spec:
+ template:
+    metadata:
+     labels:
+       app: target
+       version: v1
+    spec:
+     containers:
+     - name: target
+       image: tangxusc/test:service-proxy-go-1
+       ports:
+       - containerPort: 8090
+         name: http-target
+         protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: target
+  namespace: test
+spec:
+  type: ClusterIP
+  selector:
+    app: target
+  ports:
+    - port: 80
+      name: http-target
+      protocol: TCP
+      targetPort: 8090
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: proxy
+ namespace: test
+ labels:
+   app: proxy
+   version: v1
+spec:
+ template:
+    metadata:
+     labels:
+       app: proxy
+       version: v1
+    spec:
+     containers:
+     - name: proxy
+       image: tangxusc/test:service-proxy-go-1
+       ports:
+       - containerPort: 8090
+         name: http-proxy
+         protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: proxy
+  namespace: test
+spec:
+  type: ClusterIP
+  selector:
+    app: proxy
+  ports:
+    - port: 80
+      name: http-proxy
+      protocol: TCP
+      targetPort: 8090
