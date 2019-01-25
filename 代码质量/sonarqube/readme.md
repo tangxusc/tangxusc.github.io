@@ -133,6 +133,23 @@ sonar.projectVersion=v1
 sonar.sources=./jwell-product-service-provider/,./jwell-product-service-api/
 ```
 
+如果是多模块项目,则使用此模式:
+
+```java
+sonar.projectKey=product-service
+sonar.projectName=product-service
+sonar.projectVersion=v1
+sonar.modules=provider
+
+java-module.sonar.projectName=provider
+java-module.sonar.language=java
+java-module.sonar.sources=./jwell-product-service-provider/
+java-module.sonar.projectBaseDir=src
+sonar.binaries=classes
+```
+
+
+
 在项目的pom.xml文件夹下运行
 
 ```shell
