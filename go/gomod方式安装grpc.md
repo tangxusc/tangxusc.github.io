@@ -60,7 +60,7 @@ $ go mod init
 $ go mod edit -replace=golang.org/x/net@v0.0.0-20181023162649-9b4f9f5ad519=github.com/golang/net@v0.0.0-20181023162649-9b4f9f5ad519
 $ go mod edit -replace=golang.org/x/tools@v0.0.0-20181221001348-537d06c36207=github.com/golang/tools@v0.0.0-20181221001348-537d06c36207
 #获取插件
-$ go get -u github.com/golang/protobuf/protoc-gen-go
+$ go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
 ```
 
 需要耐心等待插件的拉取完成,并且在插件拉取完成后会在$GOPATH/bin中生成名称为`protoc-gen-go`的可执行文件
