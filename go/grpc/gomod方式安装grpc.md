@@ -114,3 +114,12 @@ $ protoc --gofast_out=plugins=grpc:. *.proto
 ```
 
 即可生成`helloworld.pb.go`文件
+
+#### 参照
+1.golang.org\x\net\context => github.com/golang/net 里面包含context，dns，http2
+
+2.golang.org/x/text/secure/bidirule => github.com/golang/text 里面包含cmd，currency，secure
+
+3.google.golang.org/grpc => github.com/grpc/grpc-go 里面包含connectivity，grpclb，grpclog
+
+4.google.golang.org/genproto => github.com/google/go-genproto 里面包含googleapis，protobuf
