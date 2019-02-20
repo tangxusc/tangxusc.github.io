@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my
+  namespace: istio-system
+  labels:
+    app: my
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: my
+      labels:
+        app: my
+    spec:
+      containers:
+        - name: my
+          image: my-adapter:2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9999
+              protocol: TCP
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: my
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my
+  namespace: istio-system
+spec:
+  selector:
+    app: my
+  ports:
+  - port: 9999
+    targetPort: 9999
+    protocol: TCP
