@@ -1,5 +1,7 @@
 # 自定义mixer adapter
 
+[TOC]
+
 本节我们将自定义一个adapter,adapter和mixer通信使用grpc,所以本节需要对grpc和mixer的adapter有一定的了解.
 
 基于的环境:
@@ -136,22 +138,18 @@ $ mkdir -p $GOPATH/src/istio.io/ && cd $GOPATH/src/istio.io/  && git clone https
 
    [使用helm template 方式安装istio1.04](https://gitee.com/tanx/kubernetes-test/blob/master/%E8%BF%88%E5%90%91istio/README.md) 
 
-### 开始项目
+
+### 初始化项目
 
 在任意目录(非$gopath包含)创建项目目录,例如:
 
 ```shell
 cd ~/openProject/ && mkdir istio-my-adapter
-```
-
-#### 初始化项目
-
-```shell
 #使用go mod初始化项目
 $ go mod init
 ```
 
-#### 编辑依赖
+### 编辑依赖
 
 `go.mod`
 
@@ -209,7 +207,7 @@ $ go mod tidy
 
 如果对go module 了解的较少,可以参考: [**傻瓜式的 go modules 的讲解和代码.md**](https://gitee.com/tanx/kubernetes-test/blob/master/go/%E5%82%BB%E7%93%9C%E5%BC%8F%E7%9A%84%20go%20modules%20%E7%9A%84%E8%AE%B2%E8%A7%A3%E5%92%8C%E4%BB%A3%E7%A0%81.md) , [**Go模块简介.md**](https://gitee.com/tanx/kubernetes-test/blob/master/go/Go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B.md)
 
-#### 创建my.go
+### 创建my.go
 
 ```shell
 $ mkdir adapter
@@ -323,7 +321,7 @@ func (*MyAuth) HandleAuthorization(ctx context.Context, request *authorization.H
 
 根据以上代码,我们的adapter其实什么事情都没有干,只是将 request 序列化为json 然后打印了出来, 然后回复了一个Status为OK的请求,各位可以基于此方法定制自己的逻辑,但是在此处,我将以最简单的方式来做.
 
-#### 创建adapter启动文件
+### 创建adapter启动文件
 
 adapter的处理已经创建好了,那么接下来我们就启动这个grpc的server就好了.
 
@@ -361,7 +359,7 @@ func main() {
 
 是不是贼简单.
 
-#### 创建check数据文件
+### 创建check数据文件
 
 在项目根目录创建一个config目录(因为istio官方的mixer教程是创建config),并在其中定义通信数据
 
@@ -392,7 +390,7 @@ message Params {
 
 写好了proto文件后,我们就可以使用protoc生成我们需要的源代码啦
 
-#### protoc生成文件
+### protoc生成文件
 
 在开始生成文件前,国内用户一定要做一个准备工作,因为mixer_codegen.sh文件依赖一个`gcr.io/istio-testing/protoc` docker image,所以你需要先拉取下来
 
@@ -461,7 +459,7 @@ $GOPATH/src/istio.io/istio/myadapter
 ```
 
 拷贝`myadapter.yaml`至项目的config目录内
-#### 配置handler/instance/rule
+### 配置handler/instance/rule
 
 这三个都是老朋友了,直接给出配置好的文件`istio.yaml`如下:
 
@@ -513,13 +511,74 @@ spec:
         - my.instance.istio-system
 ```
 
+## 测试
 
+在做好以上步骤后,我们可以在我们本地测试一下我们的代码是否正确,mixer的adapter测试有两种方式:
 
-//TODO:测试
+- 使用golang代码进行测试 : 在项目中嵌入golang测试文件,并运行golang的单元测试
 
+- 使用mixs和mixc进行测 : 启动mixs作为服务端,并监听本地的配置文件,启动mixc作为客户端向mixs发送check等请求,mixs再通过grpc转发到具体的adapter上.
 
+  毫无疑问,第二种更适合真正的istio集群的情况(不是说第一种不好),所以在此我们选择使用mixs和mixc进行测试
 
-#### 生成adapter镜像
+### 准备
+
+1. 编译mixs和mixc (如果前面已经编译,则此处不用再编译)
+
+   ```shell
+   cd $GOPATH/src/istio.io/istio/ && make mixs && make mixc
+   ```
+
+2. 创建测试文件夹及文件
+
+   ```shell
+   mkdir 项目根目录/testdata
+   cp 项目根目录/k8s/istio.yaml 项目根目录/testdata/
+   cp 项目根目录/config/
+   cp $GOPATH/src/istio.io/istio/mixer/testdata/config/attributes.yaml 目根目录/testdata/
+   cp $GOPATH/src/istio.io/istio/mixer/template/authorization/template.yaml 目根目录/testdata/
+   ```
+
+   拷贝完成后目录是这样的:
+
+   ```shell
+   /testdata$ tree
+   ├── attributes.yaml
+   ├── istio.yaml
+   ├── myadapter.yaml
+   └── template.yaml
+   0 directories, 4 files
+   ```
+
+3. 启动adapter
+
+   ```shell
+   $ go run main.go
+   ```
+
+   在此,我们启动了grpc服务器,并暴露在`9999`端口上
+
+4. 启动mixs
+
+   ```shell
+   ./mixs server --configStoreURL=fs:///项目路径/istio-my-adapter/testdata/ --log_output_level=attributes:debug
+   ```
+
+   >  注意: 如果出现未找到mixs等错误,请配置你的Path,`$GOPATH/out/linux_amd64/release/`必须包含在path中,才能找到mixs和mixc的执行文件
+   >
+   > 注意: `fs://` 标示文件系统,后面是文件系统的路径,所以才会出现三个`/`
+
+5. 启动mixc
+
+   ```shell
+   ./mixc check -s destination.service="svc.cluster.local" -s request.path="/test222"
+   ```
+
+6. 在执行了以上命令后就可以在控制台和adapter上均可以看到结果了
+
+## 部署准备
+
+### 生成adapter镜像
 
 当我们确认好了我们的adapter工作正常后,adapter要以容器的方式来运行,所以我们需要编写Dockerfile,并生成为镜像:
 
@@ -539,7 +598,7 @@ $ go build main.go
 $ docker build -t my-adapter:2 .
 ```
 
-#### 配置adapter工作负载
+### 配置adapter工作负载
 
 adapter需要以工作负载的方式运行在k8s中,所以在此处,我们需要配置工作负载文件`k8s.yaml`:
 
@@ -587,13 +646,13 @@ spec:
 
 一切就绪后,我们就可以部署到我们的istio集群中进行验证了.
 
-### 部署
+## 部署
 
-#### 部署测试服务
+### 部署测试服务
 
 ​	测试服务部署: [nginx服务](https://gitee.com/tanx/kubernetes-test/tree/master/%E8%BF%88%E5%90%91istio/1-istio-%E7%A4%BA%E4%BE%8B)
 
-#### 部署adapter
+### 部署adapter
 
 ```shell
 kubectl apply -f istio.yaml
@@ -604,14 +663,23 @@ kubectl apply -f myadapter.yaml
 现在使用curl访问istio集群中的任意服务,在Deployment中的容器将会打印如下信息:
 
 ```json
-"instance":{"name":"my.instance.istio-system","subject":{"properties":{"custom_token_auth":{"Value":{"StringValue":"/test"}},"destination_name":{"Value":{"StringValue":"unknown"}},"destination_namespace":{"Value":{"StringValue":"default"}},"destination_service_host":{"Value":{"StringValue":"nginx.test.svc.cluster.local"}},"destination_workload_name":{"Value":{"StringValue":"unknown"}},"destination_workload_namespace":{"Value":{"StringValue":"unknown"}},"source_name":{"Value":{"StringValue":"istio-ingressgateway-6fc88db97f-98qs8"}},"source_namespace":{"Value":{"StringValue":"istio-system"}},"source_workload_name":{"Value":{"StringValue":"istio-ingressgateway"}},"source_workload_namespace":{"Value":{"StringValue":"istio-system"}}}}},"adapter_config":{"type_url":"type.googleapis.com/adapter.my.config.Params","value":"CgsvdGVzdC9hLnR4dA=="},"dedup_id":"11419436721688692556"}
+"instance":{"name":"my.instance.istio-system","subject":{"properties":{"request_path":{"Value":{"StringValue":"/test"}},"destination_name":{"Value":{"StringValue":"unknown"}},"destination_namespace":{"Value":{"StringValue":"default"}},"destination_service_host":{"Value":{"StringValue":"nginx.test.svc.cluster.local"}},"destination_workload_name":{"Value":{"StringValue":"unknown"}},"destination_workload_namespace":{"Value":{"StringValue":"unknown"}},"source_name":{"Value":{"StringValue":"istio-ingressgateway-6fc88db97f-98qs8"}},"source_namespace":{"Value":{"StringValue":"istio-system"}},"source_workload_name":{"Value":{"StringValue":"istio-ingressgateway"}},"source_workload_namespace":{"Value":{"StringValue":"istio-system"}}}}},"adapter_config":{"type_url":"type.googleapis.com/adapter.my.config.Params","value":"CgsvdGVzdC9hLnR4dA=="},"dedup_id":"11419436721688692556"}
 
-{"instance":{"name":"my.instance.istio-system","subject":{"properties":{"custom_token_auth":{"Value":{"StringValue":"/"}},"destination_name":{"Value":{"StringValue":"nginx-69d9d7887c-rtnbh"}},"destination_namespace":{"Value":{"StringValue":"test"}},"destination_service_host":{"Value":{"StringValue":""}},"destination_workload_name":{"Value":{"StringValue":"nginx"}},"destination_workload_namespace":{"Value":{"StringValue":"test"}},"source_name":{"Value":{"StringValue":"istio-ingressgateway-6fc88db97f-98qs8"}},"source_namespace":{"Value":{"StringValue":"istio-system"}},"source_workload_name":{"Value":{"StringValue":"istio-ingressgateway"}},"source_workload_namespace":{"Value":{"StringValue":"istio-system"}}}}},"adapter_config":{"type_url":"type.googleapis.com/adapter.my.config.Params","value":"CgsvdGVzdC9hLnR4dA=="},"dedup_id":"11419436721688692557"}
+{"instance":{"name":"my.instance.istio-system","subject":{"properties":{"request_path":{"Value":{"StringValue":"/"}},"destination_name":{"Value":{"StringValue":"nginx-69d9d7887c-rtnbh"}},"destination_namespace":{"Value":{"StringValue":"test"}},"destination_service_host":{"Value":{"StringValue":""}},"destination_workload_name":{"Value":{"StringValue":"nginx"}},"destination_workload_namespace":{"Value":{"StringValue":"test"}},"source_name":{"Value":{"StringValue":"istio-ingressgateway-6fc88db97f-98qs8"}},"source_namespace":{"Value":{"StringValue":"istio-system"}},"source_workload_name":{"Value":{"StringValue":"istio-ingressgateway"}},"source_workload_namespace":{"Value":{"StringValue":"istio-system"}}}}},"adapter_config":{"type_url":"type.googleapis.com/adapter.my.config.Params","value":"CgsvdGVzdC9hLnR4dA=="},"dedup_id":"11419436721688692557"}
 ```
 
 到此,自定义adapter完成.
 
+## 总结
 
+整体来说,自定义一个adapter还是需要依赖不少的知识的.
+
+- 在通信上需要各位对grpc有一定的了解
+- 在整体交互上需要各位了解mixer的一些设计,并且知道sidecar的交互过程
+- 在编译istio的过程中可能会出现一些包无法获取到,需要翻墙的情况,这就只能手动去做了
+- 在配置handler等声明时,很容易出现各种错误,这就需要一点一点的查日志找原因了
+- 本示例本身以简单为主,并没有真正的功能,但是各位在此基础上拓展应该较为容易
+- 写好adapter代码后不建议直接放到集群中进行测试需要进一步验证后再进行测试,这样方便确定问题所在
 
 ## 参照
 
