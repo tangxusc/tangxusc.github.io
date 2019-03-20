@@ -1,5 +1,4 @@
 echo '开始安装 helm'
-# tar 错误
 wget https://storage.googleapis.com/kubernetes-helm/helm-v2.13.0-linux-amd64.tar.gz && tar -zxvf helm-v2.13.0-linux-amd64.tar.gz && export PATH=$PATH:($pwd)/linux-amd64/ 
 helm init --upgrade -i registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.13.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts --service-account=clusterrole-aggregation-controller
 helm repo add rook-stable https://charts.rook.io/stable
