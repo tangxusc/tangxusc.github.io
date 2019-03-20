@@ -1,5 +1,6 @@
 # 索引
 
+```shell
 .
 ├── ambassador
 │   ├── ambassador-rbac.yaml
@@ -247,3 +248,4 @@
 ​    └── 状态模式 State(对象行为型).md
 
 49 directories, 195 files
+```
