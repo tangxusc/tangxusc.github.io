@@ -1,6 +1,7 @@
 echo '开始安装 helm'
-wget https://gitee.com/tanx/kubernetes-test/raw/master/helm/helm-v2.11.0-linux-amd64.tar && tar zxvf helm-v2.11.0-linux-amd64.tar.gz && export PATH=$PATH:($pwd)/linux-amd64/
-helm init --upgrade -i registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.11.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts --service-account=clusterrole-aggregation-controller
+# tar 错误
+wget https://storage.googleapis.com/kubernetes-helm/helm-v2.13.0-linux-amd64.tar.gz && tar -zxvf helm-v2.13.0-linux-amd64.tar.gz && export PATH=$PATH:($pwd)/linux-amd64/ 
+helm init --upgrade -i registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.13.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts --service-account=clusterrole-aggregation-controller
 helm repo add rook-stable https://charts.rook.io/stable
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
@@ -22,10 +23,10 @@ kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/in
 kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/efk-kibana.yaml
 
 echo '开始安装 prometheus'
-helm install --name prometheus --namespace prometheus bitnami/kubeapps --set alertmanager.persistentVolume.storageClass=rook-ceph-block --set kubeStateMetrics.enabled=false --set pushgateway.enabled=false --set server.persistentVolume.storageClass=rook-ceph-block
+helm install --name prometheus --namespace prometheus stable/prometheus --set alertmanager.persistentVolume.storageClass=rook-ceph-block --set kubeStateMetrics.enabled=false --set pushgateway.enabled=false --set server.persistentVolume.storageClass=rook-ceph-block
 
 echo '开始安装 metrics'
-helm install --name metrics --namespace metrics bitnami/metrics-server --set apiService.create=false
+helm install --name metrics --namespace metrics bitnami/metrics-server --set apiService.create=true
 
 echo '开始安装 jaeger'
 kubectl create namespace observability
@@ -34,7 +35,7 @@ kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operato
 kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/role.yaml
 kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/role_binding.yaml
 kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/operator.yaml
-
+echo '创建 jaeger实例'
 kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/jaeger-instance.yaml
 
 echo '开始安装 dashboard'
