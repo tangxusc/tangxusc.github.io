@@ -13,7 +13,13 @@ export kubeappsPWD=$( kubectl get secret $(kubectl get serviceaccount kubeapps-o
 
 echo '开始安装 rook'
 helm install --name rook-ceph-system --namespace rook-ceph-system rook-stable/rook-ceph --set hyperkube.repository=tangxusc/docker-image
+
+sleep 3m
+
 kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/rook-cluster.yaml
+
+sleep 3m
+
 export rookcephPWD=$( kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o yaml | grep "password:" | awk '{print $2}' | base64 --decode )
 
 echo '开始安装 efk'
@@ -25,7 +31,7 @@ echo '开始安装 prometheus'
 helm install --name prometheus --namespace prometheus stable/prometheus --set alertmanager.persistentVolume.storageClass=rook-ceph-block --set kubeStateMetrics.enabled=false --set pushgateway.enabled=false --set server.persistentVolume.storageClass=rook-ceph-block
 
 echo '开始安装 metrics'
-helm install --name metrics --namespace metrics bitnami/metrics-server --set apiService.create=false
+helm install --name metrics --namespace metrics bitnami/metrics-server --set apiService.create=true
 
 echo '开始安装 jaeger'
 kubectl create namespace observability
