@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="docker, maven">
 <meta name="description" content="docker maven plugin使用 随着容器化的进行，测试环境和线上环境开始尝试容器化发布。因此需要将现有的maven工程进行容器化，容器化的好处不言而喻，但是针对原先没有解耦的应用（容器配置和代码耦合在一起），制作镜像还是有些成本的。本文主要记录对于webx和springboot应用的镜像制作。
 springboot镜像制作 springboot制作官方有介绍，最主要的就是在pom.xml中增加docker maven plugin，然后配置读取最终生成的jar即可。
 &lt;plugin&gt; &lt;groupId&gt;com.spotify&lt;/groupId&gt; &lt;artifactId&gt;docker-maven-plugin&lt;/artifactId&gt; &lt;configuration&gt; &lt;imageName&gt;aegis-package-switch:1.0&lt;/imageName&gt; &lt;dockerDirectory&gt;${project.basedir}/docker&lt;/dockerDirectory&gt; &lt;resources&gt; &lt;resource&gt; &lt;targetPath&gt;/&lt;/targetPath&gt; &lt;directory&gt;bin&lt;/directory&gt; &lt;include&gt;run.sh&lt;/include&gt; &lt;/resource&gt; &lt;resource&gt; &lt;targetPath&gt;/&lt;/targetPath&gt; &lt;directory&gt;${project.build.directory}&lt;/directory&gt; &lt;include&gt;${project.build.finalName}.jar&lt;/include&gt; &lt;/resource&gt; &lt;/resources&gt; &lt;/configuration&gt; &lt;/plugin&gt;  docker-maven-plugin主要配置有：
@@ -54,6 +54,16 @@ FROM j8:1.0 RUN mkdir /work WORKDIR /work ADD run.sh /work/run.">
   
   
   
+    
+      <meta property="article:section" content="docker">
+    
+  
+  
+    
+      <meta property="article:tag" content="docker">
+    
+      <meta property="article:tag" content="maven">
+    
   
 
 
@@ -191,7 +201,7 @@ FROM j8:1.0 RUN mkdir /work WORKDIR /work ADD run.sh /work/run.">
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -233,6 +243,14 @@ FROM j8:1.0 RUN mkdir /work WORKDIR /work ADD run.sh /work/run.">
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/docker">docker</a>
+    
+  
+
   </div>
 
 </div>
@@ -451,6 +469,18 @@ fi
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/docker/">docker</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/maven/">maven</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

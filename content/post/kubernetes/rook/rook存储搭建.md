@@ -2,6 +2,18 @@
 title: "使用rook搭建存储集群"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- kubeadm
+- k8s
+- rook
+tags:
+- kubeadm
+- k8s
+- rook
+keywords:
+- kubeadm
+- k8s
+- rook
 ---
 
 # 使用rook搭建存储集群

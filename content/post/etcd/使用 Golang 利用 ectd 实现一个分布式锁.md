@@ -2,6 +2,18 @@
 title: "使用 Golang 利用 ectd 实现一个分布式锁"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- golang
+- etcd
+- 分布式锁
+tags:
+- golang
+- etcd
+- 分布式锁
+keywords:
+- golang
+- etcd
+- 分布式锁
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://www.cnblogs.com/diegodu/p/5603678.html

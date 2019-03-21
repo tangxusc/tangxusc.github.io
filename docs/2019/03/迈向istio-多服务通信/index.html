@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="istio">
 <meta name="description" content="istio-多服务通信 [TOC]
 在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;
 在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务
@@ -50,6 +50,14 @@ package main import ( &quot;fmt&quot; &quot;io/ioutil&quot; &quot;log&quot; &quo
   
   
   
+    
+      <meta property="article:section" content="istio">
+    
+  
+  
+    
+      <meta property="article:tag" content="istio">
+    
   
 
 
@@ -187,7 +195,7 @@ package main import ( &quot;fmt&quot; &quot;io/ioutil&quot; &quot;log&quot; &quo
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -229,6 +237,14 @@ package main import ( &quot;fmt&quot; &quot;io/ioutil&quot; &quot;log&quot; &quo
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
+    
+  
+
   </div>
 
 </div>
@@ -708,6 +724,16 @@ $ curl http://localhost:31380/target/proxy?url=http://proxy/index -v
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/istio/">istio</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

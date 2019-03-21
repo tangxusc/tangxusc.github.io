@@ -2,6 +2,20 @@
 title: "prometheus和alertmanager监控并发送邮件"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- kubeadm
+- k8s
+- prometheus
+tags:
+- kubeadm
+- k8s
+- install
+- prometheus
+keywords:
+- kubeadm
+- k8s
+- install
+- prometheus
 ---
 
 # prometheus和alertmanager监控并发送邮件

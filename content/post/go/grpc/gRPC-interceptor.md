@@ -2,6 +2,18 @@
 title: "gRPC-interceptor"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- golang
+- grpc
+- interceptor
+tags:
+- golang
+- grpc
+- interceptor
+keywords:
+- golang
+- grpc
+- interceptor
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://colobu.com/2017/04/17/dive-into-gRPC-interceptor/

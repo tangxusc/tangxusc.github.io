@@ -2,6 +2,19 @@
 title: "kubeadm安装HA集群"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- kubeadm
+- k8s
+tags:
+- kubeadm
+- k8s
+- install
+- HA
+keywords:
+- kubeadm
+- k8s
+- install
+- HA
 ---
 
 # kubeadm安装HA集群

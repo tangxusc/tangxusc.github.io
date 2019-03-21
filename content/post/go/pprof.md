@@ -2,6 +2,15 @@
 title: "Golang大杀器之性能剖析PProf"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- golang
+- PProf
+tags:
+- golang
+- PProf
+keywords:
+- golang
+- PProf
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://github.com/EDDYCJY/blog/blob/master/golang/2018-09-15-Golang%20%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90%20PProf.md

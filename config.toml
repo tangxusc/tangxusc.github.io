@@ -83,7 +83,7 @@ publishDir="docs"
   identifier = "github"
   name = "GitHub"
   pre = "<i class=\"sidebar-button-icon fa fa-lg fa-github\"></i>"
-  url = "https://github.com/kakawait"
+  url = "https://github.com/tangxusc/blog"
 #[[menu.links]]
 #  weight = 2
 #  identifier = "stackoverflow"

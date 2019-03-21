@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="java, annotation">
 <meta name="description" content="本文由 简悦 SimpRead 转码， 原文地址 http://www.baeldung.com/java-annotation-processing-builder
  1.简介 本文是Java源代码级别注释处理的简介，并提供了使用此技术在编译期间生成其他源文件的示例。
 2.注释处理的应用 源级注释处理首先出现在Java 5中。它是一种在编译阶段生成其他源文件的便捷技术。
@@ -94,6 +94,16 @@ _注释处理器_模块的设置如下。我们将使用Google的自动服务库
   
   
   
+    
+      <meta property="article:section" content="java">
+    
+  
+  
+    
+      <meta property="article:tag" content="java">
+    
+      <meta property="article:tag" content="annotation">
+    
   
 
 
@@ -231,7 +241,7 @@ _注释处理器_模块的设置如下。我们将使用Google的自动服务库
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -273,6 +283,14 @@ _注释处理器_模块的设置如下。我们将使用Google的自动服务库
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/java">java</a>
+    
+  
+
   </div>
 
 </div>
@@ -754,6 +772,18 @@ public BuilderProcessor extends AbstractProcessor {
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/java/">java</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/annotation/">annotation</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="k8s, Controller manager">
 <meta name="description" content="本文由 简悦 SimpRead 转码， 原文地址 https://www.colabug.com/2801661.html
  这不是一系列入门级别的文章，也不是按部就班而来的，而是我看到哪里，发现有些代码写的精妙的地方，都值得我们学习下，顺手记录下来，一方面是让自己将来可以有迹可循，另外对大家应该也会有所帮助。而且记录本身成本并不是很高。
 高可用部署情况下，需要部署多个 controller manager （以下简称 cm ），每个 cm 需要 --leader-elect=true 启动参数，即告知 cm 以高可用方式启动，谁要想进行真正的工作，必须先抢到锁，被选举为 leader 才行，而抢不到所得只能待机，在 leader 因为异常终止的时候，由剩余的其余节点再次获得锁。
@@ -54,6 +54,18 @@
   
   
   
+    
+      <meta property="article:section" content="k8s">
+    
+      <meta property="article:section" content="Controller manager">
+    
+  
+  
+    
+      <meta property="article:tag" content="k8s">
+    
+      <meta property="article:tag" content="Controller manager">
+    
   
 
 
@@ -191,7 +203,7 @@
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -233,6 +245,16 @@
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/k8s">k8s</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/controller-manager">Controller manager</a>
+    
+  
+
   </div>
 
 </div>
@@ -612,6 +634,18 @@ chan 被关闭， <code>wait.Poll</code>
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/k8s/">k8s</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/controller-manager/">Controller manager</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

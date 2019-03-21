@@ -2,6 +2,15 @@
 title: "golang日志库"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- golang
+- logrus
+tags:
+- golang
+- logrus
+keywords:
+- golang
+- logrus
 ---
 
 # golang 日志库

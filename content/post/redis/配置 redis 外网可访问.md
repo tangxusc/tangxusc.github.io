@@ -2,6 +2,12 @@
 title: "配置redis外网可访问"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- redis
+tags:
+- redis
+keywords:
+- redis
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://blog.csdn.net/hel12he/article/details/46911159

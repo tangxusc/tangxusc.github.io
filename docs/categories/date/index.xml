@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Date on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/categories/date/</link>
+    <description>Recent content in Date on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/categories/date/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Java8 日期和时间</title>
+      <link>https://tangxusc.github.io/blog/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/a80596890555/article/details/58687444
+ 如何正确处理时间 现实生活的世界里，时间是不断向前的，如果向前追溯时间的起点，可能是宇宙出生时，又或是是宇宙出现之前， 但肯定是我们目前无法找到的，我们不知道现在距离时间原点的精确距离。所以我们要表示时间， 就需要人为定义一个原点。
+原点被规定为，格林威治时间 (GMT)1970 年 1 月 1 日的午夜 为起点, 之于为啥是 GMT 时间，大概是因为本初子午线在那的原因吧。
+java 中的时间 如果你跟你朋友说：“我们 1484301456 一起去吃饭，别迟到！”，而你朋友能马上理解你说的时间，表示时间就会很简单， 只需要一个 long 值来表示原点的偏移量，这是个绝对时间，在世界范围内都适用。但实际上我们不能马上理解这串数字， 而且我们需要不同的时间单位来表示时间的跨度，比如一个季度是 3 个月，一个月有 30 天等。 你可以跟朋友约好 “明天这个时候再见面”, 你朋友很容易理解明天的意思，但要是没有’天’这个单位， 他就需要在那串数字上加上 86400(一天是 86400 秒)。
+Java 三次引入处理时间的 API，JDK1.0 中包含了一个Date类，但大多数方法在 java1.1 引入Calendear类之后被弃用了。 它的实例都是可变的，而且它的 API 很难使用，比如月份是从 0 开始这种反人类的设置。
+java8 引入的java.time API 已经纠正了之前的问题。它已经完全实现了JSR310规范。
+java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个精确的时间点，Duration和Period表示两个时间点之间的时间量。 LocalDate表示日期，即 xx 年 xx 月 xx 日，即不包括时间也不带时区。LocalTime与LocalDate类似， 但只包含时间。LocalDateTime则包含日期和时间。ZoneDateTime表示一个带时区的时间。 DateTimeFormatter提供格式化和解析功能。下面详细的介绍使用方法。</description>
+    </item>
+    
+  </channel>
+</rss>

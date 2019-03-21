@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="电商网站, DDD">
 <meta name="description" content="分布式事务Saga模式 两阶段提交2PC是分布式事务中最强大的事务类型之一，两段提交就是分两个阶段提交，第一阶段询问各个事务数据源是否准备好，第二阶段才真正将数据提交给事务数据源，当需要同时更新多个数据源实体时，例如确认订单并立即更新库存时，它非常有用。
 但是，当您使用微服务时，情况会变得复杂。每个服务都拥有自己的数据库系统，每个服务不能再越过别的服务直接访问那个服务的数据库了。
 比如服务A有自己的数据库O1，服务B有自己的数据库O2，服务B如果想同时更新数据库O1和O2，就不能越过服务B直接操作数据库O1，而两段提交正是适合这样的场合，服务B可以在一个JTA事务中同时调用数据库O1的XA数据源JNDI，再调用数据库O2的XA数据源JNDI，那么O1和O2的数据就会实现两段提交，O1数据库执行修改或插入操作后其实没有保存到数据库，只有等O2数据库执行修改或插入操作后，才在第二阶段提交确认保存，这个过程如果有任何出错，数据库O1和数据库O2如同没有执行修改或插入一样，两者数据状态是一致的。
@@ -178,6 +178,14 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
   
   
   
+    
+      <meta property="article:section" content="DDD">
+    
+  
+  
+    
+      <meta property="article:tag" content="DDD">
+    
   
 
 
@@ -315,7 +323,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -357,6 +365,14 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/ddd">DDD</a>
+    
+  
+
   </div>
 
 </div>
@@ -518,6 +534,16 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/ddd/">DDD</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

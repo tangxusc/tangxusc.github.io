@@ -2,6 +2,20 @@
 title: "jaeger-operator安装"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- kubeadm
+- k8s
+- jaeger
+tags:
+- kubeadm
+- k8s
+- install
+- jaeger
+keywords:
+- kubeadm
+- k8s
+- install
+- jaeger
 ---
 
 # jaeger-operator安装

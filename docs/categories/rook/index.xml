@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rook on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/categories/rook/</link>
+    <description>Recent content in Rook on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/categories/rook/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>使用rook搭建存储集群</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/</guid>
+      <description>使用rook搭建存储集群 rook是云原生的存储协调器,为各种存储提供解决方案,提供自我管理,自我扩展,自我修复的存储服务,在kubernetes中实际实现是operator方式.
+在rook 0.9版本中,Ceph已经是beta支持状态了.
+Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多年生产部署的块存储，对象存储和共享文件系统.
+安装 rook提供了operator的方式来处理ceph存储的安装,所以此处安装使用helm来安装rook
+helm repo add rook-stable https://charts.rook.io/stable helm install --namespace rook-ceph-system rook-stable/rook-ceph  ceph集群 安装了rook后,还需要在rook中声明CRD来建立ceph集群
+cluster.yaml
+apiVersion: v1 kind: Namespace metadata: name: rook-ceph --- apiVersion: v1 kind: ServiceAccount metadata: name: rook-ceph-osd namespace: rook-ceph --- apiVersion: v1 kind: ServiceAccount metadata: name: rook-ceph-mgr namespace: rook-ceph --- kind: Role apiVersion: rbac.authorization.k8s.io/v1beta1 metadata: name: rook-ceph-osd namespace: rook-ceph rules: - apiGroups: [&amp;quot;&amp;quot;] resources: [&amp;quot;configmaps&amp;quot;] verbs: [ &amp;quot;get&amp;quot;, &amp;quot;list&amp;quot;, &amp;quot;watch&amp;quot;, &amp;quot;create&amp;quot;, &amp;quot;update&amp;quot;, &amp;quot;delete&amp;quot; ] --- kind: Role apiVersion: rbac.</description>
+    </item>
+    
+  </channel>
+</rss>

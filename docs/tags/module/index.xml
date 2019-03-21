@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Module on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/tags/module/</link>
+    <description>Recent content in Module on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/tags/module/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Go模块简介</title>
+      <link>https://tangxusc.github.io/blog/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://roberto.selbach.ca/intro-to-go-modules/
+ Go模块简介 发表于 2018年8月18日(https://roberto.selbach.ca/intro-to-go-modules/) 作者：Roberto Selbach
+即将发布的Go编程语言版本1.11将为_模块_带来实验性支持 ，几天前Go.A的新依赖管理系统，我写了一篇关于它的快速帖子。自那篇文章上线以来，事情发生了一些变化，因为我们现在非常接近新版本，我认为现在是另一篇文章更适合实践的好时机。所以这就是我们要做的：我们将创建一个新的包，然后我们将发布一些版本，看看它是如何工作的。
+创建模块 首先要做的事情。让我们创建我们的包。我们称之为“testmod”。这里有一个重要的细节：这个目录应该 在你的外面，因为默认情况下，模块支持在其中被禁用。Go模块是可能在某些时候完全消除的第一步。$GOPATH$GOPATH
+$ mkdir testmod $ cd testmod  我们的包很简单：
+package testmod import &amp;quot;fmt&amp;quot; // Hi returns a friendly greeting func Hi(name string) string { return fmt.Sprintf(&amp;quot;Hi, %s&amp;quot;, name) }  包完成但它仍然不是_模块_。让我们改变这一点。
+$ go mod init github.com/robteix/testmod go: creating new go.mod: module github.com/robteix/testmod  这将go.mod在包目录中创建一个新文件，其中包含以下内容：
+module github.com/robteix/testmod  这里不是很多，但这有效地将我们的包变成了一个 _模块_。我们现在可以将这个代码推送到一个存储库：
+$ git init $ git add * $ git commit -am &amp;quot;First commit&amp;quot; $ git push -u origin master  到目前为止，任何愿意使用此软件包的人都会go get ：</description>
+    </item>
+    
+    <item>
+      <title>傻瓜式的 go modules 的讲解和代码</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E5%82%BB%E7%93%9C%E5%BC%8F%E7%9A%84-go-modules-%E7%9A%84%E8%AE%B2%E8%A7%A3%E5%92%8C%E4%BB%A3%E7%A0%81/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E5%82%BB%E7%93%9C%E5%BC%8F%E7%9A%84-go-modules-%E7%9A%84%E8%AE%B2%E8%A7%A3%E5%92%8C%E4%BB%A3%E7%A0%81/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://it.520mwx.com/view/10804
+ 一 国内关于 gomod 的文章，哪怕是使用了百度 -csdn，依然全是理论，虽然 golang 的使用者大多是大神但是也有像我这样的的弱鸡是不是？
+所以，我就写个傻瓜式教程了。
+二 1. 新建文件夹 go_moudiules_demo
+2.go mod 之，生成 gomod.go 文件
+go mod init go_moudiules_demo 语法 go mod init [module] 3. 创建 main.go，默认包名是 gomod，需要改成 main
+4. 创建正真的存放代码的文件夹 demo 和文件 gomod.go，注意不能与 main 放在同一文件夹下，因为会造成包名冲突
+ 5. 根据规则引入代码，这里有个坑，因为 goland 做的不太好，实际上 golang 的所有工具都做的不太好，导致代码报红，但是实际上 go build/run 还是能跑通的
+ 当然 goland 也可以配置，就是不知道怎么去红名。。。　三 总结 gomod 最容易让人进了误区就是，把自己之前的代码都 gomod 一次，那么后面使用的时候直接根据 gomod 的 package 找之前的代码，简直美滋滋。</description>
+    </item>
+    
+    <item>
+      <title>再探go modules使用与细节</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E5%86%8D%E6%8E%A2go-modules%E4%BD%BF%E7%94%A8%E4%B8%8E%E7%BB%86%E8%8A%82/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E5%86%8D%E6%8E%A2go-modules%E4%BD%BF%E7%94%A8%E4%B8%8E%E7%BB%86%E8%8A%82/</guid>
+      <description>还有半个月 go1.12 就要发布了。这是首个将 go modules 纳入正式支持的稳定版本。
+ 距离 go modules 随着 go1.11 正式面向广大开发者进行体验也已经过去了半年，这段时间 go modules 也发生了一些变化，借此机会我想再次深入探讨 go modules 的使用，同时对这个新生包管理方案做一些思考。
+版本控制和语义化版本 包的版本控制总是一个包管理器绕不开的古老话题，自然对于我们的 go modules 也是这样。
+我们将学习一种新的版本指定方式，然后深入地探讨一下 golang 官方推荐的semver即语义化版本。
+控制包版本 在讨论 go get 进行包管理时我们曾经讨论过如何对包版本进行控制（文章在此），支持的格式如下：
+vX.Y.Z-pre.0.yyyymmddhhmmss-abcdefabcdef vX.0.0-yyyymmddhhmmss-abcdefabcdef vX.Y.(Z+1)-0.yyyymmddhhmmss-abcdefabcdef vX.Y.Z  在 go.mod 文件中我们也需要这样指定，否则 go mod 无法正常工作，这带来了 2 个痛点：
+ 目标库需要打上符合要求的 tag，如果 tag 不符合要求不排除日后出现兼容问题（目前来说只要正确指定 tag 就行，唯一的特殊情况在下一节介绍） 如果目标库没有打上 tag，那么就必须毫无差错的编写大串的版本信息，大大加重了使用者的负担  基于以上原因，现在可以直接使用 commit 的 hash 来指定版本，如下：
+# 使用go get时 go get github.com/mqu/go-notify@ef6f6f49 # 在go.mod中指定 module my-module require ( // other packages github.</description>
+    </item>
+    
+    <item>
+      <title>如何使用 go get 下载 gitlab 私有项目</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-go-get-%E4%B8%8B%E8%BD%BD-gitlab-%E7%A7%81%E6%9C%89%E9%A1%B9%E7%9B%AE/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-go-get-%E4%B8%8B%E8%BD%BD-gitlab-%E7%A7%81%E6%9C%89%E9%A1%B9%E7%9B%AE/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 http://holys.im/2016/09/20/go-get-in-gitlab/
+ 据此 issue，gitlab 7.8 就开始支持 go get private repo。
+假设 gitlab 服务是： mygitlab.com
+使用方式：
+$ go get -v mygitlab.com/user/repo  如果 mygitlab.com 不支持 https, 还得加上 -insecure 参数
+$ go get -v -insecure mygitlab.com/user/repo  但是 -insecure 参数是 go 1.5 以后才有的，所以如果低于 1.5 版本，赶紧升级一下吧。
+默认需要输入用户名和密码，比较繁琐。 由于 go get 底层实际还是用了 git 去操作。可以配置 .gitconfig 使之用 http =&amp;gt; ssh 的访问方式 (个人感觉就是重写了 url)
+$ git config --global url.&amp;quot;git@mygitlab.com:&amp;quot;.insteadOf &amp;quot;http://mygitlab.com/&amp;quot; // 其实就是在 `.</description>
+    </item>
+    
+  </channel>
+</rss>

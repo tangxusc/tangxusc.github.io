@@ -2,6 +2,12 @@
 title: "redis配置详解"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- redis
+tags:
+- redis
+keywords:
+- redis
 ---
 
 

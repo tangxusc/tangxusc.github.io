@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Golang on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/tags/golang/</link>
+    <description>Recent content in Golang on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Go 程序性能优化及 pprof 使用方法详解</title>
+      <link>https://tangxusc.github.io/blog/2019/03/go-%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8F%8A-pprof-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/go-%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8F%8A-pprof-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://www.jb51.net/article/127551.htm
+ Go 程序性能优化及 pprof 使用方法详解  更新时间：2017 年 11 月 05 日 10:50:22 作者：snowInPluto
+这篇文章主要为大家详细介绍了 Go 程序性能优化及 pprof 的使用方法，具有一定的参考价值，感兴趣的小伙伴们可以参考一下
+Go 程序的性能优化及 pprof 的使用
+程序的性能优化无非就是对程序占用资源的优化。对于服务器而言，最重要的两项资源莫过于 CPU 和内存。性能优化，就是在对于不影响程序数据处理能力的情况下，我们通常要求程序的 CPU 的内存占用尽量低。反过来说，也就是当程序 CPU 和内存占用不变的情况下，尽量地提高程序的数据处理能力或者说是吞吐量。
+Go 的原生工具链中提供了非常多丰富的工具供开发者使用，其中包括 pprof。
+对于 pprof 的使用要分成下面两部分来说。
+Web 程序使用 pprof
+先写一个简单的 Web 服务程序。程序在 9876 端口上接收请求。
+package main import ( &amp;quot;bytes&amp;quot; &amp;quot;io/ioutil&amp;quot; &amp;quot;log&amp;quot; &amp;quot;math/rand&amp;quot; &amp;quot;net/http&amp;quot; _ &amp;quot;net/http/pprof&amp;quot; ) func main() { http.HandleFunc(&amp;quot;/test&amp;quot;, handler) log.Fatal(http.ListenAndServe(&amp;quot;:9876&amp;quot;, nil)) } func handler(w http.</description>
+    </item>
+    
+    <item>
+      <title>Golang大杀器之性能剖析PProf</title>
+      <link>https://tangxusc.github.io/blog/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://github.com/EDDYCJY/blog/blob/master/golang/2018-09-15-Golang%20%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90%20PProf.md
+ Golang 大杀器之性能剖析 PProf 前言 写了几吨代码，实现了几百个接口。功能测试也通过了，终于成功的部署上线了
+结果，性能不佳，什么鬼？
+想做性能分析 PProf 想要进行性能优化，首先瞩目在 Go 自身提供的工具链来作为分析依据，本文将带你学习、使用 Go 后花园，涉及如下：
+ runtime/pprof：采集程序（非 Server）的运行数据进行分析 net/http/pprof：采集 HTTP Server 的运行时数据进行分析  是什么 pprof 是用于可视化和分析性能分析数据的工具
+pprof 以 profile.proto 读取分析样本的集合，并生成报告以可视化并帮助分析数据（支持文本和图形报告）
+profile.proto 是一个 Protocol Buffer v3 的描述文件，它描述了一组 callstack 和 symbolization 信息， 作用是表示统计分析的一组采样的调用栈，是很常见的 stacktrace 配置文件格式
+支持什么使用模式  Report generation：报告生成 Interactive terminal use：交互式终端使用 Web interface：Web 界面  可以做什么  CPU Profiling：CPU 分析，按照一定的频率采集所监听的应用程序 CPU（含寄存器）的使用情况，可确定应用程序在主动消耗 CPU 周期时花费时间的位置 Memory Profiling：内存分析，在应用程序进行堆分配时记录堆栈跟踪，用于监视当前和历史内存使用情况，以及检查内存泄漏 Block Profiling：阻塞分析，记录 goroutine 阻塞等待同步（包括定时器通道）的位置 Mutex Profiling：互斥锁分析，报告互斥锁的竞争情况  一个简单的例子 我们将编写一个简单且有点问题的例子，用于基本的程序初步分析</description>
+    </item>
+    
+    <item>
+      <title>Go模块简介</title>
+      <link>https://tangxusc.github.io/blog/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://roberto.selbach.ca/intro-to-go-modules/
+ Go模块简介 发表于 2018年8月18日(https://roberto.selbach.ca/intro-to-go-modules/) 作者：Roberto Selbach
+即将发布的Go编程语言版本1.11将为_模块_带来实验性支持 ，几天前Go.A的新依赖管理系统，我写了一篇关于它的快速帖子。自那篇文章上线以来，事情发生了一些变化，因为我们现在非常接近新版本，我认为现在是另一篇文章更适合实践的好时机。所以这就是我们要做的：我们将创建一个新的包，然后我们将发布一些版本，看看它是如何工作的。
+创建模块 首先要做的事情。让我们创建我们的包。我们称之为“testmod”。这里有一个重要的细节：这个目录应该 在你的外面，因为默认情况下，模块支持在其中被禁用。Go模块是可能在某些时候完全消除的第一步。$GOPATH$GOPATH
+$ mkdir testmod $ cd testmod  我们的包很简单：
+package testmod import &amp;quot;fmt&amp;quot; // Hi returns a friendly greeting func Hi(name string) string { return fmt.Sprintf(&amp;quot;Hi, %s&amp;quot;, name) }  包完成但它仍然不是_模块_。让我们改变这一点。
+$ go mod init github.com/robteix/testmod go: creating new go.mod: module github.com/robteix/testmod  这将go.mod在包目录中创建一个新文件，其中包含以下内容：
+module github.com/robteix/testmod  这里不是很多，但这有效地将我们的包变成了一个 _模块_。我们现在可以将这个代码推送到一个存储库：
+$ git init $ git add * $ git commit -am &amp;quot;First commit&amp;quot; $ git push -u origin master  到目前为止，任何愿意使用此软件包的人都会go get ：</description>
+    </item>
+    
+    <item>
+      <title>gRPC-interceptor</title>
+      <link>https://tangxusc.github.io/blog/2019/03/grpc-interceptor/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/grpc-interceptor/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://colobu.com/2017/04/17/dive-into-gRPC-interceptor/
+ gRPC-Go 增加了拦截器 (interceptor) 的功能， 就像 Java Servlet 中的 filter 一样，可以对 RPC 的请求和响应进行拦截处理，而且既可以在客户端进行拦截，也可以对服务器端进行拦截。
+利用拦截器，可以对 gRPC 进行扩展，利用社区的力量将 gRPC 发展壮大，也可以让开发者更灵活地处理 gRPC 流程中的业务逻辑。下面列出了利用拦截器实现的一些功能框架：
+ Go gRPC Middleware: 提供了拦截器的 interceptor 链式的功能，可以将多个拦截器组合成一个拦截器链，当然它还提供了其它的功能，所以以 gRPC 中间件命名。 grpc-multi-interceptor: 是另一个 interceptor 链式功能的库，也可以将单向的或者流式的拦截器组合。 grpc_auth: 身份验证拦截器 grpc_ctxtags: 为上下文增加Tag map 对象 grpc_zap: 支持zap日志框架 grpc_logrus: 支持logrus日志框架 grpc_prometheus: 支持 prometheus otgrpc: 支持 opentracing/zipkin grpc_opentracing: 支持 opentracing/zipkin grpc_retry: 为客户端增加重试的功能 grpc_validator: 为服务器端增加校验的功能 xrequestid: 将 request id 设置到 context 中 go-grpc-interceptor: 解析Accept-Language并设置到 context requestdump: 输出 request/response  也有其它一些文章介绍的利用拦截器的例子，如下面的两篇文章： Introduction to OAuth on gRPC、gRPC 实践 拦截器 Interceptor</description>
+    </item>
+    
+    <item>
+      <title>golang日志库</title>
+      <link>https://tangxusc.github.io/blog/2019/03/golang%E6%97%A5%E5%BF%97%E5%BA%93/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/golang%E6%97%A5%E5%BF%97%E5%BA%93/</guid>
+      <description>golang 日志库 golang 标准库的日志框架非常简单，仅仅提供了 print，panic 和 fatal 三个函数对于更精细的日志级别、日志文件分割以及日志分发等方面并没有提供支持。所以催生了很多第三方的日志库，但是在 golang 的世界里，没有一个日志库像 slf4j 那样在 Java 中具有绝对统治地位。golang 中，流行的日志框架包括 logrus、zap、zerolog、seelog 等。 logrus 是目前 Github 上 star 数量最多的日志库，目前 (2018.08，下同)star 数量为 8119，fork 数为 1031。logrus 功能强大，性能高效，而且具有高度灵活性，提供了自定义插件的功能。很多开源项目，如 docker，prometheus 等，都是用了 logrus 来记录其日志。 zap 是 Uber 推出的一个快速、结构化的分级日志库。具有强大的 ad-hoc 分析功能，并且具有灵活的仪表盘。zap 目前在 GitHub 上的 star 数量约为 4.3k。 seelog 提供了灵活的异步调度、格式化和过滤功能。目前在 GitHub 上也有约 1.1k。
+logrus 特性 logrus 具有以下特性：
+ 完全兼容 golang 标准库日志模块：logrus 拥有六种日志级别：debug、info、warn、error、fatal 和 panic，这是 golang 标准库日志模块的 API 的超集。如果您的项目使用标准库日志模块，完全可以以最低的代价迁移到 logrus 上。 可扩展的 Hook 机制：允许使用者通过 hook 的方式将日志分发到任意地方，如本地文件系统、标准输出、logstash、elasticsearch 或者 mq 等，或者通过 hook 定义日志内容和格式等。 可选的日志输出格式：logrus 内置了两种日志格式，JSONFormatter和TextFormatter，如果这两个格式不满足需求，可以自己动手实现接口Formatter，来定义自己的日志格式。 Field 机制：logrus 鼓励通过 Field 机制进行精细化的、结构化的日志记录，而不是通过冗长的消息来记录日志。 logrus 是一个可插拔的、结构化的日志框架。  logrus 的使用 第一个示例 最简单的使用 logrus 的示例如下：</description>
+    </item>
+    
+    <item>
+      <title>了解 etcd</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E4%BA%86%E8%A7%A3-etcd/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E4%BA%86%E8%A7%A3-etcd/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://segmentfault.com/a/1190000008361945
+ 说明 这是一篇非常入门的文章，让你大概了解一下 etcd。写这篇文章时使用 etcd 的版本是 3.1.0。 etcd 是以实现共享配置和服务发现为目的，提供一致性的键值存储的分布式数据库。kubernetes 等项目使用了 etcd。
+下载安装 去这里下载 release 包，解压后是一些文档和两个二进制文件 etcd 和 etcdctl。etcd 是 server 端，etcdctl 是客户端。将 etcd 和 etcdctl 加入 PATH 路径方便我们执行命令。
+运行 server 执行命令 etcd，即可启动 server
+ming@ming:/tmp$ etcd 2017-02-14 14:04:40.164639 I | etcdmain: etcd Version: 3.1.0 2017-02-14 14:04:40.164725 I | etcdmain: Git SHA: 8ba2897 2017-02-14 14:04:40.164736 I | etcdmain: Go Version: go1.7.4 2017-02-14 14:04:40.164776 I | etcdmain: Go OS/Arch: linux/amd64 2017-02-14 14:04:40.</description>
+    </item>
+    
+    <item>
+      <title>使用 Golang 利用 ectd 实现一个分布式锁</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8-golang-%E5%88%A9%E7%94%A8-ectd-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8-golang-%E5%88%A9%E7%94%A8-ectd-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/diegodu/p/5603678.html
+  本文 http://blog.codeg.cn/post/blog/2016-02-24-distrubute-lock-over-etcd/ 是作者 zieckey 在研究和学习相关内容时所做的笔记，欢迎广大朋友指正和交流！ 版权所有，欢迎转载和分享，但请保留此段声明。
+etcd是随着CoreOS项目一起成长起来的，随着 Golang 和 CoreOS 等项目在开源社区日益火热， etcd作为一个高可用、强一致性的分布式 Key-Value 存储系统被越来越多的开发人员关注和使用。
+这篇文章全方位介绍了 etcd 的应用场景，这里简单摘要如下：
+ 服务发现（Service Discovery） 消息发布与订阅 负载均衡 分布式通知与协调 分布式锁 分布式队列 集群监控与 Leader 竞选 为什么用 etcd 而不用 ZooKeeper  本文重点介绍如何利用ectd实现一个分布式锁。 锁的概念大家都熟悉，当我们希望某一事件在同一时间点只有一个线程 (goroutine) 在做，或者某一个资源在同一时间点只有一个服务能访问，这个时候我们就需要用到锁。 例如我们要实现一个分布式的 id 生成器，多台服务器之间的协调就非常麻烦。分布式锁就正好派上用场。
+其基本实现原理为：
+ 在 ectd 系统里创建一个 key 如果创建失败，key 存在，则监听该 key 的变化事件，直到该 key 被删除，回到 1 如果创建成功，则认为我获得了锁  具体代码如下：
+package etcdsync import ( &amp;quot;fmt&amp;quot; &amp;quot;io&amp;quot; &amp;quot;os&amp;quot; &amp;quot;sync&amp;quot; &amp;quot;time&amp;quot; &amp;quot;github.</description>
+    </item>
+    
+    <item>
+      <title>使用go mod(1.11)安装grpc</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8go-mod1.11%E5%AE%89%E8%A3%85grpc/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8go-mod1.11%E5%AE%89%E8%A3%85grpc/</guid>
+      <description>优势 不在使用git clone具体的golang库的源代码
+安装较为简单
+查看golang版本 $ go version go version go1.11 linux/amd64  因为go1.11才有了go mod 所以在此必须使用1.11版本
+配置protoc 在 https://github.com/protocolbuffers/protobuf/releases中下载对应平台的版本到系统中.
+版本规则为protoc-&amp;lt;version&amp;gt;-&amp;lt;platform&amp;gt;.zip
+$ wget https://github.com/protocolbuffers/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip $ unzip -o -d /protoc-3.6.1-linux-x86_64 protoc-3.6.1-linux-x86_64.zip  protoc 即Protocol Buffers v3 用于生成gRPC服务代码的protoc编译器
+配置环境变量 $ sudo vim /etc/profile export protoc=&amp;lt;刚才解压的路径&amp;gt;/protoc-3.6.1-linux-x86_64 export PATH=$PATH:$GOROOT/bin:$protoc/bin  在其中配置protoc的bin文件夹的位置
+测试 $ protoc --version libprotoc 3.6.1  安装插件 因为在国内是访问不到golang官方的一些仓库的,所以此处我们需要建立一个项目 然后让此项目替我们拉取插件.
+拉取插件 #创建文件夹 $ mkdir temp &amp;amp;&amp;amp; cd temp #初始化模块 $ go mod init #替换模块中一些依赖包 $ go mod edit -replace=golang.</description>
+    </item>
+    
+    <item>
+      <title>傻瓜式的 go modules 的讲解和代码</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E5%82%BB%E7%93%9C%E5%BC%8F%E7%9A%84-go-modules-%E7%9A%84%E8%AE%B2%E8%A7%A3%E5%92%8C%E4%BB%A3%E7%A0%81/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E5%82%BB%E7%93%9C%E5%BC%8F%E7%9A%84-go-modules-%E7%9A%84%E8%AE%B2%E8%A7%A3%E5%92%8C%E4%BB%A3%E7%A0%81/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://it.520mwx.com/view/10804
+ 一 国内关于 gomod 的文章，哪怕是使用了百度 -csdn，依然全是理论，虽然 golang 的使用者大多是大神但是也有像我这样的的弱鸡是不是？
+所以，我就写个傻瓜式教程了。
+二 1. 新建文件夹 go_moudiules_demo
+2.go mod 之，生成 gomod.go 文件
+go mod init go_moudiules_demo 语法 go mod init [module] 3. 创建 main.go，默认包名是 gomod，需要改成 main
+4. 创建正真的存放代码的文件夹 demo 和文件 gomod.go，注意不能与 main 放在同一文件夹下，因为会造成包名冲突
+ 5. 根据规则引入代码，这里有个坑，因为 goland 做的不太好，实际上 golang 的所有工具都做的不太好，导致代码报红，但是实际上 go build/run 还是能跑通的
+ 当然 goland 也可以配置，就是不知道怎么去红名。。。　三 总结 gomod 最容易让人进了误区就是，把自己之前的代码都 gomod 一次，那么后面使用的时候直接根据 gomod 的 package 找之前的代码，简直美滋滋。</description>
+    </item>
+    
+    <item>
+      <title>再探go modules使用与细节</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E5%86%8D%E6%8E%A2go-modules%E4%BD%BF%E7%94%A8%E4%B8%8E%E7%BB%86%E8%8A%82/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E5%86%8D%E6%8E%A2go-modules%E4%BD%BF%E7%94%A8%E4%B8%8E%E7%BB%86%E8%8A%82/</guid>
+      <description>还有半个月 go1.12 就要发布了。这是首个将 go modules 纳入正式支持的稳定版本。
+ 距离 go modules 随着 go1.11 正式面向广大开发者进行体验也已经过去了半年，这段时间 go modules 也发生了一些变化，借此机会我想再次深入探讨 go modules 的使用，同时对这个新生包管理方案做一些思考。
+版本控制和语义化版本 包的版本控制总是一个包管理器绕不开的古老话题，自然对于我们的 go modules 也是这样。
+我们将学习一种新的版本指定方式，然后深入地探讨一下 golang 官方推荐的semver即语义化版本。
+控制包版本 在讨论 go get 进行包管理时我们曾经讨论过如何对包版本进行控制（文章在此），支持的格式如下：
+vX.Y.Z-pre.0.yyyymmddhhmmss-abcdefabcdef vX.0.0-yyyymmddhhmmss-abcdefabcdef vX.Y.(Z+1)-0.yyyymmddhhmmss-abcdefabcdef vX.Y.Z  在 go.mod 文件中我们也需要这样指定，否则 go mod 无法正常工作，这带来了 2 个痛点：
+ 目标库需要打上符合要求的 tag，如果 tag 不符合要求不排除日后出现兼容问题（目前来说只要正确指定 tag 就行，唯一的特殊情况在下一节介绍） 如果目标库没有打上 tag，那么就必须毫无差错的编写大串的版本信息，大大加重了使用者的负担  基于以上原因，现在可以直接使用 commit 的 hash 来指定版本，如下：
+# 使用go get时 go get github.com/mqu/go-notify@ef6f6f49 # 在go.mod中指定 module my-module require ( // other packages github.</description>
+    </item>
+    
+    <item>
+      <title>在golang中创建调用图</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E5%9C%A8golang%E4%B8%AD%E5%88%9B%E5%BB%BA%E8%B0%83%E7%94%A8%E5%9B%BE/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E5%9C%A8golang%E4%B8%AD%E5%88%9B%E5%BB%BA%E8%B0%83%E7%94%A8%E5%9B%BE/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://stackoverflow.com/questions/31362332/creating-call-graph-in-golang
+ 我正在寻找为golang项目生成调用图的可能性。类似于Doxygen的 C ++类图功能（使用选项CALL_GRAPH = YES）。
+到目前为止我找到了
+http://saml.rilspace.org/profiling-and-creating-call-graphs-for-go-programs-with-go-tool-pprof 或 http://blog.golang.org/profiling-go-programs
+这会在程序运行时每秒100次对程序的调用堆栈进行采样，并创建一个对分析有用的图形。如果你的程序大部分时间都花在与你无关的函数上，我发现这个解决方案不是很有用。
+然后是这样的：
+https://godoc.org/golang.org/x/tools/go/callgraph/static
+从它的描述听起来像我需要的，但似乎没有文档，我不明白如何使用它。
+我也找到了
+https://github.com/davecheney/graphpkg/blob/master/README.md 状语从句： https://github.com/paetzke/go-dep-graph/blob/master/README.org
+但他们只创建依赖图。
+戴夫C.
+你和&amp;hellip;&amp;hellip;很接近/x/tools/go/callgraph/static。我很确定go install golang.org/x/tools/cmd/callgraph你想要的是什么。一旦安装，运行它没有参数，以查看它的完整帮助/用法。
+（一般来说，&amp;hellip;&amp;hellip; /x/tools/下面的东西是有点可重用的包，命令行前端生活在&amp;hellip;下面/x/tools/cmd，你可以安装它们go install golang.org/x/tools/cmd/...，文字/...匹配所有的子包）。
+例如，只运行callgraph生成以下开头和结尾的使用输出：
+callgraph：显示Go程序的调用图。
+用法：
+callgraph [-algo=static|cha|rta|pta] [-test] [-format=...] &amp;lt;args&amp;gt;...
+标志：
+-algo 指定调用图构造算法，其中之一是：
+ static static calls only (unsound) cha Class Hierarchy Analysis rta Rapid Type Analysis pta inclusion-based Points-To Analysis The algorithms are ordered by increasing precision in their treatment of dynamic calls (and thus also computational cost).</description>
+    </item>
+    
+    <item>
+      <title>基于 go&#43;etcd 实现分布式锁</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E5%9F%BA%E4%BA%8E-go-etcd-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E5%9F%BA%E4%BA%8E-go-etcd-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://www.jianshu.com/p/d3068d0ac7c1
+ package main import ( &amp;quot;context&amp;quot; &amp;quot;fmt&amp;quot; &amp;quot;go.etcd.io/etcd/clientv3&amp;quot; &amp;quot;time&amp;quot; ) func main() { var ( config clientv3.Config client *clientv3.Client lease clientv3.Lease leaseResp *clientv3.LeaseGrantResponse leaseId clientv3.LeaseID leaseRespChan &amp;lt;-chan *clientv3.LeaseKeepAliveResponse err error ) //客户端配置 config = clientv3.Config{ Endpoints: []string{&amp;quot;127.0.0.1:2379&amp;quot;}, DialTimeout: 5 * time.Second, } //建立连接 if client, err = clientv3.New(config); err != nil { fmt.Println(err) return } //上锁（创建租约，自动续租） lease = clientv3.NewLease(client) //设置一个ctx取消自动续租 ctx,cancleFunc := context.WithCancel(context.TODO()) //设置10秒租约（过期时间） if leaseResp,err = lease.</description>
+    </item>
+    
+    <item>
+      <title>如何使用 go get 下载 gitlab 私有项目</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-go-get-%E4%B8%8B%E8%BD%BD-gitlab-%E7%A7%81%E6%9C%89%E9%A1%B9%E7%9B%AE/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-go-get-%E4%B8%8B%E8%BD%BD-gitlab-%E7%A7%81%E6%9C%89%E9%A1%B9%E7%9B%AE/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 http://holys.im/2016/09/20/go-get-in-gitlab/
+ 据此 issue，gitlab 7.8 就开始支持 go get private repo。
+假设 gitlab 服务是： mygitlab.com
+使用方式：
+$ go get -v mygitlab.com/user/repo  如果 mygitlab.com 不支持 https, 还得加上 -insecure 参数
+$ go get -v -insecure mygitlab.com/user/repo  但是 -insecure 参数是 go 1.5 以后才有的，所以如果低于 1.5 版本，赶紧升级一下吧。
+默认需要输入用户名和密码，比较繁琐。 由于 go get 底层实际还是用了 git 去操作。可以配置 .gitconfig 使之用 http =&amp;gt; ssh 的访问方式 (个人感觉就是重写了 url)
+$ git config --global url.&amp;quot;git@mygitlab.com:&amp;quot;.insteadOf &amp;quot;http://mygitlab.com/&amp;quot; // 其实就是在 `.</description>
+    </item>
+    
+    <item>
+      <title>设置终端使用代理的几种方法</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E8%AE%BE%E7%BD%AE%E7%BB%88%E7%AB%AF%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E8%AE%BE%E7%BD%AE%E7%BB%88%E7%AB%AF%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/</guid>
+      <description>设置终端使用代理的几种方法 方法 1: 在终端中直接运行命令
+export http_proxy=http://proxyAddress:port  这个办法的好处是简单直接，并且影响面很小（只对当前终端有效，退出就不行了）。 如果你用的是 ss 代理，在当前终端运行以下命令，那么wget curl 这类网络命令都会经过 ss 代理
+export ALL_PROXY=socks5://127.0.0.1:1080  方法 2: 把代理服务器地址写入 shell 配置文件.bashrc或者.zshrc
+直接在.bashrc或者.zshrc添加下面内容
+export http_proxy=&amp;quot;http://localhost:port&amp;quot; export https_proxy=&amp;quot;http://localhost:port&amp;quot;  以使用 shadowsocks 代理为例，ss 的代理端口为1080, 那么应该设置为
+export http_proxy=&amp;quot;socks5://127.0.0.1:1080&amp;quot; export https_proxy=&amp;quot;socks5://127.0.0.1:1080&amp;quot;  或者直接设置 ALL_PROXY
+export ALL_PROXY=socks5://127.0.0.1:1080  localhost就是一个域名，域名默认指向 127.0.0.1，两者是一样的。
+然后ESC后:wq保存文件，接着在终端中执行 source ~/.bashrc
+或者退出当前终端再起一个终端。 这个办法的好处是把代理服务器永久保存了，下次就可以直接用了。
+或者通过设置 alias 简写来简化操作，每次要用的时候输入setproxy，不用了就unsetproxy。
+alias setproxy=&amp;quot;export ALL_PROXY=socks5://127.0.0.1:1080&amp;quot; alias unsetproxy=&amp;quot;unset ALL_PROXY&amp;quot; alias ip=&amp;quot;curl -i http://ip.cn&amp;quot;  方法 3: 改相应工具的配置，比如apt的配置
+sudo vim /etc/apt/apt.</description>
+    </item>
+    
+  </channel>
+</rss>

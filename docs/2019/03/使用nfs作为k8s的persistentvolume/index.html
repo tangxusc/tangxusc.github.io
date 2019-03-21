@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="kubeadm, k8s, install, nfs">
 <meta name="description" content="使用nfs作为k8s的PersistentVolume 在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选
 本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务
 准备 nfs server 一台
@@ -50,6 +50,24 @@ $ vim /etc/exports #添加 此处暴露的是/home/nfsdata目录 /home/nfsdata *
   
   
   
+    
+      <meta property="article:section" content="kubeadm">
+    
+      <meta property="article:section" content="k8s">
+    
+      <meta property="article:section" content="nfs">
+    
+  
+  
+    
+      <meta property="article:tag" content="kubeadm">
+    
+      <meta property="article:tag" content="k8s">
+    
+      <meta property="article:tag" content="install">
+    
+      <meta property="article:tag" content="nfs">
+    
   
 
 
@@ -187,7 +205,7 @@ $ vim /etc/exports #添加 此处暴露的是/home/nfsdata目录 /home/nfsdata *
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -229,6 +247,18 @@ $ vim /etc/exports #添加 此处暴露的是/home/nfsdata目录 /home/nfsdata *
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/kubeadm">kubeadm</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/k8s">k8s</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/nfs">nfs</a>
+    
+  
+
   </div>
 
 </div>
@@ -469,6 +499,22 @@ pvtest   5Gi        RWX            Recycle          Available                   
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/kubeadm/">kubeadm</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/k8s/">k8s</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/install/">install</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/nfs/">nfs</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

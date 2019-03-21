@@ -2,6 +2,15 @@
 title: "傻瓜式的 go modules 的讲解和代码"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- golang
+- module
+tags:
+- golang
+- module
+keywords:
+- golang
+- module
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://it.520mwx.com/view/10804

@@ -2,6 +2,15 @@
 title: "Lombok 原理分析与功能实现"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- java
+- Lombok
+tags:
+- java
+- Lombok
+keywords:
+- java
+- Lombok
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://blog.mythsman.com/2017/12/19/1/

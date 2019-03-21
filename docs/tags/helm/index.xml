@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Helm on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/tags/helm/</link>
+    <description>Recent content in Helm on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/tags/helm/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>helm简介</title>
+      <link>https://tangxusc.github.io/blog/2019/03/helm%E7%AE%80%E4%BB%8B/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/helm%E7%AE%80%E4%BB%8B/</guid>
+      <description>helm简介 简介 helm是k8s中的包管理器,每一个包称为一个chart,helm使用更为便捷的方式来管理我们k8s集群上的应用的安装和分发.
+helm下载地址如下: https://github.com/helm/helm/releases
+下载解压后,将二进制可执行文件helm放在$path下即可
+在helm中有三个重要的概念:
+ chart 应用的模板 release 应用的实例,用模板+ values.yaml运行起来的实际应用实例 repo 仓库,存放应用模板的地方  整体的架构图如下:
+一个chart实际为一个目录,目录大致如下:
+#创建一个mychart的应用 $ helm create mychart #查看应用目录结构 $ tree mychart/ mychart/ ├── charts ├── Chart.yaml	#用于描述这个Chart的相关信息,包括名字,描述信息以及版本等。 ├── templates	#目录下是YAML文件的模板,该模板文件遵循Go template语法。 │ ├── deployment.yaml │ ├── _helpers.tpl │ ├── ingress.yaml │ ├── NOTES.txt │ └── service.yaml └── values.yaml	#用于存储templates目录中模板文件中用到变量的值。\  一个典型的helm chart文件目录如下:
+examples/ Chart.yaml # Yaml文件，用于描述Chart的基本信息，包括名称版本等 LICENSE # [可选] 协议 README.md # [可选] 当前Chart的介绍 values.</description>
+    </item>
+    
+  </channel>
+</rss>

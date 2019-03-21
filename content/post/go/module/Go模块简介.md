@@ -2,6 +2,15 @@
 title: "Go模块简介"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- golang
+- module
+tags:
+- golang
+- module
+keywords:
+- golang
+- module
 ---
 
 

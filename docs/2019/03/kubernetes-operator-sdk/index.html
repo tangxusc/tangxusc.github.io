@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="k8s">
 <meta name="description" content="本文由 简悦 SimpRead 转码， 原文地址 https://banzaicloud.com/blog/operator-sdk/
  在Banzai Cloud，我们一直在寻找新的创新技术，以支持我们的用户使用Pipeline过渡到部署到Kubernetes的微服务。最近几个月，我们与CoreOS和RedHat合作，开展了运营商及其刚刚开源的项目，并在GitHub上提供。如果您通读这篇博客，您将了解到什么是operator，如何使用它operator sdk来开发operator我们在Banzai Cloud开发和使用的具体示例。我们的GitHub上还有一些运营商都可以在新的运营商SDK 上构建。
 TL;博士：  今天发布了一个新的Kubernetes运营商框架 我们积极参与了新的SDK，因此我们发布了一些 本博客中讨论的操作员可以为任何基于JVM的应用程序提供无缝的框控制，而无需实际具有刮擦界面  在Kubernetes上部署和运行由多个相互依赖的组件/服务组成的复杂应用程序并不总是微不足道的Kubernetes提供的构造。就像一个简单的例子，如果一个应用程序需要最少数量的实例，可以通过Kubernetes部署来解决。但是，如果实例的数量发生变化（高级/低级），则必须在运行时重新配置或重新初始化这些实例，而不是我们需要对这些事件作出反应并执行必要的重新配置步骤。尝试通过实现使用Kubernetes命令行工具的脚本来解决这些问题很容易变得麻烦，特别是当我们接近现实生活中的用例时，我们必须处理弹性，日志收集，监视等。
@@ -66,6 +66,14 @@ $ cd $GOPATH/src/github.com/&lt;your-github-repo&gt;/ $ operator-sdk new &lt;ope
   
   
   
+    
+      <meta property="article:section" content="k8s">
+    
+  
+  
+    
+      <meta property="article:tag" content="k8s">
+    
   
 
 
@@ -203,7 +211,7 @@ $ cd $GOPATH/src/github.com/&lt;your-github-repo&gt;/ $ operator-sdk new &lt;ope
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -245,6 +253,14 @@ $ cd $GOPATH/src/github.com/&lt;your-github-repo&gt;/ $ operator-sdk new &lt;ope
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/k8s">k8s</a>
+    
+  
+
   </div>
 
 </div>
@@ -583,6 +599,16 @@ if !prometheusJmxExporter.Status.Equals(newStatus) {
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/k8s/">k8s</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

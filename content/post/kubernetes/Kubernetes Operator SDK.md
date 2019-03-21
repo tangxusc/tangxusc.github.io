@@ -2,6 +2,12 @@
 title: "Kubernetes Operator SDK"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- k8s
+tags:
+- k8s
+keywords:
+- k8s
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://banzaicloud.com/blog/operator-sdk/

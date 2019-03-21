@@ -2,6 +2,13 @@
 title: "微服务分布式事务Saga模式简介"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- DDD
+tags:
+- DDD
+keywords:
+- 电商网站
+- DDD
 ---
 
 该文是基于《微服务模式》作者Chris Richardson的QCONSF 2017会议上的PPT文章(这里)和其 Eventuate Tram Saga框架之上，对Saga模式进行的原理性解说，其中包含banq个人经验总结和见解，请从批判性视角看待。Chris Richardson的另外一本书籍《POJO in Action》曾经是帮助Spring成功挑战了EJB2。

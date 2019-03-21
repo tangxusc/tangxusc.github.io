@@ -2,6 +2,15 @@
 title: "fluentd 安装、配置、使用介绍"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- efk
+- fluentd
+tags:
+- efk
+- fluentd
+keywords:
+- efk
+- fluentd
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://blog.laisky.com/p/fluentd/

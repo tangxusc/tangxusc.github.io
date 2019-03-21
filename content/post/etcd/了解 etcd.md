@@ -2,6 +2,15 @@
 title: "了解 etcd"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- golang
+- etcd
+tags:
+- golang
+- etcd
+keywords:
+- golang
+- etcd
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://segmentfault.com/a/1190000008361945

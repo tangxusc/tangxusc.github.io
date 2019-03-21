@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Git on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/categories/git/</link>
+    <description>Recent content in Git on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/categories/git/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Gitflow 工作流</title>
+      <link>https://tangxusc.github.io/blog/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 http://blog.jobbole.com/76867/
+ 这节介绍的 Gitflow工作流借鉴自在 nvie 的 _Vincent Driessen_。
+Gitflow工作流定义了一个围绕项目发布的严格分支模型。虽然比功能分支工作流复杂几分，但提供了用于一个健壮的用于管理大型项目的框架。
+Gitflow工作流没有用超出功能分支工作流的概念和命令，而是为不同的分支分配一个很明确的角色，并定义分支之间如何和什么时候进行交互。除了使用功能分支，在做准备、维护和记录发布也使用各自的分支。当然你可以用上功能分支工作流所有的好处：Pull Requests、隔离实验性开发和更高效的协作。
+工作方式 Gitflow工作流仍然用中央仓库作为所有开发者的交互中心。和其它的工作流一样，开发者在本地工作并push分支到要中央仓库中。
+历史分支 相对使用仅有的一个master分支，Gitflow工作流使用 2 个分支来记录项目的历史。master分支存储了正式发布的历史，而develop分支作为功能的集成分支。这样也方便master分支上的所有提交分配一个版本号。
+剩下要说明的问题围绕着这 2 个分支的区别展开。
+功能分支 每个新功能位于一个自己的分支，这样可以 push到中央仓库以备份和协作。但功能分支不是从master分支上拉出新分支，而是使用develop分支作为父分支。当新功能完成时，合并回develop分支。新功能提交应该从不直接与master分支交互。
+注意，从各种含义和目的上来看，功能分支加上develop分支就是功能分支工作流的用法。但Gitflow工作流没有在这里止步。
+发布分支 一旦develop分支上有了做一次发布（或者说快到了既定的发布日）的足够功能，就从develop分支上fork一个发布分支。新建的分支用于开始发布循环，所以从这个时间点开始之后新的功能不能再加到这个分支上 —— 这个分支只应该做Bug修复、文档生成和其它面向发布任务。一旦对外发布的工作都完成了，发布分支合并到master分支并分配一个版本号打好Tag。另外，这些从新建发布分支以来的做的修改要合并回develop分支。
+使用一个用于发布准备的专门分支，使得一个团队可以在完善当前的发布版本的同时，另一个团队可以继续开发下个版本的功能。 这也打造定义良好的开发阶段（比如，可以很轻松地说，『这周我们要做准备发布版本 4.0』，并且在仓库的目录结构中可以实际看到）。
+常用的分支约定：
+用于新建发布分支的分支: develop 用于合并的分支: master 分支命名: release-* 或 release/*
+维护分支 维护分支或说是热修复（hotfix）分支用于生成快速给产品发布版本（production releases）打补丁，这是唯一可以直接从master分支fork出来的分支。修复完成，修改应该马上合并回master分支和develop分支（当前的发布分支），master分支应该用新的版本号打好Tag。
+为Bug修复使用专门分支，让团队可以处理掉问题而不用打断其它工作或是等待下一个发布循环。你可以把维护分支想成是一个直接在master分支上处理的临时发布。
+示例 下面的示例演示本工作流如何用于管理单个发布循环。假设你已经创建了一个中央仓库。
+创建开发分支 第一步为master分支配套一个develop分支。简单来做可以本地创建一个空的develop分支，push到服务器上：
+git branch develop git push -u origin develop
+以后这个分支将会包含了项目的全部历史，而master分支将只包含了部分历史。其它开发者这时应该克隆中央仓库，建好develop分支的跟踪分支：
+git clone ssh://user@host/path/to/repo.git git checkout -b develop origin/develop</description>
+    </item>
+    
+    <item>
+      <title>git subtree 教程</title>
+      <link>https://tangxusc.github.io/blog/2019/03/git-subtree-%E6%95%99%E7%A8%8B/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/git-subtree-%E6%95%99%E7%A8%8B/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://segmentfault.com/a/1190000012002151
+ 关于子仓库或者说是仓库共用，git 官方推荐的工具是 git subtree。 我自己也用了一段时间的 git subtree，感觉比 git submodule 好用，但是也有一些缺点，在可接受的范围内。 所以对于仓库共用，在 git subtree 与 git submodule 之中选择的话，我推荐 git subtree。
+git subtree 是什么？为什么使用 git subtree git subtree 可以实现一个仓库作为其他仓库的子仓库。 使用 git subtree 有以下几个原因：
+ 旧版本的 git 也支持 (最老版本可以到 v1.5.2).
+ git subtree 与 git submodule 不同，它不增加任何像.gitmodule这样的新的元数据文件.
+ git subtree 对于项目中的其他成员透明，意味着可以不知道 git subtree 的存在.
+  当然，git subtree 也有它的缺点，但是这些缺点还在可以接受的范围内：
+ 必须学习新的指令 (如：git subtree).
+ 子仓库的更新与推送指令相对复杂。</description>
+    </item>
+    
+    <item>
+      <title>git 必须要熟练掌握的命令</title>
+      <link>https://tangxusc.github.io/blog/2019/03/git-%E5%BF%85%E9%A1%BB%E8%A6%81%E7%86%9F%E7%BB%83%E6%8E%8C%E6%8F%A1%E7%9A%84%E5%91%BD%E4%BB%A4/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/git-%E5%BF%85%E9%A1%BB%E8%A6%81%E7%86%9F%E7%BB%83%E6%8E%8C%E6%8F%A1%E7%9A%84%E5%91%BD%E4%BB%A4/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://segmentfault.com/a/1190000013241889
+ 因为结合了开发中可能遇到的场景，篇幅较长，不过我觉得很有助于你理解 git 的运作机制，而不是死记硬背命令。
+HEAD 指针 始终指向的是当前分支的最新版本号，HEAD^, HEAD^^, ^ 的个数 n 或 HEAD~n，n 代表前 n 个版本号。
+在项目中直接使用 linux rm 只会删除工作区的文件，git rm 同在删除工作区文件的同时删除 stage 中的，或使用 git rm &amp;ndash;cached 只删除 stage 中的。
+一些基本的操作
+#全局配置 git config --global user.name &amp;quot;your username&amp;quot; git config --global user.email youremail@email.com git config --global color.ui true # mkdir git_proj &amp;amp; cd git_proj git init echo &amp;quot;# readme.md&amp;quot; &amp;gt;&amp;gt; README.md git add README.</description>
+    </item>
+    
+    <item>
+      <title>git常用命令速查表</title>
+      <link>https://tangxusc.github.io/blog/2019/03/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5%E8%A1%A8/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5%E8%A1%A8/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>git指令列表</title>
+      <link>https://tangxusc.github.io/blog/2019/03/git%E6%8C%87%E4%BB%A4%E5%88%97%E8%A1%A8/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/git%E6%8C%87%E4%BB%A4%E5%88%97%E8%A1%A8/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>git版本控制最佳实践</title>
+      <link>https://tangxusc.github.io/blog/2019/03/git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>用 JGit 通过 Java 来操作 Git</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E7%94%A8-jgit-%E9%80%9A%E8%BF%87-java-%E6%9D%A5%E6%93%8D%E4%BD%9C-git/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E7%94%A8-jgit-%E9%80%9A%E8%BF%87-java-%E6%9D%A5%E6%93%8D%E4%BD%9C-git/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 http://qinghua.github.io/jgit/
+ 文章目录
+ 1. 概念 2. 准备环境 3. 动手  3.1. 获取仓库 3.2. 常用操作 3.3. 其它对象  4. 参考资料  JGit 是一个由 Eclipse 基金会开发、用于操作 git 的纯 Java 库。它本身也是 Eclispe 的一部分，实际上 Eclipse 的插件 EGit 便是基于 JGit 的。如果你像我这样有使用代码来操作 git 的需求，那就准备好拥抱 JGit 吧。目前来看别的竞品没它靠谱。
+概念 从用户指南的概念一节中可以看到，JGit 的基本概念如下：
+ Git 对象（Git Objects）：就是 git 的对象。它们在 git 中用 SHA-1 来表示。在 JGit 中用AnyObjectId和ObjectId表示。而它又包含了四种类型：  二进制大对象（blob）：文件数据 树（tree）：指向其它的 tree 和 blob 提交（commit）：指向某一棵 tree 标签（tag）：把一个 commit 标记为一个标签  引用（Ref）：对某一个 git 对象的引用。 仓库（Repository）：顾名思义，就是用于存储所有 git 对象和 Ref 的仓库。 RevWalk：该类用于从 commit 的关系图（graph）中遍历 commit。晦涩难懂？看到范例就清楚了。 RevCommit：表示一个 git 的 commit RevTag：表示一个 git 的 tag RevTree：表示一个 git 的 tree TreeWalk：类似 RevWalk，但是用于遍历一棵 tree  准备环境 让我们从一个最典型的用例开始吧。首先在/tmp/jgit/repo中创建一个 git 仓库：</description>
+    </item>
+    
+  </channel>
+</rss>

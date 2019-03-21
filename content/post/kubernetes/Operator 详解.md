@@ -2,6 +2,15 @@
 title: "Operator 原理"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- k8s
+- Operator
+tags:
+- k8s
+- Operator
+keywords:
+- k8s
+- Operator
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://blog.csdn.net/yan234280533/article/details/75333246

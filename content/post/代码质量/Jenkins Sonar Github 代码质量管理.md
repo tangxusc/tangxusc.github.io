@@ -2,6 +2,12 @@
 title: "Jenkins Sonar Github 代码质量管理"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- sonarqube
+tags:
+- sonarqube
+keywords:
+- sonarqube
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://segmentfault.com/a/1190000015592863

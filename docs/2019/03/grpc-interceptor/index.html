@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="golang, grpc, interceptor">
 <meta name="description" content="本文由 简悦 SimpRead 转码， 原文地址 https://colobu.com/2017/04/17/dive-into-gRPC-interceptor/
  gRPC-Go 增加了拦截器 (interceptor) 的功能， 就像 Java Servlet 中的 filter 一样，可以对 RPC 的请求和响应进行拦截处理，而且既可以在客户端进行拦截，也可以对服务器端进行拦截。
 利用拦截器，可以对 gRPC 进行扩展，利用社区的力量将 gRPC 发展壮大，也可以让开发者更灵活地处理 gRPC 流程中的业务逻辑。下面列出了利用拦截器实现的一些功能框架：
@@ -42,6 +42,22 @@
   
   
   
+    
+      <meta property="article:section" content="golang">
+    
+      <meta property="article:section" content="grpc">
+    
+      <meta property="article:section" content="interceptor">
+    
+  
+  
+    
+      <meta property="article:tag" content="golang">
+    
+      <meta property="article:tag" content="grpc">
+    
+      <meta property="article:tag" content="interceptor">
+    
   
 
 
@@ -179,7 +195,7 @@
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -221,6 +237,18 @@
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/golang">golang</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/grpc">grpc</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/interceptor">interceptor</a>
+    
+  
+
   </div>
 
 </div>
@@ -398,6 +426,20 @@ func StreamClientInterceptor(ctx context.Context, desc *grpc.StreamDesc, cc *grp
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/golang/">golang</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/grpc/">grpc</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/interceptor/">interceptor</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

@@ -2,6 +2,20 @@
 title: "使用nfs作为k8s的PersistentVolume"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- kubeadm
+- k8s
+- nfs
+tags:
+- kubeadm
+- k8s
+- install
+- nfs
+keywords:
+- kubeadm
+- k8s
+- install
+- nfs
 ---
 
 # 使用nfs作为k8s的PersistentVolume

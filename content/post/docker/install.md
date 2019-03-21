@@ -2,6 +2,13 @@
 title: "docker安装(国内环境)"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- docker
+tags:
+- docker
+keywords:
+- docker
+- install
 ---
 
 ## docker安装(国内环境)

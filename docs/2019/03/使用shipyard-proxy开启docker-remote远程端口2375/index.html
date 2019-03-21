@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="docker, shipyard, remote远程端口">
 <meta name="description" content=" 使用shipyard proxy开启docker remote远程端口(2375) 优势  不用重启docker 操作更为便捷 对于端口的定制更为方便 没有复杂的linux操作  * 注意shipyard已经没有维护了(但此镜像任然可以使用) 原理: shipyard/docker-proxy:latest 镜像可以在宿主机docker上运行一个容器,容器内挂载/var/run/docker.sock文件 将此文件暴露后,就开启了docker remote api
 docker命令行运行 docker run -d -v /var/run/docker.sock:/var/run/docker.sock -p 2375:2375 --name shipyard-docker-proxy shipyard/docker-proxy:latest  rancher调度(v2) version: &#39;2&#39; services: proxy: image: shipyard/docker-proxy:latest stdin_open: true volumes: - /var/run/docker.sock:/var/run/docker.sock tty: true ports: - 2375:2375/tcp labels: io.rancher.container.pull_image: always  ">
 
@@ -34,6 +34,18 @@ docker命令行运行 docker run -d -v /var/run/docker.sock:/var/run/docker.sock
   
   
   
+    
+      <meta property="article:section" content="docker">
+    
+  
+  
+    
+      <meta property="article:tag" content="docker">
+    
+      <meta property="article:tag" content="shipyard">
+    
+      <meta property="article:tag" content="remote远程端口">
+    
   
 
 
@@ -171,7 +183,7 @@ docker命令行运行 docker run -d -v /var/run/docker.sock:/var/run/docker.sock
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -213,6 +225,14 @@ docker命令行运行 docker run -d -v /var/run/docker.sock:/var/run/docker.sock
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/docker">docker</a>
+    
+  
+
   </div>
 
 </div>
@@ -262,6 +282,20 @@ services:
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/docker/">docker</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/shipyard/">shipyard</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A3/">remote远程端口</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

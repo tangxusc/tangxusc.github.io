@@ -2,6 +2,12 @@
 title: "迈向istio-引入外部服务"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- istio
+tags:
+- istio
+keywords:
+- istio
 ---
 
 # istio-引入外部服务

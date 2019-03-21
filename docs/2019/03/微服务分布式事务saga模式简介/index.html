@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="电商网站, DDD">
 <meta name="description" content="该文是基于《微服务模式》作者Chris Richardson的QCONSF 2017会议上的PPT文章(这里)和其 Eventuate Tram Saga框架之上，对Saga模式进行的原理性解说，其中包含banq个人经验总结和见解，请从批判性视角看待。Chris Richardson的另外一本书籍《POJO in Action》曾经是帮助Spring成功挑战了EJB2。
 在微服务环境下为什么不能使用ACID事务？因为每个微服务都拥有自己的私有数据库，比如订单服务有自己的订单数据库，而客户服务有自己的客户数据库，如果有一个业务操作需要跨订单和客户一起操作，那么一般使用JTA&#43;XA方式跨订单数据库和客户数据库操作：
 @ Transactional //事务元注解 public void crossAction(XX){ //事务开始 //这里ORDERS是属于订单服务的私有数据库 SELECT ORDER_TOTAL FROM ORDERS WHERE CUSTOMER_ID = ? //这里CUSTOMERS是属于客户服务的私有数据库 SELECT CREDIT_LIMIT FROM CUSTOMERS WHERE CUSTOMER_ID=? INERT INTO ORDERS ..... //提交事务 }  以上JTA操作如果结合XA数据源配置，将会实现2PC两段事务提交。
@@ -78,6 +78,14 @@ Saga是否实现了ACID？ ACID是原子性 一致性 隔离性和持久性的�
   
   
   
+    
+      <meta property="article:section" content="DDD">
+    
+  
+  
+    
+      <meta property="article:tag" content="DDD">
+    
   
 
 
@@ -215,7 +223,7 @@ Saga是否实现了ACID？ ACID是原子性 一致性 隔离性和持久性的�
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -257,6 +265,14 @@ Saga是否实现了ACID？ ACID是原子性 一致性 隔离性和持久性的�
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/ddd">DDD</a>
+    
+  
+
   </div>
 
 </div>
@@ -397,6 +413,16 @@ public void crossAction(XX){
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/ddd/">DDD</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

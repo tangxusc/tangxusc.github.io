@@ -2,6 +2,15 @@
 title: "Controller manager高可用实现方式"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- k8s
+- Controller manager
+tags:
+- k8s
+- Controller manager
+keywords:
+- k8s
+- Controller manager
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://www.colabug.com/2801661.html

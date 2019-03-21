@@ -2,6 +2,15 @@
 title: "再探go modules使用与细节"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- golang
+- module
+tags:
+- golang
+- module
+keywords:
+- golang
+- module
 ---
 
 > 还有半个月 go1.12 就要发布了。这是首个将 go modules 纳入正式支持的稳定版本。

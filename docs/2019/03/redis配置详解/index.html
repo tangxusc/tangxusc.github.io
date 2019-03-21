@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="redis">
 <meta name="description" content="#redis.conf # Redis configuration file example. # ./redis-server /path/to/redis.conf ################################## INCLUDES ################################### #这在你有标准配置模板但是每个redis服务器又需要个性设置的时候很有用。 # include /path/to/local.conf # include /path/to/other.conf ################################ GENERAL ##################################### #是否在后台执行，yes：后台运行；no：不是后台运行（老版本默认） daemonize yes #3.2里的参数，是否开启保护模式，默认开启。要是配置里没有指定bind和密码。开启该参数后，redis只会本地进行访问，拒绝外部访问。要是开启了密码 和bind，可以开启。否 则最好关闭，设置为no。 protected-mode yes #redis的进程文件 pidfile /var/run/redis/redis-server.pid #redis监听的端口号。 port 6379 #此参数确定了TCP连接中已完成队列(完成三次握手之后)的长度， 当然此值必须不大于Linux系统定义的/proc/sys/net/core/somaxconn值，默认是511，而Linux的默认参数值是128。当系统并发量大并且客户端速度缓慢的时候，可以将这二个参数一起参考设定。该内核参数默认值一般是128，对于负载很大的服务程序来说大大的不够。一般会将它修改为2048或者更大。在/etc/sysctl.conf中添加:net.core.somaxconn = 2048，然后在终端中执行sysctl -p。 tcp-backlog 511 #指定 redis 只接收来自于该 IP 地址的请求，如果不进行设置，那么将处理所有请求 bind 127.0.0.1 #配置unix socket来让redis支持监听本地连接。 # unixsocket /var/run/redis/redis.sock #配置unix socket使用文件的权限 # unixsocketperm 700 # 此参数为设置客户端空闲超过timeout，服务端会断开连接，为0则服务端不会主动断开连接，不能小于0。 timeout 0 #tcp keepalive参数。如果设置不为0，就使用配置tcp的SO_KEEPALIVE值，使用keepalive有两个好处:检测挂掉的对端。降低中间设备出问题而导致网络看似连接却已经与对端端口的问题。在Linux内核中，设置了keepalive，redis会定时给对端发送ack。检测到对端关闭需要两倍的设置值。 tcp-keepalive 0 #指定了服务端日志的级别。级别包括：debug（很多信息，方便开发、测试），verbose（许多有用的信息，但是没有debug级别信息多），notice（适当的日志级别，适合生产环境），warn（只有非常重要的信息） loglevel notice #指定了记录日志的文件。空字符串的话，日志会打印到标准输出设备。后台运行的redis标准输出是/dev/null。 logfile /var/log/redis/redis-server.">
 
 
@@ -30,6 +30,14 @@
   
   
   
+    
+      <meta property="article:section" content="redis">
+    
+  
+  
+    
+      <meta property="article:tag" content="redis">
+    
   
 
 
@@ -167,7 +175,7 @@
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -209,6 +217,14 @@
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/redis">redis</a>
+    
+  
+
   </div>
 
 </div>
@@ -500,6 +516,16 @@ aof-rewrite-incremental-fsync yes
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/redis/">redis</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

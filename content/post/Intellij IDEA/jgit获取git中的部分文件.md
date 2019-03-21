@@ -2,6 +2,14 @@
 title: "jgit获取git仓库中的部分文件"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- java
+tags:
+- java
+- jgit
+keywords:
+- java
+- jgit
 ---
 
 # jgit获取git仓库中的部分文件

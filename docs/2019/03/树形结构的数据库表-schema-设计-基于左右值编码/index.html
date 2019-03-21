@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="java, database, tree">
 <meta name="description" content="本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/M-D-Luffy/p/4712846.html
  树形结构的数据库表 Schema 设计  程序设计过程中，我们常常用树形结构来表征某些数据的关联关系，如企业上下级部门、栏目结构、商品分类等等，通常而言，这些树状结构需要借助于数据库完 成持久化。然而目前的各种基于关系的数据库，都是以二维表的形式记录存储数据信息，因此是不能直接将 Tree 存入 DBMS，设计合适的 Schema 及其对 应的 CRUD 算法是实现关系型数据库中存储树形结构的关键。
  理想中树形结构应该具备如下特征：数据存储冗余度小、直观性强；检索遍历过程简单高效；节点增删改查 CRUD 操作高效。无意中在网上搜索到一种很巧妙的 设计，原文是英文，看过后感觉有点意思，于是便整理了一下。本文将介绍两种树形结构的 Schema 设计方案：一种是直观而简单的设计思路，另一种是基于左 右值编码的改进方案。
@@ -58,6 +58,18 @@
   
   
   
+    
+      <meta property="article:section" content="java">
+    
+      <meta property="article:section" content="database">
+    
+  
+  
+    
+      <meta property="article:tag" content="java">
+    
+      <meta property="article:tag" content="database">
+    
   
 
 
@@ -195,7 +207,7 @@
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -237,6 +249,16 @@
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/java">java</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/database">database</a>
+    
+  
+
   </div>
 
 </div>
@@ -362,6 +384,18 @@ update setwhere updatesetwhere COMMITTRANSACTION SETOFF end GO  
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/java/">java</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/database/">database</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

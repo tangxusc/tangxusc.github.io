@@ -2,6 +2,12 @@
 title: "迈向istio-自定义mixer adapter"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- istio
+tags:
+- istio
+keywords:
+- istio
 ---
 
 # 自定义mixer adapter

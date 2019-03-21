@@ -2,6 +2,15 @@
 title: "helm简介"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- k8s
+- helm
+tags:
+- k8s
+- helm
+keywords:
+- k8s
+- helm
 ---
 
 # helm简介

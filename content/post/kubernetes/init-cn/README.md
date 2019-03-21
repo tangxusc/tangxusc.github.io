@@ -2,6 +2,17 @@
 title: "自动部署k8s基础应用"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- kubeadm
+- k8s
+tags:
+- kubeadm
+- k8s
+- install
+keywords:
+- kubeadm
+- k8s
+- install
 ---
 
 ## 自动部署k8s基础应用

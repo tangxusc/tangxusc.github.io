@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Drone on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/categories/drone/</link>
+    <description>Recent content in Drone on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/categories/drone/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>drone CI的安装(docker版本)</title>
+      <link>https://tangxusc.github.io/blog/2019/03/drone-ci%E7%9A%84%E5%AE%89%E8%A3%85docker%E7%89%88%E6%9C%AC/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/drone-ci%E7%9A%84%E5%AE%89%E8%A3%85docker%E7%89%88%E6%9C%AC/</guid>
+      <description>drone CI的安装(docker版本) 因原生的安装使用的是docker-compose进行安装,在此我使用docker进行安装 * drone 版本:0.8.4 * 强烈不推荐现在使用drone,现在感觉非常不可靠(按照文档运行各种错误)
+ 服务端运行脚本:
+docker run -d -p 8000:8000 -v /var/lib/drone:/var/lib/drone/ -e DRONE_OPEN=true -e DRONE_HOST=&amp;lt;访问地址和端口&amp;gt; -e DRONE_GITHUB=true -e DRONE_GITHUB_CLIENT=&amp;lt;DRONE_GITHUB_CLIENT&amp;gt; -e DRONE_GITHUB_SECRET=&amp;lt;DRONE_GITHUB_SECRET&amp;gt; -e DRONE_SECRET=&amp;lt;自定义一个秘钥&amp;gt; --name drone drone/drone:0.8.4   例如:
+docker run -d -p 8000:8000 -v /var/lib/drone:/var/lib/drone/ -e DRONE_OPEN=true -e DRONE_HOST=http://10.130.0.159:8000 -e DRONE_GITLAB=true -e DRONE_GITLAB_URL=https://gitlab.com -e DRONE_GITLAB_CLIENT=abba054b74a664f8226a7a99ccbc67f1140739465a4c1b0e85d -e DRONE_GITLAB_SECRET=42149d15d0e1636de99f6bc22c7d18e9f1825dcf49f0b0544dd -e DRONE_SECRET=abcd123456 --name drone drone/drone:0.8.4   代理运行脚本:
+docker run -d -v /var/run/docker.sock:/var/run/docker.sock -e DRONE_SERVER=&amp;lt;服务器地址和端口&amp;gt; -e DRONE_SECRET=&amp;lt;自定义的秘钥&amp;gt; --link drone:drone --name drone-agent drone/agent:0.</description>
+    </item>
+    
+  </channel>
+</rss>

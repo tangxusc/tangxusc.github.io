@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/categories/java/</link>
+    <description>Recent content in Java on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/categories/java/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Intellij IDEA 基于编辑器的 REST 客户端介绍</title>
+      <link>https://tangxusc.github.io/blog/2019/03/intellij-idea-%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84-rest-%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/intellij-idea-%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84-rest-%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8B%E7%BB%8D/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/u011054333/article/details/78705256
+ 最近 Intellij IDEA 更新到了 2017.3 这一版本，这个版本又增加了很多新功能。我觉得其中这个基于编辑器的 REST 客户端这个功能很不错，可以为我们带来很多方便。这个功能并不仅仅在 Intellij IDEA 才有，最近更新的所有 Jetbrains 系 IIDE 都有这个功能。
+以往我们开发和调试网络程序，用到的无非是这几种办法：浏览器 F12 工具、Fiddler、Wireshark、curl 等命令行工具、手动使用 HTTP 客户端类库编程。不过这些方法总是有些不好用。Jetbrains 这个基于编辑器的 REST 客户端用起来倒是让我眼前一亮。
+使用方法 要使用这个功能很简单，在 IDE 中新建一个后缀名为.http的文件，然后就可以使用这个功能了。截图如下。
+这个功能使用起来非常简单，使用大写的 HTTP 动词（GET、POST、DELETE、PUT 等等）后面加上要访问的网址即可，如果端口号不是 80 或者 443，可以使用冒号 + 端口号的形式写在网址后面。如果需要修改 Cookie、ContentType、UA 等设置，直接写在后面几行即可，Jetbrains 提供了非常完善的补全支持，我们只要敲第一个大写字母即可获得相应的代码提示。想要发起一个请求的时候，直接点击前面的绿色运行按钮即可。一个文件中可以保存多个请求，如果以后还想再次运行只要打开这个文件即可。
+配置环境变量 Jetbrains 还提供了一个环境变量的功能，让我们使用这个编辑器 REST 客户端更加简单。只要在项目中添加一个名为rest-client.env.json的文件，然后配置不同环境下要使用的环境变量。然后就能在 REST 客户端中使用了。例如配置文件是这样的。
+{ &amp;quot;dev&amp;quot;: { &amp;quot;host&amp;quot;: &amp;quot;http://httpbin.org&amp;quot; }, &amp;quot;prod&amp;quot;: { &amp;quot;host&amp;quot;: &amp;quot;http://httpbin.org&amp;quot; } }  那么在点击运行按钮的时候就会弹出选择要使用哪个环境变量。我们只要选择就可以针对不同环境使用不同配置了。在代码中只要使用双括号引用环境变量即可。</description>
+    </item>
+    
+    <item>
+      <title>Java 奇技淫巧 - 插件化注解处理 API(Pluggable Annotation Processing API)</title>
+      <link>https://tangxusc.github.io/blog/2019/03/java-%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7-%E6%8F%92%E4%BB%B6%E5%8C%96%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86-apipluggable-annotation-processing-api/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/java-%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7-%E6%8F%92%E4%BB%B6%E5%8C%96%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86-apipluggable-annotation-processing-api/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/throwable/p/9139908.html
+ 插件化注解处理 API(Pluggable Annotation Processing API) Java 奇技淫巧 - 插件化注解处理 API(Pluggable Annotation Processing API) 参考资料  JDK6 的新特性之六: 插入式注解处理 API(Pluggable Annotation Processing API) Java Annotation Processing and Creating a Builder  简介 插件化注解处理 (Pluggable Annotation Processing)APIJSR 269 提供一套标准 API 来处理 AnnotationsJSR 175, 实际上 JSR 269 不仅仅用来处理 Annotation，我觉得更强大的功能是它建立了 Java 语言本身的一个模型, 它把 method、package、constructor、type、variable、enum、annotation 等 Java 语言元素映射为 Types 和 Elements，从而将 Java 语言的语义映射成为对象，我们可以在 javax.lang.model 包下面可以看到这些类。所以我们可以利用 JSR 269 提供的 API 来构建一个功能丰富的元编程 (metaprogramming) 环境。JSR 269 用 Annotation Processor 在编译期间而不是运行期间处理 Annotation, Annotation Processor 相当于编译器的一个插件, 所以称为插入式注解处理.</description>
+    </item>
+    
+    <item>
+      <title>Java 读写锁实现原理</title>
+      <link>https://tangxusc.github.io/blog/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://my.oschina.net/editorial-story/blog/1928306
+ 最近做的一个小项目中有这样的需求：整个项目有一份*config.json*保存着项目的一些配置，是存储在本地文件的一个资源，并且应用中存在读写（读 &amp;gt;&amp;gt; 写）更新问题。既然读写并发操作，那么就涉及到操作互斥，这里自然想到了读写锁，本文对读写锁方面的知识做个梳理。
+为什么需要读写锁？ 与传统锁不同的是读写锁的规则是可以共享读，但只能一个写，总结起来为：读读不互斥，读写互斥，写写互斥，而一般的独占锁是：读读互斥，读写互斥，写写互斥，而场景中往往读远远大于写，读写锁就是为了这种优化而创建出来的一种机制。
+注意是读远远大于写，一般情况下独占锁的效率低来源于高并发下对临界区的激烈竞争导致线程上下文切换。因此当并发不是很高的情况下，读写锁由于需要额外维护读锁的状态，可能还不如独占锁的效率高。因此需要根据实际情况选择使用。
+一个简单的读写锁实现 根据上面理论可以利用两个 int 变量来简单实现一个读写锁，实现虽然烂，但是原理都是差不多的，值得阅读下。
+public class ReadWriteLock { /** * 读锁持有个数 */ private int readCount = 0; /** * 写锁持有个数 */ private int writeCount = 0; /** * 获取读锁,读锁在写锁不存在的时候才能获取 */ public synchronized void lockRead() throws InterruptedException { // 写锁存在,需要wait while (writeCount &amp;gt; 0) { wait(); } readCount++; } /** * 释放读锁 */ public synchronized void unlockRead() { readCount--; notifyAll(); } /** * 获取写锁,当读锁存在时需要wait.</description>
+    </item>
+    
+    <item>
+      <title>Java8 日期和时间</title>
+      <link>https://tangxusc.github.io/blog/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/a80596890555/article/details/58687444
+ 如何正确处理时间 现实生活的世界里，时间是不断向前的，如果向前追溯时间的起点，可能是宇宙出生时，又或是是宇宙出现之前， 但肯定是我们目前无法找到的，我们不知道现在距离时间原点的精确距离。所以我们要表示时间， 就需要人为定义一个原点。
+原点被规定为，格林威治时间 (GMT)1970 年 1 月 1 日的午夜 为起点, 之于为啥是 GMT 时间，大概是因为本初子午线在那的原因吧。
+java 中的时间 如果你跟你朋友说：“我们 1484301456 一起去吃饭，别迟到！”，而你朋友能马上理解你说的时间，表示时间就会很简单， 只需要一个 long 值来表示原点的偏移量，这是个绝对时间，在世界范围内都适用。但实际上我们不能马上理解这串数字， 而且我们需要不同的时间单位来表示时间的跨度，比如一个季度是 3 个月，一个月有 30 天等。 你可以跟朋友约好 “明天这个时候再见面”, 你朋友很容易理解明天的意思，但要是没有’天’这个单位， 他就需要在那串数字上加上 86400(一天是 86400 秒)。
+Java 三次引入处理时间的 API，JDK1.0 中包含了一个Date类，但大多数方法在 java1.1 引入Calendear类之后被弃用了。 它的实例都是可变的，而且它的 API 很难使用，比如月份是从 0 开始这种反人类的设置。
+java8 引入的java.time API 已经纠正了之前的问题。它已经完全实现了JSR310规范。
+java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个精确的时间点，Duration和Period表示两个时间点之间的时间量。 LocalDate表示日期，即 xx 年 xx 月 xx 日，即不包括时间也不带时区。LocalTime与LocalDate类似， 但只包含时间。LocalDateTime则包含日期和时间。ZoneDateTime表示一个带时区的时间。 DateTimeFormatter提供格式化和解析功能。下面详细的介绍使用方法。</description>
+    </item>
+    
+    <item>
+      <title>Java注释处理和创建构建器</title>
+      <link>https://tangxusc.github.io/blog/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 http://www.baeldung.com/java-annotation-processing-builder
+ 1.简介 本文是Java源代码级别注释处理的简介，并提供了使用此技术在编译期间生成其他源文件的示例。
+2.注释处理的应用 源级注释处理首先出现在Java 5中。它是一种在编译阶段生成其他源文件的便捷技术。
+源文件不必是Java文件 - 您可以根据源代码中的注释生成任何类型的描述，元数据，文档，资源或任何其他类型的文件。
+注释处理在许多无处不在的Java库中被广泛使用，例如，在QueryDSL和JPA中生成元类，以使用Lombok库中的样板代码来扩充类。
+需要注意的一件重要事情是注释处理API的局限性 - 它只能用于生成新文件，而不能用于更改现有文件。
+值得注意的例外是Lombok库，它使用注释处理作为引导机制，将自身包含在编译过程中，并通过一些内部编译器API修改AST。这种hacky技术与注释处理的预期目的无关，因此本文不讨论。
+3.注释处理API 注释处理在多轮中完成。每一轮都从编译器搜索源文件中的注释并选择适合这些注释的注释处理器开始。反过来，每个注释处理器在相应的源上被调用。
+如果在此过程中生成了任何文件，则会以生成的文件作为输入启动另一轮。此过程将继续，直到在处理阶段没有生成新文件。
+反过来，每个注释处理器在相应的源上被调用。如果在此过程中生成了任何文件，则会以生成的文件作为输入启动另一轮。此过程将继续，直到在处理阶段没有生成新文件。
+注释处理API位于_javax.annotation.processing_包中。您必须实现的主要接口是_Processor_接口，它具有_AbstractProcessor_类形式的部分实现。这个类是我们要扩展的类，以创建我们自己的注释处理器。
+4.设置项目 为了演示注释处理的可能性，我们将开发一个简单的处理器，用于为带注释的类生成流畅的对象构建器。
+我们将把项目分成两个Maven模块。其中之一，_注释处理器_模块，将包含处理器本身和注释，另一个_注释用户_模块将包含注释类。这是注释处理的典型用例。
+_注释处理器_模块的设置如下。我们将使用Google的自动服务库来生成稍后将讨论的处理器元数据文件，以及针对Java 8源代码调整的_maven-compiler-plugin_。这些依赖项的版本将提取到属性部分。
+可以在Maven Central存储库中找到最新版本的自动服务库和maven-compiler-plugin：
+&amp;lt;properties&amp;gt; &amp;lt;auto-service.version&amp;gt;1.0-rc2&amp;lt;/auto-service.version&amp;gt; &amp;lt;maven-compiler-plugin.version&amp;gt; 3.5.1 &amp;lt;/maven-compiler-plugin.version&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.google.auto.service&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;auto-service&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${auto-service.version}&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;provided&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencies&amp;gt; &amp;lt;build&amp;gt; &amp;lt;plugins&amp;gt; &amp;lt;plugin&amp;gt; &amp;lt;groupId&amp;gt;org.apache.maven.plugins&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;maven-compiler-plugin&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;${maven-compiler-plugin.version}&amp;lt;/version&amp;gt; &amp;lt;configuration&amp;gt; &amp;lt;source&amp;gt;1.8&amp;lt;/source&amp;gt; &amp;lt;target&amp;gt;1.8&amp;lt;/target&amp;gt; &amp;lt;/configuration&amp;gt; &amp;lt;/plugin&amp;gt; &amp;lt;/plugins&amp;gt; &amp;lt;/build&amp;gt;  带有注释源的注释用户 Maven模块不需要任何特殊调整，除了在依赖项部分中添加对注释处理器模块的依赖：
+&amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.baeldung&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;annotation-processing&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.0.0-SNAPSHOT&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt;  5.</description>
+    </item>
+    
+    <item>
+      <title>Lombok 原理分析与功能实现</title>
+      <link>https://tangxusc.github.io/blog/2019/03/lombok-%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E4%B8%8E%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/lombok-%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E4%B8%8E%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://blog.mythsman.com/2017/12/19/1/
+ 前言 这两天没什么重要的事情做，但是想着还要春招总觉得得学点什么才行，正巧想起来前几次面试的时候面试官总喜欢问一些框架的底层实现，但是我学东西比较倾向于用到啥学啥，因此在这些方面吃了很大的亏。而且其实很多框架也多而杂，代码起来费劲，无非就是几套设计模式套一套，用到的东西其实也就那么些，感觉没啥新意。刚这两天读” 深入理解 JVM” 的时候突然想起来有个叫 Lombok 的东西以前一直不能理解他的实现原理，现在正好趁着闲暇的时间研究研究。
+Lombok 代码 Lombok 是一个开源项目，源代码托管在 GITHUB/rzwitserloot，如果需要在 maven 里引用，只需要添加下依赖:
+&amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.projectlombok&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;lombok&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.16.8&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt;  功能 那么 Lombok 是做什么的呢？其实很简单，一个最简单的例子就是它能够实现通过添加注解，能够自动生成一些方法。比如这样的类:
+@Getter class Test{ private String value; }  我们用 Lombok 提供的 @Getter 来注解这个类，这个类在编译的时候就会变成:
+class Test{ private String value; public String getValue(){ return this.value; } }  当然 Lombok 也提供了很多其他的注解，这只是其中一个最典型的例子。其他的用法网上的资料已经很多了，这里就不啰嗦。 看上去是很方便的一个功能，尤其是在很多项目里有很多 bean，每次都要手写或自动生成 setter getter 方法，搞得代码很长而且没有啥意义，因此这个对简化代码的强迫症们还是很有吸引力的。 但是，我们发现这个包跟一般的包有很大区别，绝大多数 java 包都工作在运行时，比如 spring 提供的那种注解，通过在运行时用反射来实现业务逻辑。Lombok 这个东西工作却在编译期，在运行时是无法通过反射获取到这个注解的。 而且由于他相当于是在编译期对代码进行了修改，因此从直观上看，源代码甚至是语法有问题的。 一个更直接的体现就是，普通的包在引用之后一般的 IDE 都能够自动识别语法，但是 Lombok 的这些注解，一般的 IDE 都无法自动识别，比如我们上面的 Test 类，如果我们在其他地方这么调用了一下:</description>
+    </item>
+    
+    <item>
+      <title>jgit获取git仓库中的部分文件</title>
+      <link>https://tangxusc.github.io/blog/2019/03/jgit%E8%8E%B7%E5%8F%96git%E4%BB%93%E5%BA%93%E4%B8%AD%E7%9A%84%E9%83%A8%E5%88%86%E6%96%87%E4%BB%B6/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/jgit%E8%8E%B7%E5%8F%96git%E4%BB%93%E5%BA%93%E4%B8%AD%E7%9A%84%E9%83%A8%E5%88%86%E6%96%87%E4%BB%B6/</guid>
+      <description>jgit获取git仓库中的部分文件 jgit在获取文件时,只能获取仓库中的全部文件,本文提供一种方法,使用jgit获取仓库中的部分文件.
+适用场景:
+ 用户提交git仓库地址,文件地址,需要读取仓库中的远程文件  原理 在git的命令行中,存在一个ls-remote命令,显示远程存储库中可用的引用以及关联的提交ID
+tangxu@tangxu-pc:$ git ls-remote From https://gitee.com/tanx/cavy-platform.git befcac9af04c7822aed0a7f7604d4b9248de3c61	HEAD befcac9af04c7822aed0a7f7604d4b9248de3c61	refs/heads/master  jgit中存在一个CheckoutCommand对象,对象中包含方法
+public CheckoutCommand setStartPoint(String startPoint) {//startPoint则为引用id this.checkCallable(); this.startPoint = startPoint; this.startCommit = null; this.checkOptions(); return this; }  和addPath方法
+public CheckoutCommand addPath(String path) {//path为文件路径 this.checkCallable(); this.paths.add(path); return this; }  具体实现 话不多述,我们直接上代码:
+//url 远程仓库url地址,以.git结尾 //branch 分支名称 private String getRefHash(String url,String branch) throws GitAPIException { Collection&amp;lt;Ref&amp;gt; call = Git.lsRemoteRepository().setRemote(url).call(); for (Ref ref : call) { String[] split = ref.</description>
+    </item>
+    
+    <item>
+      <title>树形结构的数据库表 Schema 设计 - 基于左右值编码</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8-schema-%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E4%BA%8E%E5%B7%A6%E5%8F%B3%E5%80%BC%E7%BC%96%E7%A0%81/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8-schema-%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E4%BA%8E%E5%B7%A6%E5%8F%B3%E5%80%BC%E7%BC%96%E7%A0%81/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/M-D-Luffy/p/4712846.html
+ 树形结构的数据库表 Schema 设计  程序设计过程中，我们常常用树形结构来表征某些数据的关联关系，如企业上下级部门、栏目结构、商品分类等等，通常而言，这些树状结构需要借助于数据库完 成持久化。然而目前的各种基于关系的数据库，都是以二维表的形式记录存储数据信息，因此是不能直接将 Tree 存入 DBMS，设计合适的 Schema 及其对 应的 CRUD 算法是实现关系型数据库中存储树形结构的关键。
+ 理想中树形结构应该具备如下特征：数据存储冗余度小、直观性强；检索遍历过程简单高效；节点增删改查 CRUD 操作高效。无意中在网上搜索到一种很巧妙的 设计，原文是英文，看过后感觉有点意思，于是便整理了一下。本文将介绍两种树形结构的 Schema 设计方案：一种是直观而简单的设计思路，另一种是基于左 右值编码的改进方案。
+一、基本数据  本文列举了一个食品族谱的例子进行讲解，通过类别、颜色和品种组织食品，树形结构图如下：
+二、继承关系驱动的 Schema 设计  对树形结构最直观的分析莫过于节点之间的继承关系上，通过显示地描述某一节点的父节点，从而能够建立二维的关系表，则这种方案的 Tree 表结构通常设计为：{Node_id,Parent_id}，上述数据可以描述为如下图所示：
+ 这种方案的优点很明显：设计和实现自然而然，非常直观和方便。缺点当然也是非常的突出：由于直接地记录了节点之间的继承关系，因此对 Tree 的任何 CRUD 操作都将是低效的，这主要归根于频繁的 “递归” 操作，递归过程不断地访问数据库，每次数据库 IO 都会有时间开销。当然，这种方案并非没有用武之 地，在 Tree 规模相对较小的情况下，我们可以借助于缓存机制来做优化，将 Tree 的信息载入内存进行处理，避免直接对数据库 IO 操作的性能开销。
+三、基于左右值编码的 Schema 设计  在基于数据库的一般应用中，查询的需求总要大于删除和修改。为了避免对于树形结构查询时的 “递归” 过程，基于 Tree 的前序遍历设计一种全新的无递归查询、无限分组的左右值编码方案，来保存该树的数据。
+ 第一次看见这种表结构，相信大部分人都不清楚左值（Lft）和右值（Rgt）是如何计算出来的，而且这种表设计似乎并没有保存父子节点的继承关系。但当 你用手指指着表中的数字从 1 数到 18，你应该会发现点什么吧。对，你手指移动的顺序就是对这棵树进行前序遍历的顺序，如下图所示。当我们从根节点 Food 左侧开始，标记为 1，并沿前序遍历的方向，依次在遍历的路径上标注数字，最后我们回到了根节点 Food，并在右边写上了 18。</description>
+    </item>
+    
+  </channel>
+</rss>

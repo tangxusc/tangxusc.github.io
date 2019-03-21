@@ -2,6 +2,14 @@
 title: "Java注释处理和创建构建器"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- java
+tags:
+- java
+- annotation
+keywords:
+- java
+- annotation
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 http://www.baeldung.com/java-annotation-processing-builder

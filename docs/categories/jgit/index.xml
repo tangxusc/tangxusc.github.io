@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jgit on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/categories/jgit/</link>
+    <description>Recent content in Jgit on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/categories/jgit/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>用 JGit 通过 Java 来操作 Git</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E7%94%A8-jgit-%E9%80%9A%E8%BF%87-java-%E6%9D%A5%E6%93%8D%E4%BD%9C-git/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E7%94%A8-jgit-%E9%80%9A%E8%BF%87-java-%E6%9D%A5%E6%93%8D%E4%BD%9C-git/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 http://qinghua.github.io/jgit/
+ 文章目录
+ 1. 概念 2. 准备环境 3. 动手  3.1. 获取仓库 3.2. 常用操作 3.3. 其它对象  4. 参考资料  JGit 是一个由 Eclipse 基金会开发、用于操作 git 的纯 Java 库。它本身也是 Eclispe 的一部分，实际上 Eclipse 的插件 EGit 便是基于 JGit 的。如果你像我这样有使用代码来操作 git 的需求，那就准备好拥抱 JGit 吧。目前来看别的竞品没它靠谱。
+概念 从用户指南的概念一节中可以看到，JGit 的基本概念如下：
+ Git 对象（Git Objects）：就是 git 的对象。它们在 git 中用 SHA-1 来表示。在 JGit 中用AnyObjectId和ObjectId表示。而它又包含了四种类型：  二进制大对象（blob）：文件数据 树（tree）：指向其它的 tree 和 blob 提交（commit）：指向某一棵 tree 标签（tag）：把一个 commit 标记为一个标签  引用（Ref）：对某一个 git 对象的引用。 仓库（Repository）：顾名思义，就是用于存储所有 git 对象和 Ref 的仓库。 RevWalk：该类用于从 commit 的关系图（graph）中遍历 commit。晦涩难懂？看到范例就清楚了。 RevCommit：表示一个 git 的 commit RevTag：表示一个 git 的 tag RevTree：表示一个 git 的 tree TreeWalk：类似 RevWalk，但是用于遍历一棵 tree  准备环境 让我们从一个最典型的用例开始吧。首先在/tmp/jgit/repo中创建一个 git 仓库：</description>
+    </item>
+    
+  </channel>
+</rss>

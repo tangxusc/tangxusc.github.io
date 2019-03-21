@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Proxy on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/categories/proxy/</link>
+    <description>Recent content in Proxy on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/categories/proxy/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>设置终端使用代理的几种方法</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E8%AE%BE%E7%BD%AE%E7%BB%88%E7%AB%AF%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E8%AE%BE%E7%BD%AE%E7%BB%88%E7%AB%AF%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/</guid>
+      <description>设置终端使用代理的几种方法 方法 1: 在终端中直接运行命令
+export http_proxy=http://proxyAddress:port  这个办法的好处是简单直接，并且影响面很小（只对当前终端有效，退出就不行了）。 如果你用的是 ss 代理，在当前终端运行以下命令，那么wget curl 这类网络命令都会经过 ss 代理
+export ALL_PROXY=socks5://127.0.0.1:1080  方法 2: 把代理服务器地址写入 shell 配置文件.bashrc或者.zshrc
+直接在.bashrc或者.zshrc添加下面内容
+export http_proxy=&amp;quot;http://localhost:port&amp;quot; export https_proxy=&amp;quot;http://localhost:port&amp;quot;  以使用 shadowsocks 代理为例，ss 的代理端口为1080, 那么应该设置为
+export http_proxy=&amp;quot;socks5://127.0.0.1:1080&amp;quot; export https_proxy=&amp;quot;socks5://127.0.0.1:1080&amp;quot;  或者直接设置 ALL_PROXY
+export ALL_PROXY=socks5://127.0.0.1:1080  localhost就是一个域名，域名默认指向 127.0.0.1，两者是一样的。
+然后ESC后:wq保存文件，接着在终端中执行 source ~/.bashrc
+或者退出当前终端再起一个终端。 这个办法的好处是把代理服务器永久保存了，下次就可以直接用了。
+或者通过设置 alias 简写来简化操作，每次要用的时候输入setproxy，不用了就unsetproxy。
+alias setproxy=&amp;quot;export ALL_PROXY=socks5://127.0.0.1:1080&amp;quot; alias unsetproxy=&amp;quot;unset ALL_PROXY&amp;quot; alias ip=&amp;quot;curl -i http://ip.cn&amp;quot;  方法 3: 改相应工具的配置，比如apt的配置
+sudo vim /etc/apt/apt.</description>
+    </item>
+    
+  </channel>
+</rss>

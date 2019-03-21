@@ -2,6 +2,14 @@
 title: "docker maven plugin使用"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- docker
+tags:
+- docker
+- maven
+keywords:
+- docker
+- maven
 ---
 
 # docker maven plugin使用

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ha on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/tags/ha/</link>
+    <description>Recent content in Ha on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/tags/ha/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>kubeadm安装HA集群</title>
+      <link>https://tangxusc.github.io/blog/2019/03/kubeadm%E5%AE%89%E8%A3%85ha%E9%9B%86%E7%BE%A4/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/kubeadm%E5%AE%89%E8%A3%85ha%E9%9B%86%E7%BE%A4/</guid>
+      <description>kubeadm安装HA集群 鉴于使用二进制的方式安装较为复杂,且不太好处理证书的生成,分发等问题,并且对性能没有较高的要求,所以强烈推荐使用此模式,具体下来这个模式的好处为:
+ 官方提供的工具,有官方的文档支持 安装贼简单,没有其他的依赖 扩展性强,有官方的一些扩展支持 集群全部以容器启动,所以没那么多你需要管理的service  准备 硬件  一台或多台运行 Ubuntu 16.04 + 的主机(其他linux系统也行) 集群中完整的网络连接，公网或者私网都可以  各节点环境  #### docker  使用加入器安装docker
+curl https://releases.rancher.com/install-docker/17.03.sh | sh   #### 禁用swap  然后需要禁用 swap 文件，这是 Kubernetes 的强制步骤。编辑/etc/fstab文件，注释掉引用swap的行，保存并重启后输入sudo swapoff -a即可
+vim /etc.fastab #注释调swap的行 sudo swapoff -a   设置源 sudo apt-get update &amp;amp;&amp;amp; sudo apt-get install -y apt-transport-https curl -s https://gitee.com/tanx/kubernetes-test/raw/master/kubeadm/apt-key.gpg | sudo apt-key add - sudo cat &amp;lt;&amp;lt;EOF &amp;gt;/etc/apt/sources.</description>
+    </item>
+    
+  </channel>
+</rss>

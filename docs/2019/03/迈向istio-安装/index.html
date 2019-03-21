@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="istio">
 <meta name="description" content="istio-安装 [TOC]
 下载istio的release curl -L https://git.io/getLatestIstio | sh - cd istio-1.0.2 #设置环境变量,以便后面可以执行istioctl命令 export PATH=$PWD/bin:$PATH  下载helm wget https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz tar zxvf helm-v2.11.0-linux-amd64.tar.gz #或者使用我给你下载的 wget https://gitee.com/tanx/kubernetes-test/raw/master/helm/helm-v2.11.0-linux-amd64.tar tar zxvf helm-v2.11.0-linux-amd64.tar.gz export PATH=$PWD/linux-amd64/:$PATH  开始安装 $ kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml  有两种方式均可以安装istio,这里我们使用helm生成yaml的方式(因为helm的方式安装的istio,不用再去自己下载gcr.io中的镜像)
 因为我本人使用的是本地电脑,所以我需要对istio安装的参数进行一定的修改,具体修改如下:
@@ -54,6 +54,14 @@ grafana: enabled: false #修改为true #省略... service: annotations: {} name:
   
   
   
+    
+      <meta property="article:section" content="istio">
+    
+  
+  
+    
+      <meta property="article:tag" content="istio">
+    
   
 
 
@@ -191,7 +199,7 @@ grafana: enabled: false #修改为true #省略... service: annotations: {} name:
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -233,6 +241,14 @@ grafana: enabled: false #修改为true #省略... service: annotations: {} name:
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
+    
+  
+
   </div>
 
 </div>
@@ -440,6 +456,16 @@ tracing				http://node:31037
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/istio/">istio</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

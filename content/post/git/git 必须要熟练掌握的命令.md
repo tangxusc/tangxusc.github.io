@@ -2,6 +2,12 @@
 title: "git 必须要熟练掌握的命令"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- git
+tags:
+- git
+keywords:
+- git
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://segmentfault.com/a/1190000013241889

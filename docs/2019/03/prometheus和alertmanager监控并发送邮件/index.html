@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="kubeadm, k8s, install, prometheus">
 <meta name="description" content="prometheus和alertmanager监控并发送邮件 prometheus 简介 prometheus是时序的监控系统,通常使用prometheus是将prometheus当做采集存储中间件来使用,配合grafana做图表展示,配合alertmanager做自定义告警.
 prometheus的每个样本的大小为1-2个字节,要评估服务器的容量,可以使用以下公式:
 needed_disk_space = retention_time_seconds * ingested_samples_per_second * bytes_per_sample 需要的硬盘空间 = 数据保留时间(s) * 每秒采集的样本 * 样本大小  数据类型 在系统中所有的数据都以指标的方式来标示,指标包含label,指标格式如下:
@@ -46,6 +46,24 @@ $ curl localhost:9090/metrics # HELP go_gc_duration_seconds A summary of the GC 
   
   
   
+    
+      <meta property="article:section" content="kubeadm">
+    
+      <meta property="article:section" content="k8s">
+    
+      <meta property="article:section" content="prometheus">
+    
+  
+  
+    
+      <meta property="article:tag" content="kubeadm">
+    
+      <meta property="article:tag" content="k8s">
+    
+      <meta property="article:tag" content="install">
+    
+      <meta property="article:tag" content="prometheus">
+    
   
 
 
@@ -183,7 +201,7 @@ $ curl localhost:9090/metrics # HELP go_gc_duration_seconds A summary of the GC 
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -225,6 +243,18 @@ $ curl localhost:9090/metrics # HELP go_gc_duration_seconds A summary of the GC 
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/kubeadm">kubeadm</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/k8s">k8s</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/prometheus">prometheus</a>
+    
+  
+
   </div>
 
 </div>
@@ -657,6 +687,22 @@ inhibit_rules:
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/kubeadm/">kubeadm</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/k8s/">k8s</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/install/">install</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/prometheus/">prometheus</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

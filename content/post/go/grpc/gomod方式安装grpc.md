@@ -2,6 +2,15 @@
 title: "使用go mod(1.11)安装grpc"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- golang
+- grpc
+tags:
+- golang
+- grpc
+keywords:
+- golang
+- grpc
 ---
 
 ## 优势

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ubuntu on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/categories/ubuntu/</link>
+    <description>Recent content in Ubuntu on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/categories/ubuntu/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Ubuntu 中登录相关的日志</title>
+      <link>https://tangxusc.github.io/blog/2019/03/ubuntu-%E4%B8%AD%E7%99%BB%E5%BD%95%E7%9B%B8%E5%85%B3%E7%9A%84%E6%97%A5%E5%BF%97/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/ubuntu-%E4%B8%AD%E7%99%BB%E5%BD%95%E7%9B%B8%E5%85%B3%E7%9A%84%E6%97%A5%E5%BF%97/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/sparkdev/p/7694202.html
+ Ubuntu 中登录相关的日志 登录相关的日志涉及到系统的安全，所以是系统管理中非常重要的一部分内容。本文试图对登录相关的日志做一个整理。
+/var/log/auth.log 这是一个文本文件，记录了所有和用户认证相关的日志。无论是我们通过 ssh 登录，还是通过 sudo 执行命令都会在 auth.log 中产生记录。执行
+$ ssh nick@myserver 上图显示日志记录了通过秘钥认证的方式登录主机并退出的过程。
+再执行下面的命令试试：
+$ sudo vim /etc/passwd 日志同样会详细的记录本次 sudo 操作的过程。从中我们可以看到是哪个用户通过 sudo 执行了什么命令！
+/var/run/utmp 这是一个二进制文件，所以不能直接通过文本编辑器查看其内容。 它记录当前登录的每个用户的信息。因此这个文件会随着用户登录和注销系统而不断变化，它只保留当时联机的用户记录，不会为用户保留永久的记录。系统中需要查询当前用户状态的程序，如 who、w、users 等就需要访问这个文件。
+/var/log/wtmp 这是一个二进制文件，所以不能直接通过文本编辑器查看其内容。 该日志文件永久记录每个用户登录、注销及系统的启动、停机的事件。因此随着系统正常运行时间的增加，该文件的大小也会越来越大，增加的速度取决于系统用户登录的次数。该日志文件可以用来查看用户的登录记录，last 命令就通过访问这个文件获得这些信息。
+/var/log/btmp 这是一个二进制文件，所以不能直接通过文本编辑器查看其内容。 这个文件记录的是所有失败的登录尝试，使用 last 命令及其 -f 选项可以查看这个文件的内容：
+$ sudo last -f /var/log/btmp /var/log/lastlog 这是一个二进制文件，所以不能直接通过文本编辑器查看其内容。 它会记录系统中所有用户最近一次登陆的信息。比如我们通过 ssh 登录时提示的此用户最后一次的登录时间，就是从这个文件中取出的：
+其实这个文件的主要使用者是 lastlog 命令。
+特别是 /var/run/utmp、/var/log/wtmp 和 /var/log/lastlog 这三个文件，它们都是日志系统中的关键文件，并且具有如下的逻辑联系： 当一个用户登录系统时，login 程序在 lastlog 文件中查看用户的 UID。如果该用户存在，就把该用户上次登录、注销的时间以及从哪个主机登录的信息写到标准输出中。然后 login 程序在 lastlog 中记录新的登录时间，并打开 utmp 文件添加用户本次的登录记录。接下来，login 程序打开 wtmp 文件并添加用户在 utmp 文件中的记录。当用户退出时会把更新的 utmp 文件中的记录添加到 wtmp 文件中，并从 utmp 文件中删除用户的记录。</description>
+    </item>
+    
+  </channel>
+</rss>

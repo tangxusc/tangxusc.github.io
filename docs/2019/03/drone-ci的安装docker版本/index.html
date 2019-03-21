@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="docker, cicd, drone">
 <meta name="description" content="drone CI的安装(docker版本) 因原生的安装使用的是docker-compose进行安装,在此我使用docker进行安装 * drone 版本:0.8.4 * 强烈不推荐现在使用drone,现在感觉非常不可靠(按照文档运行各种错误)
  服务端运行脚本:
 docker run -d -p 8000:8000 -v /var/lib/drone:/var/lib/drone/ -e DRONE_OPEN=true -e DRONE_HOST=&lt;访问地址和端口&gt; -e DRONE_GITHUB=true -e DRONE_GITHUB_CLIENT=&lt;DRONE_GITHUB_CLIENT&gt; -e DRONE_GITHUB_SECRET=&lt;DRONE_GITHUB_SECRET&gt; -e DRONE_SECRET=&lt;自定义一个秘钥&gt; --name drone drone/drone:0.8.4   例如:
@@ -46,6 +46,22 @@ docker run -d -v /var/run/docker.sock:/var/run/docker.sock -e DRONE_SERVER=&lt;�
   
   
   
+    
+      <meta property="article:section" content="docker">
+    
+      <meta property="article:section" content="cicd">
+    
+      <meta property="article:section" content="drone">
+    
+  
+  
+    
+      <meta property="article:tag" content="docker">
+    
+      <meta property="article:tag" content="cicd">
+    
+      <meta property="article:tag" content="drone">
+    
   
 
 
@@ -183,7 +199,7 @@ docker run -d -v /var/run/docker.sock:/var/run/docker.sock -e DRONE_SERVER=&lt;�
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -225,6 +241,18 @@ docker run -d -v /var/run/docker.sock:/var/run/docker.sock -e DRONE_SERVER=&lt;�
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/docker">docker</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/cicd">cicd</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/drone">drone</a>
+    
+  
+
   </div>
 
 </div>
@@ -268,6 +296,20 @@ docker run -d -v /var/run/docker.sock:/var/run/docker.sock -e DRONE_SERVER=&lt;�
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/docker/">docker</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/cicd/">cicd</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/drone/">drone</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

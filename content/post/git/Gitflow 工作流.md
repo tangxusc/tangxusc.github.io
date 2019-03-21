@@ -2,6 +2,15 @@
 title: "Gitflow 工作流"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- git
+- gitflow
+tags:
+- git
+- gitflow
+keywords:
+- git
+- gitflow
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 http://blog.jobbole.com/76867/

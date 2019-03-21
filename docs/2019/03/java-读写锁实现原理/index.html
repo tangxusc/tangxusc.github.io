@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="java, lock">
 <meta name="description" content="本文由 简悦 SimpRead 转码， 原文地址 https://my.oschina.net/editorial-story/blog/1928306
  最近做的一个小项目中有这样的需求：整个项目有一份*config.json*保存着项目的一些配置，是存储在本地文件的一个资源，并且应用中存在读写（读 &gt;&gt; 写）更新问题。既然读写并发操作，那么就涉及到操作互斥，这里自然想到了读写锁，本文对读写锁方面的知识做个梳理。
 为什么需要读写锁？ 与传统锁不同的是读写锁的规则是可以共享读，但只能一个写，总结起来为：读读不互斥，读写互斥，写写互斥，而一般的独占锁是：读读互斥，读写互斥，写写互斥，而场景中往往读远远大于写，读写锁就是为了这种优化而创建出来的一种机制。
@@ -50,6 +50,18 @@ public class ReadWriteLock { /** * 读锁持有个数 */ private int readCount =
   
   
   
+    
+      <meta property="article:section" content="java">
+    
+      <meta property="article:section" content="lock">
+    
+  
+  
+    
+      <meta property="article:tag" content="java">
+    
+      <meta property="article:tag" content="lock">
+    
   
 
 
@@ -187,7 +199,7 @@ public class ReadWriteLock { /** * 读锁持有个数 */ private int readCount =
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -229,6 +241,16 @@ public class ReadWriteLock { /** * 读锁持有个数 */ private int readCount =
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/java">java</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/lock">lock</a>
+    
+  
+
   </div>
 
 </div>
@@ -759,6 +781,18 @@ public final boolean release(int arg) {
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/java/">java</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/lock/">lock</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

@@ -2,6 +2,13 @@
 title: "如何一步一步用 DDD 设计一个电商网站"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- DDD
+tags:
+- DDD
+keywords:
+- 电商网站
+- DDD
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 http://www.cnblogs.com/Zachary-Fan/p/5991674.html

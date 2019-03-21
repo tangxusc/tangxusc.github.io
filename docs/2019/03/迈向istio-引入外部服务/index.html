@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="istio">
 <meta name="description" content="istio-引入外部服务 [TOC]
 在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.
 服务规划 注意:istio-egressGateway这个服务是路由的出口,这样做有几个优点
@@ -70,6 +70,14 @@ apiVersion: networking.istio.io/v1alpha3 kind: ServiceEntry metadata: name: baid
   
   
   
+    
+      <meta property="article:section" content="istio">
+    
+  
+  
+    
+      <meta property="article:tag" content="istio">
+    
   
 
 
@@ -207,7 +215,7 @@ apiVersion: networking.istio.io/v1alpha3 kind: ServiceEntry metadata: name: baid
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -249,6 +257,14 @@ apiVersion: networking.istio.io/v1alpha3 kind: ServiceEntry metadata: name: baid
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
+    
+  
+
   </div>
 
 </div>
@@ -430,6 +446,16 @@ spec:
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/istio/">istio</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

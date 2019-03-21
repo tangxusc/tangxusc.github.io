@@ -2,6 +2,16 @@
 title: "树形结构的数据库表 Schema 设计 - 基于左右值编码"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- java
+- database
+tags:
+- java
+- database
+keywords:
+- java
+- database
+- tree
 ---
 
 

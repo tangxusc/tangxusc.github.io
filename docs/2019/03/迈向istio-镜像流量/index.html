@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="istio">
 <meta name="description" content="istio-镜像流量 [TOC]
 我们在前面几个章节中使用了两个服务(proxy,target),现在我们想对target进行一次升级,但是现在我们这个代码写的还不够好(没人能说他的代码一次就是期望的行为),希望通过复制一部分现在的流量 用来测试这个服务是否正确,那么这个时候就会使用到istio的镜像流量功能了
 好了,大幕拉开,开始我们的表演.
@@ -46,6 +46,14 @@ package main import ( &quot;fmt&quot; &quot;io/ioutil&quot; &quot;log&quot; &quo
   
   
   
+    
+      <meta property="article:section" content="istio">
+    
+  
+  
+    
+      <meta property="article:tag" content="istio">
+    
   
 
 
@@ -183,7 +191,7 @@ package main import ( &quot;fmt&quot; &quot;io/ioutil&quot; &quot;log&quot; &quo
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -225,6 +233,14 @@ package main import ( &quot;fmt&quot; &quot;io/ioutil&quot; &quot;log&quot; &quo
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
+    
+  
+
   </div>
 
 </div>
@@ -504,6 +520,16 @@ spec:
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/istio/">istio</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

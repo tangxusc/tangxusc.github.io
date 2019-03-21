@@ -2,6 +2,15 @@
 title: "用 JGit 通过 Java 来操作 Git"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- git
+- JGit
+tags:
+- git
+- JGit
+keywords:
+- git
+- JGit
 ---
 
 

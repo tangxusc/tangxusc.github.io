@@ -2,6 +2,12 @@
 title: "Java 奇技淫巧 - 插件化注解处理 API(Pluggable Annotation Processing API)"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- java
+tags:
+- java
+keywords:
+- java
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://www.cnblogs.com/throwable/p/9139908.html

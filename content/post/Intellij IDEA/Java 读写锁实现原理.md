@@ -2,6 +2,15 @@
 title: "Java 读写锁实现原理"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- java
+- lock
+tags:
+- java
+- lock
+keywords:
+- java
+- lock
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://my.oschina.net/editorial-story/blog/1928306

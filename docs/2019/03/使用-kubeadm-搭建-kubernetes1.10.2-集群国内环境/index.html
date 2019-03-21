@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="kubeadm, k8s, install">
 <meta name="description" content="本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/RainingNight/p/using-kubeadm-to-create-a-cluster.html
  使用 kubeadm 搭建 Kubernetes(1.10.2) 集群（国内环境） [TOC]
 目标  在您的机器上建立一个安全的 Kubernetes 集群。 在集群里安装网络插件，以便应用之间可以相互通讯。 在集群上运行一个简单的微服务。  准备 主机  一台或多台运行 Ubuntu 16.04 &#43; 的主机。 最好选至少有 2 GB 内存的双核主机。 集群中完整的网络连接，公网或者私网都可以。  软件 安装 Docker sudo apt-get update sudo apt-get install -y docker.io  Kubunetes 建议使用老版本的docker.io，如果需要使用最新版的docker-ce，可参考上一篇博客：Docker 初体验。
@@ -46,6 +46,20 @@
   
   
   
+    
+      <meta property="article:section" content="kubeadm">
+    
+      <meta property="article:section" content="k8s">
+    
+  
+  
+    
+      <meta property="article:tag" content="kubeadm">
+    
+      <meta property="article:tag" content="k8s">
+    
+      <meta property="article:tag" content="install">
+    
   
 
 
@@ -183,7 +197,7 @@
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -225,6 +239,16 @@
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/kubeadm">kubeadm</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/k8s">k8s</a>
+    
+  
+
   </div>
 
 </div>
@@ -675,6 +699,20 @@ kubectl delete node &lt;node name&gt;
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/kubeadm/">kubeadm</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/k8s/">k8s</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/install/">install</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

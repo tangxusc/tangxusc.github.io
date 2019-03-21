@@ -2,6 +2,12 @@
 title: "从分布式一致性谈到 CAP 理论、BASE 理论"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- CAP
+tags:
+- CAP
+keywords:
+- CAP
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://www.cnblogs.com/szlbm/p/5588543.html

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docker on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/categories/docker/</link>
+    <description>Recent content in Docker on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/categories/docker/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>docker maven plugin使用</title>
+      <link>https://tangxusc.github.io/blog/2019/03/docker-maven-plugin%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/docker-maven-plugin%E4%BD%BF%E7%94%A8/</guid>
+      <description>docker maven plugin使用 随着容器化的进行，测试环境和线上环境开始尝试容器化发布。因此需要将现有的maven工程进行容器化，容器化的好处不言而喻，但是针对原先没有解耦的应用（容器配置和代码耦合在一起），制作镜像还是有些成本的。本文主要记录对于webx和springboot应用的镜像制作。
+springboot镜像制作 springboot制作官方有介绍，最主要的就是在pom.xml中增加docker maven plugin，然后配置读取最终生成的jar即可。
+&amp;lt;plugin&amp;gt; &amp;lt;groupId&amp;gt;com.spotify&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;docker-maven-plugin&amp;lt;/artifactId&amp;gt; &amp;lt;configuration&amp;gt; &amp;lt;imageName&amp;gt;aegis-package-switch:1.0&amp;lt;/imageName&amp;gt; &amp;lt;dockerDirectory&amp;gt;${project.basedir}/docker&amp;lt;/dockerDirectory&amp;gt; &amp;lt;resources&amp;gt; &amp;lt;resource&amp;gt; &amp;lt;targetPath&amp;gt;/&amp;lt;/targetPath&amp;gt; &amp;lt;directory&amp;gt;bin&amp;lt;/directory&amp;gt; &amp;lt;include&amp;gt;run.sh&amp;lt;/include&amp;gt; &amp;lt;/resource&amp;gt; &amp;lt;resource&amp;gt; &amp;lt;targetPath&amp;gt;/&amp;lt;/targetPath&amp;gt; &amp;lt;directory&amp;gt;${project.build.directory}&amp;lt;/directory&amp;gt; &amp;lt;include&amp;gt;${project.build.finalName}.jar&amp;lt;/include&amp;gt; &amp;lt;/resource&amp;gt; &amp;lt;/resources&amp;gt; &amp;lt;/configuration&amp;gt; &amp;lt;/plugin&amp;gt;  docker-maven-plugin主要配置有：
+ 镜像名称 dockerfile文件 需要添加到镜像中的资源  docker-maven-plugin插件本身可以通过xml配置设置类似dockerfile中的简单操作（如添加文件等），但是为了统一和可读性，还是建议统一使用dockerfile。上面的示例中dockerfile位于项目目录的docker子目录中，目录结构类似：
+. ├── bin │ └── run.sh ├── docker │ └── Dockerfile ├── pom.xml ├── src │ ├── main │ └── test  resources标签中包含需要添加到镜像中的文件，实际执行时插件会将它们复制到target/docker目录中，供dockerfile使用，否则dockerfile中将无法引用到文件。
+然后就是最重要的dockerfile，springboot应用启动比较方便，依赖也很少，只要使用包含java的基础镜像即可。
+FROM j8:1.0 RUN mkdir /work WORKDIR /work ADD run.sh /work/run.</description>
+    </item>
+    
+    <item>
+      <title>docker入门</title>
+      <link>https://tangxusc.github.io/blog/2019/03/docker%E5%85%A5%E9%97%A8/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/docker%E5%85%A5%E9%97%A8/</guid>
+      <description>Docker简介 Docker 最初是 dotCloud 公司创始人 Solomon Hykes 在法国期间发起的一个公司内部项目，它是基于 dotCloud 公司多年云服务技术的一次革新，并于 2013 年 3 月以 Apache 2.0 授权协议开源)，主要项目代码在 GitHub 上进行维护。Docker 项目后来还加入了 Linux 基金会，并成立推动开放容器联盟。
+Docker 自开源后受到广泛的关注和讨论，至今其 GitHub 项目已经超过 3 万 6 千个星标和一万多个 fork。甚至由于 Docker 项目的火爆，在 2013 年底，dotCloud 公司决定改名为 Docker。Docker 最初是在 Ubuntu 12.04 上开发实现的；Red Hat 则从 RHEL 6.5 开始对 Docker 进行支持；Google 也在其 PaaS 产品中广泛应用 Docker。
+Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 AUFS 类的 Union FS 等技术，对进程进行封装隔离，属于操作系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容器。最初实现是基于 LXC，从 0.7 以后开始去除 LXC，转而使用自行开发的 libcontainer，从 1.</description>
+    </item>
+    
+    <item>
+      <title>docker安装(国内环境)</title>
+      <link>https://tangxusc.github.io/blog/2019/03/docker%E5%AE%89%E8%A3%85%E5%9B%BD%E5%86%85%E7%8E%AF%E5%A2%83/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/docker%E5%AE%89%E8%A3%85%E5%9B%BD%E5%86%85%E7%8E%AF%E5%A2%83/</guid>
+      <description> docker安装(国内环境) curl https://releases.rancher.com/install-docker/17.03.sh | sh  普通用户运行docker命令 usermod -aG docker &amp;lt;用户名&amp;gt;  参照  https://rancher.com/docs/rke/v0.1.x/en/os/ https://rancher.com/docs/rancher/v1.6/en/hosts/#supported-docker-versions  </description>
+    </item>
+    
+    <item>
+      <title>drone CI的安装(docker版本)</title>
+      <link>https://tangxusc.github.io/blog/2019/03/drone-ci%E7%9A%84%E5%AE%89%E8%A3%85docker%E7%89%88%E6%9C%AC/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/drone-ci%E7%9A%84%E5%AE%89%E8%A3%85docker%E7%89%88%E6%9C%AC/</guid>
+      <description>drone CI的安装(docker版本) 因原生的安装使用的是docker-compose进行安装,在此我使用docker进行安装 * drone 版本:0.8.4 * 强烈不推荐现在使用drone,现在感觉非常不可靠(按照文档运行各种错误)
+ 服务端运行脚本:
+docker run -d -p 8000:8000 -v /var/lib/drone:/var/lib/drone/ -e DRONE_OPEN=true -e DRONE_HOST=&amp;lt;访问地址和端口&amp;gt; -e DRONE_GITHUB=true -e DRONE_GITHUB_CLIENT=&amp;lt;DRONE_GITHUB_CLIENT&amp;gt; -e DRONE_GITHUB_SECRET=&amp;lt;DRONE_GITHUB_SECRET&amp;gt; -e DRONE_SECRET=&amp;lt;自定义一个秘钥&amp;gt; --name drone drone/drone:0.8.4   例如:
+docker run -d -p 8000:8000 -v /var/lib/drone:/var/lib/drone/ -e DRONE_OPEN=true -e DRONE_HOST=http://10.130.0.159:8000 -e DRONE_GITLAB=true -e DRONE_GITLAB_URL=https://gitlab.com -e DRONE_GITLAB_CLIENT=abba054b74a664f8226a7a99ccbc67f1140739465a4c1b0e85d -e DRONE_GITLAB_SECRET=42149d15d0e1636de99f6bc22c7d18e9f1825dcf49f0b0544dd -e DRONE_SECRET=abcd123456 --name drone drone/drone:0.8.4   代理运行脚本:
+docker run -d -v /var/run/docker.sock:/var/run/docker.sock -e DRONE_SERVER=&amp;lt;服务器地址和端口&amp;gt; -e DRONE_SECRET=&amp;lt;自定义的秘钥&amp;gt; --link drone:drone --name drone-agent drone/agent:0.</description>
+    </item>
+    
+    <item>
+      <title>使用shipyard proxy开启docker remote远程端口(2375)</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8shipyard-proxy%E5%BC%80%E5%90%AFdocker-remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A32375/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8shipyard-proxy%E5%BC%80%E5%90%AFdocker-remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A32375/</guid>
+      <description> 使用shipyard proxy开启docker remote远程端口(2375) 优势  不用重启docker 操作更为便捷 对于端口的定制更为方便 没有复杂的linux操作  * 注意shipyard已经没有维护了(但此镜像任然可以使用) 原理: shipyard/docker-proxy:latest 镜像可以在宿主机docker上运行一个容器,容器内挂载/var/run/docker.sock文件 将此文件暴露后,就开启了docker remote api
+docker命令行运行 docker run -d -v /var/run/docker.sock:/var/run/docker.sock -p 2375:2375 --name shipyard-docker-proxy shipyard/docker-proxy:latest  rancher调度(v2) version: &#39;2&#39; services: proxy: image: shipyard/docker-proxy:latest stdin_open: true volumes: - /var/run/docker.sock:/var/run/docker.sock tty: true ports: - 2375:2375/tcp labels: io.rancher.container.pull_image: always  </description>
+    </item>
+    
+  </channel>
+</rss>

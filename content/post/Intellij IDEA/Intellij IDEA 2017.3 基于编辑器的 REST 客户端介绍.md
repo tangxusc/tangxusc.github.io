@@ -2,6 +2,15 @@
 title: "Intellij IDEA 基于编辑器的 REST 客户端介绍"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- java
+- REST
+tags:
+- java
+- REST
+keywords:
+- java
+- REST
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://blog.csdn.net/u011054333/article/details/78705256

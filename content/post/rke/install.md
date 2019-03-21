@@ -2,6 +2,15 @@
 title: "RKE安装kubernetes集群"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- k8s
+- rke
+tags:
+- k8s
+- rke
+keywords:
+- k8s
+- rke
 ---
 
 ### RKE安装kubernetes集群

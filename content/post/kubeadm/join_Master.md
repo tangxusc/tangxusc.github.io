@@ -2,6 +2,17 @@
 title: "kubeadm生成的token过期后，集群增加节点"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- kubeadm
+- k8s
+tags:
+- kubeadm
+- k8s
+- install
+keywords:
+- kubeadm
+- k8s
+- install
 ---
 
 ### kubeadm生成的token过期后，集群增加节点

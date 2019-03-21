@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Database on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/tags/database/</link>
+    <description>Recent content in Database on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/tags/database/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>树形结构的数据库表 Schema 设计 - 基于左右值编码</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8-schema-%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E4%BA%8E%E5%B7%A6%E5%8F%B3%E5%80%BC%E7%BC%96%E7%A0%81/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8-schema-%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E4%BA%8E%E5%B7%A6%E5%8F%B3%E5%80%BC%E7%BC%96%E7%A0%81/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/M-D-Luffy/p/4712846.html
+ 树形结构的数据库表 Schema 设计  程序设计过程中，我们常常用树形结构来表征某些数据的关联关系，如企业上下级部门、栏目结构、商品分类等等，通常而言，这些树状结构需要借助于数据库完 成持久化。然而目前的各种基于关系的数据库，都是以二维表的形式记录存储数据信息，因此是不能直接将 Tree 存入 DBMS，设计合适的 Schema 及其对 应的 CRUD 算法是实现关系型数据库中存储树形结构的关键。
+ 理想中树形结构应该具备如下特征：数据存储冗余度小、直观性强；检索遍历过程简单高效；节点增删改查 CRUD 操作高效。无意中在网上搜索到一种很巧妙的 设计，原文是英文，看过后感觉有点意思，于是便整理了一下。本文将介绍两种树形结构的 Schema 设计方案：一种是直观而简单的设计思路，另一种是基于左 右值编码的改进方案。
+一、基本数据  本文列举了一个食品族谱的例子进行讲解，通过类别、颜色和品种组织食品，树形结构图如下：
+二、继承关系驱动的 Schema 设计  对树形结构最直观的分析莫过于节点之间的继承关系上，通过显示地描述某一节点的父节点，从而能够建立二维的关系表，则这种方案的 Tree 表结构通常设计为：{Node_id,Parent_id}，上述数据可以描述为如下图所示：
+ 这种方案的优点很明显：设计和实现自然而然，非常直观和方便。缺点当然也是非常的突出：由于直接地记录了节点之间的继承关系，因此对 Tree 的任何 CRUD 操作都将是低效的，这主要归根于频繁的 “递归” 操作，递归过程不断地访问数据库，每次数据库 IO 都会有时间开销。当然，这种方案并非没有用武之 地，在 Tree 规模相对较小的情况下，我们可以借助于缓存机制来做优化，将 Tree 的信息载入内存进行处理，避免直接对数据库 IO 操作的性能开销。
+三、基于左右值编码的 Schema 设计  在基于数据库的一般应用中，查询的需求总要大于删除和修改。为了避免对于树形结构查询时的 “递归” 过程，基于 Tree 的前序遍历设计一种全新的无递归查询、无限分组的左右值编码方案，来保存该树的数据。
+ 第一次看见这种表结构，相信大部分人都不清楚左值（Lft）和右值（Rgt）是如何计算出来的，而且这种表设计似乎并没有保存父子节点的继承关系。但当 你用手指指着表中的数字从 1 数到 18，你应该会发现点什么吧。对，你手指移动的顺序就是对这棵树进行前序遍历的顺序，如下图所示。当我们从根节点 Food 左侧开始，标记为 1，并沿前序遍历的方向，依次在遍历的路径上标注数字，最后我们回到了根节点 Food，并在右边写上了 18。</description>
+    </item>
+    
+  </channel>
+</rss>

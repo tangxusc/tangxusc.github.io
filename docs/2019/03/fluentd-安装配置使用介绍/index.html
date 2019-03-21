@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="efk, fluentd">
 <meta name="description" content="本文由 简悦 SimpRead 转码， 原文地址 https://blog.laisky.com/p/fluentd/
  fluentd 安装、配置、使用介绍  fluentd v1.0
  updated at 2016/10/8 updated at 2018/1/9: 完善内容 updated at 2018/1/23: 增加示例，更新为 v1.0 updated at 2018/4/9: 增加负载均衡 updated at 2018/4/25: 增加了负载均衡的一些实践细节   一、简介 fluentd2 是一个针对日志的收集、处理、转发系统。通过丰富的插件系统， 可以收集来自于各种系统或应用的日志，转化为用户指定的格式后，转发到用户所指定的日志存储系统之中。
@@ -70,6 +70,18 @@ Apps (with fluentd/fluent-bit) -&gt; broker (kafka) -&gt; fluentd cluster -&gt; 
   
   
   
+    
+      <meta property="article:section" content="efk">
+    
+      <meta property="article:section" content="fluentd">
+    
+  
+  
+    
+      <meta property="article:tag" content="efk">
+    
+      <meta property="article:tag" content="fluentd">
+    
   
 
 
@@ -207,7 +219,7 @@ Apps (with fluentd/fluent-bit) -&gt; broker (kafka) -&gt; fluentd cluster -&gt; 
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -249,6 +261,16 @@ Apps (with fluentd/fluent-bit) -&gt; broker (kafka) -&gt; fluentd cluster -&gt; 
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/efk">efk</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/fluentd">fluentd</a>
+    
+  
+
   </div>
 
 </div>
@@ -1039,6 +1061,18 @@ ENTRYPOINT exec fluentd -c /fluentd/etc/${FLUENTD_CONF} -p /fluentd/plugins $FLU
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/efk/">efk</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/fluentd/">fluentd</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

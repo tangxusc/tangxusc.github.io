@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Etcd on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/categories/etcd/</link>
+    <description>Recent content in Etcd on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/categories/etcd/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>了解 etcd</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E4%BA%86%E8%A7%A3-etcd/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E4%BA%86%E8%A7%A3-etcd/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://segmentfault.com/a/1190000008361945
+ 说明 这是一篇非常入门的文章，让你大概了解一下 etcd。写这篇文章时使用 etcd 的版本是 3.1.0。 etcd 是以实现共享配置和服务发现为目的，提供一致性的键值存储的分布式数据库。kubernetes 等项目使用了 etcd。
+下载安装 去这里下载 release 包，解压后是一些文档和两个二进制文件 etcd 和 etcdctl。etcd 是 server 端，etcdctl 是客户端。将 etcd 和 etcdctl 加入 PATH 路径方便我们执行命令。
+运行 server 执行命令 etcd，即可启动 server
+ming@ming:/tmp$ etcd 2017-02-14 14:04:40.164639 I | etcdmain: etcd Version: 3.1.0 2017-02-14 14:04:40.164725 I | etcdmain: Git SHA: 8ba2897 2017-02-14 14:04:40.164736 I | etcdmain: Go Version: go1.7.4 2017-02-14 14:04:40.164776 I | etcdmain: Go OS/Arch: linux/amd64 2017-02-14 14:04:40.</description>
+    </item>
+    
+    <item>
+      <title>使用 Golang 利用 ectd 实现一个分布式锁</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8-golang-%E5%88%A9%E7%94%A8-ectd-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8-golang-%E5%88%A9%E7%94%A8-ectd-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/diegodu/p/5603678.html
+  本文 http://blog.codeg.cn/post/blog/2016-02-24-distrubute-lock-over-etcd/ 是作者 zieckey 在研究和学习相关内容时所做的笔记，欢迎广大朋友指正和交流！ 版权所有，欢迎转载和分享，但请保留此段声明。
+etcd是随着CoreOS项目一起成长起来的，随着 Golang 和 CoreOS 等项目在开源社区日益火热， etcd作为一个高可用、强一致性的分布式 Key-Value 存储系统被越来越多的开发人员关注和使用。
+这篇文章全方位介绍了 etcd 的应用场景，这里简单摘要如下：
+ 服务发现（Service Discovery） 消息发布与订阅 负载均衡 分布式通知与协调 分布式锁 分布式队列 集群监控与 Leader 竞选 为什么用 etcd 而不用 ZooKeeper  本文重点介绍如何利用ectd实现一个分布式锁。 锁的概念大家都熟悉，当我们希望某一事件在同一时间点只有一个线程 (goroutine) 在做，或者某一个资源在同一时间点只有一个服务能访问，这个时候我们就需要用到锁。 例如我们要实现一个分布式的 id 生成器，多台服务器之间的协调就非常麻烦。分布式锁就正好派上用场。
+其基本实现原理为：
+ 在 ectd 系统里创建一个 key 如果创建失败，key 存在，则监听该 key 的变化事件，直到该 key 被删除，回到 1 如果创建成功，则认为我获得了锁  具体代码如下：
+package etcdsync import ( &amp;quot;fmt&amp;quot; &amp;quot;io&amp;quot; &amp;quot;os&amp;quot; &amp;quot;sync&amp;quot; &amp;quot;time&amp;quot; &amp;quot;github.</description>
+    </item>
+    
+    <item>
+      <title>基于 go&#43;etcd 实现分布式锁</title>
+      <link>https://tangxusc.github.io/blog/2019/03/%E5%9F%BA%E4%BA%8E-go-etcd-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/%E5%9F%BA%E4%BA%8E-go-etcd-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://www.jianshu.com/p/d3068d0ac7c1
+ package main import ( &amp;quot;context&amp;quot; &amp;quot;fmt&amp;quot; &amp;quot;go.etcd.io/etcd/clientv3&amp;quot; &amp;quot;time&amp;quot; ) func main() { var ( config clientv3.Config client *clientv3.Client lease clientv3.Lease leaseResp *clientv3.LeaseGrantResponse leaseId clientv3.LeaseID leaseRespChan &amp;lt;-chan *clientv3.LeaseKeepAliveResponse err error ) //客户端配置 config = clientv3.Config{ Endpoints: []string{&amp;quot;127.0.0.1:2379&amp;quot;}, DialTimeout: 5 * time.Second, } //建立连接 if client, err = clientv3.New(config); err != nil { fmt.Println(err) return } //上锁（创建租约，自动续租） lease = clientv3.NewLease(client) //设置一个ctx取消自动续租 ctx,cancleFunc := context.WithCancel(context.TODO()) //设置10秒租约（过期时间） if leaseResp,err = lease.</description>
+    </item>
+    
+  </channel>
+</rss>

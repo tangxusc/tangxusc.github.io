@@ -2,6 +2,16 @@
 title: "使用shipyard proxy开启docker remote远程端口(2375)"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- docker
+tags:
+- docker
+- shipyard
+- remote远程端口
+keywords:
+- docker
+- shipyard
+- remote远程端口
 ---
 
 ### 使用shipyard proxy开启docker remote远程端口(2375)

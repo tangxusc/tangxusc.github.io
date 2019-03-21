@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
+<meta name="keywords" content="k8s, rke">
 <meta name="description" content="RKE安装kubernetes集群 准备工作  1,将普通用户加入到Docker组
 sudo usermod -aG docker 用户名  2,关闭防火墙
 sudo ufw disable  3.0 安装openssh-server(如果已经安装,可省略)
@@ -66,6 +66,18 @@ nodes: - address: 节点IP(例如:1.2.3.4) user: 节点用户名(例如:demo) ro
   
   
   
+    
+      <meta property="article:section" content="k8s">
+    
+      <meta property="article:section" content="rke">
+    
+  
+  
+    
+      <meta property="article:tag" content="k8s">
+    
+      <meta property="article:tag" content="rke">
+    
   
 
 
@@ -203,7 +215,7 @@ nodes: - address: 节点IP(例如:1.2.3.4) user: 节点用户名(例如:demo) ro
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -245,6 +257,16 @@ nodes: - address: 节点IP(例如:1.2.3.4) user: 节点用户名(例如:demo) ro
       </time>
     
     
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/k8s">k8s</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/rke">rke</a>
+    
+  
+
   </div>
 
 </div>
@@ -344,6 +366,18 @@ role: [controlplane,worker,etcd]
           </div>
           <div id="post-footer" class="post-footer main-content-wrap">
             
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/k8s/">k8s</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/rke/">rke</a>
+
+                  </div>
+                
               
             
             <div class="post-actions-wrap">

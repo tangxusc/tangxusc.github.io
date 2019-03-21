@@ -2,6 +2,13 @@
 title: "分布式事务Saga模式"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- DDD
+tags:
+- DDD
+keywords:
+- 电商网站
+- DDD
 ---
 
 ### 分布式事务Saga模式

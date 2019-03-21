@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Efk on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/categories/efk/</link>
+    <description>Recent content in Efk on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/categories/efk/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>fluentd 安装、配置、使用介绍</title>
+      <link>https://tangxusc.github.io/blog/2019/03/fluentd-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/03/fluentd-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/</guid>
+      <description>本文由 简悦 SimpRead 转码， 原文地址 https://blog.laisky.com/p/fluentd/
+ fluentd 安装、配置、使用介绍  fluentd v1.0
+ updated at 2016/10/8 updated at 2018/1/9: 完善内容 updated at 2018/1/23: 增加示例，更新为 v1.0 updated at 2018/4/9: 增加负载均衡 updated at 2018/4/25: 增加了负载均衡的一些实践细节   一、简介 fluentd2 是一个针对日志的收集、处理、转发系统。通过丰富的插件系统， 可以收集来自于各种系统或应用的日志，转化为用户指定的格式后，转发到用户所指定的日志存储系统之中。
+通过 fluentd，你可以非常轻易的实现像追踪日志文件并将其过滤后转存到 MongoDB 这样的操作。fluentd 可以彻底的将你从繁琐的日志处理中解放出来。
+用图来做说明的话，使用 fluentd 以前，你的系统是这样的：
+使用了 fluentd 后，你的系统会成为这样：
+（图片来源3）
+此文将会对 fluentd 的安装、配置、使用等各方面做一个简要的介绍。
+fluentd 既可以作为日志收集器安装到每一个结点上， 也可以作为一个服务端收集各个结点上报的日志流。 你甚至也可以在各个结点上都部署 fluentd 收集日志，然后上报到一个 fluentd 集群做统一处理， 然后再转发到最终的日志存储服务器。
+所以在一个完整的日志收集、处理系统里，你可以构建一个这样的日志处理流：
+Apps (with fluentd/fluent-bit) -&amp;gt; broker (kafka) -&amp;gt; fluentd cluster -&amp;gt; elasticsearch -&amp;gt; kibana  其中提到的 fluent-bit 是一个极简版的 fluentd，专门用作日志的收集和转发， 可以在应用结点上取代 fluentd 收集日志，满足极端的资源要求。</description>
+    </item>
+    
+  </channel>
+</rss>

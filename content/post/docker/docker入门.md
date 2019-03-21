@@ -2,6 +2,12 @@
 title: "docker入门"
 date: 2019-03-20T14:15:59+08:00
 draft: false
+categories:
+- docker
+tags:
+- docker
+keywords:
+- docker
 ---
 
 ## Docker简介
