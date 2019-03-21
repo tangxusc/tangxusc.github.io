@@ -89,8 +89,8 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
 <meta property="og:type" content="article">
 <meta property="og:title" content="分布式事务Saga模式">
 <meta name="twitter:title" content="分布式事务Saga模式">
-<meta property="og:url" content="https://example.org/2019/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F/">
-<meta property="twitter:url" content="https://example.org/2019/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F/">
+<meta property="og:url" content="https://tangxusc.github.io/blog/2019/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F/">
+<meta property="twitter:url" content="https://tangxusc.github.io/blog/2019/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F/">
 <meta property="og:site_name" content="苏连云的博客">
 <meta property="og:description" content="分布式事务Saga模式 两阶段提交2PC是分布式事务中最强大的事务类型之一，两段提交就是分两个阶段提交，第一阶段询问各个事务数据源是否准备好，第二阶段才真正将数据提交给事务数据源，当需要同时更新多个数据源实体时，例如确认订单并立即更新库存时，它非常有用。
 但是，当您使用微服务时，情况会变得复杂。每个服务都拥有自己的数据库系统，每个服务不能再越过别的服务直接访问那个服务的数据库了。
@@ -199,12 +199,12 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
 
     <title>分布式事务Saga模式</title>
 
-    <link rel="icon" href="https://example.org/favicon.png">
+    <link rel="icon" href="https://tangxusc.github.io/blog/favicon.png">
     
 
     
 
-    <link rel="canonical" href="https://example.org/2019/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F/">
+    <link rel="canonical" href="https://tangxusc.github.io/blog/2019/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -212,7 +212,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
     
     
-    <link rel="stylesheet" href="https://example.org/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    <link rel="stylesheet" href="https://tangxusc.github.io/blog/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
     
     
 
@@ -227,12 +227,12 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
       <header id="header" data-behavior="4">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
-    <a class="header-title-link" href="https://example.org/">苏连云的博客</a>
+    <a class="header-title-link" href="https://tangxusc.github.io/blog/">苏连云的博客</a>
   </div>
   
     
       <a class="header-right-picture "
-         href="https://example.org/#about">
+         href="https://tangxusc.github.io/blog/#about">
     
     
     
@@ -248,7 +248,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
   <div class="sidebar-container">
     
       <div class="sidebar-profile">
-        <a href="https://example.org/#about">
+        <a href="https://tangxusc.github.io/blog/#about">
           <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=110" alt="Author&#39;s picture" />
         </a>
         <h4 class="sidebar-profile-name">苏连云</h4>
@@ -261,7 +261,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://example.org/">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/">
     
       <i class="sidebar-button-icon fa fa-lg fa-home"></i>
       
@@ -271,7 +271,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://example.org/categories">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/categories">
     
       <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
       
@@ -281,7 +281,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://example.org/tags">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/tags">
     
       <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
       
@@ -291,7 +291,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://example.org/archives">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/archives">
     
       <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
       
@@ -301,7 +301,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://example.org/#about">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/#about">
     
       <i class="sidebar-button-icon fa fa-lg fa-question"></i>
       
@@ -393,7 +393,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
 
 <p>对于我们这个电子商务示例，非常高层次级的Saga设计实现如下所示：</p>
 
-<p><img src="https://example.org/post/DDD/images/分布式事务Saga模式_image_1.jpg" alt="Alt text" /></p>
+<p><img src="https://tangxusc.github.io/blog/post/DDD/images/分布式事务Saga模式_image_1.jpg" alt="Alt text" /></p>
 
 <p>现在有两种不同的方式来实现saga事务，最流行的两种方式是：</p>
 
@@ -413,7 +413,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
 
 <p>让我们看看它在我们的电子商务示例中的外观：</p>
 
-<p><img src="https://example.org/post/DDD/images/分布式事务Saga模式_image_2.jpg" alt="Alt text" /></p>
+<p><img src="https://tangxusc.github.io/blog/post/DDD/images/分布式事务Saga模式_image_2.jpg" alt="Alt text" /></p>
 
 <p>步骤如下：
 1. 订单服务保存新订单，将状态设置为pengding挂起状态，并发布名为ORDER_CREATED_EVENT的事件。</p>
@@ -454,7 +454,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
 
 <p>这里我们定义了一项新服务，全权负责告诉每个参与者该做什么以及什么时候该做什么。saga协调器orchestrator以命令/回复的方式与每项服务进行通信，告诉他们应该执行哪些操作。</p>
 
-<p><img src="https://example.org/post/DDD/images/分布式事务Saga模式_image_3.jpg" alt="Alt text" /></p>
+<p><img src="https://tangxusc.github.io/blog/post/DDD/images/分布式事务Saga模式_image_3.jpg" alt="Alt text" /></p>
 
 <ol>
 <li><p>订单服务保存pending状态，并要求订单Saga协调器（简称OSO）开始启动订单事务。</p></li>
@@ -527,7 +527,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/03/%E5%86%8D%E6%8E%A2go-modules%E4%BD%BF%E7%94%A8%E4%B8%8E%E7%BB%86%E8%8A%82/" data-tooltip="再探go modules使用与细节">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/03/%E5%86%8D%E6%8E%A2go-modules%E4%BD%BF%E7%94%A8%E4%B8%8E%E7%BB%86%E8%8A%82/" data-tooltip="再探go modules使用与细节">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -535,7 +535,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/03/%E5%89%8D%E7%AB%AF%E5%8A%A0%E8%BD%BD%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E9%9A%8F%E6%83%B3/" data-tooltip="前端加载私有文件随想">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/03/%E5%89%8D%E7%AB%AF%E5%8A%A0%E8%BD%BD%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E9%9A%8F%E6%83%B3/" data-tooltip="前端加载私有文件随想">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -595,7 +595,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/03/%E5%86%8D%E6%8E%A2go-modules%E4%BD%BF%E7%94%A8%E4%B8%8E%E7%BB%86%E8%8A%82/" data-tooltip="再探go modules使用与细节">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/03/%E5%86%8D%E6%8E%A2go-modules%E4%BD%BF%E7%94%A8%E4%B8%8E%E7%BB%86%E8%8A%82/" data-tooltip="再探go modules使用与细节">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -603,7 +603,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/03/%E5%89%8D%E7%AB%AF%E5%8A%A0%E8%BD%BD%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E9%9A%8F%E6%83%B3/" data-tooltip="前端加载私有文件随想">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/03/%E5%89%8D%E7%AB%AF%E5%8A%A0%E8%BD%BD%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E9%9A%8F%E6%83%B3/" data-tooltip="前端加载私有文件随想">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -700,7 +700,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">
                 <h3 class="media-heading">Controller manager高可用实现方式</h3>
               </a>
               <span class="media-meta">
@@ -723,7 +723,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/">
                 <h3 class="media-heading">Gitflow 工作流</h3>
               </a>
               <span class="media-meta">
@@ -759,7 +759,7 @@ git clone ssh://user@host/path/to/repo.git git checkout -b develop origin/develo
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/go-%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8F%8A-pprof-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/go-%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8F%8A-pprof-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
                 <h3 class="media-heading">Go 程序性能优化及 pprof 使用方法详解</h3>
               </a>
               <span class="media-meta">
@@ -785,7 +785,7 @@ package main import ( &quot;bytes&quot; &quot;io/ioutil&quot; &quot;log&quot; &q
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/">
                 <h3 class="media-heading">Golang大杀器之性能剖析PProf</h3>
               </a>
               <span class="media-meta">
@@ -809,7 +809,7 @@ profile.proto 是一个 Protocol Buffer v3 的描述文件，它描述了一组 
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/">
                 <h3 class="media-heading">Go模块简介</h3>
               </a>
               <span class="media-meta">
@@ -834,7 +834,7 @@ $ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u o
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/intellij-idea-%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84-rest-%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8B%E7%BB%8D/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/intellij-idea-%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84-rest-%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8B%E7%BB%8D/">
                 <h3 class="media-heading">Intellij IDEA 基于编辑器的 REST 客户端介绍</h3>
               </a>
               <span class="media-meta">
@@ -857,7 +857,7 @@ $ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u o
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/java-%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7-%E6%8F%92%E4%BB%B6%E5%8C%96%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86-apipluggable-annotation-processing-api/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java-%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7-%E6%8F%92%E4%BB%B6%E5%8C%96%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86-apipluggable-annotation-processing-api/">
                 <h3 class="media-heading">Java 奇技淫巧 - 插件化注解处理 API(Pluggable Annotation Processing API)</h3>
               </a>
               <span class="media-meta">
@@ -875,7 +875,7 @@ $ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u o
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
                 <h3 class="media-heading">Java 读写锁实现原理</h3>
               </a>
               <span class="media-meta">
@@ -897,7 +897,7 @@ public class ReadWriteLock { /** * 读锁持有个数 */ private int readCount =
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/">
                 <h3 class="media-heading">Java8 日期和时间</h3>
               </a>
               <span class="media-meta">
@@ -920,7 +920,7 @@ java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个�
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/">
                 <h3 class="media-heading">Java注释处理和创建构建器</h3>
               </a>
               <span class="media-meta">
@@ -965,7 +965,7 @@ _注释处理器_模块的设置如下。我们将使用Google的自动服务库
     
   
     
-    <div id="cover" style="background-image:url('https://example.org/images/cover.jpg');"></div>
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/blog/images/cover.jpg');"></div>
   
 
 
@@ -977,7 +977,7 @@ _注释处理器_模块的设置如下。我们将使用Google的自动服务库
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
 
 
-<script src="https://example.org/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+<script src="https://tangxusc.github.io/blog/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
 
 
 <script lang="javascript">
@@ -1012,7 +1012,7 @@ $(document).ready(function() {
     
       <script>
         var disqus_config = function () {
-          this.page.url = 'https:\/\/example.org\/2019\/03\/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F\/';
+          this.page.url = 'https:\/\/tangxusc.github.io\/blog\/2019\/03\/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F\/';
           
             this.page.identifier = '\/2019\/03\/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F\/'
           

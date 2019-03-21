@@ -15,8 +15,8 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Posts">
 <meta name="twitter:title" content="Posts">
-<meta property="og:url" content="https://example.org/post/">
-<meta property="twitter:url" content="https://example.org/post/">
+<meta property="og:url" content="https://tangxusc.github.io/blog/post/">
+<meta property="twitter:url" content="https://tangxusc.github.io/blog/post/">
 <meta property="og:site_name" content="苏连云的博客">
 <meta property="og:description" content="">
 <meta name="twitter:description" content="">
@@ -41,14 +41,14 @@
 
     <title>Posts</title>
 
-    <link rel="icon" href="https://example.org/favicon.png">
+    <link rel="icon" href="https://tangxusc.github.io/blog/favicon.png">
     
-      <link rel="alternate" type="application/rss+xml" title="RSS" href="https://example.org/post/index.xml">
-    
-
+      <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tangxusc.github.io/blog/post/index.xml">
     
 
-    <link rel="canonical" href="https://example.org/post/">
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/blog/post/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -56,7 +56,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
     
     
-    <link rel="stylesheet" href="https://example.org/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    <link rel="stylesheet" href="https://tangxusc.github.io/blog/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
     
     
 
@@ -71,12 +71,12 @@
       <header id="header" data-behavior="1">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
-    <a class="header-title-link" href="https://example.org/">苏连云的博客</a>
+    <a class="header-title-link" href="https://tangxusc.github.io/blog/">苏连云的博客</a>
   </div>
   
     
       <a class="header-right-picture "
-         href="https://example.org/#about">
+         href="https://tangxusc.github.io/blog/#about">
     
     
     
@@ -92,7 +92,7 @@
   <div class="sidebar-container">
     
       <div class="sidebar-profile">
-        <a href="https://example.org/#about">
+        <a href="https://tangxusc.github.io/blog/#about">
           <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=110" alt="Author&#39;s picture" />
         </a>
         <h4 class="sidebar-profile-name">苏连云</h4>
@@ -105,7 +105,7 @@
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://example.org/">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/">
     
       <i class="sidebar-button-icon fa fa-lg fa-home"></i>
       
@@ -115,7 +115,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://example.org/categories">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/categories">
     
       <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
       
@@ -125,7 +125,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://example.org/tags">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/tags">
     
       <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
       
@@ -135,7 +135,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://example.org/archives">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/archives">
     
       <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
       
@@ -145,7 +145,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://example.org/#about">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/#about">
     
       <i class="sidebar-button-icon fa fa-lg fa-question"></i>
       
@@ -202,7 +202,7 @@
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://example.org/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
           Java 读写锁实现原理
         </a>
       </h1>
@@ -229,7 +229,7 @@
 public class ReadWriteLock { /** * 读锁持有个数 */ private int readCount = 0; /** * 写锁持有个数 */ private int writeCount = 0; /** * 获取读锁,读锁在写锁不存在的时候才能获取 */ public synchronized void lockRead() throws InterruptedException { // 写锁存在,需要wait while (writeCount &gt; 0) { wait(); } readCount++; } /** * 释放读锁 */ public synchronized void unlockRead() { readCount--; notifyAll(); } /** * 获取写锁,当读锁存在时需要wait.
       
       <p>
-        <a href="https://example.org/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/blog/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -255,7 +255,7 @@ public class ReadWriteLock { /** * 读锁持有个数 */ private int readCount =
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://example.org/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/">
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/">
           Java8 日期和时间
         </a>
       </h1>
@@ -283,7 +283,7 @@ java8 引入的java.time API 已经纠正了之前的问题。它已经完全实
 java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个精确的时间点，Duration和Period表示两个时间点之间的时间量。 LocalDate表示日期，即 xx 年 xx 月 xx 日，即不包括时间也不带时区。LocalTime与LocalDate类似， 但只包含时间。LocalDateTime则包含日期和时间。ZoneDateTime表示一个带时区的时间。 DateTimeFormatter提供格式化和解析功能。下面详细的介绍使用方法。
       
       <p>
-        <a href="https://example.org/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/blog/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -309,7 +309,7 @@ java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个�
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://example.org/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/">
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/">
           Java注释处理和创建构建器
         </a>
       </h1>
@@ -347,7 +347,7 @@ _注释处理器_模块的设置如下。我们将使用Google的自动服务库
 &lt;dependency&gt; &lt;groupId&gt;com.baeldung&lt;/groupId&gt; &lt;artifactId&gt;annotation-processing&lt;/artifactId&gt; &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt; &lt;/dependency&gt;  5.
       
       <p>
-        <a href="https://example.org/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/blog/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -373,7 +373,7 @@ _注释处理器_模块的设置如下。我们将使用Google的自动服务库
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://example.org/2019/03/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86/">
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86/">
           Jenkins Sonar Github 代码质量管理
         </a>
       </h1>
@@ -401,7 +401,7 @@ _注释处理器_模块的设置如下。我们将使用Google的自动服务库
  有些 Sonar 能检测出来的 issue，确实能规避一些产品上的潜在 bug 有些同事在 code 中犯的错误真的很低级，但是人工 code review 中很难被发现，不是我的锅，我现在却在为同事擦屁股。 虽然快速 fix 了 issue，但是 code 的 owner 并不是我，我有可能为了迎合 sonar 的 rule 而产生了潜在的新的 issue，而和 owner 去一一 check 又增加了很多沟通成本，另外 owner 很有可能已经离职了  思考 囧则思变！如何改进我们的开发流程？在代码开发阶段就能让 Sonar 分析出问题？强制 owner 必须解决完 issue 才能提交代码？ 嗯！是时候对目前存在弊端的开发流程进行改进了！
       
       <p>
-        <a href="https://example.org/2019/03/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/blog/2019/03/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -427,7 +427,7 @@ _注释处理器_模块的设置如下。我们将使用Google的自动服务库
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://example.org/2019/03/kubernetes-operator-sdk/">
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/kubernetes-operator-sdk/">
           Kubernetes Operator SDK
         </a>
       </h1>
@@ -458,7 +458,7 @@ CoreOS还开发了用于开发此类的SDK operators。SDK简化了a的实现，
 $ cd $GOPATH/src/github.com/&lt;your-github-repo&gt;/ $ operator-sdk new &lt;operator-project-name&gt; --api-version=&lt;your-api-group&gt;/&lt;version&gt; --kind=&lt;custom-resource-kind&gt; $ cd &lt;operator-project-name&gt;   operator-project-name - CLI在此目录下生成项目框架 your-api-group - 这是我们处理的自定义资源的Kubernetes API组operator（例如mycompany.com） version - 这是我们处理的自定义资源的Kubernetes API版本operator（例如v1alpha，beta等，请参阅Kubernetes API版本） custom-resource-kind - 自定义资源类型的名称  定义要监视的Kubernetes资源 该main.
       
       <p>
-        <a href="https://example.org/2019/03/kubernetes-operator-sdk/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/blog/2019/03/kubernetes-operator-sdk/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -484,7 +484,7 @@ $ cd $GOPATH/src/github.com/&lt;your-github-repo&gt;/ $ operator-sdk new &lt;ope
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://example.org/2019/03/lombok-%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E4%B8%8E%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/">
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/lombok-%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E4%B8%8E%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/">
           Lombok 原理分析与功能实现
         </a>
       </h1>
@@ -511,7 +511,7 @@ Lombok 代码 Lombok 是一个开源项目，源代码托管在 GITHUB/rzwitserl
 class Test{ private String value; public String getValue(){ return this.value; } }  当然 Lombok 也提供了很多其他的注解，这只是其中一个最典型的例子。其他的用法网上的资料已经很多了，这里就不啰嗦。 看上去是很方便的一个功能，尤其是在很多项目里有很多 bean，每次都要手写或自动生成 setter getter 方法，搞得代码很长而且没有啥意义，因此这个对简化代码的强迫症们还是很有吸引力的。 但是，我们发现这个包跟一般的包有很大区别，绝大多数 java 包都工作在运行时，比如 spring 提供的那种注解，通过在运行时用反射来实现业务逻辑。Lombok 这个东西工作却在编译期，在运行时是无法通过反射获取到这个注解的。 而且由于他相当于是在编译期对代码进行了修改，因此从直观上看，源代码甚至是语法有问题的。 一个更直接的体现就是，普通的包在引用之后一般的 IDE 都能够自动识别语法，但是 Lombok 的这些注解，一般的 IDE 都无法自动识别，比如我们上面的 Test 类，如果我们在其他地方这么调用了一下:
       
       <p>
-        <a href="https://example.org/2019/03/lombok-%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E4%B8%8E%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/blog/2019/03/lombok-%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E4%B8%8E%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -537,7 +537,7 @@ class Test{ private String value; public String getValue(){ return this.value; }
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://example.org/2019/03/minikube-%E5%AE%89%E8%A3%85/">
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/minikube-%E5%AE%89%E8%A3%85/">
           Minikube 安装
         </a>
       </h1>
@@ -569,7 +569,7 @@ class Test{ private String value; public String getValue(){ return this.value; }
  VirtualBox 或 KVM NOTE: Minikube 也支持 --vm-driver=none 选项来在本机运行 Kubernetes 组件，这时候需要本机安装了 Docker。在使用 0.
       
       <p>
-        <a href="https://example.org/2019/03/minikube-%E5%AE%89%E8%A3%85/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/blog/2019/03/minikube-%E5%AE%89%E8%A3%85/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -584,7 +584,7 @@ class Test{ private String value; public String getValue(){ return this.value; }
       
         
           <li class="pagination-prev">
-            <a class="btn btn--default btn--small" href="https://example.org/post/">
+            <a class="btn btn--default btn--small" href="https://tangxusc.github.io/blog/post/">
               <i class="fa fa-angle-left text-base icon-mr"></i>
               <span>NEWER POSTS</span>
             </a>
@@ -592,7 +592,7 @@ class Test{ private String value; public String getValue(){ return this.value; }
         
         
           <li class="pagination-next">
-            <a class="btn btn--default btn--small" href="https://example.org/post/page/3/">
+            <a class="btn btn--default btn--small" href="https://tangxusc.github.io/blog/post/page/3/">
               <span>OLDER POSTS</span>
               <i class="fa fa-angle-right text-base icon-ml"></i>
             </a>
@@ -665,7 +665,7 @@ class Test{ private String value; public String getValue(){ return this.value; }
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">
                 <h3 class="media-heading">Controller manager高可用实现方式</h3>
               </a>
               <span class="media-meta">
@@ -688,7 +688,7 @@ class Test{ private String value; public String getValue(){ return this.value; }
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/">
                 <h3 class="media-heading">Gitflow 工作流</h3>
               </a>
               <span class="media-meta">
@@ -724,7 +724,7 @@ git clone ssh://user@host/path/to/repo.git git checkout -b develop origin/develo
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/go-%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8F%8A-pprof-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/go-%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8F%8A-pprof-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
                 <h3 class="media-heading">Go 程序性能优化及 pprof 使用方法详解</h3>
               </a>
               <span class="media-meta">
@@ -750,7 +750,7 @@ package main import ( &quot;bytes&quot; &quot;io/ioutil&quot; &quot;log&quot; &q
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/">
                 <h3 class="media-heading">Golang大杀器之性能剖析PProf</h3>
               </a>
               <span class="media-meta">
@@ -774,7 +774,7 @@ profile.proto 是一个 Protocol Buffer v3 的描述文件，它描述了一组 
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/">
                 <h3 class="media-heading">Go模块简介</h3>
               </a>
               <span class="media-meta">
@@ -799,7 +799,7 @@ $ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u o
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/intellij-idea-%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84-rest-%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8B%E7%BB%8D/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/intellij-idea-%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84-rest-%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8B%E7%BB%8D/">
                 <h3 class="media-heading">Intellij IDEA 基于编辑器的 REST 客户端介绍</h3>
               </a>
               <span class="media-meta">
@@ -822,7 +822,7 @@ $ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u o
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/java-%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7-%E6%8F%92%E4%BB%B6%E5%8C%96%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86-apipluggable-annotation-processing-api/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java-%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7-%E6%8F%92%E4%BB%B6%E5%8C%96%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86-apipluggable-annotation-processing-api/">
                 <h3 class="media-heading">Java 奇技淫巧 - 插件化注解处理 API(Pluggable Annotation Processing API)</h3>
               </a>
               <span class="media-meta">
@@ -840,7 +840,7 @@ $ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u o
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
                 <h3 class="media-heading">Java 读写锁实现原理</h3>
               </a>
               <span class="media-meta">
@@ -862,7 +862,7 @@ public class ReadWriteLock { /** * 读锁持有个数 */ private int readCount =
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/">
                 <h3 class="media-heading">Java8 日期和时间</h3>
               </a>
               <span class="media-meta">
@@ -885,7 +885,7 @@ java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个�
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://example.org/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/">
                 <h3 class="media-heading">Java注释处理和创建构建器</h3>
               </a>
               <span class="media-meta">
@@ -930,7 +930,7 @@ _注释处理器_模块的设置如下。我们将使用Google的自动服务库
     
   
     
-    <div id="cover" style="background-image:url('https://example.org/images/cover.jpg');"></div>
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/blog/images/cover.jpg');"></div>
   
 
 
@@ -942,7 +942,7 @@ _注释处理器_模块的设置如下。我们将使用Google的自动服务库
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
 
 
-<script src="https://example.org/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+<script src="https://tangxusc.github.io/blog/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
 
 
 <script lang="javascript">
