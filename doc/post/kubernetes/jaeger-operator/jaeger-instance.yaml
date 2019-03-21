@@ -1,0 +1,17 @@
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: my-jaeger
+spec:
+  strategy: production
+#  allInOne:
+#    image: jaegertracing/all-in-one:latest
+#    options:
+#      log-level: debug
+  storage:
+    type: elasticsearch
+    options:
+      es:
+        server-urls: http://elasticsearch-logging.kube-system:9200
+#  ingress:
+#    enabled: true

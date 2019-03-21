@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="">
+<meta name="description" content="本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/a80596890555/article/details/58687444
+ 如何正确处理时间 现实生活的世界里，时间是不断向前的，如果向前追溯时间的起点，可能是宇宙出生时，又或是是宇宙出现之前， 但肯定是我们目前无法找到的，我们不知道现在距离时间原点的精确距离。所以我们要表示时间， 就需要人为定义一个原点。
+原点被规定为，格林威治时间 (GMT)1970 年 1 月 1 日的午夜 为起点, 之于为啥是 GMT 时间，大概是因为本初子午线在那的原因吧。
+java 中的时间 如果你跟你朋友说：“我们 1484301456 一起去吃饭，别迟到！”，而你朋友能马上理解你说的时间，表示时间就会很简单， 只需要一个 long 值来表示原点的偏移量，这是个绝对时间，在世界范围内都适用。但实际上我们不能马上理解这串数字， 而且我们需要不同的时间单位来表示时间的跨度，比如一个季度是 3 个月，一个月有 30 天等。 你可以跟朋友约好 “明天这个时候再见面”, 你朋友很容易理解明天的意思，但要是没有’天’这个单位， 他就需要在那串数字上加上 86400(一天是 86400 秒)。
+Java 三次引入处理时间的 API，JDK1.0 中包含了一个Date类，但大多数方法在 java1.1 引入Calendear类之后被弃用了。 它的实例都是可变的，而且它的 API 很难使用，比如月份是从 0 开始这种反人类的设置。
+java8 引入的java.time API 已经纠正了之前的问题。它已经完全实现了JSR310规范。
+java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个精确的时间点，Duration和Period表示两个时间点之间的时间量。 LocalDate表示日期，即 xx 年 xx 月 xx 日，即不包括时间也不带时区。LocalTime与LocalDate类似， 但只包含时间。LocalDateTime则包含日期和时间。ZoneDateTime表示一个带时区的时间。 DateTimeFormatter提供格式化和解析功能。下面详细的介绍使用方法。">
+
+
+<meta property="og:description" content="本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/a80596890555/article/details/58687444
+ 如何正确处理时间 现实生活的世界里，时间是不断向前的，如果向前追溯时间的起点，可能是宇宙出生时，又或是是宇宙出现之前， 但肯定是我们目前无法找到的，我们不知道现在距离时间原点的精确距离。所以我们要表示时间， 就需要人为定义一个原点。
+原点被规定为，格林威治时间 (GMT)1970 年 1 月 1 日的午夜 为起点, 之于为啥是 GMT 时间，大概是因为本初子午线在那的原因吧。
+java 中的时间 如果你跟你朋友说：“我们 1484301456 一起去吃饭，别迟到！”，而你朋友能马上理解你说的时间，表示时间就会很简单， 只需要一个 long 值来表示原点的偏移量，这是个绝对时间，在世界范围内都适用。但实际上我们不能马上理解这串数字， 而且我们需要不同的时间单位来表示时间的跨度，比如一个季度是 3 个月，一个月有 30 天等。 你可以跟朋友约好 “明天这个时候再见面”, 你朋友很容易理解明天的意思，但要是没有’天’这个单位， 他就需要在那串数字上加上 86400(一天是 86400 秒)。
+Java 三次引入处理时间的 API，JDK1.0 中包含了一个Date类，但大多数方法在 java1.1 引入Calendear类之后被弃用了。 它的实例都是可变的，而且它的 API 很难使用，比如月份是从 0 开始这种反人类的设置。
+java8 引入的java.time API 已经纠正了之前的问题。它已经完全实现了JSR310规范。
+java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个精确的时间点，Duration和Period表示两个时间点之间的时间量。 LocalDate表示日期，即 xx 年 xx 月 xx 日，即不包括时间也不带时区。LocalTime与LocalDate类似， 但只包含时间。LocalDateTime则包含日期和时间。ZoneDateTime表示一个带时区的时间。 DateTimeFormatter提供格式化和解析功能。下面详细的介绍使用方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java8 日期和时间">
+<meta name="twitter:title" content="Java8 日期和时间">
+<meta property="og:url" content="https://example.org/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/">
+<meta property="twitter:url" content="https://example.org/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/a80596890555/article/details/58687444
+ 如何正确处理时间 现实生活的世界里，时间是不断向前的，如果向前追溯时间的起点，可能是宇宙出生时，又或是是宇宙出现之前， 但肯定是我们目前无法找到的，我们不知道现在距离时间原点的精确距离。所以我们要表示时间， 就需要人为定义一个原点。
+原点被规定为，格林威治时间 (GMT)1970 年 1 月 1 日的午夜 为起点, 之于为啥是 GMT 时间，大概是因为本初子午线在那的原因吧。
+java 中的时间 如果你跟你朋友说：“我们 1484301456 一起去吃饭，别迟到！”，而你朋友能马上理解你说的时间，表示时间就会很简单， 只需要一个 long 值来表示原点的偏移量，这是个绝对时间，在世界范围内都适用。但实际上我们不能马上理解这串数字， 而且我们需要不同的时间单位来表示时间的跨度，比如一个季度是 3 个月，一个月有 30 天等。 你可以跟朋友约好 “明天这个时候再见面”, 你朋友很容易理解明天的意思，但要是没有’天’这个单位， 他就需要在那串数字上加上 86400(一天是 86400 秒)。
+Java 三次引入处理时间的 API，JDK1.0 中包含了一个Date类，但大多数方法在 java1.1 引入Calendear类之后被弃用了。 它的实例都是可变的，而且它的 API 很难使用，比如月份是从 0 开始这种反人类的设置。
+java8 引入的java.time API 已经纠正了之前的问题。它已经完全实现了JSR310规范。
+java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个精确的时间点，Duration和Period表示两个时间点之间的时间量。 LocalDate表示日期，即 xx 年 xx 月 xx 日，即不包括时间也不带时区。LocalTime与LocalDate类似， 但只包含时间。LocalDateTime则包含日期和时间。ZoneDateTime表示一个带时区的时间。 DateTimeFormatter提供格式化和解析功能。下面详细的介绍使用方法。">
+<meta name="twitter:description" content="本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/a80596890555/article/details/58687444
+ 如何正确处理时间 现实生活的世界里，时间是不断向前的，如果向前追溯时间的起点，可能是宇宙出生时，又或是是宇宙出现之前， 但肯定是我们目前无法找到的，我们不知道现在距离时间原点的精确距离。所以我们要表示时间， 就需要人为定义一个原点。
+原点被规定为，格林威治时间 (GMT)1970 年 1 月 1 日的午夜 为起点, 之于为啥是 GMT 时间，大概是因为本初子午线在那的原因吧。
+java 中的时间 如果你跟你朋友说：“我们 1484301456 一起去吃饭，别迟到！”，而你朋友能马上理解你说的时间，表示时间就会很简单， 只需要一个 long 值来表示原点的偏移量，这是个绝对时间，在世界范围内都适用。但实际上我们不能马上理解这串数字， 而且我们需要不同的时间单位来表示时间的跨度，比如一个季度是 3 个月，一个月有 30 天等。 你可以跟朋友约好 “明天这个时候再见面”, 你朋友很容易理解明天的意思，但要是没有’天’这个单位， 他就需要在那串数字上加上 86400(一天是 86400 秒)。
+Java 三次引入处理时间的 API，JDK1.0 中包含了一个Date类，但大多数方法在 java1.1 引入Calendear类之后被弃用了。 它的实例都是可变的，而且它的 API 很难使用，比如月份是从 0 开始这种反人类的设置。
+java8 引入的java.time API 已经纠正了之前的问题。它已经完全实现了JSR310规范。
+java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个精确的时间点，Duration和Period表示两个时间点之间的时间量。 LocalDate表示日期，即 xx 年 xx 月 xx 日，即不包括时间也不带时区。LocalTime与LocalDate类似， 但只包含时间。LocalDateTime则包含日期和时间。ZoneDateTime表示一个带时区的时间。 DateTimeFormatter提供格式化和解析功能。下面详细的介绍使用方法。">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-03-20T14:15:59">
+  
+  
+    <meta property="article:modified_time" content="2019-03-20T14:15:59">
+  
+  
+  
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=640">
+
+
+    <title>Java8 日期和时间</title>
+
+    <link rel="icon" href="https://example.org/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://example.org/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://example.org/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://example.org/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://example.org/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://example.org/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Java8 日期和时间
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
+        
+  March 20, 2019
+
+      </time>
+    
+    
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/a80596890555/article/details/58687444">https://blog.csdn.net/a80596890555/article/details/58687444</a></p>
+</blockquote>
+
+<h2 id="如何正确处理时间">如何正确处理时间</h2>
+
+<p><img src="http://7xvdkv.com1.z0.glb.clouddn.com/image/banner/DateTime_clock_zone.jpg" alt="" /></p>
+
+<p>现实生活的世界里，时间是不断向前的，如果向前追溯时间的起点，可能是宇宙出生时，又或是是宇宙出现之前，
+但肯定是我们目前无法找到的，我们不知道现在距离时间原点的精确距离。所以我们要表示时间，
+就需要人为定义一个原点。</p>
+
+<p>原点被规定为，格林威治时间 (GMT)1970 年 1 月 1 日的午夜 为起点, 之于为啥是 GMT 时间，大概是因为本初子午线在那的原因吧。</p>
+
+<h2 id="java-中的时间">java 中的时间</h2>
+
+<p>如果你跟你朋友说：“我们 1484301456 一起去吃饭，别迟到！”，而你朋友能马上理解你说的时间，表示时间就会很简单，
+只需要一个 long 值来表示原点的偏移量，这是个绝对时间，在世界范围内都适用。但实际上我们不能马上理解这串数字，
+而且我们需要不同的时间单位来表示时间的跨度，比如一个季度是 3 个月，一个月有 30 天等。
+你可以跟朋友约好 “明天这个时候再见面”, 你朋友很容易理解明天的意思，但要是没有’天’这个单位，
+他就需要在那串数字上加上 86400(一天是 86400 秒)。</p>
+
+<p>Java 三次引入处理时间的 API，JDK1.0 中包含了一个<code>Date</code>类，但大多数方法在 java1.1 引入<code>Calendear</code>类之后被弃用了。
+它的实例都是可变的，而且它的 API 很难使用，比如月份是从 0 开始这种反人类的设置。</p>
+
+<p>java8 引入的<code>java.time</code> API 已经纠正了之前的问题。它已经完全实现了<code>JSR310</code>规范。</p>
+
+<h2 id="java8-时间-api-介绍及使用">java8 时间 API 介绍及使用</h2>
+
+<p>在新的时间 API 中，<code>Instant</code>表示一个精确的时间点，<code>Duration</code>和<code>Period</code>表示两个时间点之间的时间量。
+<code>LocalDate</code>表示日期，即 xx 年 xx 月 xx 日，即不包括时间也不带时区。<code>LocalTime</code>与<code>LocalDate</code>类似，
+但只包含时间。<code>LocalDateTime</code>则包含日期和时间。<code>ZoneDateTime</code>表示一个带时区的时间。
+<code>DateTimeFormatter</code>提供格式化和解析功能。下面详细的介绍使用方法。</p>
+
+<h3 id="instant">Instant</h3>
+
+<p><code>Instant</code>表示一个精确的时间，时间数轴就是由无数个时间点组成，数轴的原点就是上面提
+到的<code>1970-1-1 00:00:00</code>，<code>Instant</code>由两部分组成，一是从原点开始到指定时间点的秒数 s，
+二是距离该秒数 s 的纳秒数。</p>
+
+<p><img src="http://7xvdkv.com1.z0.glb.clouddn.com/image/java8/time/timeline.png" alt="" /></p>
+
+<p>使用静态方法<code>Instant.now()</code>可以获取当前的时间点, <strong>该方法默认使用的是 UTC(协调世界时——由原子钟提供) 时间</strong>，可以使用<code>equeal</code> 和 <code>compareTo</code>来比较两个时间点的值。</p>
+
+<p>计算某段代码执行时间可以使用下面的方式：</p>
+
+<pre><code class="language-java">Instant start = Instant.now();
+
+doSomething();
+
+Instant end = Instant.now();
+
+Duration timeElapsed = Duration.between(start, end);
+long millis = timeElapsed.toMillis();
+System.out.println(&quot;millis = &quot; + millis);
+
+</code></pre>
+
+<p>Duration 对象表示两个时间点之间的距离，通过类似<code>toMillis()</code> <code>toDays()</code> <code>getSeconds()</code>等方法，
+得到各种时间单位表示的 Duration 对象。如果确实需要使用纳秒来做一些计算，可以调用<code>toNanos()</code>
+获得一个 long 类型的值，该值表示距离原点的纳秒值。<strong>大概 300 年的纳秒值会导致 long 值溢出</strong>。</p>
+
+<p>Duration 内部使用一个 long 类型来保存秒钟的值，使用一个 int 来保存纳秒的值，与 Instant 类似，
+这个纳秒保存的是距离该秒钟的纳秒值.</p>
+
+<p>Instant 与 Duration 都可以进行一些运算，来调整表示的时间，比如：<code>plus()</code> <code>minus</code> 方法，
+表示增加或减少一段时间，<code>plusSeconds()</code> <code>minusSeconds()</code> <code>plusXxx()</code>等表示增加或减少相应时间单位的一段时间。</p>
+
+<p>Duration 可以进行<code>multipliedBy()</code>乘法和<code>dividedBy()</code>除法运算。<code>negated()</code>做取反运算，即 1.2 秒取反后为 - 1.2 秒。</p>
+
+<p><strong>非常重要的是</strong>，Instant 和 Duration 类都是不可变的，他们的所有方法都返回一个新的实例。不可变类有很多优点：
+不可变类使用起来不容易出错，其本质上是线程安全的，对象可以被自由的共享，而不用担心被某个方法修改。</p>
+
+<h3 id="localdate-本地日期">LocalDate(本地日期)</h3>
+
+<p>上面介绍的 Instant 是一个绝对的准确时间点，是人类不容易理解的时间，现在介绍人类使用的时间。</p>
+
+<p>LocalDate 表示像 <code>2017-01-01</code>这样的日期。它包含有年份、月份、当月天数，它不不包含一天中的时间，
+以及时区信息。由于上面的这些特点，所以 LocalDate 不能表示一个准确的时间点，即 Instant。</p>
+
+<p>有很多时间的计算是不需要时区的，而且有一些情况下使用时区会导致一些问题，例如你在中国设置了一个
+<code>2017-01-01 UT+8:00</code> 的放假提醒，但之后你去了美国，到了<code>2017-01-01 UT+8:00</code>时间时你收到了提醒，
+但是此时美国还没到放假的时间。</p>
+
+<p>API 的设计者推荐使用不带时区的时间，除非真的希望表示绝对的时间点。</p>
+
+<p>可以使用静态方法<code>now()</code>和<code>of()</code>创建 LocalDate。<code>java.util.Date</code>使用 0 作为月份的开始，年份从 1990 年开始算起，
+而新的 API 中完全是用生活中一样的方式来表示年和月份。</p>
+
+<pre><code class="language-java">//获取当前日期
+LocalDate now = LocalDate.now();
+//2017-01-01
+LocalDate newYear = LocalDate.of(2017, 1, 1);
+
+</code></pre>
+
+<p>可以通过一些方法对日期做一些运算。</p>
+
+<pre><code class="language-java">//三天后
+now.plusDays(3);
+//一周后
+now.plusWeeks(1)
+//两天前 
+now.minusDays(2)
+//增加一个月不会出现2017-02-31 而是会返回该月的最后一个有效日期，即2017-02-28
+LocalDate.of(2017, 1, 31).plusMonths(1)
+
+LocalDate feb = LocalDate.of(2017, 2, 1);
+//withXxx()表示以该日期为基础，修改年、月、日字段，并返回一个新的日期
+//2019-2-1
+feb.withYear(2019);
+//2017-1-10
+feb.withDayOfYear(10);
+//2017-2-10
+feb.withDayOfMonth(10);
+
+</code></pre>
+
+<p>上面讲过 Duration 表示的是 Instant 对应的时间段，LocalDate 对应的表示时间段的是 Period,
+Period 内部使用三个 int 值分表表示年、月、日。
+Duration 和 Period 都是 TemporalAmount 接口的实现，该接口表示时间量。</p>
+
+<p>LocalDate 也可以增加或减少一段时间：</p>
+
+<pre><code class="language-java">//2019-02-01
+feb.plus(Period.ofYears(2));
+//2015-02-01
+feb.minus(Period.ofYears(2);
+
+</code></pre>
+
+<p>使用 until 获得两个日期之间的 Period 对象</p>
+
+<pre><code class="language-java">//输出P9D，表示相差9天
+feb.until(LocalDate.of(2017, 2, 10));//输出---&gt; P9D
+</code></pre>
+
+<p>LocalDate 提供了一些测试方法：
+<code>isBefore</code> <code>isAfter</code>比较两个 LocalDate，<code>isLeapYear</code>判断是否是闰年。</p>
+
+<p>LocalDate 还提供了各种 getXxx 方法来返回所需要的数据，其中<code>getDayOfWeek()</code>返回<code>DayOfWeek</code>枚举。
+<code>DayOfWeek</code>提供了<code>plus</code> <code>minus</code>来方便计算星期。</p>
+
+<pre><code class="language-java">//SUNDAY
+LocalDate.of(2017, 1, 1).getDayOfWeek();
+//TUESDAY
+DayOfWeek.SUNDAY.plus(2);
+</code></pre>
+
+<p>除了 LocalDate，Java8 还提供了<code>Year</code> <code>MonthDay</code> <code>YearMonth</code>来表示部分日期，例如<code>MonthDay</code>可以表示 1 月 1 日。</p>
+
+<h3 id="日期校正器-temporaladjuster">日期校正器 TemporalAdjuster</h3>
+
+<p>如果想找到某个月的第一个周五，或是某个月的最后一天，像这样的日期就可以使用<code>TemporalAdjuster</code>来进行日期调整。
+<code>TemporalAdjusters</code>提供一些静态方法，返回常用的<code>TemporalAdjuster</code>。</p>
+
+<pre><code class="language-java">//2017-02-03的下一个星期五(包含当天)  2017-03-03
+LocalDate.of(2017, 2, 3).with(TemporalAdjusters.nextOrSame(DayOfWeek.FRIDAY));
+//2017-02-03的下一个星期五(不包含当天)  2017-02-10
+LocalDate.of(2017, 2, 3).with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
+//2月中的第3个星期五  2017-02-17
+LocalDate.of(2017, 2, 3).with(TemporalAdjusters.dayOfWeekInMonth(3, DayOfWeek.FRIDAY));
+//2月中的最后一个星期五  2017-02-24
+LocalDate.of(2017, 2, 3).with(TemporalAdjusters.lastInMonth(DayOfWeek.FRIDAY));
+//下个月的第一天
+LocalDate.of(2017, 2, 3).with(TemporalAdjusters.firstDayOfNextMonth());
+</code></pre>
+
+<p>这是上面例子对应的当月日历</p>
+
+<p><img src="http://7xvdkv.com1.z0.glb.clouddn.com/image/java8/time/calendar20170223.jpg" alt="" /></p>
+
+<h3 id="localtime-本地时间">LocalTime(本地时间)</h3>
+
+<p>LocalTime 表示一天中的某个时间，例如<code>18:00:00</code>。LocaTime 与 LocalDate 类似，他们也有相似的 API。</p>
+
+<p><strong>需要注意的是：LocalTime 本身不关心是 AM 还是 PM，而是格式化程序来负责这个事情。</strong></p>
+
+<h3 id="localdatetime-本地日期时间">LocalDateTime(本地日期时间)</h3>
+
+<p>LocalDateTime 表示一个日期和时间，它适合用来存储确定时区的某个时间点。不适合跨时区的问题。</p>
+
+<p>若需要处理跨时区的时间，需要使用 ZonedDateTime.</p>
+
+<h3 id="zoneddatetime-带时区的时间">ZonedDateTime(带时区的时间)</h3>
+
+<blockquote>
+<p>时区（Time Zone) 是地球上的区域使用同一个时间定义。1884 年在华盛顿召开国际经度会议时，
+为了克服时间上的混乱，规定将全球划分为 24 个时区。
+由于实用上常常 1 个国家，或 1 个省份同时跨着 2 个或更多时区，为了照顾到行政上的方便，
+常将 1 个国家或 1 个省份划在一起。所以时区并不严格按南北直线来划分，而是按自然条件来划分。</p>
+</blockquote>
+
+<p>Java 使用<code>ZoneId</code>来标识不同的时区.</p>
+
+<pre><code class="language-java">//获得所有可用的时区  size=590
+ZoneId.getAvailableZoneIds();
+//获取默认ZoneId对象
+ZoneId defZoneId = ZoneId.systemDefault();
+//获取指定时区的ZoneId对象
+ZoneId shanghaiZoneId = ZoneId.of(&quot;Asia/Shanghai&quot;);
+//ZoneId.SHORT_IDS返回一个Map&lt;String, String&gt; 是时区的简称与全称的映射。下面可以得到字符串 Asia/Shanghai
+String shanghai = ZoneId.SHORT_IDS.get(&quot;CTT&quot;);
+
+</code></pre>
+
+<p>我在测试的时候一共有 590 个时区可用，但要知道，这个时区的个数不是固定的。</p>
+
+<blockquote>
+<p>IANA(Internet Assigned Numbers Authority，因特网拨号管理局) 维护着一份全球所有已知的时区数据库，
+每年会更新几次，主要处理夏令时规则的改变。Java 使用了 IANA 的数据库。</p>
+</blockquote>
+
+<h4 id="创建-zoneddatetime">创建 ZonedDateTime</h4>
+
+<pre><code class="language-java">//2017-01-20T17:35:20.885+08:00[Asia/Shanghai]
+ZonedDateTime.now();
+//2017-01-01T12:00+08:00[Asia/Shanghai]
+ZonedDateTime.of(2017, 1, 1, 12, 0, 0, 0, ZoneId.of(&quot;Asia/Shanghai&quot;));
+//使用一个准确的时间点来创建ZonedDateTime，下面这个代码会得到当前的UTC时间，会比北京时间早8个小时
+ZonedDateTime.ofInstant(Instant.now(), ZoneId.of(&quot;UTC&quot;));
+</code></pre>
+
+<h4 id="localdatetime-转换为-zoneddatetime">LocalDateTime 转换为 ZonedDateTime</h4>
+
+<pre><code class="language-java">//atZone方法可以将LocalDateTime转换为ZonedDateTime，下面的方法将时区设置为UTC。
+//假设现在的LocalDateTime是2017-01-20 17:55:00 转换后的时间为2017-01-20 17:55:00[UTC]
+LocalDateTime.now().atZone(ZoneId.of(&quot;UTC&quot;));
+//使用静态of方法创建zonedDateTime
+ZonedDateTime.of(LocalDateTime.now(), ZoneId.of(&quot;UTC&quot;));
+</code></pre>
+
+<h4 id="zoneddatetime-的一些方法">ZonedDateTime 的一些方法</h4>
+
+<p>ZonedDateTime 的许多方法与 LocalDateTime、LocalDate、LocalTime 类似，下面简单介绍几个方法的使用。</p>
+
+<pre><code class="language-java">
+ZonedDateTime utcDateTime = ZonedDateTime.of(2017, 1, 1, 12, 0, 0, 0, ZoneId.of(&quot;UTC&quot;));//2017-01-01T12:00Z[UTC]
+//withZoneSameLocal返回指定时区中的一个新ZonedDateTime，替换时区为指定时区，表示相同的本地时间的该时区时间。
+utcDateTime.withZoneSameLocal(ZoneId.of(&quot;Asia/Shanghai&quot;));//2017-01-01T12:00+08:00[Asia/Shanghai]
+//withZoneSameInstant返回指定时区中的一个新ZonedDateTime，替换为指定时区，表示相同时间点的该时区时间。
+utcDateTime.withZoneSameInstant(ZoneId.of(&quot;Asia/Shanghai&quot;));//2017-01-01T20:00+08:00[Asia/Shanghai]
+
+</code></pre>
+
+<p>有一些国家和地区使用夏令时，处理起来需要注意，但在中国没有该问题，
+需要注意的是使用<code>plus()</code>时要用<code>Period</code>对象表示的时间量，而不应该用<code>Duration</code>表示的时间量，
+<code>Duration</code>不能处理夏令时。</p>
+
+<pre><code class="language-java">utcDateTime.plus(Duration.ofDays(7));//不能处理夏令时
+utcDateTime.plus(Period.ofDays(7));//正确方式
+
+</code></pre>
+
+<h3 id="格式化和解析-datetimeformatter">格式化和解析 DateTimeFormatter</h3>
+
+<p><code>DateTimeFormatter</code>是不可变类，而<code>SimpleDateFormat</code>是非线程安全的，是一个常见的坑。</p>
+
+<h4 id="格式化">格式化</h4>
+
+<p>DateTimeFormatter 使用了三种格式化方法来打印日期和时间</p>
+
+<ul>
+<li><strong>预定义的标准格式</strong></li>
+</ul>
+
+<p><code>DateTimeFormatter</code>预定义了一些格式，可以直接调用 format 方法</p>
+
+<pre><code class="language-java">//2017-01-01
+DateTimeFormatter.ISO_LOCAL_DATE.format(LocalDate.of(2017, 1, 1))
+//20170101
+DateTimeFormatter.BASIC_ISO_DATE.format(LocalDate.of(2017, 1, 1));
+//2017-01-01T09:10:00
+DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.of(2017, 1, 1, 9, 10, 0));
+
+</code></pre>
+
+<ul>
+<li><strong>语言环境相关的格式化风格</strong></li>
+</ul>
+
+<p>根据当前操作系统语言环境，有<code>SHORET</code> <code>MEDIUM</code> <code>LONG</code> <code>FULL</code> 四种不同的风格来格式化。
+可以通过<code>DateTimeFormatter</code>的静态方法<code>ofLocalizedDate</code> <code>ofLocalizedTime</code> <code>ofLocalizedDateTime</code></p>
+
+<pre><code class="language-java">//2017年1月1日 星期日
+DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).format(LocalDate.of(2017, 1, 1));
+//上午09时10分00秒
+DateTimeFormatter.ofLocalizedTime(FormatStyle.LONG).format(LocalTime.of(9, 10, 0));
+//2017-2-27 22:32:03
+DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(LocalDateTime.now());
+</code></pre>
+
+<p>上面的方法都使用的是默认的语言环境，如果想改语言环境，需要使用<code>withLocale</code>方法来改变。</p>
+
+<pre><code class="language-java">//Feb 27, 2017 10:34:36 PM
+DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(Locale.US).format(LocalDateTime.now());
+</code></pre>
+
+<ul>
+<li><p><strong>使用自定义模式格式化</strong></p>
+
+<pre><code class="language-java">//2017-02-27 22:48:52
+DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd HH:mm:ss&quot;).format(LocalDateTime.now())
+</code></pre></li>
+</ul>
+
+<h4 id="解析">解析</h4>
+
+<pre><code class="language-java">//使用的ISO_LOCAL_DATE格式解析  2017-01-01
+LocalDate.parse(&quot;2017-01-01&quot;);
+//使用自定义格式解析  2017-01-01T08:08:08
+LocalDateTime.parse(&quot;2017-01-01 08:08:08&quot;, DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd HH:mm:ss&quot;));
+
+</code></pre>
+
+<h3 id="遗留代码相互操作">遗留代码相互操作</h3>
+
+<p><code>Instant</code> 类似于<code>java.util.Date</code></p>
+
+<p><code>ZonedDateTime</code>类似于<code>java.util.GregorianCalendar</code></p>
+
+<pre><code class="language-java">//Date --&gt; Instant
+Instant timestamp = new Date().toInstant();
+//Instant --&gt; Date
+Date.from(Instant.now());
+
+//GregorianCalendar --&gt; ZonedDateTime
+new GregorianCalendar().toZonedDateTime();
+//ZonedDateTime --&gt; GregorianCalendar
+GregorianCalendar.from(zonedDateTime);
+
+//2017-02-27T21:16:13.647
+LocalDateTime.ofInstant(timestamp, ZoneId.of(ZoneId.SHORT_IDS.get(&quot;PST&quot;)));
+
+//Calendar --&gt; Instant
+//2017-02-28T05:16:13.656Z
+Calendar.getInstance().toInstant();
+
+</code></pre>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" data-tooltip="Java 读写锁实现原理">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/" data-tooltip="Java注释处理和创建构建器">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" data-tooltip="Java 读写锁实现原理">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/" data-tooltip="Java注释处理和创建构建器">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">
+                <h3 class="media-heading">Controller manager高可用实现方式</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://www.colabug.com/2801661.html
+ 这不是一系列入门级别的文章，也不是按部就班而来的，而是我看到哪里，发现有些代码写的精妙的地方，都值得我们学习下，顺手记录下来，一方面是让自己将来可以有迹可循，另外对大家应该也会有所帮助。而且记录本身成本并不是很高。
+高可用部署情况下，需要部署多个 controller manager （以下简称 cm ），每个 cm 需要 --leader-elect=true 启动参数，即告知 cm 以高可用方式启动，谁要想进行真正的工作，必须先抢到锁，被选举为 leader 才行，而抢不到所得只能待机，在 leader 因为异常终止的时候，由剩余的其余节点再次获得锁。
+关于分布式锁的实现很多，可以自己从零开始制造。当然更简单的是基于现有中间件，比如有基于 Redis 或数据库的实现方式，最近 Zookeeper/ETCD 也提供了相关功能。但 K8s 的实现并没有使用这些方式，而是另辟蹊径使用了资源锁的概念，简单来说就是通过创建 K8s 的资源（当前的实现中实现了 ConfigMap 和 Endpoint 两种类型的资源）来维护锁的状态。
+分布式锁一般实现原理就是大家先去抢锁，抢到的人成为 leader ，然后 leader 会定期更新锁的状态，声明自己的活动状态，不让其他人把锁抢走。K8s 的资源锁也类似，抢到锁的节点会将自己的标记（目前是 hostname）设为锁的持有者，其他人则需要通过对比锁的更新时间和持有者来判断自己是否能成为新的 leader ，而 leader 则可以通过更新 RenewTime 来确保持续保有该锁。
+大概看了下 K8s 的实现，老实说其实现方式并不算高雅，但是却给我们开拓了一种思路：K8s 里的 resource 是万能的，不要以为 Endpoint 只是 Endpoint 。不过反过来有时候也挺让人费解的，刚了解的时候容易摸不着头脑，也不是好事。而且 scheduler 和 cm 都采用了资源锁，但是实现起来却不尽相同，也值得吐槽下。不管怎么说，这个实现算是挺有意思的实现，值得我们深入了解下。
+我们首先来看一下 cm 启动的时候，是如何去 初始化 抢锁的。启动的时候，如果指定了 --leader-elect=true 参数的话，则会进入下面的代码，首先获取自己的资源标志（这里是 hostname 加一串随机数字）。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/">
+                <h3 class="media-heading">Gitflow 工作流</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 http://blog.jobbole.com/76867/
+ 这节介绍的 Gitflow工作流借鉴自在 nvie 的 _Vincent Driessen_。
+Gitflow工作流定义了一个围绕项目发布的严格分支模型。虽然比功能分支工作流复杂几分，但提供了用于一个健壮的用于管理大型项目的框架。
+Gitflow工作流没有用超出功能分支工作流的概念和命令，而是为不同的分支分配一个很明确的角色，并定义分支之间如何和什么时候进行交互。除了使用功能分支，在做准备、维护和记录发布也使用各自的分支。当然你可以用上功能分支工作流所有的好处：Pull Requests、隔离实验性开发和更高效的协作。
+工作方式 Gitflow工作流仍然用中央仓库作为所有开发者的交互中心。和其它的工作流一样，开发者在本地工作并push分支到要中央仓库中。
+历史分支 相对使用仅有的一个master分支，Gitflow工作流使用 2 个分支来记录项目的历史。master分支存储了正式发布的历史，而develop分支作为功能的集成分支。这样也方便master分支上的所有提交分配一个版本号。
+剩下要说明的问题围绕着这 2 个分支的区别展开。
+功能分支 每个新功能位于一个自己的分支，这样可以 push到中央仓库以备份和协作。但功能分支不是从master分支上拉出新分支，而是使用develop分支作为父分支。当新功能完成时，合并回develop分支。新功能提交应该从不直接与master分支交互。
+注意，从各种含义和目的上来看，功能分支加上develop分支就是功能分支工作流的用法。但Gitflow工作流没有在这里止步。
+发布分支 一旦develop分支上有了做一次发布（或者说快到了既定的发布日）的足够功能，就从develop分支上fork一个发布分支。新建的分支用于开始发布循环，所以从这个时间点开始之后新的功能不能再加到这个分支上 —— 这个分支只应该做Bug修复、文档生成和其它面向发布任务。一旦对外发布的工作都完成了，发布分支合并到master分支并分配一个版本号打好Tag。另外，这些从新建发布分支以来的做的修改要合并回develop分支。
+使用一个用于发布准备的专门分支，使得一个团队可以在完善当前的发布版本的同时，另一个团队可以继续开发下个版本的功能。 这也打造定义良好的开发阶段（比如，可以很轻松地说，『这周我们要做准备发布版本 4.0』，并且在仓库的目录结构中可以实际看到）。
+常用的分支约定：
+用于新建发布分支的分支: develop 用于合并的分支: master 分支命名: release-* 或 release/*
+维护分支 维护分支或说是热修复（hotfix）分支用于生成快速给产品发布版本（production releases）打补丁，这是唯一可以直接从master分支fork出来的分支。修复完成，修改应该马上合并回master分支和develop分支（当前的发布分支），master分支应该用新的版本号打好Tag。
+为Bug修复使用专门分支，让团队可以处理掉问题而不用打断其它工作或是等待下一个发布循环。你可以把维护分支想成是一个直接在master分支上处理的临时发布。
+示例 下面的示例演示本工作流如何用于管理单个发布循环。假设你已经创建了一个中央仓库。
+创建开发分支 第一步为master分支配套一个develop分支。简单来做可以本地创建一个空的develop分支，push到服务器上：
+git branch develop git push -u origin develop
+以后这个分支将会包含了项目的全部历史，而master分支将只包含了部分历史。其它开发者这时应该克隆中央仓库，建好develop分支的跟踪分支：
+git clone ssh://user@host/path/to/repo.git git checkout -b develop origin/develop</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/go-%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8F%8A-pprof-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+                <h3 class="media-heading">Go 程序性能优化及 pprof 使用方法详解</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://www.jb51.net/article/127551.htm
+ Go 程序性能优化及 pprof 使用方法详解  更新时间：2017 年 11 月 05 日 10:50:22 作者：snowInPluto
+这篇文章主要为大家详细介绍了 Go 程序性能优化及 pprof 的使用方法，具有一定的参考价值，感兴趣的小伙伴们可以参考一下
+Go 程序的性能优化及 pprof 的使用
+程序的性能优化无非就是对程序占用资源的优化。对于服务器而言，最重要的两项资源莫过于 CPU 和内存。性能优化，就是在对于不影响程序数据处理能力的情况下，我们通常要求程序的 CPU 的内存占用尽量低。反过来说，也就是当程序 CPU 和内存占用不变的情况下，尽量地提高程序的数据处理能力或者说是吞吐量。
+Go 的原生工具链中提供了非常多丰富的工具供开发者使用，其中包括 pprof。
+对于 pprof 的使用要分成下面两部分来说。
+Web 程序使用 pprof
+先写一个简单的 Web 服务程序。程序在 9876 端口上接收请求。
+package main import ( &quot;bytes&quot; &quot;io/ioutil&quot; &quot;log&quot; &quot;math/rand&quot; &quot;net/http&quot; _ &quot;net/http/pprof&quot; ) func main() { http.HandleFunc(&quot;/test&quot;, handler) log.Fatal(http.ListenAndServe(&quot;:9876&quot;, nil)) } func handler(w http.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/">
+                <h3 class="media-heading">Golang大杀器之性能剖析PProf</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://github.com/EDDYCJY/blog/blob/master/golang/2018-09-15-Golang%20%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90%20PProf.md
+ Golang 大杀器之性能剖析 PProf 前言 写了几吨代码，实现了几百个接口。功能测试也通过了，终于成功的部署上线了
+结果，性能不佳，什么鬼？
+想做性能分析 PProf 想要进行性能优化，首先瞩目在 Go 自身提供的工具链来作为分析依据，本文将带你学习、使用 Go 后花园，涉及如下：
+ runtime/pprof：采集程序（非 Server）的运行数据进行分析 net/http/pprof：采集 HTTP Server 的运行时数据进行分析  是什么 pprof 是用于可视化和分析性能分析数据的工具
+pprof 以 profile.proto 读取分析样本的集合，并生成报告以可视化并帮助分析数据（支持文本和图形报告）
+profile.proto 是一个 Protocol Buffer v3 的描述文件，它描述了一组 callstack 和 symbolization 信息， 作用是表示统计分析的一组采样的调用栈，是很常见的 stacktrace 配置文件格式
+支持什么使用模式  Report generation：报告生成 Interactive terminal use：交互式终端使用 Web interface：Web 界面  可以做什么  CPU Profiling：CPU 分析，按照一定的频率采集所监听的应用程序 CPU（含寄存器）的使用情况，可确定应用程序在主动消耗 CPU 周期时花费时间的位置 Memory Profiling：内存分析，在应用程序进行堆分配时记录堆栈跟踪，用于监视当前和历史内存使用情况，以及检查内存泄漏 Block Profiling：阻塞分析，记录 goroutine 阻塞等待同步（包括定时器通道）的位置 Mutex Profiling：互斥锁分析，报告互斥锁的竞争情况  一个简单的例子 我们将编写一个简单且有点问题的例子，用于基本的程序初步分析</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/">
+                <h3 class="media-heading">Go模块简介</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://roberto.selbach.ca/intro-to-go-modules/
+ Go模块简介 发表于 2018年8月18日(https://roberto.selbach.ca/intro-to-go-modules/) 作者：Roberto Selbach
+即将发布的Go编程语言版本1.11将为_模块_带来实验性支持 ，几天前Go.A的新依赖管理系统，我写了一篇关于它的快速帖子。自那篇文章上线以来，事情发生了一些变化，因为我们现在非常接近新版本，我认为现在是另一篇文章更适合实践的好时机。所以这就是我们要做的：我们将创建一个新的包，然后我们将发布一些版本，看看它是如何工作的。
+创建模块 首先要做的事情。让我们创建我们的包。我们称之为“testmod”。这里有一个重要的细节：这个目录应该 在你的外面，因为默认情况下，模块支持在其中被禁用。Go模块是可能在某些时候完全消除的第一步。$GOPATH$GOPATH
+$ mkdir testmod $ cd testmod  我们的包很简单：
+package testmod import &quot;fmt&quot; // Hi returns a friendly greeting func Hi(name string) string { return fmt.Sprintf(&quot;Hi, %s&quot;, name) }  包完成但它仍然不是_模块_。让我们改变这一点。
+$ go mod init github.com/robteix/testmod go: creating new go.mod: module github.com/robteix/testmod  这将go.mod在包目录中创建一个新文件，其中包含以下内容：
+module github.com/robteix/testmod  这里不是很多，但这有效地将我们的包变成了一个 _模块_。我们现在可以将这个代码推送到一个存储库：
+$ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u origin master  到目前为止，任何愿意使用此软件包的人都会go get ：</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/intellij-idea-%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84-rest-%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">Intellij IDEA 基于编辑器的 REST 客户端介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/u011054333/article/details/78705256
+ 最近 Intellij IDEA 更新到了 2017.3 这一版本，这个版本又增加了很多新功能。我觉得其中这个基于编辑器的 REST 客户端这个功能很不错，可以为我们带来很多方便。这个功能并不仅仅在 Intellij IDEA 才有，最近更新的所有 Jetbrains 系 IIDE 都有这个功能。
+以往我们开发和调试网络程序，用到的无非是这几种办法：浏览器 F12 工具、Fiddler、Wireshark、curl 等命令行工具、手动使用 HTTP 客户端类库编程。不过这些方法总是有些不好用。Jetbrains 这个基于编辑器的 REST 客户端用起来倒是让我眼前一亮。
+使用方法 要使用这个功能很简单，在 IDE 中新建一个后缀名为.http的文件，然后就可以使用这个功能了。截图如下。
+这个功能使用起来非常简单，使用大写的 HTTP 动词（GET、POST、DELETE、PUT 等等）后面加上要访问的网址即可，如果端口号不是 80 或者 443，可以使用冒号 + 端口号的形式写在网址后面。如果需要修改 Cookie、ContentType、UA 等设置，直接写在后面几行即可，Jetbrains 提供了非常完善的补全支持，我们只要敲第一个大写字母即可获得相应的代码提示。想要发起一个请求的时候，直接点击前面的绿色运行按钮即可。一个文件中可以保存多个请求，如果以后还想再次运行只要打开这个文件即可。
+配置环境变量 Jetbrains 还提供了一个环境变量的功能，让我们使用这个编辑器 REST 客户端更加简单。只要在项目中添加一个名为rest-client.env.json的文件，然后配置不同环境下要使用的环境变量。然后就能在 REST 客户端中使用了。例如配置文件是这样的。
+{ &quot;dev&quot;: { &quot;host&quot;: &quot;http://httpbin.org&quot; }, &quot;prod&quot;: { &quot;host&quot;: &quot;http://httpbin.org&quot; } }  那么在点击运行按钮的时候就会弹出选择要使用哪个环境变量。我们只要选择就可以针对不同环境使用不同配置了。在代码中只要使用双括号引用环境变量即可。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/java-%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7-%E6%8F%92%E4%BB%B6%E5%8C%96%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86-apipluggable-annotation-processing-api/">
+                <h3 class="media-heading">Java 奇技淫巧 - 插件化注解处理 API(Pluggable Annotation Processing API)</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/throwable/p/9139908.html
+ 插件化注解处理 API(Pluggable Annotation Processing API) Java 奇技淫巧 - 插件化注解处理 API(Pluggable Annotation Processing API) 参考资料  JDK6 的新特性之六: 插入式注解处理 API(Pluggable Annotation Processing API) Java Annotation Processing and Creating a Builder  简介 插件化注解处理 (Pluggable Annotation Processing)APIJSR 269 提供一套标准 API 来处理 AnnotationsJSR 175, 实际上 JSR 269 不仅仅用来处理 Annotation，我觉得更强大的功能是它建立了 Java 语言本身的一个模型, 它把 method、package、constructor、type、variable、enum、annotation 等 Java 语言元素映射为 Types 和 Elements，从而将 Java 语言的语义映射成为对象，我们可以在 javax.lang.model 包下面可以看到这些类。所以我们可以利用 JSR 269 提供的 API 来构建一个功能丰富的元编程 (metaprogramming) 环境。JSR 269 用 Annotation Processor 在编译期间而不是运行期间处理 Annotation, Annotation Processor 相当于编译器的一个插件, 所以称为插入式注解处理.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
+                <h3 class="media-heading">Java 读写锁实现原理</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://my.oschina.net/editorial-story/blog/1928306
+ 最近做的一个小项目中有这样的需求：整个项目有一份*config.json*保存着项目的一些配置，是存储在本地文件的一个资源，并且应用中存在读写（读 &gt;&gt; 写）更新问题。既然读写并发操作，那么就涉及到操作互斥，这里自然想到了读写锁，本文对读写锁方面的知识做个梳理。
+为什么需要读写锁？ 与传统锁不同的是读写锁的规则是可以共享读，但只能一个写，总结起来为：读读不互斥，读写互斥，写写互斥，而一般的独占锁是：读读互斥，读写互斥，写写互斥，而场景中往往读远远大于写，读写锁就是为了这种优化而创建出来的一种机制。
+注意是读远远大于写，一般情况下独占锁的效率低来源于高并发下对临界区的激烈竞争导致线程上下文切换。因此当并发不是很高的情况下，读写锁由于需要额外维护读锁的状态，可能还不如独占锁的效率高。因此需要根据实际情况选择使用。
+一个简单的读写锁实现 根据上面理论可以利用两个 int 变量来简单实现一个读写锁，实现虽然烂，但是原理都是差不多的，值得阅读下。
+public class ReadWriteLock { /** * 读锁持有个数 */ private int readCount = 0; /** * 写锁持有个数 */ private int writeCount = 0; /** * 获取读锁,读锁在写锁不存在的时候才能获取 */ public synchronized void lockRead() throws InterruptedException { // 写锁存在,需要wait while (writeCount &gt; 0) { wait(); } readCount++; } /** * 释放读锁 */ public synchronized void unlockRead() { readCount--; notifyAll(); } /** * 获取写锁,当读锁存在时需要wait.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/">
+                <h3 class="media-heading">Java8 日期和时间</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/a80596890555/article/details/58687444
+ 如何正确处理时间 现实生活的世界里，时间是不断向前的，如果向前追溯时间的起点，可能是宇宙出生时，又或是是宇宙出现之前， 但肯定是我们目前无法找到的，我们不知道现在距离时间原点的精确距离。所以我们要表示时间， 就需要人为定义一个原点。
+原点被规定为，格林威治时间 (GMT)1970 年 1 月 1 日的午夜 为起点, 之于为啥是 GMT 时间，大概是因为本初子午线在那的原因吧。
+java 中的时间 如果你跟你朋友说：“我们 1484301456 一起去吃饭，别迟到！”，而你朋友能马上理解你说的时间，表示时间就会很简单， 只需要一个 long 值来表示原点的偏移量，这是个绝对时间，在世界范围内都适用。但实际上我们不能马上理解这串数字， 而且我们需要不同的时间单位来表示时间的跨度，比如一个季度是 3 个月，一个月有 30 天等。 你可以跟朋友约好 “明天这个时候再见面”, 你朋友很容易理解明天的意思，但要是没有’天’这个单位， 他就需要在那串数字上加上 86400(一天是 86400 秒)。
+Java 三次引入处理时间的 API，JDK1.0 中包含了一个Date类，但大多数方法在 java1.1 引入Calendear类之后被弃用了。 它的实例都是可变的，而且它的 API 很难使用，比如月份是从 0 开始这种反人类的设置。
+java8 引入的java.time API 已经纠正了之前的问题。它已经完全实现了JSR310规范。
+java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个精确的时间点，Duration和Period表示两个时间点之间的时间量。 LocalDate表示日期，即 xx 年 xx 月 xx 日，即不包括时间也不带时区。LocalTime与LocalDate类似， 但只包含时间。LocalDateTime则包含日期和时间。ZoneDateTime表示一个带时区的时间。 DateTimeFormatter提供格式化和解析功能。下面详细的介绍使用方法。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/">
+                <h3 class="media-heading">Java注释处理和创建构建器</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 http://www.baeldung.com/java-annotation-processing-builder
+ 1.简介 本文是Java源代码级别注释处理的简介，并提供了使用此技术在编译期间生成其他源文件的示例。
+2.注释处理的应用 源级注释处理首先出现在Java 5中。它是一种在编译阶段生成其他源文件的便捷技术。
+源文件不必是Java文件 - 您可以根据源代码中的注释生成任何类型的描述，元数据，文档，资源或任何其他类型的文件。
+注释处理在许多无处不在的Java库中被广泛使用，例如，在QueryDSL和JPA中生成元类，以使用Lombok库中的样板代码来扩充类。
+需要注意的一件重要事情是注释处理API的局限性 - 它只能用于生成新文件，而不能用于更改现有文件。
+值得注意的例外是Lombok库，它使用注释处理作为引导机制，将自身包含在编译过程中，并通过一些内部编译器API修改AST。这种hacky技术与注释处理的预期目的无关，因此本文不讨论。
+3.注释处理API 注释处理在多轮中完成。每一轮都从编译器搜索源文件中的注释并选择适合这些注释的注释处理器开始。反过来，每个注释处理器在相应的源上被调用。
+如果在此过程中生成了任何文件，则会以生成的文件作为输入启动另一轮。此过程将继续，直到在处理阶段没有生成新文件。
+反过来，每个注释处理器在相应的源上被调用。如果在此过程中生成了任何文件，则会以生成的文件作为输入启动另一轮。此过程将继续，直到在处理阶段没有生成新文件。
+注释处理API位于_javax.annotation.processing_包中。您必须实现的主要接口是_Processor_接口，它具有_AbstractProcessor_类形式的部分实现。这个类是我们要扩展的类，以创建我们自己的注释处理器。
+4.设置项目 为了演示注释处理的可能性，我们将开发一个简单的处理器，用于为带注释的类生成流畅的对象构建器。
+我们将把项目分成两个Maven模块。其中之一，_注释处理器_模块，将包含处理器本身和注释，另一个_注释用户_模块将包含注释类。这是注释处理的典型用例。
+_注释处理器_模块的设置如下。我们将使用Google的自动服务库来生成稍后将讨论的处理器元数据文件，以及针对Java 8源代码调整的_maven-compiler-plugin_。这些依赖项的版本将提取到属性部分。
+可以在Maven Central存储库中找到最新版本的自动服务库和maven-compiler-plugin：
+&lt;properties&gt; &lt;auto-service.version&gt;1.0-rc2&lt;/auto-service.version&gt; &lt;maven-compiler-plugin.version&gt; 3.5.1 &lt;/maven-compiler-plugin.version&gt; &lt;/properties&gt; &lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;com.google.auto.service&lt;/groupId&gt; &lt;artifactId&gt;auto-service&lt;/artifactId&gt; &lt;version&gt;${auto-service.version}&lt;/version&gt; &lt;scope&gt;provided&lt;/scope&gt; &lt;/dependency&gt; &lt;/dependencies&gt; &lt;build&gt; &lt;plugins&gt; &lt;plugin&gt; &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt; &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt; &lt;version&gt;${maven-compiler-plugin.version}&lt;/version&gt; &lt;configuration&gt; &lt;source&gt;1.8&lt;/source&gt; &lt;target&gt;1.8&lt;/target&gt; &lt;/configuration&gt; &lt;/plugin&gt; &lt;/plugins&gt; &lt;/build&gt;  带有注释源的注释用户 Maven模块不需要任何特殊调整，除了在依赖项部分中添加对注释处理器模块的依赖：
+&lt;dependency&gt; &lt;groupId&gt;com.baeldung&lt;/groupId&gt; &lt;artifactId&gt;annotation-processing&lt;/artifactId&gt; &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt; &lt;/dependency&gt;  5.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         76 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://example.org/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://example.org/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/example.org\/2019\/03\/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4\/';
+          
+            this.page.identifier = '\/2019\/03\/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

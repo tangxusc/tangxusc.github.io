@@ -1,0 +1,75 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: test
+  name: test
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      run: test
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: test
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: IfNotPresent
+        name: test
+        ports:
+        - containerPort: 80
+          protocol: TCP
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v0
+      kind: Mapping
+      name: test-mapping
+      prefix: /test
+      service: test:8080
+spec:
+  type: ClusterIP
+  selector:
+    run: test
+  ports:
+  - port: 8080
+    name: test-port
+    targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-auth
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v0
+      kind: AuthService
+      name: authentication
+      auth_service: "auth:8888"
+      allowed_headers:
+      - "auth"
+spec:
+  type: ClusterIP
+  selector:
+    run: test
+  ports:
+  - port: 8080
+    name: test-port
+    targetPort: 80

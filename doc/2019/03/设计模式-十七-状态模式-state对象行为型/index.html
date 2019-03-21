@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="">
+<meta name="description" content="本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/hguisu/article/details/7557252
+ 设计模式 (十七) 状态模式 State（对象行为型）
+1. 概述 在软件开发过程中，应用程序可能会根据不同的情况作出不同的处理。最直接的解决方案是将这些所有可能发生的情况全都考虑到。然后使用 if&hellip; ellse 语句来做状态判断来进行不同情况的处理。但是对复杂状态的判断就显得 “力不从心了”。随着增加新的状态或者修改一个状体（if else(或 switch case) 语句的增多或者修改）可能会引起很大的修改，而程序的可读性，扩展性也会变得很弱。维护也会很麻烦。那么我就考虑只修改自身状态的模式。
+ 例子 1：按钮来控制一个电梯的状态，一个电梯开们，关门，停，运行。每一种状态改变，都有可能要根据其他状态来更新处理。例如，开门状体，你不能在运行的时候开门，而是在电梯定下后才能开门。
+例子 2：我们给一部手机打电话，就可能出现这几种情况：用户开机，用户关机，用户欠费停机，用户消户等。 所以当我们拨打这个号码的时候：系统就要判断，该用户是否在开机且不忙状态，又或者是关机，欠费等状态。但不管是那种状态我们都应给出对应的处理操作。
+ 2. 问题 对象如何在每一种状态下表现出不同的行为？
+3. 解决方案 状态模式：允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。 在很多情况下，一个对象的行为取决于一个或多个动态变化的属性，这样的属性叫做状态，这样的对象叫做有状态的 (stateful) 对象，这样的对象状态是从事先定义好的一系列值中取出的。当一个这样的对象与外部事件产生互动时，其内部状态就会改变，从而使得系统的行为也随之发生变化。
+4. 适用性 在下面的两种情况下均可使用 State 模式: 1. 一个对象的行为取决于它的状态, 并且它必须在运行时刻根据状态改变它的行为。 2. 代码中包含大量与对象状态有关的条件语句: 一个操作中含有庞大的多分支的条件（if else(或 switch case) 语句，且这些分支依赖于该对象的状态。这个状态通常用一个或多个枚举常量表示。通常 , 有多个操作包含这一相同的条件结构。 State 模式将每一个条件分支放入一个独立的类中。这使得你可以根据对象自身的情况将对象的状态作为一个对象，这一对象可以不依赖于其他对象而独立变化。
+5. 结构 6. 模式的组成  环境类（Context）: 定义客户感兴趣的接口。维护一个 ConcreteState 子类的实例，这个实例定义当前状态。 抽象状态类（State）: 定义一个接口以封装与 Context 的一个特定状态相关的行为。 具体状态类（ConcreteState）: 每一子类实现一个与 Context 的一个状态相关的行为。  7.">
+
+
+<meta property="og:description" content="本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/hguisu/article/details/7557252
+ 设计模式 (十七) 状态模式 State（对象行为型）
+1. 概述 在软件开发过程中，应用程序可能会根据不同的情况作出不同的处理。最直接的解决方案是将这些所有可能发生的情况全都考虑到。然后使用 if&hellip; ellse 语句来做状态判断来进行不同情况的处理。但是对复杂状态的判断就显得 “力不从心了”。随着增加新的状态或者修改一个状体（if else(或 switch case) 语句的增多或者修改）可能会引起很大的修改，而程序的可读性，扩展性也会变得很弱。维护也会很麻烦。那么我就考虑只修改自身状态的模式。
+ 例子 1：按钮来控制一个电梯的状态，一个电梯开们，关门，停，运行。每一种状态改变，都有可能要根据其他状态来更新处理。例如，开门状体，你不能在运行的时候开门，而是在电梯定下后才能开门。
+例子 2：我们给一部手机打电话，就可能出现这几种情况：用户开机，用户关机，用户欠费停机，用户消户等。 所以当我们拨打这个号码的时候：系统就要判断，该用户是否在开机且不忙状态，又或者是关机，欠费等状态。但不管是那种状态我们都应给出对应的处理操作。
+ 2. 问题 对象如何在每一种状态下表现出不同的行为？
+3. 解决方案 状态模式：允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。 在很多情况下，一个对象的行为取决于一个或多个动态变化的属性，这样的属性叫做状态，这样的对象叫做有状态的 (stateful) 对象，这样的对象状态是从事先定义好的一系列值中取出的。当一个这样的对象与外部事件产生互动时，其内部状态就会改变，从而使得系统的行为也随之发生变化。
+4. 适用性 在下面的两种情况下均可使用 State 模式: 1. 一个对象的行为取决于它的状态, 并且它必须在运行时刻根据状态改变它的行为。 2. 代码中包含大量与对象状态有关的条件语句: 一个操作中含有庞大的多分支的条件（if else(或 switch case) 语句，且这些分支依赖于该对象的状态。这个状态通常用一个或多个枚举常量表示。通常 , 有多个操作包含这一相同的条件结构。 State 模式将每一个条件分支放入一个独立的类中。这使得你可以根据对象自身的情况将对象的状态作为一个对象，这一对象可以不依赖于其他对象而独立变化。
+5. 结构 6. 模式的组成  环境类（Context）: 定义客户感兴趣的接口。维护一个 ConcreteState 子类的实例，这个实例定义当前状态。 抽象状态类（State）: 定义一个接口以封装与 Context 的一个特定状态相关的行为。 具体状态类（ConcreteState）: 每一子类实现一个与 Context 的一个状态相关的行为。  7.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式 (十七) 状态模式 State（对象行为型">
+<meta name="twitter:title" content="设计模式 (十七) 状态模式 State（对象行为型">
+<meta property="og:url" content="https://example.org/2019/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%81%E4%B8%83-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F-state%E5%AF%B9%E8%B1%A1%E8%A1%8C%E4%B8%BA%E5%9E%8B/">
+<meta property="twitter:url" content="https://example.org/2019/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%81%E4%B8%83-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F-state%E5%AF%B9%E8%B1%A1%E8%A1%8C%E4%B8%BA%E5%9E%8B/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/hguisu/article/details/7557252
+ 设计模式 (十七) 状态模式 State（对象行为型）
+1. 概述 在软件开发过程中，应用程序可能会根据不同的情况作出不同的处理。最直接的解决方案是将这些所有可能发生的情况全都考虑到。然后使用 if&hellip; ellse 语句来做状态判断来进行不同情况的处理。但是对复杂状态的判断就显得 “力不从心了”。随着增加新的状态或者修改一个状体（if else(或 switch case) 语句的增多或者修改）可能会引起很大的修改，而程序的可读性，扩展性也会变得很弱。维护也会很麻烦。那么我就考虑只修改自身状态的模式。
+ 例子 1：按钮来控制一个电梯的状态，一个电梯开们，关门，停，运行。每一种状态改变，都有可能要根据其他状态来更新处理。例如，开门状体，你不能在运行的时候开门，而是在电梯定下后才能开门。
+例子 2：我们给一部手机打电话，就可能出现这几种情况：用户开机，用户关机，用户欠费停机，用户消户等。 所以当我们拨打这个号码的时候：系统就要判断，该用户是否在开机且不忙状态，又或者是关机，欠费等状态。但不管是那种状态我们都应给出对应的处理操作。
+ 2. 问题 对象如何在每一种状态下表现出不同的行为？
+3. 解决方案 状态模式：允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。 在很多情况下，一个对象的行为取决于一个或多个动态变化的属性，这样的属性叫做状态，这样的对象叫做有状态的 (stateful) 对象，这样的对象状态是从事先定义好的一系列值中取出的。当一个这样的对象与外部事件产生互动时，其内部状态就会改变，从而使得系统的行为也随之发生变化。
+4. 适用性 在下面的两种情况下均可使用 State 模式: 1. 一个对象的行为取决于它的状态, 并且它必须在运行时刻根据状态改变它的行为。 2. 代码中包含大量与对象状态有关的条件语句: 一个操作中含有庞大的多分支的条件（if else(或 switch case) 语句，且这些分支依赖于该对象的状态。这个状态通常用一个或多个枚举常量表示。通常 , 有多个操作包含这一相同的条件结构。 State 模式将每一个条件分支放入一个独立的类中。这使得你可以根据对象自身的情况将对象的状态作为一个对象，这一对象可以不依赖于其他对象而独立变化。
+5. 结构 6. 模式的组成  环境类（Context）: 定义客户感兴趣的接口。维护一个 ConcreteState 子类的实例，这个实例定义当前状态。 抽象状态类（State）: 定义一个接口以封装与 Context 的一个特定状态相关的行为。 具体状态类（ConcreteState）: 每一子类实现一个与 Context 的一个状态相关的行为。  7.">
+<meta name="twitter:description" content="本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/hguisu/article/details/7557252
+ 设计模式 (十七) 状态模式 State（对象行为型）
+1. 概述 在软件开发过程中，应用程序可能会根据不同的情况作出不同的处理。最直接的解决方案是将这些所有可能发生的情况全都考虑到。然后使用 if&hellip; ellse 语句来做状态判断来进行不同情况的处理。但是对复杂状态的判断就显得 “力不从心了”。随着增加新的状态或者修改一个状体（if else(或 switch case) 语句的增多或者修改）可能会引起很大的修改，而程序的可读性，扩展性也会变得很弱。维护也会很麻烦。那么我就考虑只修改自身状态的模式。
+ 例子 1：按钮来控制一个电梯的状态，一个电梯开们，关门，停，运行。每一种状态改变，都有可能要根据其他状态来更新处理。例如，开门状体，你不能在运行的时候开门，而是在电梯定下后才能开门。
+例子 2：我们给一部手机打电话，就可能出现这几种情况：用户开机，用户关机，用户欠费停机，用户消户等。 所以当我们拨打这个号码的时候：系统就要判断，该用户是否在开机且不忙状态，又或者是关机，欠费等状态。但不管是那种状态我们都应给出对应的处理操作。
+ 2. 问题 对象如何在每一种状态下表现出不同的行为？
+3. 解决方案 状态模式：允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。 在很多情况下，一个对象的行为取决于一个或多个动态变化的属性，这样的属性叫做状态，这样的对象叫做有状态的 (stateful) 对象，这样的对象状态是从事先定义好的一系列值中取出的。当一个这样的对象与外部事件产生互动时，其内部状态就会改变，从而使得系统的行为也随之发生变化。
+4. 适用性 在下面的两种情况下均可使用 State 模式: 1. 一个对象的行为取决于它的状态, 并且它必须在运行时刻根据状态改变它的行为。 2. 代码中包含大量与对象状态有关的条件语句: 一个操作中含有庞大的多分支的条件（if else(或 switch case) 语句，且这些分支依赖于该对象的状态。这个状态通常用一个或多个枚举常量表示。通常 , 有多个操作包含这一相同的条件结构。 State 模式将每一个条件分支放入一个独立的类中。这使得你可以根据对象自身的情况将对象的状态作为一个对象，这一对象可以不依赖于其他对象而独立变化。
+5. 结构 6. 模式的组成  环境类（Context）: 定义客户感兴趣的接口。维护一个 ConcreteState 子类的实例，这个实例定义当前状态。 抽象状态类（State）: 定义一个接口以封装与 Context 的一个特定状态相关的行为。 具体状态类（ConcreteState）: 每一子类实现一个与 Context 的一个状态相关的行为。  7.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-03-20T14:15:59">
+  
+  
+    <meta property="article:modified_time" content="2019-03-20T14:15:59">
+  
+  
+  
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=640">
+
+
+    <title>设计模式 (十七) 状态模式 State（对象行为型</title>
+
+    <link rel="icon" href="https://example.org/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://example.org/2019/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%81%E4%B8%83-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F-state%E5%AF%B9%E8%B1%A1%E8%A1%8C%E4%B8%BA%E5%9E%8B/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://example.org/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://example.org/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://example.org/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://example.org/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://example.org/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/kakawait" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      设计模式 (十七) 状态模式 State（对象行为型
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
+        
+  March 20, 2019
+
+      </time>
+    
+    
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/hguisu/article/details/7557252">https://blog.csdn.net/hguisu/article/details/7557252</a></p>
+</blockquote>
+
+<p><a href="http://blog.csdn.net/hguisu/article/details/7557252">设计模式 (十七) 状态模式 State（对象行为型）</a></p>
+
+<h4 id="1-概述">1. 概述</h4>
+
+<p>在软件开发过程中，应用程序可能会根据不同的情况作出不同的处理。最直接的解决方案是将这些所有可能发生的情况全都考虑到。然后使用 if&hellip; ellse 语句来做状态判断来进行不同情况的处理。但是对复杂状态的判断就显得 “力不从心了”。随着增加新的状态或者修改一个状体（if else(或 switch case) 语句的增多或者修改）可能会引起很大的修改，而程序的可读性，扩展性也会变得很弱。维护也会很麻烦。那么我就考虑只修改自身状态的模式。</p>
+
+<blockquote>
+<p>例子 1：按钮来控制一个电梯的状态，一个电梯开们，关门，停，运行。每一种状态改变，都有可能要根据其他状态来更新处理。例如，开门状体，你不能在运行的时候开门，而是在电梯定下后才能开门。</p>
+
+<p>例子 2：我们给一部手机打电话，就可能出现这几种情况：用户开机，用户关机，用户欠费停机，用户消户等。 所以当我们拨打这个号码的时候：系统就要判断，该用户是否在开机且不忙状态，又或者是关机，欠费等状态。但不管是那种状态我们都应给出对应的处理操作。</p>
+</blockquote>
+
+<h4 id="2-问题">2. 问题</h4>
+
+<p>对象如何在每一种状态下表现出不同的行为？</p>
+
+<h4 id="3-解决方案">3. 解决方案</h4>
+
+<p>状态模式：允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。<br/>
+在很多情况下，一个对象的行为取决于一个或多个动态变化的属性，这样的属性叫做状态，这样的对象叫做有状态的 (stateful) 对象，这样的对象状态是从事先定义好的一系列值中取出的。当一个这样的对象与外部事件产生互动时，其内部状态就会改变，从而使得系统的行为也随之发生变化。</p>
+
+<h4 id="4-适用性">4. 适用性</h4>
+
+<p>在下面的两种情况下均可使用 State 模式:
+1. 一个对象的行为取决于它的状态, 并且它必须在运行时刻根据状态改变它的行为。
+2. 代码中包含大量与对象状态有关的条件语句: 一个操作中含有庞大的多分支的条件（if else(或 switch case) 语句，且这些分支依赖于该对象的状态。这个状态通常用一个或多个枚举常量表示。通常 , 有多个操作包含这一相同的条件结构。 State 模式将每一个条件分支放入一个独立的类中。这使得你可以根据对象自身的情况将对象的状态作为一个对象，这一对象可以不依赖于其他对象而独立变化。</p>
+
+<h4 id="5-结构">5. 结构</h4>
+
+<p><img src="http://my.csdn.net/uploads/201205/11/1336719144_5496.jpg"/></p>
+
+<h4 id="6-模式的组成">6. 模式的组成</h4>
+
+<ul>
+<li>环境类（Context）:  定义客户感兴趣的接口。维护一个 ConcreteState 子类的实例，这个实例定义当前状态。</li>
+<li>抽象状态类（State）:  定义一个接口以封装与 Context 的一个特定状态相关的行为。</li>
+<li>具体状态类（ConcreteState）:  每一子类实现一个与 Context 的一个状态相关的行为。</li>
+</ul>
+
+<h4 id="7-效果">7. 效果</h4>
+
+<p>State 模式有下面一些效果:</p>
+
+<h5 id="状态模式的优点">状态模式的优点：</h5>
+
+<ol>
+<li><p>) 它将与特定状态相关的行为局部化，并且将不同状态的行为分割开来: State 模式将所有与一个特定的状态相关的行为都放入一个对象中。因为所有与状态相关的代码都存在于某一个 State 子类中, 所以通过定义新的子类可以很容易的增加新的状态和转换。另一个方法是使用数据值定义内部状态并且让 Context 操作来显式地检查这些数据。但这样将会使整个 Context 的实现中遍布看起来很相似的条件 if else 语句或 switch case 语句。增加一个新的状态可能需要改变若干个操作, 这就使得维护变得复杂了。State 模式避免了这个问题, 但可能会引入另一个问题, 因为该模式将不同状态的行为分布在多个 State 子类中。这就增加了子类的数目，相对于单个类的实现来说不够紧凑。但是如果有许多状态时这样的分布实际上更好一些, 否则需要使用巨大的条件语句。正如很长的过程一样，巨大的条件语句是不受欢迎的。它们形成一大整块并且使得代码不够清晰，这又使得它们难以修改和扩展。 State 模式提供了一个更好的方法来组织与特定状态相关的代码。决定状态转移的逻辑不在单块的 i f 或 s w i t c h 语句中, 而是分布在 State 子类之间。将每一个状态转换和动作封装到一个类中，就把着眼点从执行状态提高到整个对象的状态。这将使代码结构化并使其意图更加清晰。</p></li>
+
+<li><p>) 它使得状态转换显式化: 当一个对象仅以内部数据值来定义当前状态时 , 其状态仅表现为对一些变量的赋值，这不够明确。为不同的状态引入独立的对象使得转换变得更加明确。而且, State 对象可保证 Context 不会发生内部状态不一致的情况，因为从 Context 的角度看，状态转换是原子的—只需重新绑定一个变量 (即 Context 的 State 对象变量)，而无需为多个变量赋值</p></li>
+
+<li><p>) State 对象可被共享 如果 State 对象没有实例变量—即它们表示的状态完全以它们的类型来编码—那么各 Context 对象可以共享一个 State 对象。当状态以这种方式被共享时, 它们必然是没有内部状态, 只有行为的轻量级对象。</p></li>
+</ol>
+
+<h5 id="状态模式的缺点">状态模式的缺点:</h5>
+
+<ol>
+<li>) 状态模式的使用必然会增加系统类和对象的个数。</li>
+<li>) 状态模式的结构与实现都较为复杂，如果使用不当将导致程序结构和代码的混乱。</li>
+</ol>
+
+<h4 id="8-实现">8. 实现</h4>
+
+<p>我们用电梯的例子来说明：
+简单地实现代码：</p>
+
+<pre><code>&lt;?php
+abstract class ILift {
+	//电梯的四个状态
+	const OPENING_STATE = 1;  //门敞状态
+	const CLOSING_STATE = 2;  //门闭状态
+	const RUNNING_STATE = 3;  //运行状态
+	const STOPPING_STATE = 4; //停止状态；
+ 
+	
+	//设置电梯的状态
+	public abstract function setState($state);
+ 
+	//首先电梯门开启动作
+	public abstract function open();
+ 
+	//电梯门有开启，那当然也就有关闭了
+	public abstract function close();
+ 
+	//电梯要能上能下，跑起来
+	public abstract function run();
+ 
+	//电梯还要能停下来，停不下来那就扯淡了
+	public abstract function stop();
+}
+ 
+/**
+ * 电梯的实现类 
+ */ 
+class Lift extends  ILift {
+	private $state;
+ 
+	public function setState($state) {
+		$this-&gt;state = $state;
+	}
+	//电梯门关闭
+	public function close() {
+		//电梯在什么状态下才能关闭
+		switch($this-&gt;state){
+			case ILift::OPENING_STATE:  //如果是则可以关门，同时修改电梯状态
+				$this-&gt;setState(ILift::CLOSING_STATE);
+			break;
+			case ILift::CLOSING_STATE:  //如果电梯就是关门状态，则什么都不做
+				//do nothing;
+				return ;
+			break;
+			case ILift::RUNNING_STATE: //如果是正在运行，门本来就是关闭的，也说明都不做
+				//do nothing;
+				return ;
+			break;
+			case ILift::STOPPING_STATE:  //如果是停止状态，本也是关闭的，什么也不做
+				//do nothing;
+				return ;
+			break;
+		}
+				echo 'Lift colse &lt;br&gt;';
+	}
+ 
+	//电梯门开启
+	public function open() {
+		//电梯在什么状态才能开启
+		switch($this-&gt;state){
+			case ILift::OPENING_STATE: //如果已经在门敞状态，则什么都不做
+				//do nothing;
+				return ;
+			break;
+			case ILift::CLOSING_STATE: //如是电梯时关闭状态，则可以开启
+				$this-&gt;setState(ILift::OPENING_STATE);
+			break;
+			case ILift::RUNNING_STATE: //正在运行状态，则不能开门，什么都不做
+			//do nothing;
+				return ;
+			break;
+			case ILift::STOPPING_STATE: //停止状态，淡然要开门了
+				$this-&gt;setState(ILift::OPENING_STATE);
+			break;
+		}
+		echo 'Lift open &lt;br&gt;';
+	}
+	///电梯开始跑起来
+	public function run() {
+		switch($this-&gt;state){
+			case ILift::OPENING_STATE: //如果已经在门敞状态，则不你能运行，什么都不做
+				//do nothing;
+				return ;
+			break;
+			case ILift::CLOSING_STATE: //如是电梯时关闭状态，则可以运行
+				$this-&gt;setState(ILift::RUNNING_STATE);
+			break;
+			case ILift::RUNNING_STATE: //正在运行状态，则什么都不做
+				//do nothing;
+				return ;
+			break;
+			case ILift::STOPPING_STATE: //停止状态，可以运行
+				$this-&gt;setState(ILift::RUNNING_STATE);
+		}
+		echo 'Lift run &lt;br&gt;';
+	}
+ 
+	//电梯停止
+	public function stop() {
+		switch($this-&gt;state){
+			case ILift::OPENING_STATE: //如果已经在门敞状态，那肯定要先停下来的，什么都不做
+				//do nothing;
+				return ;
+			break;
+			case ILift::CLOSING_STATE: //如是电梯时关闭状态，则当然可以停止了
+				$this-&gt;setState(ILift::CLOSING_STATE);
+			break;
+			case ILift::RUNNING_STATE: //正在运行状态，有运行当然那也就有停止了
+				$this-&gt;setState(ILift::CLOSING_STATE);
+			break;
+			case ILift::STOPPING_STATE: //停止状态，什么都不做
+				//do nothing;
+				return ;
+			break;
+		}
+		echo 'Lift stop &lt;br&gt;';
+	}
+	
+}
+$lift = new Lift(); 
+   
+//电梯的初始条件应该是停止状态 
+$lift-&gt;setState(ILift::STOPPING_STATE); 
+//首先是电梯门开启，人进去 
+$lift-&gt;open(); 
+   
+//然后电梯门关闭 
+$lift-&gt;close(); 
+   
+//再然后，电梯跑起来，向上或者向下 
+$lift-&gt;run();    
+ //最后到达目的地，电梯挺下来 
+$lift-&gt;stop();
+
+</code></pre>
+
+<p>显然我们已经完成了我们的基本业务操作，但是，我们在程序中使用了大量的 switch…case 这样的判断（if…else 也是一样), 首先是程序的可阅读性很差，其次扩展非常不方便。一旦我们有新的状态加入的话，例如新加通电和断点状态。我们势必要在每个业务方法里边增加相应的 case 语句。也就是四个函数 open，close，run，stop 都需要修改相应 case 语句。</p>
+
+<p>状态模式：把不同状态的操作分散到不同的状态对象里去完成。看看状态类的 uml 类图：</p>
+
+<p><img src="http://my.csdn.net/uploads/201205/11/1336728586_7557.jpg"/></p>
+
+<p>代码实现：</p>
+
+<pre><code>
+&lt;?php
+/**
+ * 
+ * 定义一个电梯的接口 
+ */ 
+abstract class LiftState{
+ 
+	//定义一个环境角色，也就是封装状态的变换引起的功能变化
+	protected  $_context;
+ 
+	public function setContext(Context $context){
+		$this-&gt;_context = $context;
+	}
+ 
+	//首先电梯门开启动作
+	public abstract function open();
+ 
+	//电梯门有开启，那当然也就有关闭了
+	public abstract function close();
+ 
+	//电梯要能上能下，跑起来
+	public abstract function run();
+ 
+	//电梯还要能停下来，停不下来那就扯淡了
+	public abstract function stop();
+ 
+}
+ 
+ 
+/**
+ * 环境类:定义客户感兴趣的接口。维护一个ConcreteState子类的实例，这个实例定义当前状态。
+ */ 
+class Context {
+	//定义出所有的电梯状态
+	static  $openningState = null;
+	static  $closeingState = null;
+	static  $runningState  = null;
+	static  $stoppingState = null;
+ 
+    public function __construct() {
+		self::$openningState = new OpenningState();
+		self::$closeingState = new ClosingState();
+		self::$runningState =  new RunningState();
+		self::$stoppingState = new StoppingState();
+ 
+	}
+ 
+	//定一个当前电梯状态
+	private  $_liftState;
+ 
+	public function getLiftState() {
+		return $this-&gt;_liftState;
+	}
+ 
+	public function setLiftState($liftState) {
+		$this-&gt;_liftState = $liftState;
+		//把当前的环境通知到各个实现类中
+		$this-&gt;_liftState-&gt;setContext($this);
+	}
+ 
+ 
+	public function open(){
+		$this-&gt;_liftState-&gt;open();
+	}
+ 
+	public function close(){
+		$this-&gt;_liftState-&gt;close();
+	}
+ 
+	public function run(){
+		$this-&gt;_liftState-&gt;run();
+	}
+ 
+	public function stop(){
+		$this-&gt;_liftState-&gt;stop();
+	}
+}
+ 
+/**
+ * 在电梯门开启的状态下能做什么事情 
+ */ 
+class OpenningState extends LiftState {
+ 
+	/**
+	 * 开启当然可以关闭了，我就想测试一下电梯门开关功能
+	 *
+	 */
+	public function close() {
+		//状态修改
+		$this-&gt;_context-&gt;setLiftState(Context::$closeingState);
+		//动作委托为CloseState来执行
+		$this-&gt;_context-&gt;getLiftState()-&gt;close();
+	}
+ 
+	//打开电梯门
+	public function open() {
+		echo 'lift open...', '&lt;br/&gt;';
+	}
+	//门开着电梯就想跑，这电梯，吓死你！
+	public function run() {
+		//do nothing;
+	}
+ 
+	//开门还不停止？
+	public function stop() {
+		//do nothing;
+	}
+ 
+}
+ 
+/**
+ * 电梯门关闭以后，电梯可以做哪些事情 
+ */ 
+class ClosingState extends LiftState {
+ 
+	//电梯门关闭，这是关闭状态要实现的动作
+	public function close() {
+		echo 'lift close...', '&lt;br/&gt;';
+ 
+	}
+	//电梯门关了再打开，逗你玩呢，那这个允许呀
+	public function open() {
+		$this-&gt;_context-&gt;setLiftState(Context::$openningState);  //置为门敞状态
+		$this-&gt;_context-&gt;getLiftState()-&gt;open();
+	}
+ 
+	//电梯门关了就跑，这是再正常不过了
+	public function run() {
+		$this-&gt;_context-&gt;setLiftState(Context::$runningState); //设置为运行状态；
+		$this-&gt;_context-&gt;getLiftState()-&gt;run();
+	}
+ 
+	//电梯门关着，我就不按楼层
+	
+	public function stop() {
+		$this-&gt;_context-&gt;setLiftState(Context::$stoppingState);  //设置为停止状态；
+		$this-&gt;_context-&gt;getLiftState()-&gt;stop();
+	}
+ 
+}
+ 
+/**
+ * 电梯在运行状态下能做哪些动作 
+ */ 
+class RunningState extends LiftState {
+ 
+	//电梯门关闭？这是肯定了
+	public function close() {
+		//do nothing
+	}
+ 
+	//运行的时候开电梯门？你疯了！电梯不会给你开的
+	public function open() {
+		//do nothing
+	}
+ 
+	//这是在运行状态下要实现的方法
+	public function run() {
+		echo 'lift run...', '&lt;br/&gt;';
+	}
+ 
+	//这个事绝对是合理的，光运行不停止还有谁敢做这个电梯？！估计只有上帝了
+	public function stop() {
+		$this-&gt;_context-&gt;setLiftState(Context::$stoppingState); //环境设置为停止状态；
+		$this-&gt;_context-&gt;getLiftState()-&gt;stop();
+	}
+ 
+}
+ 
+ 
+ 
+/**
+ * 在停止状态下能做什么事情 
+ */ 
+class StoppingState extends LiftState {
+ 
+	//停止状态关门？电梯门本来就是关着的！
+	public function close() {
+		//do nothing;
+	}
+ 
+	//停止状态，开门，那是要的！
+	public function open() {
+		$this-&gt;_context-&gt;setLiftState(Context::$openningState);
+		$this-&gt;_context-&gt;getLiftState()-&gt;open();
+	}
+	//停止状态再跑起来，正常的很
+	public function run() {
+		$this-&gt;_context-&gt;setLiftState(Context::$runningState);
+		$this-&gt;_context-&gt;getLiftState()-&gt;run();
+	}
+	//停止状态是怎么发生的呢？当然是停止方法执行了
+	public function stop() {
+		echo 'lift stop...', '&lt;br/&gt;';
+	}
+ 
+}
+ 
+/**
+ * 模拟电梯的动作 
+ */ 
+class Client {
+ 
+	public static function main() {
+		$context = new Context();
+		$context-&gt;setLiftState(new ClosingState());
+ 
+		$context-&gt;open();
+		$context-&gt;close();
+		$context-&gt;run();
+		$context-&gt;stop();
+	}
+}
+Client::main();
+</code></pre>
+
+<h4 id="9-与其他相关模式">9. 与其他相关模式</h4>
+
+<ol>
+<li>）<a href="http://blog.csdn.net/hguisu/article/details/7547231">职责链模式</a>，
+&gt; 职责链模式和状态模式都可以解决 If 分支语句过多，
+&gt; 从定义来看，状态模式是一个对象的内在状态发生改变（一个对象，相对比较稳定，处理完一个对象下一个对象的处理一般都已确定），
+&gt; 而职责链模式是多个对象之间的改变（多个对象之间的话，就会出现某个对象不存在的现在，就像我们举例的公司请假流程，经理可能不在公司情况），这也说明他们两个模式处理的情况不同。
+&gt; 这两个设计模式最大的区别就是状态模式是让各个状态对象自己知道其下一个处理的对象是谁。
+&gt; 而职责链模式中的各个对象并不指定其下一个处理的对象到底是谁，只有在客户端才设定。
+&gt; 用我们通俗的编程语言来说，就是
+&gt; <strong>状态模式：</strong>
+&gt;   相当于 If else if else；
+&gt;   设计路线：各个 State 类的内部实现 (相当于 If，else If 内的条件)
+&gt;   执行时通过 State 调用 Context 方法来执行。
+&gt; <strong>职责链模式：</strong>
+&gt;   相当于 Swich case
+&gt;   设计路线：客户设定，每个子类 (case) 的参数是下一个子类(case)。
+&gt;   使用时，向链的第一个子类的执行方法传递参数就可以。
+&gt; 就像对设计模式的总结，有的人采用的是状态模式，从头到尾，提前一定定义好下一个处理的对象是谁，而我采用的是职责链模式，随时都有可能调整链的顺序。
+&gt;</li>
+<li>） <a href="http://blog.csdn.net/hguisu/article/details/7558249">策略模式</a>：（<a href="http://www.cnblogs.com/Mainz/archive/2007/12/15/996081.html）（状态模式是策略模式的孪生兄弟）">http://www.cnblogs.com/Mainz/archive/2007/12/15/996081.html）（状态模式是策略模式的孪生兄弟）</a>
+&gt;         状态模式和策略模式的实现方法非常类似，都是利用多态把一些操作分配到一组相关的简单的类中，因此很多人认为这两种模式实际上是相同的。
+&gt; 然而在现实世界中，策略（如促销一种商品的策略）和状态（如同一个按钮来控制一个电梯的状态，又如手机界面中一个按钮来控制手机）是两种完全不同的思想。当我们对状态和策略进行建模时，这种差异会导致完全不同的问题。例如，对状态进行建模时，状态迁移是一个核心内容；然而，在选择策略时，迁移与此毫无关系。另外，策略模式允许一个客户选择或提供一种策略，而这种思想在状态模式中完全没有。
+&gt;        一个策略是一个计划或方案，通过执行这个计划或方案，我们可以在给定的输入条件下达到一个特定的目标。策略是一组方案，他们可以相互替换；选择一个策略，获得策略的输出。策略模式用于随不同外部环境采取不同行为的场合。我们可以参考微软企业库底层 Object Builder 的创建对象的 strategy 实现方式。而状态模式不同，对一个状态特别重要的对象，通过状态机来建模一个对象的状态；状态模式处理的核心问题是状态的迁移，因为在对象存在很多状态情况下，对各个 business flow，各个状态之间跳转和迁移过程都是及其复杂的。
+&gt;        例如一个工作流，审批一个文件，存在新建、提交、已修改、HR 部门审批中、老板审批中、HR 审批失败、老板审批失败等状态，涉及多个角色交互，涉及很多事件，这种情况下用状态模式 (状态机) 来建模更加合适；把各个状态和相应的实现步骤封装成一组简单的继承自一个接口或抽象类的类，通过另外的一个 Context 来操作他们之间的自动状态变换，通过 event 来自动实现各个状态之间的跳转。在整个生命周期中存在一个状态的迁移曲线，这个迁移曲线对客户是透明的。我们可以参考微软最新的 WWF 状态机工作流实现思想。
+&gt;       在状态模式中，状态的变迁是由对象的内部条件决定，外界只需关心其接口，不必关心其状态对象的创建和转化；
+&gt; 而策略模式里，采取何种策略由外部条件 &copy; 决定。
+&gt;       他们应用场景（目的）却不一样，State 模式重在强调对象内部状态的变化改变对象的行为，Strategy 模式重在外部对策略的选择，策略的选择由外部条件决定，
+&gt; 也就是说算法的动态的切换。但由于它们的结构是如此的相似，我们可以认为 “状态模式是完全封装且自修改的策略模式”。即状态模式是封装对象内部的状态的，而策略模式是封装算法族的</li>
+</ol>
+
+<h4 id="10-总结与分析">10. 总结与分析</h4>
+
+<p>状态模式的主要优点在于封装了转换规则，并枚举可能的状态，它将所有与某个状态有关的行为放到一个类中，并且可以方便地增加新的状态，只需要改变对象状态即可改变对象的行为，还可以让多个环境对象共享一个状态对象，从而减少系统中对象的个数；其缺点在于使用状态模式会增加系统类和对象的个数，且状态模式的结构与实现都较为复杂，如果使用不当将导致程序结构和代码的混乱，对于可以切换状态的状态模式不满足 “开闭原则” 的要求。</p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/03/%E8%AE%BE%E7%BD%AE%E7%BB%88%E7%AB%AF%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-tooltip="设置终端使用代理的几种方法">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/" data-tooltip="设计模式 - 命令模式">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/03/%E8%AE%BE%E7%BD%AE%E7%BB%88%E7%AB%AF%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-tooltip="设置终端使用代理的几种方法">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://example.org/2019/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/" data-tooltip="设计模式 - 命令模式">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">
+                <h3 class="media-heading">Controller manager高可用实现方式</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://www.colabug.com/2801661.html
+ 这不是一系列入门级别的文章，也不是按部就班而来的，而是我看到哪里，发现有些代码写的精妙的地方，都值得我们学习下，顺手记录下来，一方面是让自己将来可以有迹可循，另外对大家应该也会有所帮助。而且记录本身成本并不是很高。
+高可用部署情况下，需要部署多个 controller manager （以下简称 cm ），每个 cm 需要 --leader-elect=true 启动参数，即告知 cm 以高可用方式启动，谁要想进行真正的工作，必须先抢到锁，被选举为 leader 才行，而抢不到所得只能待机，在 leader 因为异常终止的时候，由剩余的其余节点再次获得锁。
+关于分布式锁的实现很多，可以自己从零开始制造。当然更简单的是基于现有中间件，比如有基于 Redis 或数据库的实现方式，最近 Zookeeper/ETCD 也提供了相关功能。但 K8s 的实现并没有使用这些方式，而是另辟蹊径使用了资源锁的概念，简单来说就是通过创建 K8s 的资源（当前的实现中实现了 ConfigMap 和 Endpoint 两种类型的资源）来维护锁的状态。
+分布式锁一般实现原理就是大家先去抢锁，抢到的人成为 leader ，然后 leader 会定期更新锁的状态，声明自己的活动状态，不让其他人把锁抢走。K8s 的资源锁也类似，抢到锁的节点会将自己的标记（目前是 hostname）设为锁的持有者，其他人则需要通过对比锁的更新时间和持有者来判断自己是否能成为新的 leader ，而 leader 则可以通过更新 RenewTime 来确保持续保有该锁。
+大概看了下 K8s 的实现，老实说其实现方式并不算高雅，但是却给我们开拓了一种思路：K8s 里的 resource 是万能的，不要以为 Endpoint 只是 Endpoint 。不过反过来有时候也挺让人费解的，刚了解的时候容易摸不着头脑，也不是好事。而且 scheduler 和 cm 都采用了资源锁，但是实现起来却不尽相同，也值得吐槽下。不管怎么说，这个实现算是挺有意思的实现，值得我们深入了解下。
+我们首先来看一下 cm 启动的时候，是如何去 初始化 抢锁的。启动的时候，如果指定了 --leader-elect=true 参数的话，则会进入下面的代码，首先获取自己的资源标志（这里是 hostname 加一串随机数字）。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/">
+                <h3 class="media-heading">Gitflow 工作流</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 http://blog.jobbole.com/76867/
+ 这节介绍的 Gitflow工作流借鉴自在 nvie 的 _Vincent Driessen_。
+Gitflow工作流定义了一个围绕项目发布的严格分支模型。虽然比功能分支工作流复杂几分，但提供了用于一个健壮的用于管理大型项目的框架。
+Gitflow工作流没有用超出功能分支工作流的概念和命令，而是为不同的分支分配一个很明确的角色，并定义分支之间如何和什么时候进行交互。除了使用功能分支，在做准备、维护和记录发布也使用各自的分支。当然你可以用上功能分支工作流所有的好处：Pull Requests、隔离实验性开发和更高效的协作。
+工作方式 Gitflow工作流仍然用中央仓库作为所有开发者的交互中心。和其它的工作流一样，开发者在本地工作并push分支到要中央仓库中。
+历史分支 相对使用仅有的一个master分支，Gitflow工作流使用 2 个分支来记录项目的历史。master分支存储了正式发布的历史，而develop分支作为功能的集成分支。这样也方便master分支上的所有提交分配一个版本号。
+剩下要说明的问题围绕着这 2 个分支的区别展开。
+功能分支 每个新功能位于一个自己的分支，这样可以 push到中央仓库以备份和协作。但功能分支不是从master分支上拉出新分支，而是使用develop分支作为父分支。当新功能完成时，合并回develop分支。新功能提交应该从不直接与master分支交互。
+注意，从各种含义和目的上来看，功能分支加上develop分支就是功能分支工作流的用法。但Gitflow工作流没有在这里止步。
+发布分支 一旦develop分支上有了做一次发布（或者说快到了既定的发布日）的足够功能，就从develop分支上fork一个发布分支。新建的分支用于开始发布循环，所以从这个时间点开始之后新的功能不能再加到这个分支上 —— 这个分支只应该做Bug修复、文档生成和其它面向发布任务。一旦对外发布的工作都完成了，发布分支合并到master分支并分配一个版本号打好Tag。另外，这些从新建发布分支以来的做的修改要合并回develop分支。
+使用一个用于发布准备的专门分支，使得一个团队可以在完善当前的发布版本的同时，另一个团队可以继续开发下个版本的功能。 这也打造定义良好的开发阶段（比如，可以很轻松地说，『这周我们要做准备发布版本 4.0』，并且在仓库的目录结构中可以实际看到）。
+常用的分支约定：
+用于新建发布分支的分支: develop 用于合并的分支: master 分支命名: release-* 或 release/*
+维护分支 维护分支或说是热修复（hotfix）分支用于生成快速给产品发布版本（production releases）打补丁，这是唯一可以直接从master分支fork出来的分支。修复完成，修改应该马上合并回master分支和develop分支（当前的发布分支），master分支应该用新的版本号打好Tag。
+为Bug修复使用专门分支，让团队可以处理掉问题而不用打断其它工作或是等待下一个发布循环。你可以把维护分支想成是一个直接在master分支上处理的临时发布。
+示例 下面的示例演示本工作流如何用于管理单个发布循环。假设你已经创建了一个中央仓库。
+创建开发分支 第一步为master分支配套一个develop分支。简单来做可以本地创建一个空的develop分支，push到服务器上：
+git branch develop git push -u origin develop
+以后这个分支将会包含了项目的全部历史，而master分支将只包含了部分历史。其它开发者这时应该克隆中央仓库，建好develop分支的跟踪分支：
+git clone ssh://user@host/path/to/repo.git git checkout -b develop origin/develop</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/go-%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8F%8A-pprof-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
+                <h3 class="media-heading">Go 程序性能优化及 pprof 使用方法详解</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://www.jb51.net/article/127551.htm
+ Go 程序性能优化及 pprof 使用方法详解  更新时间：2017 年 11 月 05 日 10:50:22 作者：snowInPluto
+这篇文章主要为大家详细介绍了 Go 程序性能优化及 pprof 的使用方法，具有一定的参考价值，感兴趣的小伙伴们可以参考一下
+Go 程序的性能优化及 pprof 的使用
+程序的性能优化无非就是对程序占用资源的优化。对于服务器而言，最重要的两项资源莫过于 CPU 和内存。性能优化，就是在对于不影响程序数据处理能力的情况下，我们通常要求程序的 CPU 的内存占用尽量低。反过来说，也就是当程序 CPU 和内存占用不变的情况下，尽量地提高程序的数据处理能力或者说是吞吐量。
+Go 的原生工具链中提供了非常多丰富的工具供开发者使用，其中包括 pprof。
+对于 pprof 的使用要分成下面两部分来说。
+Web 程序使用 pprof
+先写一个简单的 Web 服务程序。程序在 9876 端口上接收请求。
+package main import ( &quot;bytes&quot; &quot;io/ioutil&quot; &quot;log&quot; &quot;math/rand&quot; &quot;net/http&quot; _ &quot;net/http/pprof&quot; ) func main() { http.HandleFunc(&quot;/test&quot;, handler) log.Fatal(http.ListenAndServe(&quot;:9876&quot;, nil)) } func handler(w http.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/">
+                <h3 class="media-heading">Golang大杀器之性能剖析PProf</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://github.com/EDDYCJY/blog/blob/master/golang/2018-09-15-Golang%20%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90%20PProf.md
+ Golang 大杀器之性能剖析 PProf 前言 写了几吨代码，实现了几百个接口。功能测试也通过了，终于成功的部署上线了
+结果，性能不佳，什么鬼？
+想做性能分析 PProf 想要进行性能优化，首先瞩目在 Go 自身提供的工具链来作为分析依据，本文将带你学习、使用 Go 后花园，涉及如下：
+ runtime/pprof：采集程序（非 Server）的运行数据进行分析 net/http/pprof：采集 HTTP Server 的运行时数据进行分析  是什么 pprof 是用于可视化和分析性能分析数据的工具
+pprof 以 profile.proto 读取分析样本的集合，并生成报告以可视化并帮助分析数据（支持文本和图形报告）
+profile.proto 是一个 Protocol Buffer v3 的描述文件，它描述了一组 callstack 和 symbolization 信息， 作用是表示统计分析的一组采样的调用栈，是很常见的 stacktrace 配置文件格式
+支持什么使用模式  Report generation：报告生成 Interactive terminal use：交互式终端使用 Web interface：Web 界面  可以做什么  CPU Profiling：CPU 分析，按照一定的频率采集所监听的应用程序 CPU（含寄存器）的使用情况，可确定应用程序在主动消耗 CPU 周期时花费时间的位置 Memory Profiling：内存分析，在应用程序进行堆分配时记录堆栈跟踪，用于监视当前和历史内存使用情况，以及检查内存泄漏 Block Profiling：阻塞分析，记录 goroutine 阻塞等待同步（包括定时器通道）的位置 Mutex Profiling：互斥锁分析，报告互斥锁的竞争情况  一个简单的例子 我们将编写一个简单且有点问题的例子，用于基本的程序初步分析</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/">
+                <h3 class="media-heading">Go模块简介</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://roberto.selbach.ca/intro-to-go-modules/
+ Go模块简介 发表于 2018年8月18日(https://roberto.selbach.ca/intro-to-go-modules/) 作者：Roberto Selbach
+即将发布的Go编程语言版本1.11将为_模块_带来实验性支持 ，几天前Go.A的新依赖管理系统，我写了一篇关于它的快速帖子。自那篇文章上线以来，事情发生了一些变化，因为我们现在非常接近新版本，我认为现在是另一篇文章更适合实践的好时机。所以这就是我们要做的：我们将创建一个新的包，然后我们将发布一些版本，看看它是如何工作的。
+创建模块 首先要做的事情。让我们创建我们的包。我们称之为“testmod”。这里有一个重要的细节：这个目录应该 在你的外面，因为默认情况下，模块支持在其中被禁用。Go模块是可能在某些时候完全消除的第一步。$GOPATH$GOPATH
+$ mkdir testmod $ cd testmod  我们的包很简单：
+package testmod import &quot;fmt&quot; // Hi returns a friendly greeting func Hi(name string) string { return fmt.Sprintf(&quot;Hi, %s&quot;, name) }  包完成但它仍然不是_模块_。让我们改变这一点。
+$ go mod init github.com/robteix/testmod go: creating new go.mod: module github.com/robteix/testmod  这将go.mod在包目录中创建一个新文件，其中包含以下内容：
+module github.com/robteix/testmod  这里不是很多，但这有效地将我们的包变成了一个 _模块_。我们现在可以将这个代码推送到一个存储库：
+$ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u origin master  到目前为止，任何愿意使用此软件包的人都会go get ：</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/intellij-idea-%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84-rest-%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">Intellij IDEA 基于编辑器的 REST 客户端介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/u011054333/article/details/78705256
+ 最近 Intellij IDEA 更新到了 2017.3 这一版本，这个版本又增加了很多新功能。我觉得其中这个基于编辑器的 REST 客户端这个功能很不错，可以为我们带来很多方便。这个功能并不仅仅在 Intellij IDEA 才有，最近更新的所有 Jetbrains 系 IIDE 都有这个功能。
+以往我们开发和调试网络程序，用到的无非是这几种办法：浏览器 F12 工具、Fiddler、Wireshark、curl 等命令行工具、手动使用 HTTP 客户端类库编程。不过这些方法总是有些不好用。Jetbrains 这个基于编辑器的 REST 客户端用起来倒是让我眼前一亮。
+使用方法 要使用这个功能很简单，在 IDE 中新建一个后缀名为.http的文件，然后就可以使用这个功能了。截图如下。
+这个功能使用起来非常简单，使用大写的 HTTP 动词（GET、POST、DELETE、PUT 等等）后面加上要访问的网址即可，如果端口号不是 80 或者 443，可以使用冒号 + 端口号的形式写在网址后面。如果需要修改 Cookie、ContentType、UA 等设置，直接写在后面几行即可，Jetbrains 提供了非常完善的补全支持，我们只要敲第一个大写字母即可获得相应的代码提示。想要发起一个请求的时候，直接点击前面的绿色运行按钮即可。一个文件中可以保存多个请求，如果以后还想再次运行只要打开这个文件即可。
+配置环境变量 Jetbrains 还提供了一个环境变量的功能，让我们使用这个编辑器 REST 客户端更加简单。只要在项目中添加一个名为rest-client.env.json的文件，然后配置不同环境下要使用的环境变量。然后就能在 REST 客户端中使用了。例如配置文件是这样的。
+{ &quot;dev&quot;: { &quot;host&quot;: &quot;http://httpbin.org&quot; }, &quot;prod&quot;: { &quot;host&quot;: &quot;http://httpbin.org&quot; } }  那么在点击运行按钮的时候就会弹出选择要使用哪个环境变量。我们只要选择就可以针对不同环境使用不同配置了。在代码中只要使用双括号引用环境变量即可。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/java-%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7-%E6%8F%92%E4%BB%B6%E5%8C%96%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86-apipluggable-annotation-processing-api/">
+                <h3 class="media-heading">Java 奇技淫巧 - 插件化注解处理 API(Pluggable Annotation Processing API)</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/throwable/p/9139908.html
+ 插件化注解处理 API(Pluggable Annotation Processing API) Java 奇技淫巧 - 插件化注解处理 API(Pluggable Annotation Processing API) 参考资料  JDK6 的新特性之六: 插入式注解处理 API(Pluggable Annotation Processing API) Java Annotation Processing and Creating a Builder  简介 插件化注解处理 (Pluggable Annotation Processing)APIJSR 269 提供一套标准 API 来处理 AnnotationsJSR 175, 实际上 JSR 269 不仅仅用来处理 Annotation，我觉得更强大的功能是它建立了 Java 语言本身的一个模型, 它把 method、package、constructor、type、variable、enum、annotation 等 Java 语言元素映射为 Types 和 Elements，从而将 Java 语言的语义映射成为对象，我们可以在 javax.lang.model 包下面可以看到这些类。所以我们可以利用 JSR 269 提供的 API 来构建一个功能丰富的元编程 (metaprogramming) 环境。JSR 269 用 Annotation Processor 在编译期间而不是运行期间处理 Annotation, Annotation Processor 相当于编译器的一个插件, 所以称为插入式注解处理.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
+                <h3 class="media-heading">Java 读写锁实现原理</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://my.oschina.net/editorial-story/blog/1928306
+ 最近做的一个小项目中有这样的需求：整个项目有一份*config.json*保存着项目的一些配置，是存储在本地文件的一个资源，并且应用中存在读写（读 &gt;&gt; 写）更新问题。既然读写并发操作，那么就涉及到操作互斥，这里自然想到了读写锁，本文对读写锁方面的知识做个梳理。
+为什么需要读写锁？ 与传统锁不同的是读写锁的规则是可以共享读，但只能一个写，总结起来为：读读不互斥，读写互斥，写写互斥，而一般的独占锁是：读读互斥，读写互斥，写写互斥，而场景中往往读远远大于写，读写锁就是为了这种优化而创建出来的一种机制。
+注意是读远远大于写，一般情况下独占锁的效率低来源于高并发下对临界区的激烈竞争导致线程上下文切换。因此当并发不是很高的情况下，读写锁由于需要额外维护读锁的状态，可能还不如独占锁的效率高。因此需要根据实际情况选择使用。
+一个简单的读写锁实现 根据上面理论可以利用两个 int 变量来简单实现一个读写锁，实现虽然烂，但是原理都是差不多的，值得阅读下。
+public class ReadWriteLock { /** * 读锁持有个数 */ private int readCount = 0; /** * 写锁持有个数 */ private int writeCount = 0; /** * 获取读锁,读锁在写锁不存在的时候才能获取 */ public synchronized void lockRead() throws InterruptedException { // 写锁存在,需要wait while (writeCount &gt; 0) { wait(); } readCount++; } /** * 释放读锁 */ public synchronized void unlockRead() { readCount--; notifyAll(); } /** * 获取写锁,当读锁存在时需要wait.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/">
+                <h3 class="media-heading">Java8 日期和时间</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/a80596890555/article/details/58687444
+ 如何正确处理时间 现实生活的世界里，时间是不断向前的，如果向前追溯时间的起点，可能是宇宙出生时，又或是是宇宙出现之前， 但肯定是我们目前无法找到的，我们不知道现在距离时间原点的精确距离。所以我们要表示时间， 就需要人为定义一个原点。
+原点被规定为，格林威治时间 (GMT)1970 年 1 月 1 日的午夜 为起点, 之于为啥是 GMT 时间，大概是因为本初子午线在那的原因吧。
+java 中的时间 如果你跟你朋友说：“我们 1484301456 一起去吃饭，别迟到！”，而你朋友能马上理解你说的时间，表示时间就会很简单， 只需要一个 long 值来表示原点的偏移量，这是个绝对时间，在世界范围内都适用。但实际上我们不能马上理解这串数字， 而且我们需要不同的时间单位来表示时间的跨度，比如一个季度是 3 个月，一个月有 30 天等。 你可以跟朋友约好 “明天这个时候再见面”, 你朋友很容易理解明天的意思，但要是没有’天’这个单位， 他就需要在那串数字上加上 86400(一天是 86400 秒)。
+Java 三次引入处理时间的 API，JDK1.0 中包含了一个Date类，但大多数方法在 java1.1 引入Calendear类之后被弃用了。 它的实例都是可变的，而且它的 API 很难使用，比如月份是从 0 开始这种反人类的设置。
+java8 引入的java.time API 已经纠正了之前的问题。它已经完全实现了JSR310规范。
+java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个精确的时间点，Duration和Period表示两个时间点之间的时间量。 LocalDate表示日期，即 xx 年 xx 月 xx 日，即不包括时间也不带时区。LocalTime与LocalDate类似， 但只包含时间。LocalDateTime则包含日期和时间。ZoneDateTime表示一个带时区的时间。 DateTimeFormatter提供格式化和解析功能。下面详细的介绍使用方法。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://example.org/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/">
+                <h3 class="media-heading">Java注释处理和创建构建器</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Mar 3, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 http://www.baeldung.com/java-annotation-processing-builder
+ 1.简介 本文是Java源代码级别注释处理的简介，并提供了使用此技术在编译期间生成其他源文件的示例。
+2.注释处理的应用 源级注释处理首先出现在Java 5中。它是一种在编译阶段生成其他源文件的便捷技术。
+源文件不必是Java文件 - 您可以根据源代码中的注释生成任何类型的描述，元数据，文档，资源或任何其他类型的文件。
+注释处理在许多无处不在的Java库中被广泛使用，例如，在QueryDSL和JPA中生成元类，以使用Lombok库中的样板代码来扩充类。
+需要注意的一件重要事情是注释处理API的局限性 - 它只能用于生成新文件，而不能用于更改现有文件。
+值得注意的例外是Lombok库，它使用注释处理作为引导机制，将自身包含在编译过程中，并通过一些内部编译器API修改AST。这种hacky技术与注释处理的预期目的无关，因此本文不讨论。
+3.注释处理API 注释处理在多轮中完成。每一轮都从编译器搜索源文件中的注释并选择适合这些注释的注释处理器开始。反过来，每个注释处理器在相应的源上被调用。
+如果在此过程中生成了任何文件，则会以生成的文件作为输入启动另一轮。此过程将继续，直到在处理阶段没有生成新文件。
+反过来，每个注释处理器在相应的源上被调用。如果在此过程中生成了任何文件，则会以生成的文件作为输入启动另一轮。此过程将继续，直到在处理阶段没有生成新文件。
+注释处理API位于_javax.annotation.processing_包中。您必须实现的主要接口是_Processor_接口，它具有_AbstractProcessor_类形式的部分实现。这个类是我们要扩展的类，以创建我们自己的注释处理器。
+4.设置项目 为了演示注释处理的可能性，我们将开发一个简单的处理器，用于为带注释的类生成流畅的对象构建器。
+我们将把项目分成两个Maven模块。其中之一，_注释处理器_模块，将包含处理器本身和注释，另一个_注释用户_模块将包含注释类。这是注释处理的典型用例。
+_注释处理器_模块的设置如下。我们将使用Google的自动服务库来生成稍后将讨论的处理器元数据文件，以及针对Java 8源代码调整的_maven-compiler-plugin_。这些依赖项的版本将提取到属性部分。
+可以在Maven Central存储库中找到最新版本的自动服务库和maven-compiler-plugin：
+&lt;properties&gt; &lt;auto-service.version&gt;1.0-rc2&lt;/auto-service.version&gt; &lt;maven-compiler-plugin.version&gt; 3.5.1 &lt;/maven-compiler-plugin.version&gt; &lt;/properties&gt; &lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;com.google.auto.service&lt;/groupId&gt; &lt;artifactId&gt;auto-service&lt;/artifactId&gt; &lt;version&gt;${auto-service.version}&lt;/version&gt; &lt;scope&gt;provided&lt;/scope&gt; &lt;/dependency&gt; &lt;/dependencies&gt; &lt;build&gt; &lt;plugins&gt; &lt;plugin&gt; &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt; &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt; &lt;version&gt;${maven-compiler-plugin.version}&lt;/version&gt; &lt;configuration&gt; &lt;source&gt;1.8&lt;/source&gt; &lt;target&gt;1.8&lt;/target&gt; &lt;/configuration&gt; &lt;/plugin&gt; &lt;/plugins&gt; &lt;/build&gt;  带有注释源的注释用户 Maven模块不需要任何特殊调整，除了在依赖项部分中添加对注释处理器模块的依赖：
+&lt;dependency&gt; &lt;groupId&gt;com.baeldung&lt;/groupId&gt; &lt;artifactId&gt;annotation-processing&lt;/artifactId&gt; &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt; &lt;/dependency&gt;  5.</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         76 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://example.org/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://example.org/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/example.org\/2019\/03\/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%81%E4%B8%83-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F-state%E5%AF%B9%E8%B1%A1%E8%A1%8C%E4%B8%BA%E5%9E%8B\/';
+          
+            this.page.identifier = '\/2019\/03\/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%81%E4%B8%83-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F-state%E5%AF%B9%E8%B1%A1%E8%A1%8C%E4%B8%BA%E5%9E%8B\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

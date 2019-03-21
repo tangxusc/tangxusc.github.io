@@ -1,0 +1,63 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: test
+  annotations:
+    kubernetes.io/ingress.class: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
+spec:
+  rules:
+  - host: 
+    http:
+      paths:
+      - path: /test
+        backend:
+          serviceName: tomcat
+          servicePort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: test
+  name: test
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      run: test
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: test
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: IfNotPresent
+        name: test
+        ports:
+        - containerPort: 80
+          protocol: TCP
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat
+spec:
+  type: ClusterIP
+  selector:
+    run: test
+  ports:
+  - port: 8080
+    name: test-port
+    targetPort: 80
