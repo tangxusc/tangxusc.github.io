@@ -63,7 +63,7 @@ Kubunetes 建议使用老版本的`docker.io`，如果需要使用最新版的`d
 
 ```
 sudo apt-get update && sudo apt-get install -y apt-transport-https
-curl -s https://gitee.com/tanx/kubernetes-test/raw/master/kubeadm/apt-key.gpg | sudo apt-key add -
+curl -s https://tangxusc.github.io/blog/post/kubeadm/apt-key.gpg | sudo apt-key add -
 
 sudo cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
 deb http://mirrors.ustc.edu.cn/kubernetes/apt/ kubernetes-xenial main
@@ -115,7 +115,7 @@ docker tag reg.qiniu.com/k8s/k8s-dns-dnsmasq-nanny-amd64:1.14.10 k8s.gcr.io/k8s-
 * 错误情况1: pod一直未pedding状态(或者block状态),使用`kubectl describe pod名字` 查看后发现 `pod with UID "xxx"  specified privileged container, but is disallowed`,请依次检查中
 ```
 ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_KUBEADM_ARGS $KUBELET_EXTRA_ARGS --allow_privileged
-``` 
+```
 这命令中是否加入了--allow_privileged 和 `/etc/kubernetes/manifests/kube-apiserver.yaml` apiServer是否启用了 `--allow-privileged=true` 参照 [kubelet privileged](https://github.com/kubernetes/kubernetes/issues/6530)
 
 Master 节点就是运行着控制组件的机器，包括 etcd(集群数据库) 和 API 服务 (kubectl CLI 通讯服务)。
