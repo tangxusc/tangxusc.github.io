@@ -202,6 +202,71 @@
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8-schema-%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E4%BA%8E%E5%B7%A6%E5%8F%B3%E5%80%BC%E7%BC%96%E7%A0%81/">
+          树形结构的数据库表 Schema 设计 - 基于左右值编码
+        </a>
+      </h1>
+      
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
+        
+  March 20, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/java">java</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/database">database</a>
+    
+  
+
+  </div>
+
+    </div>
+    <div class="postShorten-excerpt" itemprop="articleBody">
+      
+        本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/M-D-Luffy/p/4712846.html
+ 树形结构的数据库表 Schema 设计  程序设计过程中，我们常常用树形结构来表征某些数据的关联关系，如企业上下级部门、栏目结构、商品分类等等，通常而言，这些树状结构需要借助于数据库完 成持久化。然而目前的各种基于关系的数据库，都是以二维表的形式记录存储数据信息，因此是不能直接将 Tree 存入 DBMS，设计合适的 Schema 及其对 应的 CRUD 算法是实现关系型数据库中存储树形结构的关键。
+ 理想中树形结构应该具备如下特征：数据存储冗余度小、直观性强；检索遍历过程简单高效；节点增删改查 CRUD 操作高效。无意中在网上搜索到一种很巧妙的 设计，原文是英文，看过后感觉有点意思，于是便整理了一下。本文将介绍两种树形结构的 Schema 设计方案：一种是直观而简单的设计思路，另一种是基于左 右值编码的改进方案。
+一、基本数据  本文列举了一个食品族谱的例子进行讲解，通过类别、颜色和品种组织食品，树形结构图如下：
+二、继承关系驱动的 Schema 设计  对树形结构最直观的分析莫过于节点之间的继承关系上，通过显示地描述某一节点的父节点，从而能够建立二维的关系表，则这种方案的 Tree 表结构通常设计为：{Node_id,Parent_id}，上述数据可以描述为如下图所示：
+ 这种方案的优点很明显：设计和实现自然而然，非常直观和方便。缺点当然也是非常的突出：由于直接地记录了节点之间的继承关系，因此对 Tree 的任何 CRUD 操作都将是低效的，这主要归根于频繁的 “递归” 操作，递归过程不断地访问数据库，每次数据库 IO 都会有时间开销。当然，这种方案并非没有用武之 地，在 Tree 规模相对较小的情况下，我们可以借助于缓存机制来做优化，将 Tree 的信息载入内存进行处理，避免直接对数据库 IO 操作的性能开销。
+三、基于左右值编码的 Schema 设计  在基于数据库的一般应用中，查询的需求总要大于删除和修改。为了避免对于树形结构查询时的 “递归” 过程，基于 Tree 的前序遍历设计一种全新的无递归查询、无限分组的左右值编码方案，来保存该树的数据。
+ 第一次看见这种表结构，相信大部分人都不清楚左值（Lft）和右值（Rgt）是如何计算出来的，而且这种表设计似乎并没有保存父子节点的继承关系。但当 你用手指指着表中的数字从 1 数到 18，你应该会发现点什么吧。对，你手指移动的顺序就是对这棵树进行前序遍历的顺序，如下图所示。当我们从根节点 Food 左侧开始，标记为 1，并沿前序遍历的方向，依次在遍历的路径上标注数字，最后我们回到了根节点 Food，并在右边写上了 18。
+      
+      <p>
+        <a href="https://tangxusc.github.io/blog/2019/03/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8-schema-%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E4%BA%8E%E5%B7%A6%E5%8F%B3%E5%80%BC%E7%BC%96%E7%A0%81/" class="postShorten-excerpt_link link">Continue reading</a>
+        
+      </p>
+    </div>
+  </div>
+  
+</article>
+
+          
+            
+  
+    
+      
+        
+      
+    
+  
+
+
+  
+
+<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+  <div class="postShorten-wrap">
+    
+    <div class="postShorten-header">
+      <h1 class="postShorten-title" itemprop="headline">
         <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E6%BA%90%E4%BB%A3%E7%A0%81%E5%B0%B1%E6%98%AF%E8%AE%BE%E8%AE%A1/">
           源代码就是设计
         </a>
@@ -554,65 +619,6 @@ sudo vim /etc/apt/apt.
 </article>
 
           
-            
-  
-    
-      
-        
-      
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-jwt%E8%AE%A4%E8%AF%81/">
-          迈向istio-jwt认证
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
-        
-  March 20, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        istio-jwt认证 [TOC]
-背景 在建设企业的各种项目中,我们一定离不开,或者总要和认证授权系统打交道,应用总会入侵一些认证和授权部分的代码,现在在java等方面有大量的安全框架,例如spring security,shiro等等框架,这些框架也是为了解决这个重复性的做认证和授权等功能的问题,这也是我们在单体服务的时候一直做的,将各种各样的框架集成到系统中,那么现在在微服务时代,或者说在istio有没有解决方法能解决这个问题呢,让服务真正回归业务,不再去过多的管理认证的问题呢.
-在本节中我们将会将我们的应用构建为一个需要使用jwt token才能访问的服务,在没有jwt token的情况下,将会返回401 未授权.
-服务图 target配置 #记得开启自动注入 #kubectl label namespace test istio-injection=enabled apiVersion: extensions/v1beta1 kind: Deployment metadata: name: target namespace: test labels: app: target version: v1 spec: template: metadata: labels: app: target version: v1 spec: containers: - name: target image: service-proxy:go-1 ports: - containerPort: 8090 name: http protocol: TCP --- kind: Service apiVersion: v1 metadata: name: target namespace: test spec: selector: app: target ports: - port: 80 name: http #一定注意命名 protocol: TCP targetPort: 8090  在k8s中部署服务 $ kubectl create ns test $ kubectl label namespace test istio-injection=enabled $ kubectl apply -f k8s.
-      
-      <p>
-        <a href="https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-jwt%E8%AE%A4%E8%AF%81/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-          
           
   <div class="pagination-bar">
     <ul class="pagination">
@@ -696,6 +702,31 @@ sudo vim /etc/apt/apt.
       <div class="no-result text-color-light text-center">no post found</div>
       <div class="results">
         
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/">
+                <h3 class="media-heading">迈向istio-11 升级到1.1.2</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">废话 istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本的口号叫企业级就绪(以后会不会出云供应商就绪?),这8个月中可以看到istio还是发生了很大的变化的,纵观历史,istio进行了三次腾飞:
+ 0.8 不在是模型了 1.0 生产就绪了(其实没有),抛弃了ingress,模型改动比较大 1.1 企业就绪了,理清楚了流量管理的模型啊啊啊啊,sidecar不再操碎了心,pilot解放了,mixer adapter又被默认的关了,ServiceEntry存在感突然就没啦.  废话太多了,接下来我们进入正题,去看看istio1.1到底更新了那些东西
+ 注意,不会全部的解析,只捡我认为重要的说.
+ 升级内容 安装  安装模式变化  现在提供了两个helm chart来安装,分别为istio-init和istio 这两个职责如下:
+istio-init: 负责通过job.batch/istio-init-crd-10,job.batch/istio-init-crd-11 这两个job来安装istio的crd资源(一共53个,如果启用cert-manager则为58个),可通过命令查看:
+$ kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l 53  istio: 现在istio安装的时候是没有启用grafana,kiali的,并且已经说明使用kiali替换servicegraph,所以在安装时,需要手动开启:
+# # addon grafana configuration # grafana: enabled: true # # addon kiali tracing configuration # kiali: enabled: true createDemoSecret: true  并且现在支持自定义kiali的用户名密码了,如果还是使用admin/admin 那么就需要createDemoSecret: true
+istio现在提供了一个cni组件来避免init-container的privilege问题,不过这个cni需要kubelet的cni支持,kubelet的网络就两种kubenet和cni,也就是说 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf文件中的
+Environment=&quot;KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin&quot;  这里的--network-plugin=cni 值只能是 cni了</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
         
           <div class="media">
             
@@ -917,39 +948,6 @@ java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个�
             <hr>
           </div>
         
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/">
-                <h3 class="media-heading">Java注释处理和创建构建器</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Mar 3, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 http://www.baeldung.com/java-annotation-processing-builder
- 1.简介 本文是Java源代码级别注释处理的简介，并提供了使用此技术在编译期间生成其他源文件的示例。
-2.注释处理的应用 源级注释处理首先出现在Java 5中。它是一种在编译阶段生成其他源文件的便捷技术。
-源文件不必是Java文件 - 您可以根据源代码中的注释生成任何类型的描述，元数据，文档，资源或任何其他类型的文件。
-注释处理在许多无处不在的Java库中被广泛使用，例如，在QueryDSL和JPA中生成元类，以使用Lombok库中的样板代码来扩充类。
-需要注意的一件重要事情是注释处理API的局限性 - 它只能用于生成新文件，而不能用于更改现有文件。
-值得注意的例外是Lombok库，它使用注释处理作为引导机制，将自身包含在编译过程中，并通过一些内部编译器API修改AST。这种hacky技术与注释处理的预期目的无关，因此本文不讨论。
-3.注释处理API 注释处理在多轮中完成。每一轮都从编译器搜索源文件中的注释并选择适合这些注释的注释处理器开始。反过来，每个注释处理器在相应的源上被调用。
-如果在此过程中生成了任何文件，则会以生成的文件作为输入启动另一轮。此过程将继续，直到在处理阶段没有生成新文件。
-反过来，每个注释处理器在相应的源上被调用。如果在此过程中生成了任何文件，则会以生成的文件作为输入启动另一轮。此过程将继续，直到在处理阶段没有生成新文件。
-注释处理API位于_javax.annotation.processing_包中。您必须实现的主要接口是_Processor_接口，它具有_AbstractProcessor_类形式的部分实现。这个类是我们要扩展的类，以创建我们自己的注释处理器。
-4.设置项目 为了演示注释处理的可能性，我们将开发一个简单的处理器，用于为带注释的类生成流畅的对象构建器。
-我们将把项目分成两个Maven模块。其中之一，_注释处理器_模块，将包含处理器本身和注释，另一个_注释用户_模块将包含注释类。这是注释处理的典型用例。
-_注释处理器_模块的设置如下。我们将使用Google的自动服务库来生成稍后将讨论的处理器元数据文件，以及针对Java 8源代码调整的_maven-compiler-plugin_。这些依赖项的版本将提取到属性部分。
-可以在Maven Central存储库中找到最新版本的自动服务库和maven-compiler-plugin：
-&lt;properties&gt; &lt;auto-service.version&gt;1.0-rc2&lt;/auto-service.version&gt; &lt;maven-compiler-plugin.version&gt; 3.5.1 &lt;/maven-compiler-plugin.version&gt; &lt;/properties&gt; &lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;com.google.auto.service&lt;/groupId&gt; &lt;artifactId&gt;auto-service&lt;/artifactId&gt; &lt;version&gt;${auto-service.version}&lt;/version&gt; &lt;scope&gt;provided&lt;/scope&gt; &lt;/dependency&gt; &lt;/dependencies&gt; &lt;build&gt; &lt;plugins&gt; &lt;plugin&gt; &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt; &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt; &lt;version&gt;${maven-compiler-plugin.version}&lt;/version&gt; &lt;configuration&gt; &lt;source&gt;1.8&lt;/source&gt; &lt;target&gt;1.8&lt;/target&gt; &lt;/configuration&gt; &lt;/plugin&gt; &lt;/plugins&gt; &lt;/build&gt;  带有注释源的注释用户 Maven模块不需要任何特殊调整，除了在依赖项部分中添加对注释处理器模块的依赖：
-&lt;dependency&gt; &lt;groupId&gt;com.baeldung&lt;/groupId&gt; &lt;artifactId&gt;annotation-processing&lt;/artifactId&gt; &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt; &lt;/dependency&gt;  5.</div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
       </div>
     </div>
     <div class="modal-footer">
@@ -957,7 +955,7 @@ _注释处理器_模块的设置如下。我们将使用Google的自动服务库
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         76 posts found
+         77 posts found
       </p>
     </div>
   </div>

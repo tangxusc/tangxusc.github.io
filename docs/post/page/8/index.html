@@ -202,6 +202,99 @@
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F/">
+          分布式事务Saga模式
+        </a>
+      </h1>
+      
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
+        
+  March 20, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/ddd">DDD</a>
+    
+  
+
+  </div>
+
+    </div>
+    <div class="postShorten-excerpt" itemprop="articleBody">
+      
+        分布式事务Saga模式 两阶段提交2PC是分布式事务中最强大的事务类型之一，两段提交就是分两个阶段提交，第一阶段询问各个事务数据源是否准备好，第二阶段才真正将数据提交给事务数据源，当需要同时更新多个数据源实体时，例如确认订单并立即更新库存时，它非常有用。
+但是，当您使用微服务时，情况会变得复杂。每个服务都拥有自己的数据库系统，每个服务不能再越过别的服务直接访问那个服务的数据库了。
+比如服务A有自己的数据库O1，服务B有自己的数据库O2，服务B如果想同时更新数据库O1和O2，就不能越过服务B直接操作数据库O1，而两段提交正是适合这样的场合，服务B可以在一个JTA事务中同时调用数据库O1的XA数据源JNDI，再调用数据库O2的XA数据源JNDI，那么O1和O2的数据就会实现两段提交，O1数据库执行修改或插入操作后其实没有保存到数据库，只有等O2数据库执行修改或插入操作后，才在第二阶段提交确认保存，这个过程如果有任何出错，数据库O1和数据库O2如同没有执行修改或插入一样，两者数据状态是一致的。
+因此，在微服务架构中，因为一个服务不能越过其他服务直接访问它们的数据库，两段提交可能不适用，当然EJB提供了基于容器的跨服务分布式事务，虽然听起来很容易，但是因为是同步操作，对网络硬件要求比较高，一旦发生事务出错，需要手工介入数据库进行强制回滚，如果跨N个服务调用出错，出错定位是非常困难的，很难判断问题出在哪个服务器或哪段通讯上，不可能进行时间和空间的同时定位。
+基于以上原因，本文介绍Saga模式是一种分布式异步事务，一种最终一致性事务，是一种柔性事务，当然从传统ACID同步事务过渡到异步事务需要很多思维方式切换和步骤证明，可见本站其他文章，这里。
+下面以电子商务案例说明Saga模式实现：
+API网关 后面是四个微服务：OrderService(订购) StockService(库存) PaymentService(支付) 和DeliveryService(货运)
+在这个例子中，我们不能将“下订单，向客户收费，更新库存”这几个动作放入一个ACID事务中。但是又必须一致地执行这整个流程，这就需要创建一个分布式事务。
+我们都知道，实施分布式任务是多么困难，而且不幸的是，事务也不例外。处理瞬态状态，服务之间的最终一致性，隔离和回滚是应该在设计阶段考虑的情况。
+幸运的是，我们已经为它提出了一些很好的模式，因为我们已经实施了二十多年的分布式事务。今天我想谈论的那个叫做Saga模式。
+Saga是最着名的分布式事务模式之一。关于它的第一篇文章早在1987年就已经发表了， 从那以后它一直是一个受欢迎的解决方案。
+Saga是一系列本地交易，每笔事务都会更新单个服务中的数据。第一个事务由系统外部请求启动，然后每个后续步骤由前一个事件完成而触发。
+对于我们这个电子商务示例，非常高层次级的Saga设计实现如下所示：
+现在有两种不同的方式来实现saga事务，最流行的两种方式是：
+ 事件/编排Choreography：没有中央协调器（没有单点风险）时，每个服务产生并聆听其他服务的事件，并决定是否应采取行动。
+ 命令/协调orchestrator：中央协调器负责集中处理事件的决策和业务逻辑排序。
+  让我们对这两个实现进行更深入的了解，以了解它们的工作方式。
+事件/编排Events/Choreography 在Events/Choreography方法中，第一个服务执行一个事务，然后发布一个事件。该事件被一个或多个服务进行监听，这些服务再执行本地事务并发布（或不发布）新的事件。
+当最后一个服务执行本地事务并且不发布任何事件时，意味着分布式事务结束，或者它发布的事件没有被任何Saga参与者听到都意味着事务结束。
+让我们看看它在我们的电子商务示例中的外观：
+步骤如下： 1. 订单服务保存新订单，将状态设置为pengding挂起状态，并发布名为ORDER_CREATED_EVENT的事件。
+ 支付服务监听ORDER_CREATED_EVENT，并公布事件BILLED_ORDER_EVENT。
+ 库存服务监听BILLED_ORDER_EVENT，更新库存，并发布ORDER_PREPARED_EVENT。
+ 货运服务监听ORDER_PREPARED_EVENT，然后交付产品。最后，它发布ORDER_DELIVERED_EVENT
+ 最后，订单服务侦听ORDER_DELIVERED_EVENT并设置订单的状态为concluded完成。
+  在上面的情况下，如果需要跟踪订单的状态，订单服务可以简单地监听所有事件并更新其状态。 在这个案例中，除了订单服务以外的其他服务都是订单服务的子服务，也就是说，为完成一个订单服务，需要经过这些步骤，订单服务与这些服务是包含与被包含关系，因此，订单服务在业务上天然是一个协调器。
+回滚分布式事务并不是免费的。通常情况下，您必须实施额外操作才能弥补以前所做的工作。
+假设库存服务在事务过程中失败了。让我们看看回滚是什么样子的：
+1.库存服务产生PRODUCT_OUT_OF_STOCK_EVENT ;
+2.订购服务和支付服务会监听到上面库存服务的这一事件： 1. 支付服务会退款给客户。 2. 订单服务将订单状态设置为失败。
+请注意，为每个事务定义一个公共共享ID非常重要，因此每当您抛出一个事件时，所有侦听器都可以立即知道它引用的是哪个事务。
+saga事件/编排设计的优点和缺点 事件/编排是实现Saga模式的自然方式; 它很简单，容易理解，不需要太多的努力来构建，所有参与者都是松散耦合的，因为他们彼此之间没有直接的耦合。如果您的事务涉及2至4个步骤，则可能是非常合适的。
+但是，如果您在事务中不断添加额外步骤，则此方法可能会很快变得混乱，因为很难跟踪哪些服务监听哪些事件。此外，它还可能在服务之间添加循环依赖，因为它们必须订阅彼此的事件。
+最后，使用这种设计来实现测试将会非常棘手。为了模拟交易行为，您应该运行所有服务。
+Saga的命令/协调模式 这里我们定义了一项新服务，全权负责告诉每个参与者该做什么以及什么时候该做什么。saga协调器orchestrator以命令/回复的方式与每项服务进行通信，告诉他们应该执行哪些操作。
+ 订单服务保存pending状态，并要求订单Saga协调器（简称OSO）开始启动订单事务。
+ OSO向收款服务发送执行收款命令，收款服务回复Payment Executed消息
+ OSO向库存服务发送准备订单命令，库存服务将回复OrderPrepared消息
+      
+      <p>
+        <a href="https://tangxusc.github.io/blog/2019/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F/" class="postShorten-excerpt_link link">Continue reading</a>
+        
+      </p>
+    </div>
+  </div>
+  
+</article>
+
+          
+            
+  
+    
+      
+        
+      
+    
+  
+
+
+  
+
+<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+  <div class="postShorten-wrap">
+    
+    <div class="postShorten-header">
+      <h1 class="postShorten-title" itemprop="headline">
         <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E5%89%8D%E7%AB%AF%E5%8A%A0%E8%BD%BD%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E9%9A%8F%E6%83%B3/">
           前端加载私有文件随想
         </a>
@@ -600,71 +693,6 @@ Saga是否实现了ACID？ ACID是原子性 一致性 隔离性和持久性的�
 </article>
 
           
-            
-  
-    
-      
-        
-      
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8-schema-%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E4%BA%8E%E5%B7%A6%E5%8F%B3%E5%80%BC%E7%BC%96%E7%A0%81/">
-          树形结构的数据库表 Schema 设计 - 基于左右值编码
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
-        
-  March 20, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/java">java</a>, 
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/database">database</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/M-D-Luffy/p/4712846.html
- 树形结构的数据库表 Schema 设计  程序设计过程中，我们常常用树形结构来表征某些数据的关联关系，如企业上下级部门、栏目结构、商品分类等等，通常而言，这些树状结构需要借助于数据库完 成持久化。然而目前的各种基于关系的数据库，都是以二维表的形式记录存储数据信息，因此是不能直接将 Tree 存入 DBMS，设计合适的 Schema 及其对 应的 CRUD 算法是实现关系型数据库中存储树形结构的关键。
- 理想中树形结构应该具备如下特征：数据存储冗余度小、直观性强；检索遍历过程简单高效；节点增删改查 CRUD 操作高效。无意中在网上搜索到一种很巧妙的 设计，原文是英文，看过后感觉有点意思，于是便整理了一下。本文将介绍两种树形结构的 Schema 设计方案：一种是直观而简单的设计思路，另一种是基于左 右值编码的改进方案。
-一、基本数据  本文列举了一个食品族谱的例子进行讲解，通过类别、颜色和品种组织食品，树形结构图如下：
-二、继承关系驱动的 Schema 设计  对树形结构最直观的分析莫过于节点之间的继承关系上，通过显示地描述某一节点的父节点，从而能够建立二维的关系表，则这种方案的 Tree 表结构通常设计为：{Node_id,Parent_id}，上述数据可以描述为如下图所示：
- 这种方案的优点很明显：设计和实现自然而然，非常直观和方便。缺点当然也是非常的突出：由于直接地记录了节点之间的继承关系，因此对 Tree 的任何 CRUD 操作都将是低效的，这主要归根于频繁的 “递归” 操作，递归过程不断地访问数据库，每次数据库 IO 都会有时间开销。当然，这种方案并非没有用武之 地，在 Tree 规模相对较小的情况下，我们可以借助于缓存机制来做优化，将 Tree 的信息载入内存进行处理，避免直接对数据库 IO 操作的性能开销。
-三、基于左右值编码的 Schema 设计  在基于数据库的一般应用中，查询的需求总要大于删除和修改。为了避免对于树形结构查询时的 “递归” 过程，基于 Tree 的前序遍历设计一种全新的无递归查询、无限分组的左右值编码方案，来保存该树的数据。
- 第一次看见这种表结构，相信大部分人都不清楚左值（Lft）和右值（Rgt）是如何计算出来的，而且这种表设计似乎并没有保存父子节点的继承关系。但当 你用手指指着表中的数字从 1 数到 18，你应该会发现点什么吧。对，你手指移动的顺序就是对这棵树进行前序遍历的顺序，如下图所示。当我们从根节点 Food 左侧开始，标记为 1，并沿前序遍历的方向，依次在遍历的路径上标注数字，最后我们回到了根节点 Food，并在右边写上了 18。
-      
-      <p>
-        <a href="https://tangxusc.github.io/blog/2019/03/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8-schema-%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E4%BA%8E%E5%B7%A6%E5%8F%B3%E5%80%BC%E7%BC%96%E7%A0%81/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-          
           
   <div class="pagination-bar">
     <ul class="pagination">
@@ -748,6 +776,31 @@ Saga是否实现了ACID？ ACID是原子性 一致性 隔离性和持久性的�
       <div class="no-result text-color-light text-center">no post found</div>
       <div class="results">
         
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/">
+                <h3 class="media-heading">迈向istio-11 升级到1.1.2</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">废话 istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本的口号叫企业级就绪(以后会不会出云供应商就绪?),这8个月中可以看到istio还是发生了很大的变化的,纵观历史,istio进行了三次腾飞:
+ 0.8 不在是模型了 1.0 生产就绪了(其实没有),抛弃了ingress,模型改动比较大 1.1 企业就绪了,理清楚了流量管理的模型啊啊啊啊,sidecar不再操碎了心,pilot解放了,mixer adapter又被默认的关了,ServiceEntry存在感突然就没啦.  废话太多了,接下来我们进入正题,去看看istio1.1到底更新了那些东西
+ 注意,不会全部的解析,只捡我认为重要的说.
+ 升级内容 安装  安装模式变化  现在提供了两个helm chart来安装,分别为istio-init和istio 这两个职责如下:
+istio-init: 负责通过job.batch/istio-init-crd-10,job.batch/istio-init-crd-11 这两个job来安装istio的crd资源(一共53个,如果启用cert-manager则为58个),可通过命令查看:
+$ kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l 53  istio: 现在istio安装的时候是没有启用grafana,kiali的,并且已经说明使用kiali替换servicegraph,所以在安装时,需要手动开启:
+# # addon grafana configuration # grafana: enabled: true # # addon kiali tracing configuration # kiali: enabled: true createDemoSecret: true  并且现在支持自定义kiali的用户名密码了,如果还是使用admin/admin 那么就需要createDemoSecret: true
+istio现在提供了一个cni组件来避免init-container的privilege问题,不过这个cni需要kubelet的cni支持,kubelet的网络就两种kubenet和cni,也就是说 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf文件中的
+Environment=&quot;KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin&quot;  这里的--network-plugin=cni 值只能是 cni了</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
         
           <div class="media">
             
@@ -969,39 +1022,6 @@ java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个�
             <hr>
           </div>
         
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/">
-                <h3 class="media-heading">Java注释处理和创建构建器</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Mar 3, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 http://www.baeldung.com/java-annotation-processing-builder
- 1.简介 本文是Java源代码级别注释处理的简介，并提供了使用此技术在编译期间生成其他源文件的示例。
-2.注释处理的应用 源级注释处理首先出现在Java 5中。它是一种在编译阶段生成其他源文件的便捷技术。
-源文件不必是Java文件 - 您可以根据源代码中的注释生成任何类型的描述，元数据，文档，资源或任何其他类型的文件。
-注释处理在许多无处不在的Java库中被广泛使用，例如，在QueryDSL和JPA中生成元类，以使用Lombok库中的样板代码来扩充类。
-需要注意的一件重要事情是注释处理API的局限性 - 它只能用于生成新文件，而不能用于更改现有文件。
-值得注意的例外是Lombok库，它使用注释处理作为引导机制，将自身包含在编译过程中，并通过一些内部编译器API修改AST。这种hacky技术与注释处理的预期目的无关，因此本文不讨论。
-3.注释处理API 注释处理在多轮中完成。每一轮都从编译器搜索源文件中的注释并选择适合这些注释的注释处理器开始。反过来，每个注释处理器在相应的源上被调用。
-如果在此过程中生成了任何文件，则会以生成的文件作为输入启动另一轮。此过程将继续，直到在处理阶段没有生成新文件。
-反过来，每个注释处理器在相应的源上被调用。如果在此过程中生成了任何文件，则会以生成的文件作为输入启动另一轮。此过程将继续，直到在处理阶段没有生成新文件。
-注释处理API位于_javax.annotation.processing_包中。您必须实现的主要接口是_Processor_接口，它具有_AbstractProcessor_类形式的部分实现。这个类是我们要扩展的类，以创建我们自己的注释处理器。
-4.设置项目 为了演示注释处理的可能性，我们将开发一个简单的处理器，用于为带注释的类生成流畅的对象构建器。
-我们将把项目分成两个Maven模块。其中之一，_注释处理器_模块，将包含处理器本身和注释，另一个_注释用户_模块将包含注释类。这是注释处理的典型用例。
-_注释处理器_模块的设置如下。我们将使用Google的自动服务库来生成稍后将讨论的处理器元数据文件，以及针对Java 8源代码调整的_maven-compiler-plugin_。这些依赖项的版本将提取到属性部分。
-可以在Maven Central存储库中找到最新版本的自动服务库和maven-compiler-plugin：
-&lt;properties&gt; &lt;auto-service.version&gt;1.0-rc2&lt;/auto-service.version&gt; &lt;maven-compiler-plugin.version&gt; 3.5.1 &lt;/maven-compiler-plugin.version&gt; &lt;/properties&gt; &lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;com.google.auto.service&lt;/groupId&gt; &lt;artifactId&gt;auto-service&lt;/artifactId&gt; &lt;version&gt;${auto-service.version}&lt;/version&gt; &lt;scope&gt;provided&lt;/scope&gt; &lt;/dependency&gt; &lt;/dependencies&gt; &lt;build&gt; &lt;plugins&gt; &lt;plugin&gt; &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt; &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt; &lt;version&gt;${maven-compiler-plugin.version}&lt;/version&gt; &lt;configuration&gt; &lt;source&gt;1.8&lt;/source&gt; &lt;target&gt;1.8&lt;/target&gt; &lt;/configuration&gt; &lt;/plugin&gt; &lt;/plugins&gt; &lt;/build&gt;  带有注释源的注释用户 Maven模块不需要任何特殊调整，除了在依赖项部分中添加对注释处理器模块的依赖：
-&lt;dependency&gt; &lt;groupId&gt;com.baeldung&lt;/groupId&gt; &lt;artifactId&gt;annotation-processing&lt;/artifactId&gt; &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt; &lt;/dependency&gt;  5.</div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
       </div>
     </div>
     <div class="modal-footer">
@@ -1009,7 +1029,7 @@ _注释处理器_模块的设置如下。我们将使用Google的自动服务库
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         76 posts found
+         77 posts found
       </p>
     </div>
   </div>

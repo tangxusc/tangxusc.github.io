@@ -6,10 +6,27 @@
     <description>Recent content on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 12 Apr 2019 15:59:49 +0800</lastBuildDate>
     
 	<atom:link href="https://tangxusc.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>迈向istio-11 升级到1.1.2</title>
+      <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/</link>
+      <pubDate>Fri, 12 Apr 2019 15:59:49 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/</guid>
+      <description>废话 istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本的口号叫企业级就绪(以后会不会出云供应商就绪?),这8个月中可以看到istio还是发生了很大的变化的,纵观历史,istio进行了三次腾飞:
+ 0.8 不在是模型了 1.0 生产就绪了(其实没有),抛弃了ingress,模型改动比较大 1.1 企业就绪了,理清楚了流量管理的模型啊啊啊啊,sidecar不再操碎了心,pilot解放了,mixer adapter又被默认的关了,ServiceEntry存在感突然就没啦.  废话太多了,接下来我们进入正题,去看看istio1.1到底更新了那些东西
+ 注意,不会全部的解析,只捡我认为重要的说.
+ 升级内容 安装  安装模式变化  现在提供了两个helm chart来安装,分别为istio-init和istio 这两个职责如下:
+istio-init: 负责通过job.batch/istio-init-crd-10,job.batch/istio-init-crd-11 这两个job来安装istio的crd资源(一共53个,如果启用cert-manager则为58个),可通过命令查看:
+$ kubectl get crds | grep &#39;istio.io\|certmanager.k8s.io&#39; | wc -l 53  istio: 现在istio安装的时候是没有启用grafana,kiali的,并且已经说明使用kiali替换servicegraph,所以在安装时,需要手动开启:
+# # addon grafana configuration # grafana: enabled: true # # addon kiali tracing configuration # kiali: enabled: true createDemoSecret: true  并且现在支持自定义kiali的用户名密码了,如果还是使用admin/admin 那么就需要createDemoSecret: true
+istio现在提供了一个cni组件来避免init-container的privilege问题,不过这个cni需要kubelet的cni支持,kubelet的网络就两种kubenet和cni,也就是说 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf文件中的
+Environment=&amp;quot;KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin&amp;quot;  这里的--network-plugin=cni 值只能是 cni了</description>
+    </item>
     
     <item>
       <title>Controller manager高可用实现方式</title>

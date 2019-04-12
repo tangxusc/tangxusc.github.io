@@ -319,6 +319,31 @@ $ git config --global url.&quot;git@mygitlab.com:&quot;.insteadOf &quot;http://m
           <div class="media">
             
             <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/">
+                <h3 class="media-heading">迈向istio-11 升级到1.1.2</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">废话 istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本的口号叫企业级就绪(以后会不会出云供应商就绪?),这8个月中可以看到istio还是发生了很大的变化的,纵观历史,istio进行了三次腾飞:
+ 0.8 不在是模型了 1.0 生产就绪了(其实没有),抛弃了ingress,模型改动比较大 1.1 企业就绪了,理清楚了流量管理的模型啊啊啊啊,sidecar不再操碎了心,pilot解放了,mixer adapter又被默认的关了,ServiceEntry存在感突然就没啦.  废话太多了,接下来我们进入正题,去看看istio1.1到底更新了那些东西
+ 注意,不会全部的解析,只捡我认为重要的说.
+ 升级内容 安装  安装模式变化  现在提供了两个helm chart来安装,分别为istio-init和istio 这两个职责如下:
+istio-init: 负责通过job.batch/istio-init-crd-10,job.batch/istio-init-crd-11 这两个job来安装istio的crd资源(一共53个,如果启用cert-manager则为58个),可通过命令查看:
+$ kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l 53  istio: 现在istio安装的时候是没有启用grafana,kiali的,并且已经说明使用kiali替换servicegraph,所以在安装时,需要手动开启:
+# # addon grafana configuration # grafana: enabled: true # # addon kiali tracing configuration # kiali: enabled: true createDemoSecret: true  并且现在支持自定义kiali的用户名密码了,如果还是使用admin/admin 那么就需要createDemoSecret: true
+istio现在提供了一个cni组件来避免init-container的privilege问题,不过这个cni需要kubelet的cni支持,kubelet的网络就两种kubenet和cni,也就是说 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf文件中的
+Environment=&quot;KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin&quot;  这里的--network-plugin=cni 值只能是 cni了</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
               <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">
                 <h3 class="media-heading">Controller manager高可用实现方式</h3>
               </a>
@@ -536,39 +561,6 @@ java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个�
             <hr>
           </div>
         
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/">
-                <h3 class="media-heading">Java注释处理和创建构建器</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Mar 3, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 http://www.baeldung.com/java-annotation-processing-builder
- 1.简介 本文是Java源代码级别注释处理的简介，并提供了使用此技术在编译期间生成其他源文件的示例。
-2.注释处理的应用 源级注释处理首先出现在Java 5中。它是一种在编译阶段生成其他源文件的便捷技术。
-源文件不必是Java文件 - 您可以根据源代码中的注释生成任何类型的描述，元数据，文档，资源或任何其他类型的文件。
-注释处理在许多无处不在的Java库中被广泛使用，例如，在QueryDSL和JPA中生成元类，以使用Lombok库中的样板代码来扩充类。
-需要注意的一件重要事情是注释处理API的局限性 - 它只能用于生成新文件，而不能用于更改现有文件。
-值得注意的例外是Lombok库，它使用注释处理作为引导机制，将自身包含在编译过程中，并通过一些内部编译器API修改AST。这种hacky技术与注释处理的预期目的无关，因此本文不讨论。
-3.注释处理API 注释处理在多轮中完成。每一轮都从编译器搜索源文件中的注释并选择适合这些注释的注释处理器开始。反过来，每个注释处理器在相应的源上被调用。
-如果在此过程中生成了任何文件，则会以生成的文件作为输入启动另一轮。此过程将继续，直到在处理阶段没有生成新文件。
-反过来，每个注释处理器在相应的源上被调用。如果在此过程中生成了任何文件，则会以生成的文件作为输入启动另一轮。此过程将继续，直到在处理阶段没有生成新文件。
-注释处理API位于_javax.annotation.processing_包中。您必须实现的主要接口是_Processor_接口，它具有_AbstractProcessor_类形式的部分实现。这个类是我们要扩展的类，以创建我们自己的注释处理器。
-4.设置项目 为了演示注释处理的可能性，我们将开发一个简单的处理器，用于为带注释的类生成流畅的对象构建器。
-我们将把项目分成两个Maven模块。其中之一，_注释处理器_模块，将包含处理器本身和注释，另一个_注释用户_模块将包含注释类。这是注释处理的典型用例。
-_注释处理器_模块的设置如下。我们将使用Google的自动服务库来生成稍后将讨论的处理器元数据文件，以及针对Java 8源代码调整的_maven-compiler-plugin_。这些依赖项的版本将提取到属性部分。
-可以在Maven Central存储库中找到最新版本的自动服务库和maven-compiler-plugin：
-&lt;properties&gt; &lt;auto-service.version&gt;1.0-rc2&lt;/auto-service.version&gt; &lt;maven-compiler-plugin.version&gt; 3.5.1 &lt;/maven-compiler-plugin.version&gt; &lt;/properties&gt; &lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;com.google.auto.service&lt;/groupId&gt; &lt;artifactId&gt;auto-service&lt;/artifactId&gt; &lt;version&gt;${auto-service.version}&lt;/version&gt; &lt;scope&gt;provided&lt;/scope&gt; &lt;/dependency&gt; &lt;/dependencies&gt; &lt;build&gt; &lt;plugins&gt; &lt;plugin&gt; &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt; &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt; &lt;version&gt;${maven-compiler-plugin.version}&lt;/version&gt; &lt;configuration&gt; &lt;source&gt;1.8&lt;/source&gt; &lt;target&gt;1.8&lt;/target&gt; &lt;/configuration&gt; &lt;/plugin&gt; &lt;/plugins&gt; &lt;/build&gt;  带有注释源的注释用户 Maven模块不需要任何特殊调整，除了在依赖项部分中添加对注释处理器模块的依赖：
-&lt;dependency&gt; &lt;groupId&gt;com.baeldung&lt;/groupId&gt; &lt;artifactId&gt;annotation-processing&lt;/artifactId&gt; &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt; &lt;/dependency&gt;  5.</div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
       </div>
     </div>
     <div class="modal-footer">
@@ -576,7 +568,7 @@ _注释处理器_模块的设置如下。我们将使用Google的自动服务库
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         76 posts found
+         77 posts found
       </p>
     </div>
   </div>
