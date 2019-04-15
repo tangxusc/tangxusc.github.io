@@ -17,22 +17,13 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/%E4%BA%94%E5%88%86%E9%92%9F%E8%AF%BB%E6%87%82-uml-%E7%B1%BB%E5%9B%BE/</guid>
-      <description>本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/shindo/p/5579191.html
- 五分钟读懂 UML 类图 平时阅读一些远吗分析类文章或是设计应用架构时没少与 UML 类图打交道。实际上，UML 类图中最常用到的元素五分钟就能掌握，下面赶紧来一起认识一下它吧：
-一、类的属性的表示方式
-在 UML 类图中，类使用包含类名、属性 (field) 和方法(method) 且带有分割线的矩形来表示，比如下图表示一个 Employee 类，它包含 name,age 和 email 这 3 个属性，以及 modifyInfo() 方法。
-那么属性 / 方法名称前加的加号和减号是什么意思呢？它们表示了这个属性或方法的可见性，UML 类图中表示可见性的符号有三种：
-· + ：表示 public
-· - ：表示 private
-· #：表示 protected（friendly 也归入这类）
-因此，上图中的 Employee 类具有 3 个私有属性和一个公有方法。
-实际上，属性的完整表示方式是这样的：
-可见性 名称 ：类型 [= 缺省值]
-中括号中的内容表示是可选的
-二、类的方法的表示方式
-上图中我们已经看到了方法的表示形式。实际上，方法的完整表示方式如下：
-可见性 名称 (参数列表) [ ： 返回类型]
-同样，中括号中的内容是可选的。</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://www.cnblogs.com/shindo/p/5579191.html&#34;&gt;https://www.cnblogs.com/shindo/p/5579191.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&#34;五分钟读懂-uml-类图&#34;&gt;五分钟读懂 UML 类图&lt;/h1&gt;
+
+&lt;p&gt;平时阅读一些远吗分析类文章或是设计应用架构时没少与 UML 类图打交道。实际上，UML 类图中最常用到的元素五分钟就能掌握，下面赶紧来一起认识一下它吧：&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -41,15 +32,11 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%81%E4%B8%83-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F-state%E5%AF%B9%E8%B1%A1%E8%A1%8C%E4%B8%BA%E5%9E%8B/</guid>
-      <description>本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/hguisu/article/details/7557252
- 设计模式 (十七) 状态模式 State（对象行为型）
-1. 概述 在软件开发过程中，应用程序可能会根据不同的情况作出不同的处理。最直接的解决方案是将这些所有可能发生的情况全都考虑到。然后使用 if&amp;hellip; ellse 语句来做状态判断来进行不同情况的处理。但是对复杂状态的判断就显得 “力不从心了”。随着增加新的状态或者修改一个状体（if else(或 switch case) 语句的增多或者修改）可能会引起很大的修改，而程序的可读性，扩展性也会变得很弱。维护也会很麻烦。那么我就考虑只修改自身状态的模式。
- 例子 1：按钮来控制一个电梯的状态，一个电梯开们，关门，停，运行。每一种状态改变，都有可能要根据其他状态来更新处理。例如，开门状体，你不能在运行的时候开门，而是在电梯定下后才能开门。
-例子 2：我们给一部手机打电话，就可能出现这几种情况：用户开机，用户关机，用户欠费停机，用户消户等。 所以当我们拨打这个号码的时候：系统就要判断，该用户是否在开机且不忙状态，又或者是关机，欠费等状态。但不管是那种状态我们都应给出对应的处理操作。
- 2. 问题 对象如何在每一种状态下表现出不同的行为？
-3. 解决方案 状态模式：允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类。 在很多情况下，一个对象的行为取决于一个或多个动态变化的属性，这样的属性叫做状态，这样的对象叫做有状态的 (stateful) 对象，这样的对象状态是从事先定义好的一系列值中取出的。当一个这样的对象与外部事件产生互动时，其内部状态就会改变，从而使得系统的行为也随之发生变化。
-4. 适用性 在下面的两种情况下均可使用 State 模式: 1. 一个对象的行为取决于它的状态, 并且它必须在运行时刻根据状态改变它的行为。 2. 代码中包含大量与对象状态有关的条件语句: 一个操作中含有庞大的多分支的条件（if else(或 switch case) 语句，且这些分支依赖于该对象的状态。这个状态通常用一个或多个枚举常量表示。通常 , 有多个操作包含这一相同的条件结构。 State 模式将每一个条件分支放入一个独立的类中。这使得你可以根据对象自身的情况将对象的状态作为一个对象，这一对象可以不依赖于其他对象而独立变化。
-5. 结构 6. 模式的组成  环境类（Context）: 定义客户感兴趣的接口。维护一个 ConcreteState 子类的实例，这个实例定义当前状态。 抽象状态类（State）: 定义一个接口以封装与 Context 的一个特定状态相关的行为。 具体状态类（ConcreteState）: 每一子类实现一个与 Context 的一个状态相关的行为。  7.</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://blog.csdn.net/hguisu/article/details/7557252&#34;&gt;https://blog.csdn.net/hguisu/article/details/7557252&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.csdn.net/hguisu/article/details/7557252&#34;&gt;设计模式 (十七) 状态模式 State（对象行为型）&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -58,12 +45,11 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/</guid>
-      <description>本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/f-zhao/p/6203208.html
- 设计模式 - 命令模式 一、定义 命令模式是一个高内聚的模式，其定义为：Encapsulate a request as an object,there by letting you parameterize clients with different requests,queue or log requests,and support undoable operations.（将一个请求封装成一个对象，从而让你使用不同的请求把客户端参数化，对请 求排队或者记录请求日志，可以提供命令的撤销和恢复功能。）
-通用类图：
-在该类图中，我们看到三个角色：
- Receiver 接受者角色：该角色就是干活的角色，命令传递到这里是应该被执行的 Command 命令角色：需要执行的所有命令都在这里声明 Invoker 调用者角色：接收到命令，并执行命令
-//通用Receiver类 public abstract class Receiver { public abstract void doSomething(); } //具体Receiver类 public class ConcreteReciver1 extends Receiver{ //每个接收者都必须处理一定的业务逻辑 public void doSomething(){ } } public class ConcreteReciver2 extends Receiver{ //每个接收者都必须处理一定的业务逻辑 public void doSomething(){ } } //抽象Command类 public abstract class Command { public abstract void execute(); } //具体的Command类 public class ConcreteCommand1 extends Command { //对哪个Receiver类进行命令处理 private Receiver receiver; //构造函数传递接收者 public ConcreteCommand1(Receiver _receiver){ this.</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://www.cnblogs.com/f-zhao/p/6203208.html&#34;&gt;https://www.cnblogs.com/f-zhao/p/6203208.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;设计模式 - 命令模式&lt;/p&gt;</description>
     </item>
     
   </channel>

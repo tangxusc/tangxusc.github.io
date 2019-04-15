@@ -1,6 +1,6 @@
 ---
 title: "迈向istio-自定义mixer adapter"
-date: 2019-03-20T14:15:59+08:00
+date: 2019-04-01T14:15:59+08:00
 draft: false
 categories:
 - istio
@@ -9,11 +9,6 @@ tags:
 keywords:
 - istio
 ---
-
-# 自定义mixer adapter
-
-[TOC]
-
 本节我们将自定义一个adapter,adapter和mixer通信使用grpc,所以本节需要对grpc和mixer的adapter有一定的了解.
 
 基于的环境:
@@ -21,6 +16,8 @@ keywords:
 - istio 1.0.4
 - golang 1.11(go module)
 - goland (或者其他go IDE)
+
+<!--more-->
 
 ## mixer介绍
 

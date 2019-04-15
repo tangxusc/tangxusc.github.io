@@ -17,10 +17,11 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/grpc-interceptor/</guid>
-      <description>本文由 简悦 SimpRead 转码， 原文地址 https://colobu.com/2017/04/17/dive-into-gRPC-interceptor/
- gRPC-Go 增加了拦截器 (interceptor) 的功能， 就像 Java Servlet 中的 filter 一样，可以对 RPC 的请求和响应进行拦截处理，而且既可以在客户端进行拦截，也可以对服务器端进行拦截。
-利用拦截器，可以对 gRPC 进行扩展，利用社区的力量将 gRPC 发展壮大，也可以让开发者更灵活地处理 gRPC 流程中的业务逻辑。下面列出了利用拦截器实现的一些功能框架：
- Go gRPC Middleware: 提供了拦截器的 interceptor 链式的功能，可以将多个拦截器组合成一个拦截器链，当然它还提供了其它的功能，所以以 gRPC 中间件命名。 grpc-multi-interceptor: 是另一个 interceptor 链式功能的库，也可以将单向的或者流式的拦截器组合。 grpc_auth: 身份验证拦截器 grpc_ctxtags: 为上下文增加Tag map 对象 grpc_zap: 支持zap日志框架 grpc_logrus: 支持logrus日志框架 grpc_prometheus: 支持 prometheus otgrpc: 支持 opentracing/zipkin grpc_opentracing: 支持 opentracing/zipkin grpc_retry: 为客户端增加重试的功能 grpc_validator: 为服务器端增加校验的功能 xrequestid: 将 request id 设置到 context 中 go-grpc-interceptor: 解析Accept-Language并设置到 context requestdump: 输出 request/response  也有其它一些文章介绍的利用拦截器的例子，如下面的两篇文章： Introduction to OAuth on gRPC、gRPC 实践 拦截器 Interceptor</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://colobu.com/2017/04/17/dive-into-gRPC-interceptor/&#34;&gt;https://colobu.com/2017/04/17/dive-into-gRPC-interceptor/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;gRPC-Go 增加了拦截器 (interceptor) 的功能， 就像 Java Servlet 中的 filter 一样，可以对 RPC 的请求和响应进行拦截处理，而且既可以在客户端进行拦截，也可以对服务器端进行拦截。&lt;/p&gt;</description>
     </item>
     
   </channel>

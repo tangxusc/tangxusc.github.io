@@ -1,6 +1,6 @@
 ---
 title: "迈向istio-网关"
-date: 2019-03-20T14:15:59+08:00
+date: 2019-04-01T14:15:59+08:00
 draft: false
 categories:
 - istio
@@ -10,16 +10,13 @@ keywords:
 - istio
 ---
 
-# istio-网关
-
-[TOC]
-
 在上一节中我们已经成功的简单运行了istio的一个路由,也有了一番流量管理的体验,那么很多人都不禁要问,这些配置和yaml是什么意思呢? 
 
 那接下来我们基于istio示例中的配置,一点一点的解析这些yaml文件.
 
 > nginx.yaml中的内容为k8s的yaml文件,再此不做赘述.
 
+<!--more-->
 ## gateway
 
 ```yaml

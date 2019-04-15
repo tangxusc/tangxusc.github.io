@@ -9,7 +9,8 @@ tags:
 keywords:
 - golang
 ---
-
+在golang中创建调用图
+<!--more-->
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://stackoverflow.com/questions/31362332/creating-call-graph-in-golang
 
 我正在寻找为golang项目生成调用图的可能性。类似于[Doxygen的](http://www.stack.nl/~dimitri/doxygen/manual/diagrams.html) C ++类[图功能](http://www.stack.nl/~dimitri/doxygen/manual/diagrams.html)（使用选项CALL_GRAPH = YES）。

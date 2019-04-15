@@ -14,9 +14,8 @@ keywords:
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 http://www.baeldung.com/java-annotation-processing-builder
 
-## **1.简介**
-
 本文是**Java源代码级别注释处理的简介，**并提供了使用此技术在编译期间生成其他源文件的示例。
+<!--more-->
 
 ## **2.注释处理的应用**
 

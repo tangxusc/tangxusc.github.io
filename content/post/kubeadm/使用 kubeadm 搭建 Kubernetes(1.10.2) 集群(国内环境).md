@@ -17,7 +17,8 @@ keywords:
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://www.cnblogs.com/RainingNight/p/using-kubeadm-to-create-a-cluster.html
 
-# 使用 kubeadm 搭建 Kubernetes(1.10.2) 集群（国内环境）
+使用 kubeadm 搭建 Kubernetes(1.10.2) 集群（国内环境）
+<!--more-->
 
 [TOC]
 

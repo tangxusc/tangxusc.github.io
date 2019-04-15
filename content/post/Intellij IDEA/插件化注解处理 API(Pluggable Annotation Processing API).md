@@ -11,10 +11,8 @@ keywords:
 ---
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://www.cnblogs.com/throwable/p/9139908.html
-
-# [插件化注解处理 API(Pluggable Annotation Processing API)](https://www.cnblogs.com/throwable/p/9139908.html)
-
-# Java 奇技淫巧 - 插件化注解处理 API(Pluggable Annotation Processing API)
+插件化注解处理 API(Pluggable Annotation Processing API)
+<!--more-->
 
 # 参考资料
 

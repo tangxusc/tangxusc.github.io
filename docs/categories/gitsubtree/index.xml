@@ -17,15 +17,12 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/git-subtree-%E6%95%99%E7%A8%8B/</guid>
-      <description>本文由 简悦 SimpRead 转码， 原文地址 https://segmentfault.com/a/1190000012002151
- 关于子仓库或者说是仓库共用，git 官方推荐的工具是 git subtree。 我自己也用了一段时间的 git subtree，感觉比 git submodule 好用，但是也有一些缺点，在可接受的范围内。 所以对于仓库共用，在 git subtree 与 git submodule 之中选择的话，我推荐 git subtree。
-git subtree 是什么？为什么使用 git subtree git subtree 可以实现一个仓库作为其他仓库的子仓库。 使用 git subtree 有以下几个原因：
- 旧版本的 git 也支持 (最老版本可以到 v1.5.2).
- git subtree 与 git submodule 不同，它不增加任何像.gitmodule这样的新的元数据文件.
- git subtree 对于项目中的其他成员透明，意味着可以不知道 git subtree 的存在.
-  当然，git subtree 也有它的缺点，但是这些缺点还在可以接受的范围内：
- 必须学习新的指令 (如：git subtree).
- 子仓库的更新与推送指令相对复杂。</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://segmentfault.com/a/1190000012002151&#34;&gt;https://segmentfault.com/a/1190000012002151&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;关于子仓库或者说是仓库共用，git 官方推荐的工具是 git subtree。 我自己也用了一段时间的 git subtree，感觉比 git submodule 好用，但是也有一些缺点，在可接受的范围内。
+所以对于仓库共用，在 git subtree 与 git submodule 之中选择的话，我推荐 git subtree。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -34,7 +31,7 @@ git subtree 是什么？为什么使用 git subtree git subtree 可以实现一�
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</guid>
-      <description></description>
+      <description>&lt;p&gt;git版本控制最佳实践&lt;/p&gt;</description>
     </item>
     
   </channel>

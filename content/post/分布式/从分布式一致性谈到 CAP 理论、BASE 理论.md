@@ -12,7 +12,9 @@ keywords:
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://www.cnblogs.com/szlbm/p/5588543.html
 
-# [从分布式一致性谈到 CAP 理论、BASE 理论](https://www.cnblogs.com/szlbm/p/5588543.html)
+[从分布式一致性谈到 CAP 理论、BASE 理论](https://www.cnblogs.com/szlbm/p/5588543.html)
+
+<!--more-->
 
 **问题的提出**
 

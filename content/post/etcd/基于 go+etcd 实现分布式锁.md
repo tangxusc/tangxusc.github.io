@@ -16,6 +16,8 @@ keywords:
 - 分布式锁
 ---
 
+基于 go+etcd 实现分布式锁,主要使用的是租约机制
+<!--more-->
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://www.jianshu.com/p/d3068d0ac7c1
 
 ```golang

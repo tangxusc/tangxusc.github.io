@@ -10,6 +10,9 @@ keywords:
 - redis
 ---
 
+redis配置详解
+<!--more-->
+
 
 ```
 #redis.conf

@@ -18,12 +18,13 @@ keywords:
 - jaeger
 ---
 
-# jaeger-operator安装
+jaeger-operator安装
 
 在一个成规模的微服务系统中,一个功能不单由这一个服务完成,而是多个服务协作来共同完成,但是如果其中一个服务出现了错误,对于错误的追踪,对于整个调用链的追踪便成为了难题.
 
 好在外国佬遇到了这些问题,指定了`opentracing`规范,并且提供了例如`zipkin`,`pinpoint`,`jaeger`等工具供我们使用
 
+<!--more-->
 jaeger组件如下:
 
 ![](https://www.jaegertracing.io/img/architecture.png)

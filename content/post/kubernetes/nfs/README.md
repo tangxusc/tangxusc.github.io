@@ -18,11 +18,13 @@ keywords:
 - nfs
 ---
 
-# 使用nfs作为k8s的PersistentVolume
+使用nfs作为k8s的PersistentVolume
 
 在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选
 
 本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务
+
+<!--more-->
 
 ## 准备
 

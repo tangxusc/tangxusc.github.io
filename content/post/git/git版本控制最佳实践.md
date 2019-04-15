@@ -12,5 +12,6 @@ keywords:
 - git
 - gitsubtree
 ---
-
+git版本控制最佳实践
+<!--more-->
 <img src="/post/git/git版本控制最佳实践.png"/>

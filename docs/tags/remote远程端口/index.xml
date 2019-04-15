@@ -17,8 +17,7 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8shipyard-proxy%E5%BC%80%E5%90%AFdocker-remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A32375/</guid>
-      <description> 使用shipyard proxy开启docker remote远程端口(2375) 优势  不用重启docker 操作更为便捷 对于端口的定制更为方便 没有复杂的linux操作  * 注意shipyard已经没有维护了(但此镜像任然可以使用) 原理: shipyard/docker-proxy:latest 镜像可以在宿主机docker上运行一个容器,容器内挂载/var/run/docker.sock文件 将此文件暴露后,就开启了docker remote api
-docker命令行运行 docker run -d -v /var/run/docker.sock:/var/run/docker.sock -p 2375:2375 --name shipyard-docker-proxy shipyard/docker-proxy:latest  rancher调度(v2) version: &#39;2&#39; services: proxy: image: shipyard/docker-proxy:latest stdin_open: true volumes: - /var/run/docker.sock:/var/run/docker.sock tty: true ports: - 2375:2375/tcp labels: io.rancher.container.pull_image: always  </description>
+      <description>&lt;p&gt;使用shipyard proxy开启docker remote远程端口(2375)&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -16,7 +16,8 @@ keywords:
 - drone
 ---
 
-### drone CI的安装(docker版本)
+drone ci是我使用过的最方便最纯粹的在docker基础上的cicd工具,推荐大家都使用
+<!--more-->
 
 因原生的安装使用的是docker-compose进行安装,在此我使用docker进行安装
 * drone 版本:0.8.4

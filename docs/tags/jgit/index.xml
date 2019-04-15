@@ -17,13 +17,13 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/jgit%E8%8E%B7%E5%8F%96git%E4%BB%93%E5%BA%93%E4%B8%AD%E7%9A%84%E9%83%A8%E5%88%86%E6%96%87%E4%BB%B6/</guid>
-      <description>jgit获取git仓库中的部分文件 jgit在获取文件时,只能获取仓库中的全部文件,本文提供一种方法,使用jgit获取仓库中的部分文件.
-适用场景:
- 用户提交git仓库地址,文件地址,需要读取仓库中的远程文件  原理 在git的命令行中,存在一个ls-remote命令,显示远程存储库中可用的引用以及关联的提交ID
-tangxu@tangxu-pc:$ git ls-remote From https://gitee.com/tanx/cavy-platform.git befcac9af04c7822aed0a7f7604d4b9248de3c61	HEAD befcac9af04c7822aed0a7f7604d4b9248de3c61	refs/heads/master  jgit中存在一个CheckoutCommand对象,对象中包含方法
-public CheckoutCommand setStartPoint(String startPoint) {//startPoint则为引用id this.checkCallable(); this.startPoint = startPoint; this.startCommit = null; this.checkOptions(); return this; }  和addPath方法
-public CheckoutCommand addPath(String path) {//path为文件路径 this.checkCallable(); this.paths.add(path); return this; }  具体实现 话不多述,我们直接上代码:
-//url 远程仓库url地址,以.git结尾 //branch 分支名称 private String getRefHash(String url,String branch) throws GitAPIException { Collection&amp;lt;Ref&amp;gt; call = Git.lsRemoteRepository().setRemote(url).call(); for (Ref ref : call) { String[] split = ref.</description>
+      <description>&lt;p&gt;jgit在获取文件时,只能获取仓库中的全部文件,本文提供一种方法,使用jgit获取仓库中的部分文件.&lt;/p&gt;
+
+&lt;p&gt;适用场景:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;用户提交git仓库地址,文件地址,需要读取仓库中的远程文件&lt;/li&gt;
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -32,11 +32,7 @@ public CheckoutCommand addPath(String path) {//path为文件路径 this.checkCal
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/%E7%94%A8-jgit-%E9%80%9A%E8%BF%87-java-%E6%9D%A5%E6%93%8D%E4%BD%9C-git/</guid>
-      <description>本文由 简悦 SimpRead 转码， 原文地址 http://qinghua.github.io/jgit/
- 文章目录
- 1. 概念 2. 准备环境 3. 动手  3.1. 获取仓库 3.2. 常用操作 3.3. 其它对象  4. 参考资料  JGit 是一个由 Eclipse 基金会开发、用于操作 git 的纯 Java 库。它本身也是 Eclispe 的一部分，实际上 Eclipse 的插件 EGit 便是基于 JGit 的。如果你像我这样有使用代码来操作 git 的需求，那就准备好拥抱 JGit 吧。目前来看别的竞品没它靠谱。
-概念 从用户指南的概念一节中可以看到，JGit 的基本概念如下：
- Git 对象（Git Objects）：就是 git 的对象。它们在 git 中用 SHA-1 来表示。在 JGit 中用AnyObjectId和ObjectId表示。而它又包含了四种类型：  二进制大对象（blob）：文件数据 树（tree）：指向其它的 tree 和 blob 提交（commit）：指向某一棵 tree 标签（tag）：把一个 commit 标记为一个标签  引用（Ref）：对某一个 git 对象的引用。 仓库（Repository）：顾名思义，就是用于存储所有 git 对象和 Ref 的仓库。 RevWalk：该类用于从 commit 的关系图（graph）中遍历 commit。晦涩难懂？看到范例就清楚了。 RevCommit：表示一个 git 的 commit RevTag：表示一个 git 的 tag RevTree：表示一个 git 的 tree TreeWalk：类似 RevWalk，但是用于遍历一棵 tree  准备环境 让我们从一个最典型的用例开始吧。首先在/tmp/jgit/repo中创建一个 git 仓库：</description>
+      <description>&lt;p&gt;&lt;a href=&#34;https://eclipse.org/jgit/&#34;&gt;JGit&lt;/a&gt; 是一个由 &lt;a href=&#34;https://www.eclipse.org/org/&#34;&gt;Eclipse 基金会&lt;/a&gt;开发、用于操作 git 的纯 Java 库。它本身也是 Eclispe 的一部分，实际上 Eclipse 的插件 &lt;a href=&#34;http://www.eclipse.org/egit/&#34;&gt;EGit&lt;/a&gt; 便是基于 JGit 的。如果你像我这样有使用代码来操作 git 的需求，那就准备好拥抱 JGit 吧。目前来看别的竞品没它靠谱。&lt;/p&gt;</description>
     </item>
     
   </channel>

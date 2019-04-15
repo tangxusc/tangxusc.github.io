@@ -1,6 +1,6 @@
 ---
 title: "迈向istio-引入外部服务"
-date: 2019-03-20T14:15:59+08:00
+date: 2019-04-01T14:15:59+08:00
 draft: false
 categories:
 - istio
@@ -10,11 +10,9 @@ keywords:
 - istio
 ---
 
-# istio-引入外部服务
-
-[TOC]
-
 在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.
+
+<!--more-->
 
 ## 服务规划
 

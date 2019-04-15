@@ -18,7 +18,8 @@ keywords:
 - prometheus
 ---
 
-# prometheus和alertmanager监控并发送邮件
+prometheus和alertmanager监控并发送邮件
+<!--more-->
 
 ## prometheus
 

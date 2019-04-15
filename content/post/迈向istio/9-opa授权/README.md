@@ -1,6 +1,6 @@
 ---
 title: "迈向istio-opa授权"
-date: 2019-03-20T14:15:59+08:00
+date: 2019-04-01T14:15:59+08:00
 draft: false
 categories:
 - istio
@@ -10,13 +10,9 @@ keywords:
 - istio
 ---
 
-# istio-opa授权
-
-[TOC]
-
-## 背景
-
 在上一章节中,我们使用jwt进行了认证,那么我们如何对资源进行授权检查呢?
+
+<!--more-->
 
 在istio中,我们一个请求实际的调用链,我们来看看一个请求的流程图:
 

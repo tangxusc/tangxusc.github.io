@@ -1,6 +1,6 @@
 ---
 title: "迈向istio-多服务通信"
-date: 2019-03-20T14:15:59+08:00
+date: 2019-04-01T14:15:59+08:00
 draft: false
 categories:
 - istio
@@ -10,13 +10,11 @@ keywords:
 - istio
 ---
 
-# istio-多服务通信
-
-[TOC]
-
 在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;
 
 在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务
+
+<!--more-->
 ## 服务规划
 
 <img src="/post/迈向istio/4-多服务通信/服务图.png"/>

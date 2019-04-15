@@ -13,6 +13,8 @@ keywords:
 
 该文是基于《微服务模式》作者Chris Richardson的QCONSF 2017会议上的PPT文章(这里)和其 Eventuate Tram Saga框架之上，对Saga模式进行的原理性解说，其中包含banq个人经验总结和见解，请从批判性视角看待。Chris Richardson的另外一本书籍《POJO in Action》曾经是帮助Spring成功挑战了EJB2。
 
+<!--more-->
+
 在微服务环境下为什么不能使用ACID事务？因为每个微服务都拥有自己的私有数据库，比如订单服务有自己的订单数据库，而客户服务有自己的客户数据库，如果有一个业务操作需要跨订单和客户一起操作，那么一般使用JTA+XA方式跨订单数据库和客户数据库操作：
 ```
 @ Transactional //事务元注解

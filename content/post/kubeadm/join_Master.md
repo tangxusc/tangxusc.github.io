@@ -15,7 +15,8 @@ keywords:
 - install
 ---
 
-### kubeadm生成的token过期后，集群增加节点
+kubeadm生成的token过期后，集群增加节点
+<!--more-->
 1. 重新生成token(默认token24小时后过期)
 ```
 kubeadm token create

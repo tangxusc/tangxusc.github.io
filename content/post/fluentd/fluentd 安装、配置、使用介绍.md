@@ -13,6 +13,9 @@ keywords:
 - fluentd
 ---
 
+fluentd<sup class="footnote-ref" id="fnref-home">[2](#fn-home)</sup> 是一个针对日志的收集、处理、转发系统。通过丰富的插件系统， 可以收集来自于各种系统或应用的日志，转化为用户指定的格式后，转发到用户所指定的日志存储系统之中。
+<!--more-->
+
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://blog.laisky.com/p/fluentd/
 
 # fluentd 安装、配置、使用介绍

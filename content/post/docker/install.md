@@ -11,7 +11,9 @@ keywords:
 - install
 ---
 
-## docker安装(国内环境)
+docker安装(国内环境)
+<!--more-->
+
 ---
 ```
 curl https://releases.rancher.com/install-docker/17.03.sh | sh

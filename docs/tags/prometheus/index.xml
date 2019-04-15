@@ -17,11 +17,7 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/prometheus%E5%92%8Calertmanager%E7%9B%91%E6%8E%A7%E5%B9%B6%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/</guid>
-      <description>prometheus和alertmanager监控并发送邮件 prometheus 简介 prometheus是时序的监控系统,通常使用prometheus是将prometheus当做采集存储中间件来使用,配合grafana做图表展示,配合alertmanager做自定义告警.
-prometheus的每个样本的大小为1-2个字节,要评估服务器的容量,可以使用以下公式:
-needed_disk_space = retention_time_seconds * ingested_samples_per_second * bytes_per_sample 需要的硬盘空间 = 数据保留时间(s) * 每秒采集的样本 * 样本大小  数据类型 在系统中所有的数据都以指标的方式来标示,指标包含label,指标格式如下:
-&amp;lt;metric name&amp;gt;{&amp;lt;label name&amp;gt;=&amp;lt;label value&amp;gt;, ...} ##例如 api_http_requests_total{method=&amp;quot;POST&amp;quot;, handler=&amp;quot;/messages&amp;quot;}  在系统中,所有指标都在采集时得到其数据类型和描述,通常如下:
-$ curl localhost:9090/metrics # HELP go_gc_duration_seconds A summary of the GC invocation durations. # TYPE go_gc_duration_seconds summary go_gc_duration_seconds{quantile=&amp;quot;0&amp;quot;} 2.9632e-05 go_gc_duration_seconds{quantile=&amp;quot;0.25&amp;quot;} 4.7174e-05 go_gc_duration_seconds{quantile=&amp;quot;0.5&amp;quot;} 5.8693e-05 go_gc_duration_seconds{quantile=&amp;quot;0.75&amp;quot;} 9.4042e-05 go_gc_duration_seconds{quantile=&amp;quot;1&amp;quot;} 0.021392614 go_gc_duration_seconds_sum 0.056610034 go_gc_duration_seconds_count 70 # HELP go_goroutines Number of goroutines that currently exist.</description>
+      <description>&lt;p&gt;prometheus和alertmanager监控并发送邮件&lt;/p&gt;</description>
     </item>
     
   </channel>

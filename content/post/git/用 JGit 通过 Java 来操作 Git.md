@@ -13,7 +13,8 @@ keywords:
 - JGit
 ---
 
-
+[JGit](https://eclipse.org/jgit/) 是一个由 [Eclipse 基金会](https://www.eclipse.org/org/)开发、用于操作 git 的纯 Java 库。它本身也是 Eclispe 的一部分，实际上 Eclipse 的插件 [EGit](http://www.eclipse.org/egit/) 便是基于 JGit 的。如果你像我这样有使用代码来操作 git 的需求，那就准备好拥抱 JGit 吧。目前来看别的竞品没它靠谱。
+<!--more-->
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 http://qinghua.github.io/jgit/ 
 
 **文章目录**

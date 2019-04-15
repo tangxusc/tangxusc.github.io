@@ -202,8 +202,8 @@
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F/">
-          分布式事务Saga模式
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/sonarqube%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">
+          sonarqube使用指南
         </a>
       </h1>
       
@@ -220,7 +220,7 @@
   
     <span>in</span>
     
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/ddd">DDD</a>
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/sonarqube">sonarqube</a>
     
   
 
@@ -229,47 +229,12 @@
     </div>
     <div class="postShorten-excerpt" itemprop="articleBody">
       
-        分布式事务Saga模式 两阶段提交2PC是分布式事务中最强大的事务类型之一，两段提交就是分两个阶段提交，第一阶段询问各个事务数据源是否准备好，第二阶段才真正将数据提交给事务数据源，当需要同时更新多个数据源实体时，例如确认订单并立即更新库存时，它非常有用。
-但是，当您使用微服务时，情况会变得复杂。每个服务都拥有自己的数据库系统，每个服务不能再越过别的服务直接访问那个服务的数据库了。
-比如服务A有自己的数据库O1，服务B有自己的数据库O2，服务B如果想同时更新数据库O1和O2，就不能越过服务B直接操作数据库O1，而两段提交正是适合这样的场合，服务B可以在一个JTA事务中同时调用数据库O1的XA数据源JNDI，再调用数据库O2的XA数据源JNDI，那么O1和O2的数据就会实现两段提交，O1数据库执行修改或插入操作后其实没有保存到数据库，只有等O2数据库执行修改或插入操作后，才在第二阶段提交确认保存，这个过程如果有任何出错，数据库O1和数据库O2如同没有执行修改或插入一样，两者数据状态是一致的。
-因此，在微服务架构中，因为一个服务不能越过其他服务直接访问它们的数据库，两段提交可能不适用，当然EJB提供了基于容器的跨服务分布式事务，虽然听起来很容易，但是因为是同步操作，对网络硬件要求比较高，一旦发生事务出错，需要手工介入数据库进行强制回滚，如果跨N个服务调用出错，出错定位是非常困难的，很难判断问题出在哪个服务器或哪段通讯上，不可能进行时间和空间的同时定位。
-基于以上原因，本文介绍Saga模式是一种分布式异步事务，一种最终一致性事务，是一种柔性事务，当然从传统ACID同步事务过渡到异步事务需要很多思维方式切换和步骤证明，可见本站其他文章，这里。
-下面以电子商务案例说明Saga模式实现：
-API网关 后面是四个微服务：OrderService(订购) StockService(库存) PaymentService(支付) 和DeliveryService(货运)
-在这个例子中，我们不能将“下订单，向客户收费，更新库存”这几个动作放入一个ACID事务中。但是又必须一致地执行这整个流程，这就需要创建一个分布式事务。
-我们都知道，实施分布式任务是多么困难，而且不幸的是，事务也不例外。处理瞬态状态，服务之间的最终一致性，隔离和回滚是应该在设计阶段考虑的情况。
-幸运的是，我们已经为它提出了一些很好的模式，因为我们已经实施了二十多年的分布式事务。今天我想谈论的那个叫做Saga模式。
-Saga是最着名的分布式事务模式之一。关于它的第一篇文章早在1987年就已经发表了， 从那以后它一直是一个受欢迎的解决方案。
-Saga是一系列本地交易，每笔事务都会更新单个服务中的数据。第一个事务由系统外部请求启动，然后每个后续步骤由前一个事件完成而触发。
-对于我们这个电子商务示例，非常高层次级的Saga设计实现如下所示：
-现在有两种不同的方式来实现saga事务，最流行的两种方式是：
- 事件/编排Choreography：没有中央协调器（没有单点风险）时，每个服务产生并聆听其他服务的事件，并决定是否应采取行动。
- 命令/协调orchestrator：中央协调器负责集中处理事件的决策和业务逻辑排序。
-  让我们对这两个实现进行更深入的了解，以了解它们的工作方式。
-事件/编排Events/Choreography 在Events/Choreography方法中，第一个服务执行一个事务，然后发布一个事件。该事件被一个或多个服务进行监听，这些服务再执行本地事务并发布（或不发布）新的事件。
-当最后一个服务执行本地事务并且不发布任何事件时，意味着分布式事务结束，或者它发布的事件没有被任何Saga参与者听到都意味着事务结束。
-让我们看看它在我们的电子商务示例中的外观：
-步骤如下： 1. 订单服务保存新订单，将状态设置为pengding挂起状态，并发布名为ORDER_CREATED_EVENT的事件。
- 支付服务监听ORDER_CREATED_EVENT，并公布事件BILLED_ORDER_EVENT。
- 库存服务监听BILLED_ORDER_EVENT，更新库存，并发布ORDER_PREPARED_EVENT。
- 货运服务监听ORDER_PREPARED_EVENT，然后交付产品。最后，它发布ORDER_DELIVERED_EVENT
- 最后，订单服务侦听ORDER_DELIVERED_EVENT并设置订单的状态为concluded完成。
-  在上面的情况下，如果需要跟踪订单的状态，订单服务可以简单地监听所有事件并更新其状态。 在这个案例中，除了订单服务以外的其他服务都是订单服务的子服务，也就是说，为完成一个订单服务，需要经过这些步骤，订单服务与这些服务是包含与被包含关系，因此，订单服务在业务上天然是一个协调器。
-回滚分布式事务并不是免费的。通常情况下，您必须实施额外操作才能弥补以前所做的工作。
-假设库存服务在事务过程中失败了。让我们看看回滚是什么样子的：
-1.库存服务产生PRODUCT_OUT_OF_STOCK_EVENT ;
-2.订购服务和支付服务会监听到上面库存服务的这一事件： 1. 支付服务会退款给客户。 2. 订单服务将订单状态设置为失败。
-请注意，为每个事务定义一个公共共享ID非常重要，因此每当您抛出一个事件时，所有侦听器都可以立即知道它引用的是哪个事务。
-saga事件/编排设计的优点和缺点 事件/编排是实现Saga模式的自然方式; 它很简单，容易理解，不需要太多的努力来构建，所有参与者都是松散耦合的，因为他们彼此之间没有直接的耦合。如果您的事务涉及2至4个步骤，则可能是非常合适的。
-但是，如果您在事务中不断添加额外步骤，则此方法可能会很快变得混乱，因为很难跟踪哪些服务监听哪些事件。此外，它还可能在服务之间添加循环依赖，因为它们必须订阅彼此的事件。
-最后，使用这种设计来实现测试将会非常棘手。为了模拟交易行为，您应该运行所有服务。
-Saga的命令/协调模式 这里我们定义了一项新服务，全权负责告诉每个参与者该做什么以及什么时候该做什么。saga协调器orchestrator以命令/回复的方式与每项服务进行通信，告诉他们应该执行哪些操作。
- 订单服务保存pending状态，并要求订单Saga协调器（简称OSO）开始启动订单事务。
- OSO向收款服务发送执行收款命令，收款服务回复Payment Executed消息
- OSO向库存服务发送准备订单命令，库存服务将回复OrderPrepared消息
+        <h2 id="简介">简介</h2>
+
+<p>​   Sonar是一个用于代码质量管理的开源平台，用于管理源代码的质量，可以从多个维度检测代码质量通过插件形式，可以支持包括java,C#,C/C++,PL/SQL,Cobol,JavaScrip,Groovy等等二十几种编程语言的代码质量管理与检测</p>
       
       <p>
-        <a href="https://tangxusc.github.io/blog/2019/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/blog/2019/03/sonarqube%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -295,8 +260,8 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E5%89%8D%E7%AB%AF%E5%8A%A0%E8%BD%BD%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E9%9A%8F%E6%83%B3/">
-          前端加载私有文件随想
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E4%BA%86%E8%A7%A3-etcd/">
+          了解 etcd
         </a>
       </h1>
       
@@ -313,7 +278,9 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
   
     <span>in</span>
     
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/%e5%89%8d%e7%ab%af">前端</a>
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/golang">golang</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/etcd">etcd</a>
     
   
 
@@ -322,24 +289,11 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
     </div>
     <div class="postShorten-excerpt" itemprop="articleBody">
       
-        前端加载私有文件随想 在前后端分离的工程中,前后端通信链路由前端调用后端,变成了前端&ndash;&gt;api gateway&ndash;&gt;后端,那么前端在加载一些私有资源(需要权限,需要认证)等文件时会存在无法传入token的问题 本文是针对前端加载资源的随想
- 未前后端分离调用链路
-前端 ------&gt; 后端 ------&gt; 返回结果到前端  前后端分离调用链路
-前端 ------&gt; API gateway ------&gt; 后端 ------&gt; 前端   解决方案列表 在前端加载一些文件,例如图片,浏览器会根据image标签的src属性自动获取图片的二进制流,浏览器在加载图片时,不会带上token在header中,一切都是浏览器默认行为,所以此处无法利用浏览器默认行为加载私有文件,所以提出了以下几种解决方案.
- 前端ajax加载,后端返回base64,前端再做处理 前端在url中加入token,传入到后端 前端获取token,存入cookie,后端根据优先级来获取token  下面我们分别来说说这三种方案.
-前端ajax加载,后端返回base64,前端再做处理 链路图如下:
-前端ajax ------&gt; API gateway ------&gt; 后端base64 ------&gt; 前端设置图片base64  前端:使用ajax加载图片,ajax中带上token等认证信息 后端:在接收到请求后,将图片转为base64字符串,通过response返回至前端 前端:在接收到后端返回后,将base64设置至相关的image中
- 优点: 遵循原有token机制 可解决加载机制
- 缺点:
- base64在后端转换增加了后端压力
- base64在前端处理较为麻烦(如果有大量图片,容易产生阻塞)
- 整个链路复杂度太高了,涉及到很多流的操作
- 其他类型的文件无法满足此需求
-  前端在url中加入token,传入到后端 链路图如下:
-前端修改图片url ------&gt; API gateway ------&gt; 后端返回图片二进制  前端:在加载图片时,先修改图片的url,带上token参数 后端:在接收到请求后返回图片二进制
+        <p>这是一篇非常入门的文章，让你大概了解一下 etcd。写这篇文章时使用 etcd 的版本是 3.1.0。
+etcd 是以实现共享配置和服务发现为目的，提供一致性的键值存储的分布式数据库。kubernetes 等项目使用了 etcd。</p>
       
       <p>
-        <a href="https://tangxusc.github.io/blog/2019/03/%E5%89%8D%E7%AB%AF%E5%8A%A0%E8%BD%BD%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E9%9A%8F%E6%83%B3/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/blog/2019/03/%E4%BA%86%E8%A7%A3-etcd/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -365,8 +319,8 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E5%9C%A8golang%E4%B8%AD%E5%88%9B%E5%BB%BA%E8%B0%83%E7%94%A8%E5%9B%BE/">
-          在golang中创建调用图
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E4%BA%94%E5%88%86%E9%92%9F%E8%AF%BB%E6%87%82-uml-%E7%B1%BB%E5%9B%BE/">
+          五分钟读懂 UML 类图
         </a>
       </h1>
       
@@ -383,7 +337,7 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
   
     <span>in</span>
     
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/golang">golang</a>
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f">设计模式</a>
     
   
 
@@ -392,30 +346,16 @@ Saga的命令/协调模式 这里我们定义了一项新服务，全权负责�
     </div>
     <div class="postShorten-excerpt" itemprop="articleBody">
       
-        本文由 简悦 SimpRead 转码， 原文地址 https://stackoverflow.com/questions/31362332/creating-call-graph-in-golang
- 我正在寻找为golang项目生成调用图的可能性。类似于Doxygen的 C ++类图功能（使用选项CALL_GRAPH = YES）。
-到目前为止我找到了
-http://saml.rilspace.org/profiling-and-creating-call-graphs-for-go-programs-with-go-tool-pprof 或 http://blog.golang.org/profiling-go-programs
-这会在程序运行时每秒100次对程序的调用堆栈进行采样，并创建一个对分析有用的图形。如果你的程序大部分时间都花在与你无关的函数上，我发现这个解决方案不是很有用。
-然后是这样的：
-https://godoc.org/golang.org/x/tools/go/callgraph/static
-从它的描述听起来像我需要的，但似乎没有文档，我不明白如何使用它。
-我也找到了
-https://github.com/davecheney/graphpkg/blob/master/README.md 状语从句： https://github.com/paetzke/go-dep-graph/blob/master/README.org
-但他们只创建依赖图。
-戴夫C.
-你和&hellip;&hellip;很接近/x/tools/go/callgraph/static。我很确定go install golang.org/x/tools/cmd/callgraph你想要的是什么。一旦安装，运行它没有参数，以查看它的完整帮助/用法。
-（一般来说，&hellip;&hellip; /x/tools/下面的东西是有点可重用的包，命令行前端生活在&hellip;下面/x/tools/cmd，你可以安装它们go install golang.org/x/tools/cmd/...，文字/...匹配所有的子包）。
-例如，只运行callgraph生成以下开头和结尾的使用输出：
-callgraph：显示Go程序的调用图。
-用法：
-callgraph [-algo=static|cha|rta|pta] [-test] [-format=...] &lt;args&gt;...
-标志：
--algo 指定调用图构造算法，其中之一是：
- static static calls only (unsound) cha Class Hierarchy Analysis rta Rapid Type Analysis pta inclusion-based Points-To Analysis The algorithms are ordered by increasing precision in their treatment of dynamic calls (and thus also computational cost).
+        <blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://www.cnblogs.com/shindo/p/5579191.html">https://www.cnblogs.com/shindo/p/5579191.html</a></p>
+</blockquote>
+
+<h1 id="五分钟读懂-uml-类图">五分钟读懂 UML 类图</h1>
+
+<p>平时阅读一些远吗分析类文章或是设计应用架构时没少与 UML 类图打交道。实际上，UML 类图中最常用到的元素五分钟就能掌握，下面赶紧来一起认识一下它吧：</p>
       
       <p>
-        <a href="https://tangxusc.github.io/blog/2019/03/%E5%9C%A8golang%E4%B8%AD%E5%88%9B%E5%BB%BA%E8%B0%83%E7%94%A8%E5%9B%BE/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/blog/2019/03/%E4%BA%94%E5%88%86%E9%92%9F%E8%AF%BB%E6%87%82-uml-%E7%B1%BB%E5%9B%BE/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -441,8 +381,68 @@ callgraph [-algo=static|cha|rta|pta] [-test] [-format=...] &lt;args&gt;...
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E5%9F%BA%E4%BA%8E-go-etcd-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
-          基于 go&#43;etcd 实现分布式锁
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E4%BB%8E%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E8%B0%88%E5%88%B0-cap-%E7%90%86%E8%AE%BAbase-%E7%90%86%E8%AE%BA/">
+          从分布式一致性谈到 CAP 理论、BASE 理论
+        </a>
+      </h1>
+      
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
+        
+  March 20, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/cap">CAP</a>
+    
+  
+
+  </div>
+
+    </div>
+    <div class="postShorten-excerpt" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://www.cnblogs.com/szlbm/p/5588543.html">https://www.cnblogs.com/szlbm/p/5588543.html</a></p>
+</blockquote>
+
+<p><a href="https://www.cnblogs.com/szlbm/p/5588543.html">从分布式一致性谈到 CAP 理论、BASE 理论</a></p>
+      
+      <p>
+        <a href="https://tangxusc.github.io/blog/2019/03/%E4%BB%8E%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E8%B0%88%E5%88%B0-cap-%E7%90%86%E8%AE%BAbase-%E7%90%86%E8%AE%BA/" class="postShorten-excerpt_link link">Continue reading</a>
+        
+      </p>
+    </div>
+  </div>
+  
+</article>
+
+          
+            
+  
+    
+      
+        
+      
+    
+  
+
+
+  
+
+<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+  <div class="postShorten-wrap">
+    
+    <div class="postShorten-header">
+      <h1 class="postShorten-title" itemprop="headline">
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8-golang-%E5%88%A9%E7%94%A8-ectd-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
+          使用 Golang 利用 ectd 实现一个分布式锁
         </a>
       </h1>
       
@@ -472,11 +472,10 @@ callgraph [-algo=static|cha|rta|pta] [-test] [-format=...] &lt;args&gt;...
     </div>
     <div class="postShorten-excerpt" itemprop="articleBody">
       
-        本文由 简悦 SimpRead 转码， 原文地址 https://www.jianshu.com/p/d3068d0ac7c1
- package main import ( &quot;context&quot; &quot;fmt&quot; &quot;go.etcd.io/etcd/clientv3&quot; &quot;time&quot; ) func main() { var ( config clientv3.Config client *clientv3.Client lease clientv3.Lease leaseResp *clientv3.LeaseGrantResponse leaseId clientv3.LeaseID leaseRespChan &lt;-chan *clientv3.LeaseKeepAliveResponse err error ) //客户端配置 config = clientv3.Config{ Endpoints: []string{&quot;127.0.0.1:2379&quot;}, DialTimeout: 5 * time.Second, } //建立连接 if client, err = clientv3.New(config); err != nil { fmt.Println(err) return } //上锁（创建租约，自动续租） lease = clientv3.NewLease(client) //设置一个ctx取消自动续租 ctx,cancleFunc := context.WithCancel(context.TODO()) //设置10秒租约（过期时间） if leaseResp,err = lease.
+        <p><code>etcd</code>是随着<code>CoreOS</code>项目一起成长起来的，随着 Golang 和 CoreOS 等项目在开源社区日益火热， <code>etcd</code>作为一个高可用、强一致性的分布式 Key-Value 存储系统被越来越多的开发人员关注和使用。</p>
       
       <p>
-        <a href="https://tangxusc.github.io/blog/2019/03/%E5%9F%BA%E4%BA%8E-go-etcd-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8-golang-%E5%88%A9%E7%94%A8-ectd-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -502,8 +501,8 @@ callgraph [-algo=static|cha|rta|pta] [-test] [-format=...] &lt;args&gt;...
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E5%A6%82%E4%BD%95%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E7%94%A8-ddd-%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E7%94%B5%E5%95%86%E7%BD%91%E7%AB%99/">
-          如何一步一步用 DDD 设计一个电商网站
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8-kubeadm-%E6%90%AD%E5%BB%BA-kubernetes1.10.2-%E9%9B%86%E7%BE%A4%E5%9B%BD%E5%86%85%E7%8E%AF%E5%A2%83/">
+          使用 kubeadm 搭建 Kubernetes(1.10.2) 集群（国内环境）
         </a>
       </h1>
       
@@ -520,7 +519,9 @@ callgraph [-algo=static|cha|rta|pta] [-test] [-format=...] &lt;args&gt;...
   
     <span>in</span>
     
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/ddd">DDD</a>
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/kubeadm">kubeadm</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/k8s">k8s</a>
     
   
 
@@ -529,27 +530,14 @@ callgraph [-algo=static|cha|rta|pta] [-test] [-format=...] &lt;args&gt;...
     </div>
     <div class="postShorten-excerpt" itemprop="articleBody">
       
-         本文由 简悦 SimpRead 转码， 原文地址 http://www.cnblogs.com/Zachary-Fan/p/5991674.html
- 本系列所有文章
-如何一步一步用 DDD 设计一个电商网站（一）—— 先理解核心概念
-如何一步一步用 DDD 设计一个电商网站（二）—— 项目架构
-如何一步一步用 DDD 设计一个电商网站（三）—— 初涉核心域
-如何一步一步用 DDD 设计一个电商网站（四）—— 把商品卖给用户
-如何一步一步用 DDD 设计一个电商网站（五）—— 停下脚步，重新出发
-如何一步一步用 DDD 设计一个电商网站（六）—— 给购物车加点料，集成售价上下文
-如何一步一步用 DDD 设计一个电商网站（七）—— 实现售价上下文
-如何一步一步用 DDD 设计一个电商网站（八）—— 会员价的集成
-如何一步一步用 DDD 设计一个电商网站（九）—— 小心陷入值对象持久化的坑
-如何一步一步用 DDD 设计一个电商网站（十）—— 一个完整的购物车
-如何一步一步用 DDD 设计一个电商网站（十一）—— 最后的准备
-如何一步一步用 DDD 设计一个电商网站（十二）—— 提交并生成订单
-如何一步一步用 DDD 设计一个电商网站（十三）—— 领域事件扩展
- 本文只是收集 如何一步一步用 DDD 设计一个电商网站,作为索引使用
-~!~
- 
+        <blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://www.cnblogs.com/RainingNight/p/using-kubeadm-to-create-a-cluster.html">https://www.cnblogs.com/RainingNight/p/using-kubeadm-to-create-a-cluster.html</a></p>
+</blockquote>
+
+<p>使用 kubeadm 搭建 Kubernetes(1.10.2) 集群（国内环境）</p>
       
       <p>
-        <a href="https://tangxusc.github.io/blog/2019/03/%E5%A6%82%E4%BD%95%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E7%94%A8-ddd-%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E7%94%B5%E5%95%86%E7%BD%91%E7%AB%99/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8-kubeadm-%E6%90%AD%E5%BB%BA-kubernetes1.10.2-%E9%9B%86%E7%BE%A4%E5%9B%BD%E5%86%85%E7%8E%AF%E5%A2%83/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -575,8 +563,8 @@ callgraph [-algo=static|cha|rta|pta] [-test] [-format=...] &lt;args&gt;...
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-go-get-%E4%B8%8B%E8%BD%BD-gitlab-%E7%A7%81%E6%9C%89%E9%A1%B9%E7%9B%AE/">
-          如何使用 go get 下载 gitlab 私有项目
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8go-mod1.11%E5%AE%89%E8%A3%85grpc/">
+          使用go mod(1.11)安装grpc
         </a>
       </h1>
       
@@ -595,9 +583,7 @@ callgraph [-algo=static|cha|rta|pta] [-test] [-format=...] &lt;args&gt;...
     
       <a class="category-link" href="https://tangxusc.github.io/blog/categories/golang">golang</a>, 
     
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/module">module</a>, 
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/gitlab">gitlab</a>
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/grpc">grpc</a>
     
   
 
@@ -606,85 +592,10 @@ callgraph [-algo=static|cha|rta|pta] [-test] [-format=...] &lt;args&gt;...
     </div>
     <div class="postShorten-excerpt" itemprop="articleBody">
       
-        本文由 简悦 SimpRead 转码， 原文地址 http://holys.im/2016/09/20/go-get-in-gitlab/
- 据此 issue，gitlab 7.8 就开始支持 go get private repo。
-假设 gitlab 服务是： mygitlab.com
-使用方式：
-$ go get -v mygitlab.com/user/repo  如果 mygitlab.com 不支持 https, 还得加上 -insecure 参数
-$ go get -v -insecure mygitlab.com/user/repo  但是 -insecure 参数是 go 1.5 以后才有的，所以如果低于 1.5 版本，赶紧升级一下吧。
-默认需要输入用户名和密码，比较繁琐。 由于 go get 底层实际还是用了 git 去操作。可以配置 .gitconfig 使之用 http =&gt; ssh 的访问方式 (个人感觉就是重写了 url)
-$ git config --global url.&quot;git@mygitlab.com:&quot;.insteadOf &quot;http://mygitlab.com/&quot; // 其实就是在 `.
+        <p>使用go mod(1.11)安装grpc</p>
       
       <p>
-        <a href="https://tangxusc.github.io/blog/2019/03/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-go-get-%E4%B8%8B%E8%BD%BD-gitlab-%E7%A7%81%E6%9C%89%E9%A1%B9%E7%9B%AE/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-          
-            
-  
-    
-      
-        
-      
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B/">
-          微服务分布式事务Saga模式简介
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
-        
-  March 20, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/ddd">DDD</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        该文是基于《微服务模式》作者Chris Richardson的QCONSF 2017会议上的PPT文章(这里)和其 Eventuate Tram Saga框架之上，对Saga模式进行的原理性解说，其中包含banq个人经验总结和见解，请从批判性视角看待。Chris Richardson的另外一本书籍《POJO in Action》曾经是帮助Spring成功挑战了EJB2。
-在微服务环境下为什么不能使用ACID事务？因为每个微服务都拥有自己的私有数据库，比如订单服务有自己的订单数据库，而客户服务有自己的客户数据库，如果有一个业务操作需要跨订单和客户一起操作，那么一般使用JTA+XA方式跨订单数据库和客户数据库操作：
-@ Transactional //事务元注解 public void crossAction(XX){ //事务开始 //这里ORDERS是属于订单服务的私有数据库 SELECT ORDER_TOTAL FROM ORDERS WHERE CUSTOMER_ID = ? //这里CUSTOMERS是属于客户服务的私有数据库 SELECT CREDIT_LIMIT FROM CUSTOMERS WHERE CUSTOMER_ID=? INERT INTO ORDERS ..... //提交事务 }  以上JTA操作如果结合XA数据源配置，将会实现2PC两段事务提交。
-通过这段事务操作主要目的是为了维持业务上的不变性约束，比如一个人下订单的总金额不能超过这个人的信用卡授信额度，也就是说：一个人购买的商品总金额只能小于或等于他的信用卡授信额度。
-但是，2PC两段提交并不是微服务分布式架构的选择，因为存在单点风险，因为锁也会降低吞吐量。分布式事务如果不结合CAP定理是无法认识清楚，2PC其实只是选择了CAP中CA，虽然CA保证了可靠性，但是忽视网络通讯随时可能堵塞或失败，形成网络分区，反而不可靠，2PC带来的可靠性在分布式环境中是虚幻的。
-在分布式系统中，CAP定理是King，CAP定理无论是理论高度或是工程实施高度都是要高于传统事务的，在CAP定理的干预下，传统ACID事务走向了妥协，变成了BASE，也就是走向最终一致性的柔性事务。
-Saga是来自于1987年Hector GM和Kenneth Salem论文，从原理上看Saga好像比较简单： 1. 客户端发出订单创建请求createOrder() 2. OrderService会在其内部本地事务进行Order数据库操作，此时订单状态是待确认状态。 3. CustomerService会在其内部本地事务进行信用卡预授权操作，检查订单金额是否超过信用卡授信额度？ 4. OrderService会在上一步确认业务不变性约束得到满足后，再次操作订单数据库状态，将订单状态改为确认状态。
-但是，传统2PC/ACID事务中在上面任何一个步骤失败时会使用回滚操作，比如第三步出错，因为是两段提交，所以，第二段就不会进行确认提交，而是进行回滚Rollback，这样订单状态就恢复到当前事务之前的状态，但是在Saga这种BASE模式下,是无法实现像2PC回滚的，因为2PC是同步的，而Saga是异步的。
-那么在Saga这种异步模式如何实现客户的及时响应呢？有两种可选方案：首先是当Saga流程全部完成时再发送响应，这样的好处是响应中带有处理结果，但是这样会降低可用性，CAP定理中，分布式环境中满足了C一致性，只能降低了可用性A。
-第二种方案是推荐的，也就是在创建Saga之时，并不是等这个Saga流程完成时候，就发送响应给客户端，当然客户端可能只会得到一个事务ID号，并没有得到如期的处理结果，但是这样数据一致性比较弱的情况下，我们能获得很高的可用性A。
-客户端可以根据事务ID号再次查询处理结果（通过浏览器异步调用或服务器端推送都可以），比如之前调用createOrder()，获得order的id，然后，根据这个id号调用getOrder(id)，这样就能获得自己创建的订单。在传统同步环境下，这两步其实是在同一个步骤实现的，也就是createOrder()的结果就是一个订单order。
-通过UI界面设计可以降低这种不一致性导致的延迟体验： 1. UI会通过异步方式进行查询调用，给用户的体验感觉还是创建订单后返回了一个创建好的订单 2. Saga处理也是可以很快的，小于100毫秒。 3. 如果会花费很长时间，可以显示“正在处理中&hellip;” 4. Saga处理完成后可以采取服务器推送结果到浏览器。
-Saga是否实现了ACID？ ACID是原子性 一致性 隔离性和持久性的总称：
-      
-      <p>
-        <a href="https://tangxusc.github.io/blog/2019/03/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8go-mod1.11%E5%AE%89%E8%A3%85grpc/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -788,15 +699,7 @@ Saga是否实现了ACID？ ACID是原子性 一致性 隔离性和持久性的�
                   Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">介绍 istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本的口号叫企业级就绪(以后会不会出云供应商就绪?),这8个月中可以看到istio还是发生了很大的变化的,纵观历史,istio进行了三次腾飞:
- 0.8 不在是模型了 1.0 生产就绪了(其实没有),抛弃了ingress,模型改动比较大 1.1 企业就绪了,理清楚了流量管理的模型,sidecar不再操碎了心,pilot解放了,mixer adapter又被默认的关了,ServiceEntry存在感突然就没啦.  废话太多了,接下来我们进入正题,去看看istio1.1到底更新了那些东西
- 注意,因个人知识有限,不会全部解析,请见谅.
- 升级内容 安装 1.安装模式变化 现在提供了两个helm chart来安装,分别为istio-init和istio 这两个职责如下:
-istio-init: 负责通过job.batch/istio-init-crd-10,job.batch/istio-init-crd-11 这两个job来安装istio的crd资源(一共53个,如果启用cert-manager则为58个),可通过命令查看:
-$ kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l 53  istio: 现在istio安装的时候是没有启用grafana,kiali的,并且已经说明使用kiali替换servicegraph,所以在安装时,需要手动开启:
-# # addon grafana configuration # grafana: enabled: true # # addon kiali tracing configuration # kiali: enabled: true createDemoSecret: true  并且现在支持自定义kiali的用户名密码了,如果还是使用admin/admin 那么就需要createDemoSecret: true
-istio现在提供了一个cni组件来避免init-container的privilege问题,不过这个cni需要kubelet的cni支持,kubelet的网络就两种kubenet和cni,也就是说 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf文件中的
-Environment=&quot;KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin&quot;  这里的--network-plugin=cni 值只能是 cni了</div>
+              <div class="media-content hide-xs font-merryweather"><p>istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本为<code>企业级就绪</code></p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -805,21 +708,17 @@ Environment=&quot;KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">
-                <h3 class="media-heading">Controller manager高可用实现方式</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-jwt%E8%AE%A4%E8%AF%81/">
+                <h3 class="media-heading">迈向istio-jwt认证</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://www.colabug.com/2801661.html
- 这不是一系列入门级别的文章，也不是按部就班而来的，而是我看到哪里，发现有些代码写的精妙的地方，都值得我们学习下，顺手记录下来，一方面是让自己将来可以有迹可循，另外对大家应该也会有所帮助。而且记录本身成本并不是很高。
-高可用部署情况下，需要部署多个 controller manager （以下简称 cm ），每个 cm 需要 --leader-elect=true 启动参数，即告知 cm 以高可用方式启动，谁要想进行真正的工作，必须先抢到锁，被选举为 leader 才行，而抢不到所得只能待机，在 leader 因为异常终止的时候，由剩余的其余节点再次获得锁。
-关于分布式锁的实现很多，可以自己从零开始制造。当然更简单的是基于现有中间件，比如有基于 Redis 或数据库的实现方式，最近 Zookeeper/ETCD 也提供了相关功能。但 K8s 的实现并没有使用这些方式，而是另辟蹊径使用了资源锁的概念，简单来说就是通过创建 K8s 的资源（当前的实现中实现了 ConfigMap 和 Endpoint 两种类型的资源）来维护锁的状态。
-分布式锁一般实现原理就是大家先去抢锁，抢到的人成为 leader ，然后 leader 会定期更新锁的状态，声明自己的活动状态，不让其他人把锁抢走。K8s 的资源锁也类似，抢到锁的节点会将自己的标记（目前是 hostname）设为锁的持有者，其他人则需要通过对比锁的更新时间和持有者来判断自己是否能成为新的 leader ，而 leader 则可以通过更新 RenewTime 来确保持续保有该锁。
-大概看了下 K8s 的实现，老实说其实现方式并不算高雅，但是却给我们开拓了一种思路：K8s 里的 resource 是万能的，不要以为 Endpoint 只是 Endpoint 。不过反过来有时候也挺让人费解的，刚了解的时候容易摸不着头脑，也不是好事。而且 scheduler 和 cm 都采用了资源锁，但是实现起来却不尽相同，也值得吐槽下。不管怎么说，这个实现算是挺有意思的实现，值得我们深入了解下。
-我们首先来看一下 cm 启动的时候，是如何去 初始化 抢锁的。启动的时候，如果指定了 --leader-elect=true 参数的话，则会进入下面的代码，首先获取自己的资源标志（这里是 hostname 加一串随机数字）。</div>
+              <div class="media-content hide-xs font-merryweather"><p>在建设企业的各种项目中,我们一定离不开,或者总要和认证授权系统打交道,应用总会入侵一些认证和授权部分的代码,现在在java等方面有大量的安全框架,例如<code>spring security,shiro</code>等等框架,这些框架也是为了解决这个重复性的做认证和授权等功能的问题,这也是我们在单体服务的时候一直做的,将各种各样的框架集成到系统中,那么现在在微服务时代,或者说在istio有没有解决方法能解决这个问题呢,让服务真正回归业务,不再去过多的管理认证的问题呢.</p>
+
+<p>在本节中我们将会将我们的应用构建为一个需要使用jwt token才能访问的服务,在没有jwt token的情况下,将会返回401 未授权.</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -828,34 +727,15 @@ Environment=&quot;KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/">
-                <h3 class="media-heading">Gitflow 工作流</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-opa%E6%8E%88%E6%9D%83/">
+                <h3 class="media-heading">迈向istio-opa授权</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 http://blog.jobbole.com/76867/
- 这节介绍的 Gitflow工作流借鉴自在 nvie 的 _Vincent Driessen_。
-Gitflow工作流定义了一个围绕项目发布的严格分支模型。虽然比功能分支工作流复杂几分，但提供了用于一个健壮的用于管理大型项目的框架。
-Gitflow工作流没有用超出功能分支工作流的概念和命令，而是为不同的分支分配一个很明确的角色，并定义分支之间如何和什么时候进行交互。除了使用功能分支，在做准备、维护和记录发布也使用各自的分支。当然你可以用上功能分支工作流所有的好处：Pull Requests、隔离实验性开发和更高效的协作。
-工作方式 Gitflow工作流仍然用中央仓库作为所有开发者的交互中心。和其它的工作流一样，开发者在本地工作并push分支到要中央仓库中。
-历史分支 相对使用仅有的一个master分支，Gitflow工作流使用 2 个分支来记录项目的历史。master分支存储了正式发布的历史，而develop分支作为功能的集成分支。这样也方便master分支上的所有提交分配一个版本号。
-剩下要说明的问题围绕着这 2 个分支的区别展开。
-功能分支 每个新功能位于一个自己的分支，这样可以 push到中央仓库以备份和协作。但功能分支不是从master分支上拉出新分支，而是使用develop分支作为父分支。当新功能完成时，合并回develop分支。新功能提交应该从不直接与master分支交互。
-注意，从各种含义和目的上来看，功能分支加上develop分支就是功能分支工作流的用法。但Gitflow工作流没有在这里止步。
-发布分支 一旦develop分支上有了做一次发布（或者说快到了既定的发布日）的足够功能，就从develop分支上fork一个发布分支。新建的分支用于开始发布循环，所以从这个时间点开始之后新的功能不能再加到这个分支上 —— 这个分支只应该做Bug修复、文档生成和其它面向发布任务。一旦对外发布的工作都完成了，发布分支合并到master分支并分配一个版本号打好Tag。另外，这些从新建发布分支以来的做的修改要合并回develop分支。
-使用一个用于发布准备的专门分支，使得一个团队可以在完善当前的发布版本的同时，另一个团队可以继续开发下个版本的功能。 这也打造定义良好的开发阶段（比如，可以很轻松地说，『这周我们要做准备发布版本 4.0』，并且在仓库的目录结构中可以实际看到）。
-常用的分支约定：
-用于新建发布分支的分支: develop 用于合并的分支: master 分支命名: release-* 或 release/*
-维护分支 维护分支或说是热修复（hotfix）分支用于生成快速给产品发布版本（production releases）打补丁，这是唯一可以直接从master分支fork出来的分支。修复完成，修改应该马上合并回master分支和develop分支（当前的发布分支），master分支应该用新的版本号打好Tag。
-为Bug修复使用专门分支，让团队可以处理掉问题而不用打断其它工作或是等待下一个发布循环。你可以把维护分支想成是一个直接在master分支上处理的临时发布。
-示例 下面的示例演示本工作流如何用于管理单个发布循环。假设你已经创建了一个中央仓库。
-创建开发分支 第一步为master分支配套一个develop分支。简单来做可以本地创建一个空的develop分支，push到服务器上：
-git branch develop git push -u origin develop
-以后这个分支将会包含了项目的全部历史，而master分支将只包含了部分历史。其它开发者这时应该克隆中央仓库，建好develop分支的跟踪分支：
-git clone ssh://user@host/path/to/repo.git git checkout -b develop origin/develop</div>
+              <div class="media-content hide-xs font-merryweather"><p>在上一章节中,我们使用jwt进行了认证,那么我们如何对资源进行授权检查呢?</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -864,24 +744,15 @@ git clone ssh://user@host/path/to/repo.git git checkout -b develop origin/develo
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/go-%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8F%8A-pprof-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
-                <h3 class="media-heading">Go 程序性能优化及 pprof 使用方法详解</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-tls/">
+                <h3 class="media-heading">迈向istio-tls</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://www.jb51.net/article/127551.htm
- Go 程序性能优化及 pprof 使用方法详解  更新时间：2017 年 11 月 05 日 10:50:22 作者：snowInPluto
-这篇文章主要为大家详细介绍了 Go 程序性能优化及 pprof 的使用方法，具有一定的参考价值，感兴趣的小伙伴们可以参考一下
-Go 程序的性能优化及 pprof 的使用
-程序的性能优化无非就是对程序占用资源的优化。对于服务器而言，最重要的两项资源莫过于 CPU 和内存。性能优化，就是在对于不影响程序数据处理能力的情况下，我们通常要求程序的 CPU 的内存占用尽量低。反过来说，也就是当程序 CPU 和内存占用不变的情况下，尽量地提高程序的数据处理能力或者说是吞吐量。
-Go 的原生工具链中提供了非常多丰富的工具供开发者使用，其中包括 pprof。
-对于 pprof 的使用要分成下面两部分来说。
-Web 程序使用 pprof
-先写一个简单的 Web 服务程序。程序在 9876 端口上接收请求。
-package main import ( &quot;bytes&quot; &quot;io/ioutil&quot; &quot;log&quot; &quot;math/rand&quot; &quot;net/http&quot; _ &quot;net/http/pprof&quot; ) func main() { http.HandleFunc(&quot;/test&quot;, handler) log.Fatal(http.ListenAndServe(&quot;:9876&quot;, nil)) } func handler(w http.</div>
+              <div class="media-content hide-xs font-merryweather"><p>我们已经完成了我们服务的路由,并且也已经有了镜像流量了,那么接下来我们要做什么呢?</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -890,22 +761,17 @@ package main import ( &quot;bytes&quot; &quot;io/ioutil&quot; &quot;log&quot; &q
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/">
-                <h3 class="media-heading">Golang大杀器之性能剖析PProf</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/">
+                <h3 class="media-heading">迈向istio-多服务通信</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://github.com/EDDYCJY/blog/blob/master/golang/2018-09-15-Golang%20%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90%20PProf.md
- Golang 大杀器之性能剖析 PProf 前言 写了几吨代码，实现了几百个接口。功能测试也通过了，终于成功的部署上线了
-结果，性能不佳，什么鬼？
-想做性能分析 PProf 想要进行性能优化，首先瞩目在 Go 自身提供的工具链来作为分析依据，本文将带你学习、使用 Go 后花园，涉及如下：
- runtime/pprof：采集程序（非 Server）的运行数据进行分析 net/http/pprof：采集 HTTP Server 的运行时数据进行分析  是什么 pprof 是用于可视化和分析性能分析数据的工具
-pprof 以 profile.proto 读取分析样本的集合，并生成报告以可视化并帮助分析数据（支持文本和图形报告）
-profile.proto 是一个 Protocol Buffer v3 的描述文件，它描述了一组 callstack 和 symbolization 信息， 作用是表示统计分析的一组采样的调用栈，是很常见的 stacktrace 配置文件格式
-支持什么使用模式  Report generation：报告生成 Interactive terminal use：交互式终端使用 Web interface：Web 界面  可以做什么  CPU Profiling：CPU 分析，按照一定的频率采集所监听的应用程序 CPU（含寄存器）的使用情况，可确定应用程序在主动消耗 CPU 周期时花费时间的位置 Memory Profiling：内存分析，在应用程序进行堆分配时记录堆栈跟踪，用于监视当前和历史内存使用情况，以及检查内存泄漏 Block Profiling：阻塞分析，记录 goroutine 阻塞等待同步（包括定时器通道）的位置 Mutex Profiling：互斥锁分析，报告互斥锁的竞争情况  一个简单的例子 我们将编写一个简单且有点问题的例子，用于基本的程序初步分析</div>
+              <div class="media-content hide-xs font-merryweather"><p>在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;</p>
+
+<p>在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -914,23 +780,15 @@ profile.proto 是一个 Protocol Buffer v3 的描述文件，它描述了一组 
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/">
-                <h3 class="media-heading">Go模块简介</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/">
+                <h3 class="media-heading">迈向istio-安装</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://roberto.selbach.ca/intro-to-go-modules/
- Go模块简介 发表于 2018年8月18日(https://roberto.selbach.ca/intro-to-go-modules/) 作者：Roberto Selbach
-即将发布的Go编程语言版本1.11将为_模块_带来实验性支持 ，几天前Go.A的新依赖管理系统，我写了一篇关于它的快速帖子。自那篇文章上线以来，事情发生了一些变化，因为我们现在非常接近新版本，我认为现在是另一篇文章更适合实践的好时机。所以这就是我们要做的：我们将创建一个新的包，然后我们将发布一些版本，看看它是如何工作的。
-创建模块 首先要做的事情。让我们创建我们的包。我们称之为“testmod”。这里有一个重要的细节：这个目录应该 在你的外面，因为默认情况下，模块支持在其中被禁用。Go模块是可能在某些时候完全消除的第一步。$GOPATH$GOPATH
-$ mkdir testmod $ cd testmod  我们的包很简单：
-package testmod import &quot;fmt&quot; // Hi returns a friendly greeting func Hi(name string) string { return fmt.Sprintf(&quot;Hi, %s&quot;, name) }  包完成但它仍然不是_模块_。让我们改变这一点。
-$ go mod init github.com/robteix/testmod go: creating new go.mod: module github.com/robteix/testmod  这将go.mod在包目录中创建一个新文件，其中包含以下内容：
-module github.com/robteix/testmod  这里不是很多，但这有效地将我们的包变成了一个 _模块_。我们现在可以将这个代码推送到一个存储库：
-$ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u origin master  到目前为止，任何愿意使用此软件包的人都会go get ：</div>
+              <div class="media-content hide-xs font-merryweather"><p>istio-安装</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -939,21 +797,15 @@ $ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u o
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/intellij-idea-%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84-rest-%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8B%E7%BB%8D/">
-                <h3 class="media-heading">Intellij IDEA 基于编辑器的 REST 客户端介绍</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/">
+                <h3 class="media-heading">迈向istio-引入外部服务</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/u011054333/article/details/78705256
- 最近 Intellij IDEA 更新到了 2017.3 这一版本，这个版本又增加了很多新功能。我觉得其中这个基于编辑器的 REST 客户端这个功能很不错，可以为我们带来很多方便。这个功能并不仅仅在 Intellij IDEA 才有，最近更新的所有 Jetbrains 系 IIDE 都有这个功能。
-以往我们开发和调试网络程序，用到的无非是这几种办法：浏览器 F12 工具、Fiddler、Wireshark、curl 等命令行工具、手动使用 HTTP 客户端类库编程。不过这些方法总是有些不好用。Jetbrains 这个基于编辑器的 REST 客户端用起来倒是让我眼前一亮。
-使用方法 要使用这个功能很简单，在 IDE 中新建一个后缀名为.http的文件，然后就可以使用这个功能了。截图如下。
-这个功能使用起来非常简单，使用大写的 HTTP 动词（GET、POST、DELETE、PUT 等等）后面加上要访问的网址即可，如果端口号不是 80 或者 443，可以使用冒号 + 端口号的形式写在网址后面。如果需要修改 Cookie、ContentType、UA 等设置，直接写在后面几行即可，Jetbrains 提供了非常完善的补全支持，我们只要敲第一个大写字母即可获得相应的代码提示。想要发起一个请求的时候，直接点击前面的绿色运行按钮即可。一个文件中可以保存多个请求，如果以后还想再次运行只要打开这个文件即可。
-配置环境变量 Jetbrains 还提供了一个环境变量的功能，让我们使用这个编辑器 REST 客户端更加简单。只要在项目中添加一个名为rest-client.env.json的文件，然后配置不同环境下要使用的环境变量。然后就能在 REST 客户端中使用了。例如配置文件是这样的。
-{ &quot;dev&quot;: { &quot;host&quot;: &quot;http://httpbin.org&quot; }, &quot;prod&quot;: { &quot;host&quot;: &quot;http://httpbin.org&quot; } }  那么在点击运行按钮的时候就会弹出选择要使用哪个环境变量。我们只要选择就可以针对不同环境使用不同配置了。在代码中只要使用双括号引用环境变量即可。</div>
+              <div class="media-content hide-xs font-merryweather"><p>在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -962,16 +814,19 @@ $ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u o
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java-%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7-%E6%8F%92%E4%BB%B6%E5%8C%96%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86-apipluggable-annotation-processing-api/">
-                <h3 class="media-heading">Java 奇技淫巧 - 插件化注解处理 API(Pluggable Annotation Processing API)</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/">
+                <h3 class="media-heading">迈向istio-服务路由</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/throwable/p/9139908.html
- 插件化注解处理 API(Pluggable Annotation Processing API) Java 奇技淫巧 - 插件化注解处理 API(Pluggable Annotation Processing API) 参考资料  JDK6 的新特性之六: 插入式注解处理 API(Pluggable Annotation Processing API) Java Annotation Processing and Creating a Builder  简介 插件化注解处理 (Pluggable Annotation Processing)APIJSR 269 提供一套标准 API 来处理 AnnotationsJSR 175, 实际上 JSR 269 不仅仅用来处理 Annotation，我觉得更强大的功能是它建立了 Java 语言本身的一个模型, 它把 method、package、constructor、type、variable、enum、annotation 等 Java 语言元素映射为 Types 和 Elements，从而将 Java 语言的语义映射成为对象，我们可以在 javax.lang.model 包下面可以看到这些类。所以我们可以利用 JSR 269 提供的 API 来构建一个功能丰富的元编程 (metaprogramming) 环境。JSR 269 用 Annotation Processor 在编译期间而不是运行期间处理 Annotation, Annotation Processor 相当于编译器的一个插件, 所以称为插入式注解处理.</div>
+              <div class="media-content hide-xs font-merryweather"><p>在上一节中,我们使用nginx开启了我们istio的第一个应用,现在我们加入另外一个服务tomcat</p>
+
+<blockquote>
+<p>本节内容基于上节内容,请先运行上一节的yaml文件,然后再体验本节内容</p>
+</blockquote></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -980,20 +835,15 @@ $ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u o
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
-                <h3 class="media-heading">Java 读写锁实现原理</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">迈向istio-示例</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://my.oschina.net/editorial-story/blog/1928306
- 最近做的一个小项目中有这样的需求：整个项目有一份*config.json*保存着项目的一些配置，是存储在本地文件的一个资源，并且应用中存在读写（读 &gt;&gt; 写）更新问题。既然读写并发操作，那么就涉及到操作互斥，这里自然想到了读写锁，本文对读写锁方面的知识做个梳理。
-为什么需要读写锁？ 与传统锁不同的是读写锁的规则是可以共享读，但只能一个写，总结起来为：读读不互斥，读写互斥，写写互斥，而一般的独占锁是：读读互斥，读写互斥，写写互斥，而场景中往往读远远大于写，读写锁就是为了这种优化而创建出来的一种机制。
-注意是读远远大于写，一般情况下独占锁的效率低来源于高并发下对临界区的激烈竞争导致线程上下文切换。因此当并发不是很高的情况下，读写锁由于需要额外维护读锁的状态，可能还不如独占锁的效率高。因此需要根据实际情况选择使用。
-一个简单的读写锁实现 根据上面理论可以利用两个 int 变量来简单实现一个读写锁，实现虽然烂，但是原理都是差不多的，值得阅读下。
-public class ReadWriteLock { /** * 读锁持有个数 */ private int readCount = 0; /** * 写锁持有个数 */ private int writeCount = 0; /** * 获取读锁,读锁在写锁不存在的时候才能获取 */ public synchronized void lockRead() throws InterruptedException { // 写锁存在,需要wait while (writeCount &gt; 0) { wait(); } readCount++; } /** * 释放读锁 */ public synchronized void unlockRead() { readCount--; notifyAll(); } /** * 获取写锁,当读锁存在时需要wait.</div>
+              <div class="media-content hide-xs font-merryweather"><p>在上一节中我们已经成功的安装了istio的各个组件,接下来我们一起来运行一个nginx,体验一下istio的功能</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -1002,21 +852,21 @@ public class ReadWriteLock { /** * 读锁持有个数 */ private int readCount =
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/">
-                <h3 class="media-heading">Java8 日期和时间</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E7%BD%91%E5%85%B3/">
+                <h3 class="media-heading">迈向istio-网关</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/a80596890555/article/details/58687444
- 如何正确处理时间 现实生活的世界里，时间是不断向前的，如果向前追溯时间的起点，可能是宇宙出生时，又或是是宇宙出现之前， 但肯定是我们目前无法找到的，我们不知道现在距离时间原点的精确距离。所以我们要表示时间， 就需要人为定义一个原点。
-原点被规定为，格林威治时间 (GMT)1970 年 1 月 1 日的午夜 为起点, 之于为啥是 GMT 时间，大概是因为本初子午线在那的原因吧。
-java 中的时间 如果你跟你朋友说：“我们 1484301456 一起去吃饭，别迟到！”，而你朋友能马上理解你说的时间，表示时间就会很简单， 只需要一个 long 值来表示原点的偏移量，这是个绝对时间，在世界范围内都适用。但实际上我们不能马上理解这串数字， 而且我们需要不同的时间单位来表示时间的跨度，比如一个季度是 3 个月，一个月有 30 天等。 你可以跟朋友约好 “明天这个时候再见面”, 你朋友很容易理解明天的意思，但要是没有’天’这个单位， 他就需要在那串数字上加上 86400(一天是 86400 秒)。
-Java 三次引入处理时间的 API，JDK1.0 中包含了一个Date类，但大多数方法在 java1.1 引入Calendear类之后被弃用了。 它的实例都是可变的，而且它的 API 很难使用，比如月份是从 0 开始这种反人类的设置。
-java8 引入的java.time API 已经纠正了之前的问题。它已经完全实现了JSR310规范。
-java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个精确的时间点，Duration和Period表示两个时间点之间的时间量。 LocalDate表示日期，即 xx 年 xx 月 xx 日，即不包括时间也不带时区。LocalTime与LocalDate类似， 但只包含时间。LocalDateTime则包含日期和时间。ZoneDateTime表示一个带时区的时间。 DateTimeFormatter提供格式化和解析功能。下面详细的介绍使用方法。</div>
+              <div class="media-content hide-xs font-merryweather"><p>在上一节中我们已经成功的简单运行了istio的一个路由,也有了一番流量管理的体验,那么很多人都不禁要问,这些配置和yaml是什么意思呢?</p>
+
+<p>那接下来我们基于istio示例中的配置,一点一点的解析这些yaml文件.</p>
+
+<blockquote>
+<p>nginx.yaml中的内容为k8s的yaml文件,再此不做赘述.</p>
+</blockquote></div>
             </div>
             <div style="clear:both;"></div>
             <hr>

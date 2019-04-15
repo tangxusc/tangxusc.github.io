@@ -17,12 +17,11 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/lombok-%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E4%B8%8E%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/</guid>
-      <description>本文由 简悦 SimpRead 转码， 原文地址 https://blog.mythsman.com/2017/12/19/1/
- 前言 这两天没什么重要的事情做，但是想着还要春招总觉得得学点什么才行，正巧想起来前几次面试的时候面试官总喜欢问一些框架的底层实现，但是我学东西比较倾向于用到啥学啥，因此在这些方面吃了很大的亏。而且其实很多框架也多而杂，代码起来费劲，无非就是几套设计模式套一套，用到的东西其实也就那么些，感觉没啥新意。刚这两天读” 深入理解 JVM” 的时候突然想起来有个叫 Lombok 的东西以前一直不能理解他的实现原理，现在正好趁着闲暇的时间研究研究。
-Lombok 代码 Lombok 是一个开源项目，源代码托管在 GITHUB/rzwitserloot，如果需要在 maven 里引用，只需要添加下依赖:
-&amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.projectlombok&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;lombok&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.16.8&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt;  功能 那么 Lombok 是做什么的呢？其实很简单，一个最简单的例子就是它能够实现通过添加注解，能够自动生成一些方法。比如这样的类:
-@Getter class Test{ private String value; }  我们用 Lombok 提供的 @Getter 来注解这个类，这个类在编译的时候就会变成:
-class Test{ private String value; public String getValue(){ return this.value; } }  当然 Lombok 也提供了很多其他的注解，这只是其中一个最典型的例子。其他的用法网上的资料已经很多了，这里就不啰嗦。 看上去是很方便的一个功能，尤其是在很多项目里有很多 bean，每次都要手写或自动生成 setter getter 方法，搞得代码很长而且没有啥意义，因此这个对简化代码的强迫症们还是很有吸引力的。 但是，我们发现这个包跟一般的包有很大区别，绝大多数 java 包都工作在运行时，比如 spring 提供的那种注解，通过在运行时用反射来实现业务逻辑。Lombok 这个东西工作却在编译期，在运行时是无法通过反射获取到这个注解的。 而且由于他相当于是在编译期对代码进行了修改，因此从直观上看，源代码甚至是语法有问题的。 一个更直接的体现就是，普通的包在引用之后一般的 IDE 都能够自动识别语法，但是 Lombok 的这些注解，一般的 IDE 都无法自动识别，比如我们上面的 Test 类，如果我们在其他地方这么调用了一下:</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://blog.mythsman.com/2017/12/19/1/&#34;&gt;https://blog.mythsman.com/2017/12/19/1/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这两天没什么重要的事情做，但是想着还要春招总觉得得学点什么才行，正巧想起来前几次面试的时候面试官总喜欢问一些框架的底层实现，但是我学东西比较倾向于用到啥学啥，因此在这些方面吃了很大的亏。而且其实很多框架也多而杂，代码起来费劲，无非就是几套设计模式套一套，用到的东西其实也就那么些，感觉没啥新意。刚这两天读” 深入理解 JVM” 的时候突然想起来有个叫 Lombok 的东西以前一直不能理解他的实现原理，现在正好趁着闲暇的时间研究研究。&lt;/p&gt;</description>
     </item>
     
   </channel>

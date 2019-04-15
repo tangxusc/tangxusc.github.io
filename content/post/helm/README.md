@@ -13,8 +13,8 @@ keywords:
 - helm
 ---
 
-# helm简介
-
+helm简介
+<!--more-->
 ## 简介
 
 helm是k8s中的**包管理器**,每一个包称为一个`chart`,helm使用更为便捷的方式来管理我们k8s集群上的应用的安装和分发.

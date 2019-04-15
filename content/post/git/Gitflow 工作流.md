@@ -13,6 +13,10 @@ keywords:
 - gitflow
 ---
 
+`Gitflow`工作流定义了一个围绕项目发布的严格分支模型。虽然比[功能分支工作流](http://blog.jobbole.com/76857/)复杂几分，但提供了用于一个健壮的用于管理大型项目的框架。
+
+`Gitflow`工作流没有用超出功能分支工作流的概念和命令，而是为不同的分支分配一个很明确的角色，并定义分支之间如何和什么时候进行交互。除了使用功能分支，在做准备、维护和记录发布也使用各自的分支。当然你可以用上功能分支工作流所有的好处：`Pull Requests`、隔离实验性开发和更高效的协作。
+<!--more-->
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 http://blog.jobbole.com/76867/
 
 <img src="https://raw.githubusercontent.com/quickhack/translations/master/git-workflows-and-tutorials/images/git-workflows-gitflow.png"/>

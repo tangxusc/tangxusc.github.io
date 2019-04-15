@@ -16,6 +16,8 @@ keywords:
 - 分布式锁
 ---
 
+`etcd`是随着`CoreOS`项目一起成长起来的，随着 Golang 和 CoreOS 等项目在开源社区日益火热， `etcd`作为一个高可用、强一致性的分布式 Key-Value 存储系统被越来越多的开发人员关注和使用。
+<!--more-->
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://www.cnblogs.com/diegodu/p/5603678.html
 
   本文 [http://blog.codeg.cn/post/blog/2016-02-24-distrubute-lock-over-etcd/](http://blog.codeg.cn/post/blog/2016-02-24-distrubute-lock-over-etcd/) 是作者 [zieckey](http://blog.codeg.cn/) 在研究和学习相关内容时所做的笔记，欢迎广大朋友指正和交流！ 版权所有，欢迎转载和分享，但请保留此段声明。

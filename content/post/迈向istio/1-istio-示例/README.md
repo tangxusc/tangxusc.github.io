@@ -1,6 +1,6 @@
 ---
 title: "迈向istio-示例"
-date: 2019-03-20T14:15:59+08:00
+date: 2019-04-01T14:15:59+08:00
 draft: false
 categories:
 - istio
@@ -10,11 +10,9 @@ keywords:
 - istio
 ---
 
-# istio-示例
-
-[TOC]
-
 在上一节中我们已经成功的安装了istio的各个组件,接下来我们一起来运行一个nginx,体验一下istio的功能
+
+<!--more-->
 
 ## nginx示例
 

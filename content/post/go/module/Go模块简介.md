@@ -13,6 +13,8 @@ keywords:
 - module
 ---
 
+go module模块的简介和使用
+<!--more-->
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://roberto.selbach.ca/intro-to-go-modules/
 

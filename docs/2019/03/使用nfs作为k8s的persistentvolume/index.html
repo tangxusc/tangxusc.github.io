@@ -8,38 +8,34 @@
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
 <meta name="keywords" content="kubeadm, k8s, install, nfs">
-<meta name="description" content="使用nfs作为k8s的PersistentVolume 在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选
-本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务
-准备 nfs server 一台
-k8s集群 一台
-NFS server配置 安装nfs,并启动 $ yum install -y nfs-utils ##关闭防火墙 $ systemctl disable firewalld $ systemctl stop firewalld ##开启nfs自动启动 $ systemctl enable rpcbind.service $ systemctl enable nfs-server.service ## 启动nfs $ systemctl start rpcbind.service $ systemctl start nfs-server.service  配置nfs 编辑文件/etc/exports设置nfs需要暴露的文件夹
-$ vim /etc/exports #添加 此处暴露的是/home/nfsdata目录 /home/nfsdata *(insecure,rw,sync,no_root_squash) ###修改暴露的目录的权限 $ chmod 777 -R /home/nfsdata ##重启nfs $ systemctl restart nfs.service  验证 $ showmount -e 10.">
+<meta name="description" content="使用nfs作为k8s的PersistentVolume
+
+在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选
+
+本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务">
 
 
-<meta property="og:description" content="使用nfs作为k8s的PersistentVolume 在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选
-本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务
-准备 nfs server 一台
-k8s集群 一台
-NFS server配置 安装nfs,并启动 $ yum install -y nfs-utils ##关闭防火墙 $ systemctl disable firewalld $ systemctl stop firewalld ##开启nfs自动启动 $ systemctl enable rpcbind.service $ systemctl enable nfs-server.service ## 启动nfs $ systemctl start rpcbind.service $ systemctl start nfs-server.service  配置nfs 编辑文件/etc/exports设置nfs需要暴露的文件夹
-$ vim /etc/exports #添加 此处暴露的是/home/nfsdata目录 /home/nfsdata *(insecure,rw,sync,no_root_squash) ###修改暴露的目录的权限 $ chmod 777 -R /home/nfsdata ##重启nfs $ systemctl restart nfs.service  验证 $ showmount -e 10.">
+<meta property="og:description" content="使用nfs作为k8s的PersistentVolume
+
+在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选
+
+本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用nfs作为k8s的PersistentVolume">
 <meta name="twitter:title" content="使用nfs作为k8s的PersistentVolume">
 <meta property="og:url" content="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/">
 <meta property="twitter:url" content="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/">
 <meta property="og:site_name" content="苏连云的博客">
-<meta property="og:description" content="使用nfs作为k8s的PersistentVolume 在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选
-本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务
-准备 nfs server 一台
-k8s集群 一台
-NFS server配置 安装nfs,并启动 $ yum install -y nfs-utils ##关闭防火墙 $ systemctl disable firewalld $ systemctl stop firewalld ##开启nfs自动启动 $ systemctl enable rpcbind.service $ systemctl enable nfs-server.service ## 启动nfs $ systemctl start rpcbind.service $ systemctl start nfs-server.service  配置nfs 编辑文件/etc/exports设置nfs需要暴露的文件夹
-$ vim /etc/exports #添加 此处暴露的是/home/nfsdata目录 /home/nfsdata *(insecure,rw,sync,no_root_squash) ###修改暴露的目录的权限 $ chmod 777 -R /home/nfsdata ##重启nfs $ systemctl restart nfs.service  验证 $ showmount -e 10.">
-<meta name="twitter:description" content="使用nfs作为k8s的PersistentVolume 在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选
-本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务
-准备 nfs server 一台
-k8s集群 一台
-NFS server配置 安装nfs,并启动 $ yum install -y nfs-utils ##关闭防火墙 $ systemctl disable firewalld $ systemctl stop firewalld ##开启nfs自动启动 $ systemctl enable rpcbind.service $ systemctl enable nfs-server.service ## 启动nfs $ systemctl start rpcbind.service $ systemctl start nfs-server.service  配置nfs 编辑文件/etc/exports设置nfs需要暴露的文件夹
-$ vim /etc/exports #添加 此处暴露的是/home/nfsdata目录 /home/nfsdata *(insecure,rw,sync,no_root_squash) ###修改暴露的目录的权限 $ chmod 777 -R /home/nfsdata ##重启nfs $ systemctl restart nfs.service  验证 $ showmount -e 10.">
+<meta property="og:description" content="使用nfs作为k8s的PersistentVolume
+
+在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选
+
+本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务">
+<meta name="twitter:description" content="使用nfs作为k8s的PersistentVolume
+
+在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选
+
+本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务">
 <meta property="og:locale" content="en-us">
 
   
@@ -265,9 +261,7 @@ $ vim /etc/exports #添加 此处暴露的是/home/nfsdata目录 /home/nfsdata *
           
           <div class="post-content markdown" itemprop="articleBody">
             <div class="main-content-wrap">
-              
-
-<h1 id="使用nfs作为k8s的persistentvolume">使用nfs作为k8s的PersistentVolume</h1>
+              <p>使用nfs作为k8s的PersistentVolume</p>
 
 <p>在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选</p>
 
@@ -493,7 +487,6 @@ pvtest   5Gi        RWX            Recycle          Available                   
 <h2 id="参照">参照</h2>
 
 <p><a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/">k8s官方说明persistent-volumes</a></p>
-
               
             </div>
           </div>
@@ -705,15 +698,7 @@ pvtest   5Gi        RWX            Recycle          Available                   
                   Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">介绍 istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本的口号叫企业级就绪(以后会不会出云供应商就绪?),这8个月中可以看到istio还是发生了很大的变化的,纵观历史,istio进行了三次腾飞:
- 0.8 不在是模型了 1.0 生产就绪了(其实没有),抛弃了ingress,模型改动比较大 1.1 企业就绪了,理清楚了流量管理的模型,sidecar不再操碎了心,pilot解放了,mixer adapter又被默认的关了,ServiceEntry存在感突然就没啦.  废话太多了,接下来我们进入正题,去看看istio1.1到底更新了那些东西
- 注意,因个人知识有限,不会全部解析,请见谅.
- 升级内容 安装 1.安装模式变化 现在提供了两个helm chart来安装,分别为istio-init和istio 这两个职责如下:
-istio-init: 负责通过job.batch/istio-init-crd-10,job.batch/istio-init-crd-11 这两个job来安装istio的crd资源(一共53个,如果启用cert-manager则为58个),可通过命令查看:
-$ kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l 53  istio: 现在istio安装的时候是没有启用grafana,kiali的,并且已经说明使用kiali替换servicegraph,所以在安装时,需要手动开启:
-# # addon grafana configuration # grafana: enabled: true # # addon kiali tracing configuration # kiali: enabled: true createDemoSecret: true  并且现在支持自定义kiali的用户名密码了,如果还是使用admin/admin 那么就需要createDemoSecret: true
-istio现在提供了一个cni组件来避免init-container的privilege问题,不过这个cni需要kubelet的cni支持,kubelet的网络就两种kubenet和cni,也就是说 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf文件中的
-Environment=&quot;KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin&quot;  这里的--network-plugin=cni 值只能是 cni了</div>
+              <div class="media-content hide-xs font-merryweather"><p>istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本为<code>企业级就绪</code></p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -722,21 +707,17 @@ Environment=&quot;KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">
-                <h3 class="media-heading">Controller manager高可用实现方式</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-jwt%E8%AE%A4%E8%AF%81/">
+                <h3 class="media-heading">迈向istio-jwt认证</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://www.colabug.com/2801661.html
- 这不是一系列入门级别的文章，也不是按部就班而来的，而是我看到哪里，发现有些代码写的精妙的地方，都值得我们学习下，顺手记录下来，一方面是让自己将来可以有迹可循，另外对大家应该也会有所帮助。而且记录本身成本并不是很高。
-高可用部署情况下，需要部署多个 controller manager （以下简称 cm ），每个 cm 需要 --leader-elect=true 启动参数，即告知 cm 以高可用方式启动，谁要想进行真正的工作，必须先抢到锁，被选举为 leader 才行，而抢不到所得只能待机，在 leader 因为异常终止的时候，由剩余的其余节点再次获得锁。
-关于分布式锁的实现很多，可以自己从零开始制造。当然更简单的是基于现有中间件，比如有基于 Redis 或数据库的实现方式，最近 Zookeeper/ETCD 也提供了相关功能。但 K8s 的实现并没有使用这些方式，而是另辟蹊径使用了资源锁的概念，简单来说就是通过创建 K8s 的资源（当前的实现中实现了 ConfigMap 和 Endpoint 两种类型的资源）来维护锁的状态。
-分布式锁一般实现原理就是大家先去抢锁，抢到的人成为 leader ，然后 leader 会定期更新锁的状态，声明自己的活动状态，不让其他人把锁抢走。K8s 的资源锁也类似，抢到锁的节点会将自己的标记（目前是 hostname）设为锁的持有者，其他人则需要通过对比锁的更新时间和持有者来判断自己是否能成为新的 leader ，而 leader 则可以通过更新 RenewTime 来确保持续保有该锁。
-大概看了下 K8s 的实现，老实说其实现方式并不算高雅，但是却给我们开拓了一种思路：K8s 里的 resource 是万能的，不要以为 Endpoint 只是 Endpoint 。不过反过来有时候也挺让人费解的，刚了解的时候容易摸不着头脑，也不是好事。而且 scheduler 和 cm 都采用了资源锁，但是实现起来却不尽相同，也值得吐槽下。不管怎么说，这个实现算是挺有意思的实现，值得我们深入了解下。
-我们首先来看一下 cm 启动的时候，是如何去 初始化 抢锁的。启动的时候，如果指定了 --leader-elect=true 参数的话，则会进入下面的代码，首先获取自己的资源标志（这里是 hostname 加一串随机数字）。</div>
+              <div class="media-content hide-xs font-merryweather"><p>在建设企业的各种项目中,我们一定离不开,或者总要和认证授权系统打交道,应用总会入侵一些认证和授权部分的代码,现在在java等方面有大量的安全框架,例如<code>spring security,shiro</code>等等框架,这些框架也是为了解决这个重复性的做认证和授权等功能的问题,这也是我们在单体服务的时候一直做的,将各种各样的框架集成到系统中,那么现在在微服务时代,或者说在istio有没有解决方法能解决这个问题呢,让服务真正回归业务,不再去过多的管理认证的问题呢.</p>
+
+<p>在本节中我们将会将我们的应用构建为一个需要使用jwt token才能访问的服务,在没有jwt token的情况下,将会返回401 未授权.</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -745,34 +726,15 @@ Environment=&quot;KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/">
-                <h3 class="media-heading">Gitflow 工作流</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-opa%E6%8E%88%E6%9D%83/">
+                <h3 class="media-heading">迈向istio-opa授权</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 http://blog.jobbole.com/76867/
- 这节介绍的 Gitflow工作流借鉴自在 nvie 的 _Vincent Driessen_。
-Gitflow工作流定义了一个围绕项目发布的严格分支模型。虽然比功能分支工作流复杂几分，但提供了用于一个健壮的用于管理大型项目的框架。
-Gitflow工作流没有用超出功能分支工作流的概念和命令，而是为不同的分支分配一个很明确的角色，并定义分支之间如何和什么时候进行交互。除了使用功能分支，在做准备、维护和记录发布也使用各自的分支。当然你可以用上功能分支工作流所有的好处：Pull Requests、隔离实验性开发和更高效的协作。
-工作方式 Gitflow工作流仍然用中央仓库作为所有开发者的交互中心。和其它的工作流一样，开发者在本地工作并push分支到要中央仓库中。
-历史分支 相对使用仅有的一个master分支，Gitflow工作流使用 2 个分支来记录项目的历史。master分支存储了正式发布的历史，而develop分支作为功能的集成分支。这样也方便master分支上的所有提交分配一个版本号。
-剩下要说明的问题围绕着这 2 个分支的区别展开。
-功能分支 每个新功能位于一个自己的分支，这样可以 push到中央仓库以备份和协作。但功能分支不是从master分支上拉出新分支，而是使用develop分支作为父分支。当新功能完成时，合并回develop分支。新功能提交应该从不直接与master分支交互。
-注意，从各种含义和目的上来看，功能分支加上develop分支就是功能分支工作流的用法。但Gitflow工作流没有在这里止步。
-发布分支 一旦develop分支上有了做一次发布（或者说快到了既定的发布日）的足够功能，就从develop分支上fork一个发布分支。新建的分支用于开始发布循环，所以从这个时间点开始之后新的功能不能再加到这个分支上 —— 这个分支只应该做Bug修复、文档生成和其它面向发布任务。一旦对外发布的工作都完成了，发布分支合并到master分支并分配一个版本号打好Tag。另外，这些从新建发布分支以来的做的修改要合并回develop分支。
-使用一个用于发布准备的专门分支，使得一个团队可以在完善当前的发布版本的同时，另一个团队可以继续开发下个版本的功能。 这也打造定义良好的开发阶段（比如，可以很轻松地说，『这周我们要做准备发布版本 4.0』，并且在仓库的目录结构中可以实际看到）。
-常用的分支约定：
-用于新建发布分支的分支: develop 用于合并的分支: master 分支命名: release-* 或 release/*
-维护分支 维护分支或说是热修复（hotfix）分支用于生成快速给产品发布版本（production releases）打补丁，这是唯一可以直接从master分支fork出来的分支。修复完成，修改应该马上合并回master分支和develop分支（当前的发布分支），master分支应该用新的版本号打好Tag。
-为Bug修复使用专门分支，让团队可以处理掉问题而不用打断其它工作或是等待下一个发布循环。你可以把维护分支想成是一个直接在master分支上处理的临时发布。
-示例 下面的示例演示本工作流如何用于管理单个发布循环。假设你已经创建了一个中央仓库。
-创建开发分支 第一步为master分支配套一个develop分支。简单来做可以本地创建一个空的develop分支，push到服务器上：
-git branch develop git push -u origin develop
-以后这个分支将会包含了项目的全部历史，而master分支将只包含了部分历史。其它开发者这时应该克隆中央仓库，建好develop分支的跟踪分支：
-git clone ssh://user@host/path/to/repo.git git checkout -b develop origin/develop</div>
+              <div class="media-content hide-xs font-merryweather"><p>在上一章节中,我们使用jwt进行了认证,那么我们如何对资源进行授权检查呢?</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -781,24 +743,15 @@ git clone ssh://user@host/path/to/repo.git git checkout -b develop origin/develo
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/go-%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8F%8A-pprof-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
-                <h3 class="media-heading">Go 程序性能优化及 pprof 使用方法详解</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-tls/">
+                <h3 class="media-heading">迈向istio-tls</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://www.jb51.net/article/127551.htm
- Go 程序性能优化及 pprof 使用方法详解  更新时间：2017 年 11 月 05 日 10:50:22 作者：snowInPluto
-这篇文章主要为大家详细介绍了 Go 程序性能优化及 pprof 的使用方法，具有一定的参考价值，感兴趣的小伙伴们可以参考一下
-Go 程序的性能优化及 pprof 的使用
-程序的性能优化无非就是对程序占用资源的优化。对于服务器而言，最重要的两项资源莫过于 CPU 和内存。性能优化，就是在对于不影响程序数据处理能力的情况下，我们通常要求程序的 CPU 的内存占用尽量低。反过来说，也就是当程序 CPU 和内存占用不变的情况下，尽量地提高程序的数据处理能力或者说是吞吐量。
-Go 的原生工具链中提供了非常多丰富的工具供开发者使用，其中包括 pprof。
-对于 pprof 的使用要分成下面两部分来说。
-Web 程序使用 pprof
-先写一个简单的 Web 服务程序。程序在 9876 端口上接收请求。
-package main import ( &quot;bytes&quot; &quot;io/ioutil&quot; &quot;log&quot; &quot;math/rand&quot; &quot;net/http&quot; _ &quot;net/http/pprof&quot; ) func main() { http.HandleFunc(&quot;/test&quot;, handler) log.Fatal(http.ListenAndServe(&quot;:9876&quot;, nil)) } func handler(w http.</div>
+              <div class="media-content hide-xs font-merryweather"><p>我们已经完成了我们服务的路由,并且也已经有了镜像流量了,那么接下来我们要做什么呢?</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -807,22 +760,17 @@ package main import ( &quot;bytes&quot; &quot;io/ioutil&quot; &quot;log&quot; &q
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/">
-                <h3 class="media-heading">Golang大杀器之性能剖析PProf</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/">
+                <h3 class="media-heading">迈向istio-多服务通信</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://github.com/EDDYCJY/blog/blob/master/golang/2018-09-15-Golang%20%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90%20PProf.md
- Golang 大杀器之性能剖析 PProf 前言 写了几吨代码，实现了几百个接口。功能测试也通过了，终于成功的部署上线了
-结果，性能不佳，什么鬼？
-想做性能分析 PProf 想要进行性能优化，首先瞩目在 Go 自身提供的工具链来作为分析依据，本文将带你学习、使用 Go 后花园，涉及如下：
- runtime/pprof：采集程序（非 Server）的运行数据进行分析 net/http/pprof：采集 HTTP Server 的运行时数据进行分析  是什么 pprof 是用于可视化和分析性能分析数据的工具
-pprof 以 profile.proto 读取分析样本的集合，并生成报告以可视化并帮助分析数据（支持文本和图形报告）
-profile.proto 是一个 Protocol Buffer v3 的描述文件，它描述了一组 callstack 和 symbolization 信息， 作用是表示统计分析的一组采样的调用栈，是很常见的 stacktrace 配置文件格式
-支持什么使用模式  Report generation：报告生成 Interactive terminal use：交互式终端使用 Web interface：Web 界面  可以做什么  CPU Profiling：CPU 分析，按照一定的频率采集所监听的应用程序 CPU（含寄存器）的使用情况，可确定应用程序在主动消耗 CPU 周期时花费时间的位置 Memory Profiling：内存分析，在应用程序进行堆分配时记录堆栈跟踪，用于监视当前和历史内存使用情况，以及检查内存泄漏 Block Profiling：阻塞分析，记录 goroutine 阻塞等待同步（包括定时器通道）的位置 Mutex Profiling：互斥锁分析，报告互斥锁的竞争情况  一个简单的例子 我们将编写一个简单且有点问题的例子，用于基本的程序初步分析</div>
+              <div class="media-content hide-xs font-merryweather"><p>在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;</p>
+
+<p>在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -831,23 +779,15 @@ profile.proto 是一个 Protocol Buffer v3 的描述文件，它描述了一组 
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/">
-                <h3 class="media-heading">Go模块简介</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/">
+                <h3 class="media-heading">迈向istio-安装</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://roberto.selbach.ca/intro-to-go-modules/
- Go模块简介 发表于 2018年8月18日(https://roberto.selbach.ca/intro-to-go-modules/) 作者：Roberto Selbach
-即将发布的Go编程语言版本1.11将为_模块_带来实验性支持 ，几天前Go.A的新依赖管理系统，我写了一篇关于它的快速帖子。自那篇文章上线以来，事情发生了一些变化，因为我们现在非常接近新版本，我认为现在是另一篇文章更适合实践的好时机。所以这就是我们要做的：我们将创建一个新的包，然后我们将发布一些版本，看看它是如何工作的。
-创建模块 首先要做的事情。让我们创建我们的包。我们称之为“testmod”。这里有一个重要的细节：这个目录应该 在你的外面，因为默认情况下，模块支持在其中被禁用。Go模块是可能在某些时候完全消除的第一步。$GOPATH$GOPATH
-$ mkdir testmod $ cd testmod  我们的包很简单：
-package testmod import &quot;fmt&quot; // Hi returns a friendly greeting func Hi(name string) string { return fmt.Sprintf(&quot;Hi, %s&quot;, name) }  包完成但它仍然不是_模块_。让我们改变这一点。
-$ go mod init github.com/robteix/testmod go: creating new go.mod: module github.com/robteix/testmod  这将go.mod在包目录中创建一个新文件，其中包含以下内容：
-module github.com/robteix/testmod  这里不是很多，但这有效地将我们的包变成了一个 _模块_。我们现在可以将这个代码推送到一个存储库：
-$ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u origin master  到目前为止，任何愿意使用此软件包的人都会go get ：</div>
+              <div class="media-content hide-xs font-merryweather"><p>istio-安装</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -856,21 +796,15 @@ $ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u o
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/intellij-idea-%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84-rest-%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8B%E7%BB%8D/">
-                <h3 class="media-heading">Intellij IDEA 基于编辑器的 REST 客户端介绍</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/">
+                <h3 class="media-heading">迈向istio-引入外部服务</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/u011054333/article/details/78705256
- 最近 Intellij IDEA 更新到了 2017.3 这一版本，这个版本又增加了很多新功能。我觉得其中这个基于编辑器的 REST 客户端这个功能很不错，可以为我们带来很多方便。这个功能并不仅仅在 Intellij IDEA 才有，最近更新的所有 Jetbrains 系 IIDE 都有这个功能。
-以往我们开发和调试网络程序，用到的无非是这几种办法：浏览器 F12 工具、Fiddler、Wireshark、curl 等命令行工具、手动使用 HTTP 客户端类库编程。不过这些方法总是有些不好用。Jetbrains 这个基于编辑器的 REST 客户端用起来倒是让我眼前一亮。
-使用方法 要使用这个功能很简单，在 IDE 中新建一个后缀名为.http的文件，然后就可以使用这个功能了。截图如下。
-这个功能使用起来非常简单，使用大写的 HTTP 动词（GET、POST、DELETE、PUT 等等）后面加上要访问的网址即可，如果端口号不是 80 或者 443，可以使用冒号 + 端口号的形式写在网址后面。如果需要修改 Cookie、ContentType、UA 等设置，直接写在后面几行即可，Jetbrains 提供了非常完善的补全支持，我们只要敲第一个大写字母即可获得相应的代码提示。想要发起一个请求的时候，直接点击前面的绿色运行按钮即可。一个文件中可以保存多个请求，如果以后还想再次运行只要打开这个文件即可。
-配置环境变量 Jetbrains 还提供了一个环境变量的功能，让我们使用这个编辑器 REST 客户端更加简单。只要在项目中添加一个名为rest-client.env.json的文件，然后配置不同环境下要使用的环境变量。然后就能在 REST 客户端中使用了。例如配置文件是这样的。
-{ &quot;dev&quot;: { &quot;host&quot;: &quot;http://httpbin.org&quot; }, &quot;prod&quot;: { &quot;host&quot;: &quot;http://httpbin.org&quot; } }  那么在点击运行按钮的时候就会弹出选择要使用哪个环境变量。我们只要选择就可以针对不同环境使用不同配置了。在代码中只要使用双括号引用环境变量即可。</div>
+              <div class="media-content hide-xs font-merryweather"><p>在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -879,16 +813,19 @@ $ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u o
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java-%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7-%E6%8F%92%E4%BB%B6%E5%8C%96%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86-apipluggable-annotation-processing-api/">
-                <h3 class="media-heading">Java 奇技淫巧 - 插件化注解处理 API(Pluggable Annotation Processing API)</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/">
+                <h3 class="media-heading">迈向istio-服务路由</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/throwable/p/9139908.html
- 插件化注解处理 API(Pluggable Annotation Processing API) Java 奇技淫巧 - 插件化注解处理 API(Pluggable Annotation Processing API) 参考资料  JDK6 的新特性之六: 插入式注解处理 API(Pluggable Annotation Processing API) Java Annotation Processing and Creating a Builder  简介 插件化注解处理 (Pluggable Annotation Processing)APIJSR 269 提供一套标准 API 来处理 AnnotationsJSR 175, 实际上 JSR 269 不仅仅用来处理 Annotation，我觉得更强大的功能是它建立了 Java 语言本身的一个模型, 它把 method、package、constructor、type、variable、enum、annotation 等 Java 语言元素映射为 Types 和 Elements，从而将 Java 语言的语义映射成为对象，我们可以在 javax.lang.model 包下面可以看到这些类。所以我们可以利用 JSR 269 提供的 API 来构建一个功能丰富的元编程 (metaprogramming) 环境。JSR 269 用 Annotation Processor 在编译期间而不是运行期间处理 Annotation, Annotation Processor 相当于编译器的一个插件, 所以称为插入式注解处理.</div>
+              <div class="media-content hide-xs font-merryweather"><p>在上一节中,我们使用nginx开启了我们istio的第一个应用,现在我们加入另外一个服务tomcat</p>
+
+<blockquote>
+<p>本节内容基于上节内容,请先运行上一节的yaml文件,然后再体验本节内容</p>
+</blockquote></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -897,20 +834,15 @@ $ git init $ git add * $ git commit -am &quot;First commit&quot; $ git push -u o
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
-                <h3 class="media-heading">Java 读写锁实现原理</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">迈向istio-示例</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://my.oschina.net/editorial-story/blog/1928306
- 最近做的一个小项目中有这样的需求：整个项目有一份*config.json*保存着项目的一些配置，是存储在本地文件的一个资源，并且应用中存在读写（读 &gt;&gt; 写）更新问题。既然读写并发操作，那么就涉及到操作互斥，这里自然想到了读写锁，本文对读写锁方面的知识做个梳理。
-为什么需要读写锁？ 与传统锁不同的是读写锁的规则是可以共享读，但只能一个写，总结起来为：读读不互斥，读写互斥，写写互斥，而一般的独占锁是：读读互斥，读写互斥，写写互斥，而场景中往往读远远大于写，读写锁就是为了这种优化而创建出来的一种机制。
-注意是读远远大于写，一般情况下独占锁的效率低来源于高并发下对临界区的激烈竞争导致线程上下文切换。因此当并发不是很高的情况下，读写锁由于需要额外维护读锁的状态，可能还不如独占锁的效率高。因此需要根据实际情况选择使用。
-一个简单的读写锁实现 根据上面理论可以利用两个 int 变量来简单实现一个读写锁，实现虽然烂，但是原理都是差不多的，值得阅读下。
-public class ReadWriteLock { /** * 读锁持有个数 */ private int readCount = 0; /** * 写锁持有个数 */ private int writeCount = 0; /** * 获取读锁,读锁在写锁不存在的时候才能获取 */ public synchronized void lockRead() throws InterruptedException { // 写锁存在,需要wait while (writeCount &gt; 0) { wait(); } readCount++; } /** * 释放读锁 */ public synchronized void unlockRead() { readCount--; notifyAll(); } /** * 获取写锁,当读锁存在时需要wait.</div>
+              <div class="media-content hide-xs font-merryweather"><p>在上一节中我们已经成功的安装了istio的各个组件,接下来我们一起来运行一个nginx,体验一下istio的功能</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -919,21 +851,21 @@ public class ReadWriteLock { /** * 读锁持有个数 */ private int readCount =
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/">
-                <h3 class="media-heading">Java8 日期和时间</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E7%BD%91%E5%85%B3/">
+                <h3 class="media-heading">迈向istio-网关</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Mar 3, 2019
+                  Apr 4, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather">本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/a80596890555/article/details/58687444
- 如何正确处理时间 现实生活的世界里，时间是不断向前的，如果向前追溯时间的起点，可能是宇宙出生时，又或是是宇宙出现之前， 但肯定是我们目前无法找到的，我们不知道现在距离时间原点的精确距离。所以我们要表示时间， 就需要人为定义一个原点。
-原点被规定为，格林威治时间 (GMT)1970 年 1 月 1 日的午夜 为起点, 之于为啥是 GMT 时间，大概是因为本初子午线在那的原因吧。
-java 中的时间 如果你跟你朋友说：“我们 1484301456 一起去吃饭，别迟到！”，而你朋友能马上理解你说的时间，表示时间就会很简单， 只需要一个 long 值来表示原点的偏移量，这是个绝对时间，在世界范围内都适用。但实际上我们不能马上理解这串数字， 而且我们需要不同的时间单位来表示时间的跨度，比如一个季度是 3 个月，一个月有 30 天等。 你可以跟朋友约好 “明天这个时候再见面”, 你朋友很容易理解明天的意思，但要是没有’天’这个单位， 他就需要在那串数字上加上 86400(一天是 86400 秒)。
-Java 三次引入处理时间的 API，JDK1.0 中包含了一个Date类，但大多数方法在 java1.1 引入Calendear类之后被弃用了。 它的实例都是可变的，而且它的 API 很难使用，比如月份是从 0 开始这种反人类的设置。
-java8 引入的java.time API 已经纠正了之前的问题。它已经完全实现了JSR310规范。
-java8 时间 API 介绍及使用 在新的时间 API 中，Instant表示一个精确的时间点，Duration和Period表示两个时间点之间的时间量。 LocalDate表示日期，即 xx 年 xx 月 xx 日，即不包括时间也不带时区。LocalTime与LocalDate类似， 但只包含时间。LocalDateTime则包含日期和时间。ZoneDateTime表示一个带时区的时间。 DateTimeFormatter提供格式化和解析功能。下面详细的介绍使用方法。</div>
+              <div class="media-content hide-xs font-merryweather"><p>在上一节中我们已经成功的简单运行了istio的一个路由,也有了一番流量管理的体验,那么很多人都不禁要问,这些配置和yaml是什么意思呢?</p>
+
+<p>那接下来我们基于istio示例中的配置,一点一点的解析这些yaml文件.</p>
+
+<blockquote>
+<p>nginx.yaml中的内容为k8s的yaml文件,再此不做赘述.</p>
+</blockquote></div>
             </div>
             <div style="clear:both;"></div>
             <hr>

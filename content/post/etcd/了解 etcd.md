@@ -13,6 +13,9 @@ keywords:
 - etcd
 ---
 
+这是一篇非常入门的文章，让你大概了解一下 etcd。写这篇文章时使用 etcd 的版本是 3.1.0。
+etcd 是以实现共享配置和服务发现为目的，提供一致性的键值存储的分布式数据库。kubernetes 等项目使用了 etcd。
+<!--more-->
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://segmentfault.com/a/1190000008361945
 
 ## 说明

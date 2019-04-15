@@ -18,6 +18,7 @@ keywords:
 关于子仓库或者说是仓库共用，git 官方推荐的工具是 git subtree。 我自己也用了一段时间的 git subtree，感觉比 git submodule 好用，但是也有一些缺点，在可接受的范围内。
 所以对于仓库共用，在 git subtree 与 git submodule 之中选择的话，我推荐 git subtree。
 
+<!--more-->
 # git subtree 是什么？为什么使用 git subtree
 
 git subtree 可以实现一个仓库作为其他仓库的子仓库。

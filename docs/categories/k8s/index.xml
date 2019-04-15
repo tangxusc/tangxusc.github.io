@@ -17,13 +17,14 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/</guid>
-      <description>本文由 简悦 SimpRead 转码， 原文地址 https://www.colabug.com/2801661.html
- 这不是一系列入门级别的文章，也不是按部就班而来的，而是我看到哪里，发现有些代码写的精妙的地方，都值得我们学习下，顺手记录下来，一方面是让自己将来可以有迹可循，另外对大家应该也会有所帮助。而且记录本身成本并不是很高。
-高可用部署情况下，需要部署多个 controller manager （以下简称 cm ），每个 cm 需要 --leader-elect=true 启动参数，即告知 cm 以高可用方式启动，谁要想进行真正的工作，必须先抢到锁，被选举为 leader 才行，而抢不到所得只能待机，在 leader 因为异常终止的时候，由剩余的其余节点再次获得锁。
-关于分布式锁的实现很多，可以自己从零开始制造。当然更简单的是基于现有中间件，比如有基于 Redis 或数据库的实现方式，最近 Zookeeper/ETCD 也提供了相关功能。但 K8s 的实现并没有使用这些方式，而是另辟蹊径使用了资源锁的概念，简单来说就是通过创建 K8s 的资源（当前的实现中实现了 ConfigMap 和 Endpoint 两种类型的资源）来维护锁的状态。
-分布式锁一般实现原理就是大家先去抢锁，抢到的人成为 leader ，然后 leader 会定期更新锁的状态，声明自己的活动状态，不让其他人把锁抢走。K8s 的资源锁也类似，抢到锁的节点会将自己的标记（目前是 hostname）设为锁的持有者，其他人则需要通过对比锁的更新时间和持有者来判断自己是否能成为新的 leader ，而 leader 则可以通过更新 RenewTime 来确保持续保有该锁。
-大概看了下 K8s 的实现，老实说其实现方式并不算高雅，但是却给我们开拓了一种思路：K8s 里的 resource 是万能的，不要以为 Endpoint 只是 Endpoint 。不过反过来有时候也挺让人费解的，刚了解的时候容易摸不着头脑，也不是好事。而且 scheduler 和 cm 都采用了资源锁，但是实现起来却不尽相同，也值得吐槽下。不管怎么说，这个实现算是挺有意思的实现，值得我们深入了解下。
-我们首先来看一下 cm 启动的时候，是如何去 初始化 抢锁的。启动的时候，如果指定了 --leader-elect=true 参数的话，则会进入下面的代码，首先获取自己的资源标志（这里是 hostname 加一串随机数字）。</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://www.colabug.com/2801661.html&#34;&gt;https://www.colabug.com/2801661.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这不是一系列入门级别的文章，也不是按部就班而来的，而是我看到哪里，发现有些代码写的精妙的地方，都值得我们学习下，顺手记录下来，一方面是让自己将来可以有迹可循，另外对大家应该也会有所帮助。而且记录本身成本并不是很高。&lt;/p&gt;
+
+&lt;p&gt;高可用部署情况下，需要部署多个 controller manager （以下简称 cm ），每个 cm 需要 &lt;code&gt;--leader-elect=true&lt;/code&gt;
+启动参数，即告知 cm 以高可用方式启动，谁要想进行真正的工作，必须先抢到锁，被选举为 leader 才行，而抢不到所得只能待机，在 leader 因为异常终止的时候，由剩余的其余节点再次获得锁。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -32,16 +33,11 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/kubernetes-operator-sdk/</guid>
-      <description>本文由 简悦 SimpRead 转码， 原文地址 https://banzaicloud.com/blog/operator-sdk/
- 在Banzai Cloud，我们一直在寻找新的创新技术，以支持我们的用户使用Pipeline过渡到部署到Kubernetes的微服务。最近几个月，我们与CoreOS和RedHat合作，开展了运营商及其刚刚开源的项目，并在GitHub上提供。如果您通读这篇博客，您将了解到什么是operator，如何使用它operator sdk来开发operator我们在Banzai Cloud开发和使用的具体示例。我们的GitHub上还有一些运营商都可以在新的运营商SDK 上构建。
-TL;博士：  今天发布了一个新的Kubernetes运营商框架 我们积极参与了新的SDK，因此我们发布了一些 本博客中讨论的操作员可以为任何基于JVM的应用程序提供无缝的框控制，而无需实际具有刮擦界面  在Kubernetes上部署和运行由多个相互依赖的组件/服务组成的复杂应用程序并不总是微不足道的Kubernetes提供的构造。就像一个简单的例子，如果一个应用程序需要最少数量的实例，可以通过Kubernetes部署来解决。但是，如果实例的数量发生变化（高级/低级），则必须在运行时重新配置或重新初始化这些实例，而不是我们需要对这些事件作出反应并执行必要的重新配置步骤。尝试通过实现使用Kubernetes命令行工具的脚本来解决这些问题很容易变得麻烦，特别是当我们接近现实生活中的用例时，我们必须处理弹性，日志收集，监视等。
-CoreOS引入了运营商来自动处理这些复杂的运营场景。简而言之operators，通过第三方资源机制（自定义资源）扩展Kubernetes API，并提供对细胞内部正在进行的细粒度访问和控制。
-在我们进一步讨论之前，先谈谈Kubernetes的_自定义资源，_以便更好地了解它operator是什么。甲_资源_在Kubernetes是在端点Kubernetes API，其存储一定的Kubernetes对象（例如对象波德）_种类_（例如，POD）。一个_自定义资源_本质上是一种_资源_，可以添加到Kubernetes扩展基本Kubernetes API。一旦_自定义资源_安装用户可以管理这种对象kubectl相同的方式，为他们做内置Kubernetes资源，如_豆荚_的例子。必须有一个控制器来执行由此引起的操作kubectl。定制控制器是_自定义资源的_控制器。总而言之，a operator是一个自定义控制器，可以处理某种_自定义资源_。
-CoreOS还开发了用于开发此类的SDK operators。SDK简化了a的实现，operator因为它提供了高级API来编写操作逻辑，为它生成框架，使开发人员无需编写样板代码。
-我们来看看我们如何使用Operator SDK。
-首先，我们需要将Operator SDK安装到我们的开发机器上。如果您准备冒险使用最新最好的安装来自master分支机构的CLI 。安装CLI后，开发流程将如下所示：
- 创建一个新的操作员项目 定义要监视的Kubernetes资源 在指定的处理程序中定义操作符逻辑 更新并生成自定义资源的代码 构建并生成运营商部署清单 部署运营商 创建自定义资源  创建一个新的操作员项目 运行CLI以创建新operator项目。
-$ cd $GOPATH/src/github.com/&amp;lt;your-github-repo&amp;gt;/ $ operator-sdk new &amp;lt;operator-project-name&amp;gt; --api-version=&amp;lt;your-api-group&amp;gt;/&amp;lt;version&amp;gt; --kind=&amp;lt;custom-resource-kind&amp;gt; $ cd &amp;lt;operator-project-name&amp;gt;   operator-project-name - CLI在此目录下生成项目框架 your-api-group - 这是我们处理的自定义资源的Kubernetes API组operator（例如mycompany.com） version - 这是我们处理的自定义资源的Kubernetes API版本operator（例如v1alpha，beta等，请参阅Kubernetes API版本） custom-resource-kind - 自定义资源类型的名称  定义要监视的Kubernetes资源 该main.</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://banzaicloud.com/blog/operator-sdk/&#34;&gt;https://banzaicloud.com/blog/operator-sdk/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;在&lt;a href=&#34;https://banzaicloud.com&#34;&gt;Banzai Cloud，&lt;/a&gt;我们一直在寻找新的创新技术，以支持我们的用户使用&lt;a href=&#34;https://github.com/banzaicloud/pipeline&#34;&gt;Pipeline&lt;/a&gt;过渡到部署到Kubernetes的微服务。最近几个月，我们与&lt;a href=&#34;https://coreos.com/&#34;&gt;CoreOS&lt;/a&gt;和&lt;a href=&#34;https://coreos.com/&#34;&gt;RedHat&lt;/a&gt;合作，开展了运营商及其刚刚开源的项目，并在&lt;a href=&#34;https://github.com/operator-framework&#34;&gt;GitHub上提供&lt;/a&gt;。如果您通读这篇博客，您将了解到什么是&lt;code&gt;operator&lt;/code&gt;，如何使用它&lt;code&gt;operator sdk&lt;/code&gt;来开发&lt;code&gt;operator&lt;/code&gt;我们在&lt;a href=&#34;https://banzaicloud.com&#34;&gt;Banzai Cloud&lt;/a&gt;开发和使用的具体示例。我们的&lt;a href=&#34;https://github.com/banzaicloud&#34;&gt;GitHub上&lt;/a&gt;还有一些运营商都可以在新的运营商SDK &lt;a href=&#34;https://github.com/banzaicloud&#34;&gt;上&lt;/a&gt;构建。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -50,17 +46,11 @@ $ cd $GOPATH/src/github.com/&amp;lt;your-github-repo&amp;gt;/ $ operator-sdk new
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/minikube-%E5%AE%89%E8%A3%85/</guid>
-      <description>本文由 简悦 SimpRead 转码， 原文地址 https://yq.aliyun.com/articles/221687
- 为了方便大家开发和体验 Kubernetes，社区提供了可以在本地部署的 Minikube。由于网络访问原因，很多朋友无法使用 minikube 进行实验。为此我们提供了一个修改版的 Minikube，可以从阿里云的镜像地址来获取所需 Docker 镜像和配置。
-注：
- 本文已更新到 Minikube v0.28.0/Kubernetes v1.10.0 如需更新 minikube，需要更新 minikube 安装包
- minikube delete 删除现有虚机，删除 ~/.minikube 目录缓存的文件
- 重新创建 minikube 环境
- Docker 社区版也为 Mac/Windows 用户提供了 Kubernetes 开发环境的支持 https://yq.aliyun.com/articles/508460，大家也可以试用
-  配置 先决条件  安装 kubectl  Minikube 在不同操作系统上支持不同的驱动
- macOS
- xhyve driver, VirtualBox 或 VMware Fusion  Linux
- VirtualBox 或 KVM NOTE: Minikube 也支持 --vm-driver=none 选项来在本机运行 Kubernetes 组件，这时候需要本机安装了 Docker。在使用 0.</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://yq.aliyun.com/articles/221687&#34;&gt;https://yq.aliyun.com/articles/221687&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;为了方便大家开发和体验 Kubernetes，社区提供了可以在本地部署的 &lt;a href=&#34;https://github.com/kubernetes/minikube&#34;&gt;Minikube&lt;/a&gt;。由于网络访问原因，很多朋友无法使用 minikube 进行实验。为此我们提供了一个修改版的 Minikube，可以从阿里云的镜像地址来获取所需 Docker 镜像和配置。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -69,11 +59,11 @@ $ cd $GOPATH/src/github.com/&amp;lt;your-github-repo&amp;gt;/ $ operator-sdk new
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/operator-%E5%8E%9F%E7%90%86/</guid>
-      <description>本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/yan234280533/article/details/75333246
- Operator 是 CoreOS 推出的旨在简化复杂有状态应用管理的框架，它是一个感知应用状态的控制器，通过扩展 Kubernetes API 来自动创建、管理和配置应用实例。
-Operator 原理 Operator 基于 Third Party Resources 扩展了新的应用资源，并通过控制器来保证应用处于预期状态。比如 etcd operator 通过下面的三个步骤模拟了管理 etcd 集群的行为：
- 通过 Kubernetes API 观察集群的当前状态； 分析当前状态与期望状态的差别； 调用 etcd 集群管理 API 或 Kubernetes API 消除这些差别。  Operator 本质是通过在 Kubenertes 中部署对应的 Third-Party Resource (TPR) 插件，然后通过部署 Third-Party Resource 的方式来部署对应的应用。Third-Party Resource 会调用 Kubenertes 部署 API 部署相应的 Kubenertes 资源，并对资源状态进行管理。
-如何创建 Operator Operator 是一个感知应用状态的控制器，所以实现一个 Operator 最关键的就是把管理应用状态的所有操作封装到配置资源和控制器中。通常来说 Operator 需要包括以下功能：</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://blog.csdn.net/yan234280533/article/details/75333246&#34;&gt;https://blog.csdn.net/yan234280533/article/details/75333246&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Operator 是 CoreOS 推出的旨在简化复杂有状态应用管理的框架，它是一个感知应用状态的控制器，通过扩展 Kubernetes API 来自动创建、管理和配置应用实例。&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -82,16 +72,7 @@ Operator 原理 Operator 基于 Third Party Resources 扩展了新的应用资�
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/rke%E5%AE%89%E8%A3%85kubernetes%E9%9B%86%E7%BE%A4/</guid>
-      <description>RKE安装kubernetes集群 准备工作  1,将普通用户加入到Docker组
-sudo usermod -aG docker 用户名  2,关闭防火墙
-sudo ufw disable  3.0 安装openssh-server(如果已经安装,可省略)
-#centos yum install openssh-server #ubuntu apt-get install openssh-server  3,建立ssh单向通道
-ssh-keygen #三次回车，生成ssh公钥和私钥文件 ssh-copy-id &amp;lt;节点用户名&amp;gt;@&amp;lt;节点IP&amp;gt; 例如: ssh-copy-id demo@1.2.3.4  4,验证ssh
-ssh 192.168.3.162 exit  5,禁用selinux(CentOS7)
-vi /etc/sysconfig/selinux 设置SELINUX=disabled  6,禁用swap
-vi /etc/fstab swap那句话注释掉,重启  安装步骤 1,从github rke的仓库中下载rke文件
-https://github.com/rancher/rke/releases/  2,在rke同级文件夹下创建cluster.yml
-nodes: - address: 节点IP(例如:1.2.3.4) user: 节点用户名(例如:demo) role: [controlplane,worker,etcd] #network: # plugin: flannel # options: # flannel_iface: enp3s0  3,授予执行权限</description>
+      <description>&lt;p&gt;RKE安装kubernetes集群&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -100,14 +81,7 @@ nodes: - address: 节点IP(例如:1.2.3.4) user: 节点用户名(例如:demo) ro
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/helm%E7%AE%80%E4%BB%8B/</guid>
-      <description>helm简介 简介 helm是k8s中的包管理器,每一个包称为一个chart,helm使用更为便捷的方式来管理我们k8s集群上的应用的安装和分发.
-helm下载地址如下: https://github.com/helm/helm/releases
-下载解压后,将二进制可执行文件helm放在$path下即可
-在helm中有三个重要的概念:
- chart 应用的模板 release 应用的实例,用模板+ values.yaml运行起来的实际应用实例 repo 仓库,存放应用模板的地方  整体的架构图如下:
-一个chart实际为一个目录,目录大致如下:
-#创建一个mychart的应用 $ helm create mychart #查看应用目录结构 $ tree mychart/ mychart/ ├── charts ├── Chart.yaml	#用于描述这个Chart的相关信息,包括名字,描述信息以及版本等。 ├── templates	#目录下是YAML文件的模板,该模板文件遵循Go template语法。 │ ├── deployment.yaml │ ├── _helpers.tpl │ ├── ingress.yaml │ ├── NOTES.txt │ └── service.yaml └── values.yaml	#用于存储templates目录中模板文件中用到变量的值。\  一个典型的helm chart文件目录如下:
-examples/ Chart.yaml # Yaml文件，用于描述Chart的基本信息，包括名称版本等 LICENSE # [可选] 协议 README.md # [可选] 当前Chart的介绍 values.</description>
+      <description>&lt;p&gt;helm简介&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -116,16 +90,11 @@ examples/ Chart.yaml # Yaml文件，用于描述Chart的基本信息，包括名
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/jaeger-operator%E5%AE%89%E8%A3%85/</guid>
-      <description>jaeger-operator安装 在一个成规模的微服务系统中,一个功能不单由这一个服务完成,而是多个服务协作来共同完成,但是如果其中一个服务出现了错误,对于错误的追踪,对于整个调用链的追踪便成为了难题.
-好在外国佬遇到了这些问题,指定了opentracing规范,并且提供了例如zipkin,pinpoint,jaeger等工具供我们使用
-jaeger组件如下:
-安装 1. elasticsearch jaeger的存储是依赖cassandra或elasticsearch的,jaeger本身并不存储数据,在此处我们使用es来存储数据
-$ kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init-cn/efk-elasticsearch.yaml   elasticsearch 他妈的又需要存储支持,惊不惊喜,意不意外.
- 此处建议此es应和k8s中的日志收集使用一个es集群,方便管理,并且追踪数据并不需要支持事务等特性,符合日志存储模式.
-2. jaeger operator 在github中提供了operator的安装,直接使用就行
-$ kubectl create namespace observability $ kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/crds/jaegertracing_v1_jaeger_crd.yaml $ kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/service_account.yaml $ kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/role.yaml $ kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/role_binding.yaml $ kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/operator.yaml   注意:如果安装在其他命名空间中貌似不行&amp;hellip; 起码我使用helm安装在jaeger命名空间中不行.
- 安装成功后等待几分钟就可以看到如下资源的成功运行
-$ kubectl get all -n observability NAME READY STATUS RESTARTS AGE pod/jaeger-operator-69c987b98-grv9n 1/1 Running 0 23h NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE service/jaeger-operator ClusterIP 10.</description>
+      <description>&lt;p&gt;jaeger-operator安装&lt;/p&gt;
+
+&lt;p&gt;在一个成规模的微服务系统中,一个功能不单由这一个服务完成,而是多个服务协作来共同完成,但是如果其中一个服务出现了错误,对于错误的追踪,对于整个调用链的追踪便成为了难题.&lt;/p&gt;
+
+&lt;p&gt;好在外国佬遇到了这些问题,指定了&lt;code&gt;opentracing&lt;/code&gt;规范,并且提供了例如&lt;code&gt;zipkin&lt;/code&gt;,&lt;code&gt;pinpoint&lt;/code&gt;,&lt;code&gt;jaeger&lt;/code&gt;等工具供我们使用&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -134,10 +103,14 @@ $ kubectl get all -n observability NAME READY STATUS RESTARTS AGE pod/jaeger-ope
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/kubeadm%E5%AE%89%E8%A3%85ha%E9%9B%86%E7%BE%A4/</guid>
-      <description>kubeadm安装HA集群 鉴于使用二进制的方式安装较为复杂,且不太好处理证书的生成,分发等问题,并且对性能没有较高的要求,所以强烈推荐使用此模式,具体下来这个模式的好处为:
- 官方提供的工具,有官方的文档支持 安装贼简单,没有其他的依赖 扩展性强,有官方的一些扩展支持 集群全部以容器启动,所以没那么多你需要管理的service  准备 硬件  一台或多台运行 Ubuntu 16.04 + 的主机(其他linux系统也行) 集群中完整的网络连接，公网或者私网都可以  各节点环境  #### docker  使用加入器安装docker
-curl https://releases.rancher.com/install-docker/17.03.sh | sh   #### 禁用swap  然后需要禁用 swap 文件，这是 Kubernetes 的强制步骤。编辑/etc/fstab文件，注释掉引用swap的行，保存并重启后输入sudo swapoff -a即可
-vim /etc.fastab #注释调swap的行 sudo swapoff -a   设置源 sudo apt-get update &amp;amp;&amp;amp; sudo apt-get install -y apt-transport-https curl -s https://gitee.com/tanx/kubernetes-test/raw/master/kubeadm/apt-key.gpg | sudo apt-key add - sudo cat &amp;lt;&amp;lt;EOF &amp;gt;/etc/apt/sources.</description>
+      <description>&lt;p&gt;鉴于使用二进制的方式安装较为复杂,且不太好处理证书的生成,分发等问题,并且对性能没有较高的要求,所以强烈推荐使用此模式,具体下来这个模式的好处为:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;官方提供的工具,有官方的文档支持&lt;/li&gt;
+&lt;li&gt;安装贼简单,没有其他的依赖&lt;/li&gt;
+&lt;li&gt;扩展性强,有官方的一些扩展支持&lt;/li&gt;
+&lt;li&gt;集群全部以容器启动,所以没那么多你需要管理的service&lt;/li&gt;
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -146,10 +119,7 @@ vim /etc.fastab #注释调swap的行 sudo swapoff -a   设置源 sudo apt-get up
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/kubeadm%E7%94%9F%E6%88%90%E7%9A%84token%E8%BF%87%E6%9C%9F%E5%90%8E%E9%9B%86%E7%BE%A4%E5%A2%9E%E5%8A%A0%E8%8A%82%E7%82%B9/</guid>
-      <description> kubeadm生成的token过期后，集群增加节点  重新生成token(默认token24小时后过期)
-kubeadm token create TOKEN TTL EXPIRES USAGES DESCRIPTION EXTRA GROUPS 36iajs.t016zpxbyqdmivcq 19h 2018-07-04T12:48:32+08:00 authentication,signing The default bootstrap token generated by &#39;kubeadm init&#39;. system:bootstrappers:kubeadm:default-node-token  获取ca证书sha256编码hash值
-openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2&amp;gt;/dev/null | openssl dgst -sha256 -hex | sed &#39;s/^.* //&#39;  节点加入集群
-kubeadm join &amp;lt;节点IP&amp;gt;:6443 --token 36iajs.t016zpxbyqdmivcq --discovery-token-ca-cert-hash sha256:19246ce11ba3fc633fe0b21f2f8aaaebd7df9103ae47138dc0dd615f61a32d99   </description>
+      <description>&lt;p&gt;kubeadm生成的token过期后，集群增加节点&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -158,11 +128,7 @@ kubeadm join &amp;lt;节点IP&amp;gt;:6443 --token 36iajs.t016zpxbyqdmivcq --dis
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/prometheus%E5%92%8Calertmanager%E7%9B%91%E6%8E%A7%E5%B9%B6%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/</guid>
-      <description>prometheus和alertmanager监控并发送邮件 prometheus 简介 prometheus是时序的监控系统,通常使用prometheus是将prometheus当做采集存储中间件来使用,配合grafana做图表展示,配合alertmanager做自定义告警.
-prometheus的每个样本的大小为1-2个字节,要评估服务器的容量,可以使用以下公式:
-needed_disk_space = retention_time_seconds * ingested_samples_per_second * bytes_per_sample 需要的硬盘空间 = 数据保留时间(s) * 每秒采集的样本 * 样本大小  数据类型 在系统中所有的数据都以指标的方式来标示,指标包含label,指标格式如下:
-&amp;lt;metric name&amp;gt;{&amp;lt;label name&amp;gt;=&amp;lt;label value&amp;gt;, ...} ##例如 api_http_requests_total{method=&amp;quot;POST&amp;quot;, handler=&amp;quot;/messages&amp;quot;}  在系统中,所有指标都在采集时得到其数据类型和描述,通常如下:
-$ curl localhost:9090/metrics # HELP go_gc_duration_seconds A summary of the GC invocation durations. # TYPE go_gc_duration_seconds summary go_gc_duration_seconds{quantile=&amp;quot;0&amp;quot;} 2.9632e-05 go_gc_duration_seconds{quantile=&amp;quot;0.25&amp;quot;} 4.7174e-05 go_gc_duration_seconds{quantile=&amp;quot;0.5&amp;quot;} 5.8693e-05 go_gc_duration_seconds{quantile=&amp;quot;0.75&amp;quot;} 9.4042e-05 go_gc_duration_seconds{quantile=&amp;quot;1&amp;quot;} 0.021392614 go_gc_duration_seconds_sum 0.056610034 go_gc_duration_seconds_count 70 # HELP go_goroutines Number of goroutines that currently exist.</description>
+      <description>&lt;p&gt;prometheus和alertmanager监控并发送邮件&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -171,11 +137,11 @@ $ curl localhost:9090/metrics # HELP go_gc_duration_seconds A summary of the GC 
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8-kubeadm-%E6%90%AD%E5%BB%BA-kubernetes1.10.2-%E9%9B%86%E7%BE%A4%E5%9B%BD%E5%86%85%E7%8E%AF%E5%A2%83/</guid>
-      <description>本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/RainingNight/p/using-kubeadm-to-create-a-cluster.html
- 使用 kubeadm 搭建 Kubernetes(1.10.2) 集群（国内环境） [TOC]
-目标  在您的机器上建立一个安全的 Kubernetes 集群。 在集群里安装网络插件，以便应用之间可以相互通讯。 在集群上运行一个简单的微服务。  准备 主机  一台或多台运行 Ubuntu 16.04 + 的主机。 最好选至少有 2 GB 内存的双核主机。 集群中完整的网络连接，公网或者私网都可以。  软件 安装 Docker sudo apt-get update sudo apt-get install -y docker.io  Kubunetes 建议使用老版本的docker.io，如果需要使用最新版的docker-ce，可参考上一篇博客：Docker 初体验。
-禁用 swap 文件 然后需要禁用 swap 文件，这是 Kubernetes 的强制步骤。实现它很简单，编辑/etc/fstab文件，注释掉引用swap的行，保存并重启后输入sudo swapoff -a即可。
- 对于禁用swap内存，你可能会有点不解，具体原因可以查看 Github 上的 Issue：Kubelet/Kubernetes should work with Swap Enabled。</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://www.cnblogs.com/RainingNight/p/using-kubeadm-to-create-a-cluster.html&#34;&gt;https://www.cnblogs.com/RainingNight/p/using-kubeadm-to-create-a-cluster.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;使用 kubeadm 搭建 Kubernetes(1.10.2) 集群（国内环境）&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -184,12 +150,11 @@ $ curl localhost:9090/metrics # HELP go_gc_duration_seconds A summary of the GC 
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/</guid>
-      <description>使用nfs作为k8s的PersistentVolume 在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选
-本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务
-准备 nfs server 一台
-k8s集群 一台
-NFS server配置 安装nfs,并启动 $ yum install -y nfs-utils ##关闭防火墙 $ systemctl disable firewalld $ systemctl stop firewalld ##开启nfs自动启动 $ systemctl enable rpcbind.service $ systemctl enable nfs-server.service ## 启动nfs $ systemctl start rpcbind.service $ systemctl start nfs-server.service  配置nfs 编辑文件/etc/exports设置nfs需要暴露的文件夹
-$ vim /etc/exports #添加 此处暴露的是/home/nfsdata目录 /home/nfsdata *(insecure,rw,sync,no_root_squash) ###修改暴露的目录的权限 $ chmod 777 -R /home/nfsdata ##重启nfs $ systemctl restart nfs.service  验证 $ showmount -e 10.</description>
+      <description>&lt;p&gt;使用nfs作为k8s的PersistentVolume&lt;/p&gt;
+
+&lt;p&gt;在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选&lt;/p&gt;
+
+&lt;p&gt;本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -198,13 +163,11 @@ $ vim /etc/exports #添加 此处暴露的是/home/nfsdata目录 /home/nfsdata *
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/</guid>
-      <description>使用rook搭建存储集群 rook是云原生的存储协调器,为各种存储提供解决方案,提供自我管理,自我扩展,自我修复的存储服务,在kubernetes中实际实现是operator方式.
-在rook 0.9版本中,Ceph已经是beta支持状态了.
-Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多年生产部署的块存储，对象存储和共享文件系统.
-安装 rook提供了operator的方式来处理ceph存储的安装,所以此处安装使用helm来安装rook
-helm repo add rook-stable https://charts.rook.io/stable helm install --namespace rook-ceph-system rook-stable/rook-ceph  ceph集群 安装了rook后,还需要在rook中声明CRD来建立ceph集群
-cluster.yaml
-apiVersion: v1 kind: Namespace metadata: name: rook-ceph --- apiVersion: v1 kind: ServiceAccount metadata: name: rook-ceph-osd namespace: rook-ceph --- apiVersion: v1 kind: ServiceAccount metadata: name: rook-ceph-mgr namespace: rook-ceph --- kind: Role apiVersion: rbac.authorization.k8s.io/v1beta1 metadata: name: rook-ceph-osd namespace: rook-ceph rules: - apiGroups: [&amp;quot;&amp;quot;] resources: [&amp;quot;configmaps&amp;quot;] verbs: [ &amp;quot;get&amp;quot;, &amp;quot;list&amp;quot;, &amp;quot;watch&amp;quot;, &amp;quot;create&amp;quot;, &amp;quot;update&amp;quot;, &amp;quot;delete&amp;quot; ] --- kind: Role apiVersion: rbac.</description>
+      <description>&lt;p&gt;rook是云原生的存储&lt;strong&gt;协调器&lt;/strong&gt;,为各种存储提供解决方案,提供自我管理,自我扩展,自我修复的存储服务,在kubernetes中实际实现是operator方式.&lt;/p&gt;
+
+&lt;p&gt;在rook 0.9版本中,Ceph已经是&lt;strong&gt;beta&lt;/strong&gt;支持状态了.&lt;/p&gt;
+
+&lt;p&gt;Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多年生产部署的块存储，对象存储和共享文件系统.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -213,10 +176,7 @@ apiVersion: v1 kind: Namespace metadata: name: rook-ceph --- apiVersion: v1 kind
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2k8s%E5%9F%BA%E7%A1%80%E5%BA%94%E7%94%A8/</guid>
-      <description>自动部署k8s基础应用 在k8s集群安装完成后,我们需要为集群安装很多初始应用,此处通过一个简易脚本方式安装以下应用:
- helm-tiller kubeapp rook rook-cluster elasticsearch-fluentd-kinaba prometheus metrics-server jaeger dashboard  该脚本使用如下:
-curl https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/init.sh | sh  对于国内用户,推荐使用cn脚本:
-curl https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init-cn/init.sh | sh  脚本说明 helm-tiller wget https://storage.googleapis.com/kubernetes-helm/helm-v2.13.0-linux-amd64.tar.gz &amp;amp;&amp;amp; tar -zxvf helm-v2.13.0-linux-amd64.tar.gz &amp;amp;&amp;amp; sudo cp linux-amd64/helm /usr/local/bin helm init --upgrade -i registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.13.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts --service-account=clusterrole-aggregation-controller helm repo add rook-stable https://charts.rook.io/stable helm repo add bitnami https://charts.bitnami.com/bitnami helm repo update  kubeapp helm install --name kubeapps --namespace kubeapps bitnami/kubeapps kubectl create serviceaccount kubeapps-operator kubectl create clusterrolebinding kubeapps-operator --clusterrole=cluster-admin --serviceaccount=default:kubeapps-operator export kubeappsPWD=$( kubectl get secret $(kubectl get serviceaccount kubeapps-operator -o jsonpath=&#39;{.</description>
+      <description>&lt;p&gt;自动部署k8s基础应用&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -15,6 +15,9 @@ keywords:
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://it.520mwx.com/view/10804
 
+傻瓜式的 go modules 的讲解和代码
+<!--more-->
+
 # 一
 
 国内关于 gomod 的文章，哪怕是使用了百度 -csdn，依然全是理论，虽然 golang 的使用者大多是大神但是也有像我这样的的弱鸡是不是？

@@ -12,6 +12,9 @@ keywords:
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://segmentfault.com/a/1190000015592863
 
+Jenkins Sonar Github 代码质量管理
+<!--more-->
+
 # 背景
 
 前阵子老美的 Audit 要求各个开发组截图各自 repository 的 Sonar Analysis Report，我跑去 Sonarqube 一看。。。好家伙！全是红灯，简直惨不忍睹

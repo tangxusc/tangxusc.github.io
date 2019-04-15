@@ -14,6 +14,8 @@ keywords:
 
 在[Banzai Cloud，](https://banzaicloud.com)我们一直在寻找新的创新技术，以支持我们的用户使用[Pipeline](https://github.com/banzaicloud/pipeline)过渡到部署到Kubernetes的微服务。最近几个月，我们与[CoreOS](https://coreos.com/)和[RedHat](https://coreos.com/)合作，开展了运营商及其刚刚开源的项目，并在[GitHub上提供](https://github.com/operator-framework)。如果您通读这篇博客，您将了解到什么是`operator`，如何使用它`operator sdk`来开发`operator`我们在[Banzai Cloud](https://banzaicloud.com)开发和使用的具体示例。我们的[GitHub上](https://github.com/banzaicloud)还有一些运营商都可以在新的运营商SDK [上](https://github.com/banzaicloud)构建。
 
+<!--more-->
+
 ### TL;博士：
 
 *   今天[发布](https://github.com/operator-framework)了一个新的Kubernetes运营商框架

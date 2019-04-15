@@ -20,6 +20,8 @@ keywords:
 
 gRPC-Go 增加了拦截器 (interceptor) 的功能， 就像 Java Servlet 中的 filter 一样，可以对 RPC 的请求和响应进行拦截处理，而且既可以在客户端进行拦截，也可以对服务器端进行拦截。
 
+<!--more-->
+
 利用拦截器，可以对 gRPC 进行扩展，利用社区的力量将 gRPC 发展壮大，也可以让开发者更灵活地处理 gRPC 流程中的业务逻辑。下面列出了利用拦截器实现的一些功能框架：
 
 1.  [Go gRPC Middleware](https://github.com/grpc-ecosystem/go-grpc-middleware): 提供了拦截器的 interceptor 链式的功能，可以将多个拦截器组合成一个拦截器链，当然它还提供了其它的功能，所以以 gRPC 中间件命名。

@@ -1,6 +1,6 @@
 ---
 title: "迈向istio-服务路由"
-date: 2019-03-20T14:15:59+08:00
+date: 2019-04-01T14:15:59+08:00
 draft: false
 categories:
 - istio
@@ -10,13 +10,11 @@ keywords:
 - istio
 ---
 
-# 服务路由
-
-[TOC]
-
 在上一节中,我们使用nginx开启了我们istio的第一个应用,现在我们加入另外一个服务tomcat
 
 > 本节内容基于上节内容,请先运行上一节的yaml文件,然后再体验本节内容
+
+<!--more-->
 
 ## tomcat
 

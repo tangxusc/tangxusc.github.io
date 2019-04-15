@@ -6,7 +6,7 @@
     <description>Recent content in Istio on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 12 Apr 2019 15:59:49 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 01 Apr 2019 14:15:59 +0800</lastBuildDate>
     
 	<atom:link href="https://tangxusc.github.io/blog/tags/istio/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,205 +14,142 @@
     <item>
       <title>迈向istio-11 升级到1.1.2</title>
       <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/</link>
-      <pubDate>Fri, 12 Apr 2019 15:59:49 +0800</pubDate>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/</guid>
-      <description>介绍 istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本的口号叫企业级就绪(以后会不会出云供应商就绪?),这8个月中可以看到istio还是发生了很大的变化的,纵观历史,istio进行了三次腾飞:
- 0.8 不在是模型了 1.0 生产就绪了(其实没有),抛弃了ingress,模型改动比较大 1.1 企业就绪了,理清楚了流量管理的模型,sidecar不再操碎了心,pilot解放了,mixer adapter又被默认的关了,ServiceEntry存在感突然就没啦.  废话太多了,接下来我们进入正题,去看看istio1.1到底更新了那些东西
- 注意,因个人知识有限,不会全部解析,请见谅.
- 升级内容 安装 1.安装模式变化 现在提供了两个helm chart来安装,分别为istio-init和istio 这两个职责如下:
-istio-init: 负责通过job.batch/istio-init-crd-10,job.batch/istio-init-crd-11 这两个job来安装istio的crd资源(一共53个,如果启用cert-manager则为58个),可通过命令查看:
-$ kubectl get crds | grep &#39;istio.io\|certmanager.k8s.io&#39; | wc -l 53  istio: 现在istio安装的时候是没有启用grafana,kiali的,并且已经说明使用kiali替换servicegraph,所以在安装时,需要手动开启:
-# # addon grafana configuration # grafana: enabled: true # # addon kiali tracing configuration # kiali: enabled: true createDemoSecret: true  并且现在支持自定义kiali的用户名密码了,如果还是使用admin/admin 那么就需要createDemoSecret: true
-istio现在提供了一个cni组件来避免init-container的privilege问题,不过这个cni需要kubelet的cni支持,kubelet的网络就两种kubenet和cni,也就是说 /etc/systemd/system/kubelet.service.d/10-kubeadm.conf文件中的
-Environment=&amp;quot;KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin&amp;quot;  这里的--network-plugin=cni 值只能是 cni了</description>
+      <description>&lt;p&gt;istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本为&lt;code&gt;企业级就绪&lt;/code&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>迈向istio-jwt认证</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-jwt%E8%AE%A4%E8%AF%81/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-jwt%E8%AE%A4%E8%AF%81/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-jwt%E8%AE%A4%E8%AF%81/</guid>
-      <description>istio-jwt认证 [TOC]
-背景 在建设企业的各种项目中,我们一定离不开,或者总要和认证授权系统打交道,应用总会入侵一些认证和授权部分的代码,现在在java等方面有大量的安全框架,例如spring security,shiro等等框架,这些框架也是为了解决这个重复性的做认证和授权等功能的问题,这也是我们在单体服务的时候一直做的,将各种各样的框架集成到系统中,那么现在在微服务时代,或者说在istio有没有解决方法能解决这个问题呢,让服务真正回归业务,不再去过多的管理认证的问题呢.
-在本节中我们将会将我们的应用构建为一个需要使用jwt token才能访问的服务,在没有jwt token的情况下,将会返回401 未授权.
-服务图 target配置 #记得开启自动注入 #kubectl label namespace test istio-injection=enabled apiVersion: extensions/v1beta1 kind: Deployment metadata: name: target namespace: test labels: app: target version: v1 spec: template: metadata: labels: app: target version: v1 spec: containers: - name: target image: service-proxy:go-1 ports: - containerPort: 8090 name: http protocol: TCP --- kind: Service apiVersion: v1 metadata: name: target namespace: test spec: selector: app: target ports: - port: 80 name: http #一定注意命名 protocol: TCP targetPort: 8090  在k8s中部署服务 $ kubectl create ns test $ kubectl label namespace test istio-injection=enabled $ kubectl apply -f k8s.</description>
+      <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-jwt%E8%AE%A4%E8%AF%81/</guid>
+      <description>&lt;p&gt;在建设企业的各种项目中,我们一定离不开,或者总要和认证授权系统打交道,应用总会入侵一些认证和授权部分的代码,现在在java等方面有大量的安全框架,例如&lt;code&gt;spring security,shiro&lt;/code&gt;等等框架,这些框架也是为了解决这个重复性的做认证和授权等功能的问题,这也是我们在单体服务的时候一直做的,将各种各样的框架集成到系统中,那么现在在微服务时代,或者说在istio有没有解决方法能解决这个问题呢,让服务真正回归业务,不再去过多的管理认证的问题呢.&lt;/p&gt;
+
+&lt;p&gt;在本节中我们将会将我们的应用构建为一个需要使用jwt token才能访问的服务,在没有jwt token的情况下,将会返回401 未授权.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>迈向istio-opa授权</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-opa%E6%8E%88%E6%9D%83/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-opa%E6%8E%88%E6%9D%83/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-opa%E6%8E%88%E6%9D%83/</guid>
-      <description>istio-opa授权 [TOC]
-背景 在上一章节中,我们使用jwt进行了认证,那么我们如何对资源进行授权检查呢?
-在istio中,我们一个请求实际的调用链,我们来看看一个请求的流程图:
-start=&amp;gt;start: 请求 end=&amp;gt;end: 结束 gateway=&amp;gt;operation: gateway target=&amp;gt;operation: 目标服务 out401=&amp;gt;inputoutput: 返回401 out200=&amp;gt;inputoutput: 返回200 mixer=&amp;gt;condition: mixer-check start-&amp;gt;gateway-&amp;gt;mixer mixer(no)-&amp;gt;out401 mixer(yes)-&amp;gt;target-&amp;gt;out200  一个请求在到达网关后,需要请求mixer-check进行请求的授权验证,对于符合此授权验证的,则开始请求目标服务,如果不符合的,那么则会直接拒绝这个请求,向前端返回401/403
-那么我们如何接入istio的授权验证呢?看过istio的可能会说istio提供了rbac的handler,那么这里有必要分析一下,istio提供的rbac的handler有什么要求.
- istio中所有的认证和授权都希望我们将信息放在istio的系统中,这样在本地就完成了认证和授权,则会少一次链路调用 rbac的handler需要将授权信息以特定格式放在k8s的文件系统中,或者存放在k8s的etcd中   那么这有什么缺陷呢?
- 有一些信息放在istio中是可以的,例如jwt的公钥,这样可以加快认证 授权信息放在k8s还是有待商榷的,权限是用户*资源*权限的集合,这个集合比较大,放在etcd中是否不太合适呢? 有一些地址不需要检查权限  那么我们如何解决这些问题呢? 通过查找istio文档,找到了另外一种open policy agent(简称OPA) Handler,我们看看opa官方的介绍:
- OPA是一种轻量级的通用策略引擎，可以与您的服务共存。您可以将OPA集成为边车，主机级守护程序或库。
-服务通过执行*查询*将策略决策卸载到OPA 。OPA评估策略和数据以生成查询结果（将其发送回客户端）。策略使用高级声明性语言编写，可以通过文件系统或定义良好的API加载到OPA中。
- 现在opa已经内置在mixer中(istio 1.0.4),可以为我们提供了一种mixer之外的认证模式:
-流程图 start=&amp;gt;start: 请求 end=&amp;gt;end: 结束 gateway=&amp;gt;operation: gateway target=&amp;gt;operation: 目标服务 gateway=&amp;gt;operation: gateway out401=&amp;gt;inputoutput: 返回401 out200=&amp;gt;inputoutput: 返回200 opa认证=&amp;gt;subroutine: opa认证 mixer=&amp;gt;operation: mixer-check 认证服务=&amp;gt;condition: 认证服务 start-&amp;gt;gateway-&amp;gt;mixer-&amp;gt;opa认证-&amp;gt;认证服务 认证服务(no)-&amp;gt;out401 认证服务(yes)-&amp;gt;target-&amp;gt;out200  istio中的rule/handler/instance 在istio中我们需要理解rule handler instance这三个对象,这里我简要说明一下这三个对象</description>
+      <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-opa%E6%8E%88%E6%9D%83/</guid>
+      <description>&lt;p&gt;在上一章节中,我们使用jwt进行了认证,那么我们如何对资源进行授权检查呢?&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>迈向istio-tls</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-tls/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-tls/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-tls/</guid>
-      <description>istio-tls [TOC]
-我们已经完成了我们服务的路由,并且也已经有了镜像流量了,那么接下来我们要做什么呢?
-背景 安全-所有应用都离不开的话题,在微服务中也一样会存在安全问题,特别是在一个企业的微服务系统中,各服务对外的接口安全都做的很好,但是服务间的安全等问题很多企业都做的不够好.这里我给大家一个例子:
-企业x有一个混合云集群,node节点分别位于 某云服务器提供商和本地机房这两个地方,并且部署了两个服务,其中存在不少敏感信息,我们用一个表单来说明这样的情况:
-    某云 本地     服务A  local-node1   服务B cloud-node2     这个时候,我们发现,服务A调用服务B实际上是一次跨云之旅,但是这个跨云之旅中途会出现以下几个安全问题:
- 中途被劫道(劫持) 到目标服务的可能是间谍(请求被修改,替换)  那么,我们如何应对这样的情况呢?
-在istio的安全章节中 我找到了一个应对此问题的答案,各位请跟我来,我指给各位看istio-安全
-好了,大幕拉开,表演开始.
-服务图 target配置 #记得开启自动注入 #kubectl label namespace test istio-injection=enabled apiVersion: extensions/v1beta1 kind: Deployment metadata: name: target namespace: test labels: app: target version: v1 spec: template: metadata: labels: app: target version: v1 spec: containers: - name: target image: service-proxy:go-1 ports: - containerPort: 8090 name: http protocol: TCP --- kind: Service apiVersion: v1 metadata: name: target namespace: test spec: selector: app: target ports: - port: 80 name: http #一定注意命名 protocol: TCP targetPort: 8090  在k8s中部署服务 $ kubectl create ns test $ kubectl label namespace test istio-injection=enabled $ kubectl apply -f k8s.</description>
+      <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-tls/</guid>
+      <description>&lt;p&gt;我们已经完成了我们服务的路由,并且也已经有了镜像流量了,那么接下来我们要做什么呢?&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>迈向istio-多服务通信</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/</guid>
-      <description>istio-多服务通信 [TOC]
-在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;
-在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务
-服务规划  请忽略nginx,这个是我用来做测试的&amp;hellip;
- proxy服务 proxy服务使用golang进行构建,serviceProxy.go文件内容如下:
-package main import ( &amp;quot;fmt&amp;quot; &amp;quot;io/ioutil&amp;quot; &amp;quot;log&amp;quot; &amp;quot;net/http&amp;quot; &amp;quot;os&amp;quot; ) func main() { http.HandleFunc(&amp;quot;/proxy&amp;quot;, handler) http.HandleFunc(&amp;quot;/index&amp;quot;, indexHandler) serve := http.ListenAndServe(&amp;quot;0.0.0.0:8090&amp;quot;, nil) if serve != nil { log.Fatalf(&amp;quot;启动失败,%v&amp;quot;, serve) } else { fmt.Fprintf(os.Stdout, &amp;quot;启动成功&amp;quot;) } } func handler(writer http.ResponseWriter, request *http.Request) { fmt.Printf(&amp;quot;proxy请求begin\n&amp;quot;) request.ParseForm() get := request.Form.Get(&amp;quot;url&amp;quot;) fmt.Printf(&amp;quot;请求地址:%s\n&amp;quot;, get) for key, value := range request.Form { fmt.Printf(&amp;quot;请求参数 [%s]:%s \n&amp;quot;, key, value) } for key, value := range request.</description>
+      <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/</guid>
+      <description>&lt;p&gt;在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;&lt;/p&gt;
+
+&lt;p&gt;在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>迈向istio-安装</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/</guid>
-      <description>istio-安装 [TOC]
-下载istio的release curl -L https://git.io/getLatestIstio | sh - cd istio-1.0.2 #设置环境变量,以便后面可以执行istioctl命令 export PATH=$PWD/bin:$PATH  下载helm wget https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz tar zxvf helm-v2.11.0-linux-amd64.tar.gz #或者使用我给你下载的 wget https://gitee.com/tanx/kubernetes-test/raw/master/helm/helm-v2.11.0-linux-amd64.tar tar zxvf helm-v2.11.0-linux-amd64.tar.gz export PATH=$PWD/linux-amd64/:$PATH  开始安装 $ kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml  有两种方式均可以安装istio,这里我们使用helm生成yaml的方式(因为helm的方式安装的istio,不用再去自己下载gcr.io中的镜像)
-因为我本人使用的是本地电脑,所以我需要对istio安装的参数进行一定的修改,具体修改如下:
- 复制一个新的istio-1.0.2/install/kubernetes/helm/istio/values.yaml文件出来
- 修改gateways为NodePort
-gateways: enabled: true #省略n多节点 type: ClusterIP #修改为NodePort  启用grafana,将grafana节点下的enabled修改为true
-grafana: enabled: false #修改为true #省略... service: annotations: {} name: http type: ClusterIP #修改为NodePort externalPort: 3000 internalPort: 3000  启用prometheus</description>
+      <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/</guid>
+      <description>&lt;p&gt;istio-安装&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>迈向istio-引入外部服务</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/</guid>
-      <description>istio-引入外部服务 [TOC]
-在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.
-服务规划 注意:istio-egressGateway这个服务是路由的出口,这样做有几个优点
- 企业通过统一的ingressGateway控制流量的进入
- 通过EgressGateway控制流量的总体出
-  这样更有利于网络管理人员进行统一的流量控制和安全检查.
-但是这也会引起几个问题,希望各位注意:
- IngressGateway需要高可用,并且流量较大 EgressGateway外部出口流量一样不会小,这个时候很考研公司的基础网络环境  那么在我们这一节的示例中我们引入 www.baidu.com 这个服务来做我们的测试
- 注意:此节基于上节部署的服务
- 百度(baidu)服务 istio.yaml
-apiVersion: networking.istio.io/v1alpha3 kind: ServiceEntry metadata: name: baidu namespace: test spec: hosts: - &amp;quot;www.baidu.com&amp;quot; location: MESH_EXTERNAL # location: MESH_INTERNAL ports: - number: 80 name: http protocol: HTTP resolution: DNS # endpoints: # - address: www.baidu.com # ports: # http: 80 --- apiVersion: networking.istio.io/v1alpha3 kind: Gateway metadata: name: istio-egressgateway namespace: test spec: selector: istio: egressgateway servers: - port: number: 80 name: http protocol: HTTP hosts: - &amp;quot;*&amp;quot; --- apiVersion: networking.</description>
+      <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/</guid>
+      <description>&lt;p&gt;在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>迈向istio-服务路由</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/</guid>
-      <description>服务路由 [TOC]
-在上一节中,我们使用nginx开启了我们istio的第一个应用,现在我们加入另外一个服务tomcat
- 本节内容基于上节内容,请先运行上一节的yaml文件,然后再体验本节内容
- tomcat tomcat.yaml文件如下:
-apiVersion: extensions/v1beta1 kind: Deployment metadata: name: tomcat namespace: test labels: app: tomcat version: v1 spec: template: metadata: labels: app: tomcat version: v1 spec: containers: - name: tomcat image: tomcat:8 ports: - containerPort: 8080 name: http protocol: TCP --- kind: Service apiVersion: v1 metadata: name: tomcat namespace: test spec: type: ClusterIP selector: app: tomcat ports: - port: 8890 protocol: TCP targetPort: 8080  创建tomcat服务 $ istioctl kube-inject -f tomcat.</description>
+      <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/</guid>
+      <description>&lt;p&gt;在上一节中,我们使用nginx开启了我们istio的第一个应用,现在我们加入另外一个服务tomcat&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本节内容基于上节内容,请先运行上一节的yaml文件,然后再体验本节内容&lt;/p&gt;
+&lt;/blockquote&gt;</description>
     </item>
     
     <item>
       <title>迈向istio-示例</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E7%A4%BA%E4%BE%8B/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E7%A4%BA%E4%BE%8B/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E7%A4%BA%E4%BE%8B/</guid>
-      <description>istio-示例 [TOC]
-在上一节中我们已经成功的安装了istio的各个组件,接下来我们一起来运行一个nginx,体验一下istio的功能
-nginx示例 nginx.yaml文件如下:
-apiVersion: extensions/v1beta1 kind: Deployment metadata: name: nginx namespace: test labels: app: nginx version: v1 spec: template: metadata: labels: app: nginx version: v1 spec: containers: - name: nginx image: nginx ports: - containerPort: 80 name: http protocol: TCP --- kind: Service apiVersion: v1 metadata: name: nginx namespace: test spec: type: ClusterIP selector: app: nginx ports: - port: 7890 protocol: TCP targetPort: 80  在kubernetes中创建命名空间test $ kubectl create namespace test #在istio中开启自动sidecar注入,如果不能支持自动注入,则使用下面的方式 $ kubectl label namespace test istio-injection=enable #使用istioctl注入sidecar $ istioctl kube-inject -f nginx.</description>
+      <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E7%A4%BA%E4%BE%8B/</guid>
+      <description>&lt;p&gt;在上一节中我们已经成功的安装了istio的各个组件,接下来我们一起来运行一个nginx,体验一下istio的功能&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>迈向istio-网关</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E7%BD%91%E5%85%B3/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E7%BD%91%E5%85%B3/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E7%BD%91%E5%85%B3/</guid>
-      <description>istio-网关 [TOC]
-在上一节中我们已经成功的简单运行了istio的一个路由,也有了一番流量管理的体验,那么很多人都不禁要问,这些配置和yaml是什么意思呢?
-那接下来我们基于istio示例中的配置,一点一点的解析这些yaml文件.
- nginx.yaml中的内容为k8s的yaml文件,再此不做赘述.
- gateway apiVersion: networking.istio.io/v1alpha3 kind: Gateway	#声明类型 metadata: name: nginx	#名称 namespace: test	#作用的namespace spec: selector:	#配置选择器,istio将根据此选择器选择具体的pod来作为网关用于承载网格边缘的进入和发出连接 istio: ingressgateway servers:	#声明具体的服务的host和port的绑定关系 - port:	#注意,此处是pod已经开放的端口,如果pod没有开放此端口,配置将不生效 number: 80 name: http protocol: HTTP hosts:	#声明port绑定的host - &amp;quot;*&amp;quot;  VirtualService apiVersion: networking.istio.io/v1alpha3 kind: VirtualService metadata: name: nginx namespace: test spec: hosts:	#流量的目标主机,可以是带有通配符前缀的DNS名称，也可以是IP地址,FQDN地址,使用FQDN地址要格外注意,例如配置host为nginx,那么在此处服务全路径为nginx.test.svc.cluster.local - &amp;quot;*&amp;quot; gateways:	#gateway 名称列表	- nginx http:	#HTTP 流量规则的有序列表,用于匹配端口服务前缀为http-、http2-、grpc- 或者协议为HTTP、HTTP2、GRPC 以及终结的TLS - match:	#激活规则所需的匹配条件 - uri: prefix: /test rewrite:	#重写请求url uri: &amp;quot;/&amp;quot; route:	#对流量可能进行重定向或者转发配置 - destination:	#请求或连接在经过路由规则的处理之后，就会被发送给目标 host: nginx	#目标的host subset: v1	#目标的子集   使用FQDN地址要格外注意,例如配置host为nginx,那么在此处服务全路径为nginx.</description>
+      <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E7%BD%91%E5%85%B3/</guid>
+      <description>&lt;p&gt;在上一节中我们已经成功的简单运行了istio的一个路由,也有了一番流量管理的体验,那么很多人都不禁要问,这些配置和yaml是什么意思呢?&lt;/p&gt;
+
+&lt;p&gt;那接下来我们基于istio示例中的配置,一点一点的解析这些yaml文件.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;nginx.yaml中的内容为k8s的yaml文件,再此不做赘述.&lt;/p&gt;
+&lt;/blockquote&gt;</description>
     </item>
     
     <item>
       <title>迈向istio-自定义mixer adapter</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E8%87%AA%E5%AE%9A%E4%B9%89mixer-adapter/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E8%87%AA%E5%AE%9A%E4%B9%89mixer-adapter/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E8%87%AA%E5%AE%9A%E4%B9%89mixer-adapter/</guid>
-      <description>自定义mixer adapter [TOC]
-本节我们将自定义一个adapter,adapter和mixer通信使用grpc,所以本节需要对grpc和mixer的adapter有一定的了解.
-基于的环境:
- istio 1.0.4 golang 1.11(go module) goland (或者其他go IDE)  mixer介绍 mixer是istio负责策略和遥测的组件,实际上是一个抽象的基础设施后端,用于实现访问控制,遥测捕获,配额管理,计费等功能.
-在mixer中提供了adapter的机制用来扩展mixer功能,sidecar在每次请求前调用mixer进行check,在请求完成后向mixer进行report,具体来说mixer提供了:
- 后端adapter的抽象: mixer抽象了后端adapter的实现,sidecar只需要和mixer交互,不再依赖具体的adapter 关注点分离: mixer提供的check,report机制让adapter只需要关注具体的行为,进行细粒度的控制  具体的策略和遥测收集如下图所示:
-adapter介绍 adapter是用来扩展mixer行为的组件,mixer和adapter之间使用grpc通信,adapter可以实现日志记录,监控,配额检查,权限检查等,adapter需要向mixer注册,注册后,使用handler/instance/rule进行绑定才能生效.
-在mixer中提供了两种类型的adapter实现方式:
- mixer内部的adapter: 放在mixer组件内部,并且编译在mixer中,随着mixer一起发行  优点:不用进行grpc网络通信,速度快
-缺点:在mixer内部,无法自定义,如果自定义那么需要求改mixer源码重新编译
- 外部的adapter: 在k8s集群中以工作负载的方式运行  优点:可自定义,并且以工作负载等方式运行部署方便,编译简单
-缺点:grpc网络通信,不过grpc通信是可以复用的(http2)
-本节我们就要自定义一个外部的adapter来扩展mixer (不实现具体功能,具体功能各位可自行实现,较为简单)
-attributes介绍 在扩展上有mixer和adapter配合进行扩展,在通信协议上使用grpc,那么具体的通信内容是什么呢?
-在mixer中有一个重要的概念是attribute,用于描述请求的所有环境和变量等等,属性的示例如下:
-request.path: xyz/abc request.size: 234 request.time: 12:34:56.789 04/17/2017 source.ip: 192.168.0.1 destination.service: example  mixer的本质实际上就是一个属性的处理器,将基础的属性处理后(处理方式参照),发起到具体adapter的grpc调用.
-支持的属性可以通过命令k8s命令查看
-kubectl get attributemanifests -o yaml -n istio-system  在使用基础属性时,肯定会有很多属性不满足具体的使用需求,这个时候需要使用到属性表达式来做一些简单的属性编辑,具体示例如下:
-source_name: source.</description>
+      <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E8%87%AA%E5%AE%9A%E4%B9%89mixer-adapter/</guid>
+      <description>&lt;p&gt;本节我们将自定义一个adapter,adapter和mixer通信使用grpc,所以本节需要对grpc和mixer的adapter有一定的了解.&lt;/p&gt;
+
+&lt;p&gt;基于的环境:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;istio 1.0.4&lt;/li&gt;
+&lt;li&gt;golang 1.11(go module)&lt;/li&gt;
+&lt;li&gt;goland (或者其他go IDE)&lt;/li&gt;
+&lt;/ul&gt;</description>
     </item>
     
     <item>
       <title>迈向istio-错误排查清单</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95/</guid>
-      <description>istio-错误排查清单 [TOC]
-使用到istio的时候,我发现istio对于调试方面,错误提示方面还是不怎么友好,很多时候都不知道去哪里找错误原因,突然想到飞机那么复杂的系统是如何做到一直按照正确的方式运行的呢,遂提出此错误排查清单,用于排查部分错误,各位同仁可以一句此错误清单进行异常的排查,或者一句不同的因素对错误进行处理.
-错误排查清单  #### 工作负载中的service端口必须正确的命名   服务端口必须进行命名。端口名称只允许是&amp;lt;协议&amp;gt;[-&amp;lt;后缀&amp;gt;-]模式，其中&amp;lt;协议&amp;gt;部分可选择范围包括 http、http2、grpc、mongo 以及 redis，Istio 可以通过对这些协议的支持来提供路由能力。例如 name: http2-foo 和 name: http 都是有效的端口名，但 name: http2foo 就是无效的。如果没有给端口进行命名，或者命名没有使用指定前缀，那么这一端口的流量就会被视为普通 TCP 流量（除非显式的用 Protocol: UDP 声明该端口是 UDP 端口）
-  #### pod必须关联到服务,并且同一端口只能同一协议   Pod 必须关联到service，如果一个 Pod 属于多个服务，这些服务不能再同一端口上使用不同协议，例如 HTTP 和 TCP
-  #### Deployment 应带有 app 以及 version 标签   在使用 Kubernetes Deployment 进行 Pod 部署的时候，建议显式的为 Deployment 加上 app 以及 version标签。每个 Deployment 都应该有一个有意义的 app 标签和一个用于标识 Deployment 版本的 version 标签。app 标签在分布式跟踪的过程中会被用来加入上下文信息。Istio 还会用 app 和 version 标签来给遥测指标数据加入上下文信息。</description>
+      <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95/</guid>
+      <description>&lt;p&gt;使用到istio的时候,我发现istio对于调试方面,错误提示方面还是不怎么友好,很多时候都不知道去哪里找错误原因,突然想到飞机那么复杂的系统是如何做到一直按照正确的方式运行的呢,遂提出此错误排查清单,用于排查部分错误,各位同仁可以一句此错误清单进行异常的排查,或者一句不同的因素对错误进行处理.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>迈向istio-镜像流量</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E8%BF%88%E5%90%91istio-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/</guid>
-      <description>istio-镜像流量 [TOC]
-我们在前面几个章节中使用了两个服务(proxy,target),现在我们想对target进行一次升级,但是现在我们这个代码写的还不够好(没人能说他的代码一次就是期望的行为),希望通过复制一部分现在的流量 用来测试这个服务是否正确,那么这个时候就会使用到istio的镜像流量功能了
-好了,大幕拉开,开始我们的表演.
-服务图 target代码 serviceProxy2.go
-package main import ( &amp;quot;fmt&amp;quot; &amp;quot;io/ioutil&amp;quot; &amp;quot;log&amp;quot; &amp;quot;net/http&amp;quot; &amp;quot;os&amp;quot; ) func main() { http.HandleFunc(&amp;quot;/proxy&amp;quot;, handler) http.HandleFunc(&amp;quot;/index&amp;quot;, indexHandler) serve := http.ListenAndServe(&amp;quot;0.0.0.0:8090&amp;quot;, nil) if serve != nil { log.Fatalf(&amp;quot;启动失败,%v&amp;quot;, serve) } else { fmt.Fprintf(os.Stdout, &amp;quot;启动成功&amp;quot;) } } func handler(writer http.ResponseWriter, request *http.Request) { fmt.Printf(&amp;quot;我是v2的proxy请求begin\n&amp;quot;)	fmt.Printf(&amp;quot;我是v2的proxy请求begin\n&amp;quot;) request.ParseForm() get := request.Form.Get(&amp;quot;url&amp;quot;) fmt.Printf(&amp;quot;我是v2的请求地址:%s\n&amp;quot;, get) for key, value := range request.Form { fmt.Printf(&amp;quot;我是v2的请求参数 [%s]:%s \n&amp;quot;, key, value) } for key, value := range request.</description>
+      <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/</guid>
+      <description>&lt;p&gt;我们在前面几个章节中使用了两个服务(proxy,target),现在我们想对target进行一次升级,但是现在我们这个代码写的还不够好(没人能说他的代码一次就是期望的行为),希望通过复制一部分现在的流量 用来测试这个服务是否正确,那么这个时候就会使用到istio的镜像流量功能了&lt;/p&gt;
+
+&lt;p&gt;好了,大幕拉开,开始我们的表演.&lt;/p&gt;</description>
     </item>
     
   </channel>

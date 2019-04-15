@@ -13,7 +13,10 @@ keywords:
 - rke
 ---
 
-### RKE安装kubernetes集群
+RKE安装kubernetes集群
+
+<!--more-->
+
 ### 准备工作
 * 1,将普通用户加入到Docker组
 ```

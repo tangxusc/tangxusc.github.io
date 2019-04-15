@@ -17,11 +17,11 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/operator-%E5%8E%9F%E7%90%86/</guid>
-      <description>本文由 简悦 SimpRead 转码， 原文地址 https://blog.csdn.net/yan234280533/article/details/75333246
- Operator 是 CoreOS 推出的旨在简化复杂有状态应用管理的框架，它是一个感知应用状态的控制器，通过扩展 Kubernetes API 来自动创建、管理和配置应用实例。
-Operator 原理 Operator 基于 Third Party Resources 扩展了新的应用资源，并通过控制器来保证应用处于预期状态。比如 etcd operator 通过下面的三个步骤模拟了管理 etcd 集群的行为：
- 通过 Kubernetes API 观察集群的当前状态； 分析当前状态与期望状态的差别； 调用 etcd 集群管理 API 或 Kubernetes API 消除这些差别。  Operator 本质是通过在 Kubenertes 中部署对应的 Third-Party Resource (TPR) 插件，然后通过部署 Third-Party Resource 的方式来部署对应的应用。Third-Party Resource 会调用 Kubenertes 部署 API 部署相应的 Kubenertes 资源，并对资源状态进行管理。
-如何创建 Operator Operator 是一个感知应用状态的控制器，所以实现一个 Operator 最关键的就是把管理应用状态的所有操作封装到配置资源和控制器中。通常来说 Operator 需要包括以下功能：</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://blog.csdn.net/yan234280533/article/details/75333246&#34;&gt;https://blog.csdn.net/yan234280533/article/details/75333246&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Operator 是 CoreOS 推出的旨在简化复杂有状态应用管理的框架，它是一个感知应用状态的控制器，通过扩展 Kubernetes API 来自动创建、管理和配置应用实例。&lt;/p&gt;</description>
     </item>
     
   </channel>

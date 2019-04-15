@@ -12,7 +12,9 @@ keywords:
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://www.cnblogs.com/sparkdev/p/7694202.html
 
-# [Ubuntu 中登录相关的日志](https://www.cnblogs.com/sparkdev/p/7694202.html)
+[Ubuntu 中登录相关的日志](https://www.cnblogs.com/sparkdev/p/7694202.html)
+
+<!--more-->
 
 登录相关的日志涉及到系统的安全，所以是系统管理中非常重要的一部分内容。本文试图对登录相关的日志做一个整理。
 

@@ -12,11 +12,9 @@ keywords:
 - maven
 ---
 
-# docker maven plugin使用
-
-
 随着容器化的进行，测试环境和线上环境开始尝试容器化发布。因此需要将现有的maven工程进行容器化，容器化的好处不言而喻，但是针对原先没有解耦的应用（容器配置和代码耦合在一起），制作镜像还是有些成本的。本文主要记录对于webx和springboot应用的镜像制作。
 
+<!--more-->
 ## springboot镜像制作
 springboot制作官方有[介绍][1]，最主要的就是在pom.xml中增加docker maven plugin，然后配置读取最终生成的jar即可。
 

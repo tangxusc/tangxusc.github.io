@@ -13,12 +13,13 @@ keywords:
 - logrus
 ---
 
-# golang 日志库
 
 golang 标准库的日志框架非常简单，仅仅提供了 print，panic 和 fatal 三个函数对于更精细的日志级别、日志[文件分割](https://www.baidu.com/s?wd=%E6%96%87%E4%BB%B6%E5%88%86%E5%89%B2&tn=24004469_oem_dg&rsv_dl=gh_pl_sl_csd)以及日志分发等方面并没有提供支持。所以催生了很多第三方的日志库，但是在 golang 的世界里，没有一个日志库像 slf4j 那样在 Java 中具有绝对统治地位。golang 中，流行的日志框架包括 logrus、zap、zerolog、seelog 等。
 logrus 是目前 Github 上 star 数量最多的日志库，目前 (2018.08，下同)star 数量为 8119，fork 数为 1031。logrus 功能强大，性能高效，而且具有高度灵活性，提供了自定义插件的功能。很多开源项目，如 docker，prometheus 等，都是用了 logrus 来记录其日志。
 zap 是 [Uber](https://www.baidu.com/s?wd=Uber&tn=24004469_oem_dg&rsv_dl=gh_pl_sl_csd) 推出的一个快速、结构化的分级日志库。具有强大的 ad-hoc 分析功能，并且具有灵活的仪表盘。zap 目前在 GitHub 上的 star 数量约为 4.3k。
 seelog 提供了灵活的异步调度、格式化和过滤功能。目前在 GitHub 上也有约 1.1k。
+
+<!--more-->
 
 # logrus 特性
 

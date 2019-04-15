@@ -12,7 +12,8 @@ keywords:
 - golang
 - grpc
 ---
-
+使用go mod(1.11)安装grpc
+<!--more-->
 ## 优势
 
 不在使用git clone具体的golang库的源代码

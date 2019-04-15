@@ -17,9 +17,10 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/golang%E6%97%A5%E5%BF%97%E5%BA%93/</guid>
-      <description>golang 日志库 golang 标准库的日志框架非常简单，仅仅提供了 print，panic 和 fatal 三个函数对于更精细的日志级别、日志文件分割以及日志分发等方面并没有提供支持。所以催生了很多第三方的日志库，但是在 golang 的世界里，没有一个日志库像 slf4j 那样在 Java 中具有绝对统治地位。golang 中，流行的日志框架包括 logrus、zap、zerolog、seelog 等。 logrus 是目前 Github 上 star 数量最多的日志库，目前 (2018.08，下同)star 数量为 8119，fork 数为 1031。logrus 功能强大，性能高效，而且具有高度灵活性，提供了自定义插件的功能。很多开源项目，如 docker，prometheus 等，都是用了 logrus 来记录其日志。 zap 是 Uber 推出的一个快速、结构化的分级日志库。具有强大的 ad-hoc 分析功能，并且具有灵活的仪表盘。zap 目前在 GitHub 上的 star 数量约为 4.3k。 seelog 提供了灵活的异步调度、格式化和过滤功能。目前在 GitHub 上也有约 1.1k。
-logrus 特性 logrus 具有以下特性：
- 完全兼容 golang 标准库日志模块：logrus 拥有六种日志级别：debug、info、warn、error、fatal 和 panic，这是 golang 标准库日志模块的 API 的超集。如果您的项目使用标准库日志模块，完全可以以最低的代价迁移到 logrus 上。 可扩展的 Hook 机制：允许使用者通过 hook 的方式将日志分发到任意地方，如本地文件系统、标准输出、logstash、elasticsearch 或者 mq 等，或者通过 hook 定义日志内容和格式等。 可选的日志输出格式：logrus 内置了两种日志格式，JSONFormatter和TextFormatter，如果这两个格式不满足需求，可以自己动手实现接口Formatter，来定义自己的日志格式。 Field 机制：logrus 鼓励通过 Field 机制进行精细化的、结构化的日志记录，而不是通过冗长的消息来记录日志。 logrus 是一个可插拔的、结构化的日志框架。  logrus 的使用 第一个示例 最简单的使用 logrus 的示例如下：</description>
+      <description>&lt;p&gt;golang 标准库的日志框架非常简单，仅仅提供了 print，panic 和 fatal 三个函数对于更精细的日志级别、日志&lt;a href=&#34;https://www.baidu.com/s?wd=%E6%96%87%E4%BB%B6%E5%88%86%E5%89%B2&amp;amp;tn=24004469_oem_dg&amp;amp;rsv_dl=gh_pl_sl_csd&#34;&gt;文件分割&lt;/a&gt;以及日志分发等方面并没有提供支持。所以催生了很多第三方的日志库，但是在 golang 的世界里，没有一个日志库像 slf4j 那样在 Java 中具有绝对统治地位。golang 中，流行的日志框架包括 logrus、zap、zerolog、seelog 等。
+logrus 是目前 Github 上 star 数量最多的日志库，目前 (2018.08，下同)star 数量为 8119，fork 数为 1031。logrus 功能强大，性能高效，而且具有高度灵活性，提供了自定义插件的功能。很多开源项目，如 docker，prometheus 等，都是用了 logrus 来记录其日志。
+zap 是 &lt;a href=&#34;https://www.baidu.com/s?wd=Uber&amp;amp;tn=24004469_oem_dg&amp;amp;rsv_dl=gh_pl_sl_csd&#34;&gt;Uber&lt;/a&gt; 推出的一个快速、结构化的分级日志库。具有强大的 ad-hoc 分析功能，并且具有灵活的仪表盘。zap 目前在 GitHub 上的 star 数量约为 4.3k。
+seelog 提供了灵活的异步调度、格式化和过滤功能。目前在 GitHub 上也有约 1.1k。&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -17,13 +17,11 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86/</guid>
-      <description>本文由 简悦 SimpRead 转码， 原文地址 https://segmentfault.com/a/1190000015592863
- 背景 前阵子老美的 Audit 要求各个开发组截图各自 repository 的 Sonar Analysis Report，我跑去 Sonarqube 一看。。。好家伙！全是红灯，简直惨不忍睹
-当然这其中有历史问题，因为我们是半路接管的欧美 team 的 code，很多 issue 都是 old code 所遗留的。
-不逃避责任，其中也有一部分是我们后续提交的新代码造成的，通过项目 2 年来的日积月累，issue 多的有点积重难返，sonarqube 虽然在每次 jenkins build 都会生成 report，但是我们却没有把它作为 build 成功失败的一个硬指标。只要 build 成功通过 QA 测试就好了嘛！管他娘的 sonar quality gate
-结果 为了出一份体面漂亮的 report 给 audit，我不得不快马加鞭的 checkout -b quick_fix_sonar_issues, 花了一整天的功夫把 block 和 critical 的 issue 降到了阈值以下。
-临阵磨枪的我体会到了以下 3 个痛点
- 有些 Sonar 能检测出来的 issue，确实能规避一些产品上的潜在 bug 有些同事在 code 中犯的错误真的很低级，但是人工 code review 中很难被发现，不是我的锅，我现在却在为同事擦屁股。 虽然快速 fix 了 issue，但是 code 的 owner 并不是我，我有可能为了迎合 sonar 的 rule 而产生了潜在的新的 issue，而和 owner 去一一 check 又增加了很多沟通成本，另外 owner 很有可能已经离职了  思考 囧则思变！如何改进我们的开发流程？在代码开发阶段就能让 Sonar 分析出问题？强制 owner 必须解决完 issue 才能提交代码？ 嗯！是时候对目前存在弊端的开发流程进行改进了！</description>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://segmentfault.com/a/1190000015592863&#34;&gt;https://segmentfault.com/a/1190000015592863&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Jenkins Sonar Github 代码质量管理&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -32,14 +30,9 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/2019/03/sonarqube%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</guid>
-      <description>sonarqube使用指南 简介 ​ Sonar是一个用于代码质量管理的开源平台，用于管理源代码的质量，可以从多个维度检测代码质量通过插件形式，可以支持包括java,C#,C/C++,PL/SQL,Cobol,JavaScrip,Groovy等等二十几种编程语言的代码质量管理与检测
-糟糕的复杂度分布 ​ 文件、类、方法等，如果复杂度过高将难以改变，这会使得开发人员难以理解它们，且如果没有自动化的单元测试，对于程序中的任何组件的改变都将可能导致需要全面的回归测试
-重复 ​ 显然程序中包含大量复制粘贴的代码是质量低下的 sonar可以展示源码中重复严重的地方
-缺乏单元测试 sonar可以很方便地统计并展示单元测试覆盖率  没有代码标准 ​ sonar可以通过PMD,CheckStyle,Findbugs等等代码规则检测工具规范代码编写
-没有足够的或者过多的注释 ​ 没有注释将使代码可读性变差，特别是当不可避免地出现人员变动时，程序的可读性将大幅下降 而过多的注释又会使得开发人员将精力过多地花费在阅读注释上，亦违背初衷
-潜在的bug ​ sonar可以通过PMD,CheckStyle,Findbugs等等代码规则检测工具检测出潜在的bug
-糟糕的设计 通过sonar可以找出循环，展示包与包、类与类之间的相互依赖关系 可以检测自定义的架构规则 通过sonar可以管理第三方的jar包 可以利用LCOM4检测单个任务规则的应用情况 检测耦合  安装 pg.yaml
-apiVersion: apps/v1 kind: Deployment metadata: name: postgres labels: app: postgres spec: replicas: 1 template: metadata: name: postgres labels: app: postgres spec: containers: - name: postgres image: postgres:10 imagePullPolicy: IfNotPresent ports: - containerPort: 5432 env: - name: POSTGRES_USER value: sonar - name: POSTGRES_PASSWORD value: sonar volumeMounts: - mountPath: /var/lib/postgresql/data name: postgres-data restartPolicy: Always volumes: - name: postgres-data emptyDir: {} selector: matchLabels: app: postgres --- apiVersion: v1 kind: Service metadata: name: postgres spec: selector: app: postgres ports: - port: 5432  sonar.</description>
+      <description>&lt;h2 id=&#34;简介&#34;&gt;简介&lt;/h2&gt;
+
+&lt;p&gt;​   Sonar是一个用于代码质量管理的开源平台，用于管理源代码的质量，可以从多个维度检测代码质量通过插件形式，可以支持包括java,C#,C/C++,PL/SQL,Cobol,JavaScrip,Groovy等等二十几种编程语言的代码质量管理与检测&lt;/p&gt;</description>
     </item>
     
   </channel>

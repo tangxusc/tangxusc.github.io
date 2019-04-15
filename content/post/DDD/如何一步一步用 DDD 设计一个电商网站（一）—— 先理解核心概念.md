@@ -10,8 +10,10 @@ keywords:
 - 电商网站
 - DDD
 ---
+如何一步一步用 DDD 设计一个电商网站
 
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 http://www.cnblogs.com/Zachary-Fan/p/5991674.html
+<!--more-->
 
 **本系列所有文章**
 

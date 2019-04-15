@@ -1,6 +1,6 @@
 ---
 title: "迈向istio-安装"
-date: 2019-03-20T14:15:59+08:00
+date: 2019-04-01T14:15:59+08:00
 draft: false
 categories:
 - istio
@@ -10,7 +10,8 @@ keywords:
 - istio
 ---
 
-# istio-安装
+istio-安装
+<!--more-->
 
 [TOC]
 

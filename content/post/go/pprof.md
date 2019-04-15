@@ -12,7 +12,12 @@ keywords:
 - golang
 - PProf
 ---
+写了几吨代码，实现了几百个接口。功能测试也通过了，终于成功的部署上线了
 
+结果，性能不佳，什么鬼？
+
+本文教你使用 PProf来分析程序
+<!--more-->
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 https://github.com/EDDYCJY/blog/blob/master/golang/2018-09-15-Golang%20%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90%20PProf.md
 
 # Golang 大杀器之性能剖析 PProf

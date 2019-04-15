@@ -5,7 +5,6 @@ draft: false
 categories:
 - golang
 - module
-- gitlab
 tags:
 - golang
 - module
@@ -16,6 +15,8 @@ keywords:
 - gitlab
 ---
 
+在我们使用golang开发项目时,会遇到私有仓库问题,本文章讲解golang中私有仓库的使用
+<!--more-->
 > 本文由 [简悦 SimpRead](http://ksria.com/simpread/) 转码， 原文地址 http://holys.im/2016/09/20/go-get-in-gitlab/
 
 据此 [issue](https://github.com/gitlabhq/gitlabhq/pull/7693)，gitlab 7.8 就开始支持 go get private repo。
