@@ -545,7 +545,7 @@
               <div class="media-content hide-xs font-merryweather">废话 istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本的口号叫企业级就绪(以后会不会出云供应商就绪?),这8个月中可以看到istio还是发生了很大的变化的,纵观历史,istio进行了三次腾飞:
  0.8 不在是模型了 1.0 生产就绪了(其实没有),抛弃了ingress,模型改动比较大 1.1 企业就绪了,理清楚了流量管理的模型啊啊啊啊,sidecar不再操碎了心,pilot解放了,mixer adapter又被默认的关了,ServiceEntry存在感突然就没啦.  废话太多了,接下来我们进入正题,去看看istio1.1到底更新了那些东西
  注意,不会全部的解析,只捡我认为重要的说.
- 升级内容 安装  安装模式变化  现在提供了两个helm chart来安装,分别为istio-init和istio 这两个职责如下:
+ 升级内容 安装 1.安装模式变化 现在提供了两个helm chart来安装,分别为istio-init和istio 这两个职责如下:
 istio-init: 负责通过job.batch/istio-init-crd-10,job.batch/istio-init-crd-11 这两个job来安装istio的crd资源(一共53个,如果启用cert-manager则为58个),可通过命令查看:
 $ kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l 53  istio: 现在istio安装的时候是没有启用grafana,kiali的,并且已经说明使用kiali替换servicegraph,所以在安装时,需要手动开启:
 # # addon grafana configuration # grafana: enabled: true # # addon kiali tracing configuration # kiali: enabled: true createDemoSecret: true  并且现在支持自定义kiali的用户名密码了,如果还是使用admin/admin 那么就需要createDemoSecret: true
