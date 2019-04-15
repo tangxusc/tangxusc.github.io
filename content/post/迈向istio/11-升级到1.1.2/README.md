@@ -13,17 +13,17 @@ keywords:
 
 <!--more-->
 
-## 废话
+## 介绍
 
 istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本的口号叫`企业级就绪`(以后会不会出`云供应商就绪`?),这8个月中可以看到istio还是发生了很大的变化的,纵观历史,istio进行了三次腾飞:
 
 - 0.8 	不在是模型了
 - 1.0 	生产就绪了(其实没有),抛弃了ingress,模型改动比较大
-- 1.1	 企业就绪了,理清楚了流量管理的模型啊啊啊啊,sidecar不再操碎了心,pilot解放了,mixer adapter又被默认的关了,ServiceEntry存在感突然就没啦.
+- 1.1	 企业就绪了,理清楚了流量管理的模型,sidecar不再操碎了心,pilot解放了,mixer adapter又被默认的关了,ServiceEntry存在感突然就没啦.
 
 废话太多了,接下来我们进入正题,去看看istio1.1到底更新了那些东西
 
-> 注意,不会全部的解析,只捡我认为重要的说.
+> 注意,因个人知识有限,不会全部解析,请见谅.
 
 ## 升级内容
 
@@ -109,7 +109,7 @@ outboundTrafficPolicy:
 
 #### 3.改进多集群集成
 
-   这个我也不会,有会的教下我.
+   多集群提供了新的集成方式,但限于知识体系和篇幅就不在此讲述.
 
 ### 流量管理
 
@@ -129,9 +129,11 @@ outboundTrafficPolicy:
 
    > 从这里也可以看出来,其实没有企业就绪,因为后续可以选择暴露给某个命名空间,某个服务这样才最好
 
-#### 3.基于位置的路由
+#### 3.基于位置的负载均衡
 
-   在你的node上用label标注`Region`,`Zone`,`Sub-zone`后,例如:
+   要启用基于位置的负载均衡需要在pilot实例中需要设置环境变量`PILOT_ENABLE_LOCALITY_LOAD_BALANCING`
+
+   然后在你的node上用label标注`Region`,`Zone`,`Sub-zone`后,例如:
 
 ```shell
 Region=us-west
@@ -153,11 +155,11 @@ distribute:
       "us-west/zone2/*": 80
 ```
 
-   
+#### 4.性能提升了
 
-#### 4.性能提升了(这不废话么)
+   得益于sidecar资源和exportTo字段,让sidecar不再拥有所有的服务的配置,我们也不用看那么大的一个配置了(起码几千行啊),pilot也不那么累了,整体性能和延时都提升了,用性能最好的版本只有8ms的延迟了
 
-   得益于sidecar资源和exportTo字段,让sidecar不再拥有所有的服务的配置,我们也不用看那么大的一个配置了(起码几千行啊),pilot也不那么累了,整体性能和延时都提升了,用性能最好的版本只有8ms的延迟了哟
+> 详细解析请参照: [Istio1.1新特性之限制服务可见性](http://www.servicemesher.com/blog/istio-service-visibility/)
 
 #### 5.值得注意的gateway
 
@@ -165,11 +167,11 @@ distribute:
 
    A: gateway中的hosts字段写法也变成了 `ns-name/service.ns.svc.cluster.local`这个模式
 
-   B: **极其重要** selector用来选择网关的工作负载,但是推荐的做法是 gateway资源和 istio-ingressgateway 这个容器 放在同一命名空间中,听起来有点绕,咱们把舌头捋顺:
+   B: (**极其重要**) selector用来选择网关的工作负载,但是推荐的做法是 gateway资源和 istio-ingressgateway 这个容器 放在同一命名空间中,听起来有点绕,咱们把舌头捋顺:
 
    推荐做法, gateway资源放在运行istio-ingressgateway这个pod的命名空间中.
 
-   其实大部分人安装都是放在istio-system的,那接下来你的gateway都要放在istio-system这里面(别问为什么,这是推荐)
+   其实大部分人安装都是放在istio-system的,那接下来你的gateway都要放在istio-system这里面(istio文档中推荐)
 
    > 其实,网络入口的控制权限应该更高,所以确实放在istio-system中更好
 
@@ -179,7 +181,11 @@ distribute:
 
    在1.0之前是不能使用健康检查的,因为在启用Policy的https加密后,所有进入sidecar的流量都需要使用https协议并且带上https的证书,但是k8s在进行健康检查的时候,它是真不知道去哪里弄个证书...
 
+> 注意 1.0的时候使用健康检查并且在集群中开启https后会出现pod频繁被杀死,因为健康检查过不了
+
 #### 2.RbacConfig替换为ClusterRbacConfig
+
+  其实在此处有一个比较麻烦的问题,如果使用istio的rbac对于很多用户量较大的企业,就需要生成许多crd的资源应用到k8s中,etcd压力是不小的,个人认为使用mixer中的OPA(open policy agent)或者自定义adapter更为合适.
 
 ### 策略和遥测
 
@@ -217,7 +223,7 @@ spec:
     values: [ x.output.value ]
 ```
 
-   
+  
 
 #### 3. 1.2后就要移除mixer内的adapter了
 
@@ -227,7 +233,9 @@ spec:
 
 #### 1.galley组件现在正式服役
 
-   我也暂时不知道他是干嘛的....,1.0的时候虽然文档中有这个组件,但是几乎没怎么介绍
+   其实在1.0的版本中该组件就存在,只是现在升级后正式服役了,具体使用方法请参考:
+
+   [Istio 庖丁解牛三：galley](http://www.servicemesher.com/blog/istio-analysis-3/)
 
 ### 命令行
 
@@ -239,6 +247,8 @@ spec:
 
 `istio proxy-status`
 
+其他的create,get 这些命令被废弃了.
+
 #### 2.kubectl 可以使用 短名称获取istio资源
 
 ```shell
@@ -248,14 +258,22 @@ $ kubectl get vs
 ```
 
 
-## 方向
+## 个人理解
 
-既然升级了这么多内容,那么istio现在模型就已经有了一次巨大的改变,如果你没有意思到就要敲脑袋了!
+既然升级了这么多内容,那么istio现在模型就已经有了一次较大的改变,更强调整体性(体现出了istio社区的各位贡献者的孜孜不倦的努力贡献)
 
 - gateway 放在 istio-system 命名空间中
 - 每一个命名空间的服务 自己配置自己的 VirtualService,DestinationRule,并在VirtualService中`gateway字段`填写`gateway资源`的名称,**这样把流量引进来**
 - 要调用其他命名空间的服务 需要在自己命名空间中 声明VirtualService和DestinationRule,但是并不填写`gateway字段`,但是需要极度[**注意**](https://istio.io/help/ops/traffic-management/deploy-guidelines/#multiple-virtual-services-and-destination-rules-for-the-same-host), 这样 服务间的熔断,故障注入等等功能也就齐活了
 - 其他的命名空间如过不需要引用就不做上一步就好了
 
-> 这相当危险,不信你去看 https://istio.io/help/ops/traffic-management/deploy-guidelines/#multiple-virtual-services-and-destination-rules-for-the-same-host
+> 在istio1.0中是不推荐一个host配置多个VirtualService的
+
+## 参考
+
+- [一个host多VirtualService配置](https://istio.io/help/ops/traffic-management/deploy-guidelines/#multiple-virtual-services-and-destination-rules-for-the-same-host)
+- [Istio 庖丁解牛三：galley](http://www.servicemesher.com/blog/istio-analysis-3/)
+- [基于位置的负载均衡](https://istio.io/help/ops/traffic-management/locality-load-balancing/)
+- [istio 1.1发行说明](https://istio.io/about/notes/1.1/)
+- [Istio1.1新特性之限制服务可见性](http://www.servicemesher.com/blog/istio-service-visibility/)
 
