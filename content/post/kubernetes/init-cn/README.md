@@ -33,13 +33,13 @@ keywords:
 该脚本使用如下:
 
 ```shell
-curl https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/init.sh | sh
+curl https://tangxusc.github.io/blog/post/kubernetes/init/init.sh | sh
 ```
 
 对于国内用户,推荐使用`cn`脚本:
 
 ```shell
-curl https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init-cn/init.sh | sh
+curl https://tangxusc.github.io/blog/post/kubernetes/init-cn/init.sh | sh
 ```
 
 ## 脚本说明
@@ -71,7 +71,7 @@ helm install --name rook-ceph-system --namespace rook-ceph-system rook-stable/ro
 
 sleep 3m
 
-kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/rook-cluster.yaml
+kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init/rook-cluster.yaml
 
 sleep 3m
 
@@ -86,9 +86,9 @@ export rookcephPWD=$( kubectl -n rook-ceph get secret rook-ceph-dashboard-passwo
 ### elasticsearch-fluentd-kinaba
 
 ```shell
-kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init-cn/efk-elasticsearch.yaml
-kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init-cn/efk-fluentd.yaml
-kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init-cn/efk-kibana.yaml
+kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init-cn/efk-elasticsearch.yaml
+kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init-cn/efk-fluentd.yaml
+kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init-cn/efk-kibana.yaml
 ```
 
 ### prometheus
@@ -113,7 +113,7 @@ kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operato
 kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/role_binding.yaml
 kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/operator.yaml
 
-kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/jaeger-instance.yaml
+kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init/jaeger-instance.yaml
 ```
 
 ### dashboard

@@ -257,12 +257,12 @@
 
 <p>该脚本使用如下:</p>
 
-<pre><code class="language-shell">curl https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/init.sh | sh
+<pre><code class="language-shell">curl https://tangxusc.github.io/blog/post/kubernetes/init/init.sh | sh
 </code></pre>
 
 <p>对于国内用户,推荐使用<code>cn</code>脚本:</p>
 
-<pre><code class="language-shell">curl https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init-cn/init.sh | sh
+<pre><code class="language-shell">curl https://tangxusc.github.io/blog/post/kubernetes/init-cn/init.sh | sh
 </code></pre>
 
 <h2 id="脚本说明">脚本说明</h2>
@@ -291,7 +291,7 @@ export kubeappsPWD=$( kubectl get secret $(kubectl get serviceaccount kubeapps-o
 
 sleep 3m
 
-kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/rook-cluster.yaml
+kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init/rook-cluster.yaml
 
 sleep 3m
 
@@ -307,9 +307,9 @@ export rookcephPWD=$( kubectl -n rook-ceph get secret rook-ceph-dashboard-passwo
 
 <h3 id="elasticsearch-fluentd-kinaba">elasticsearch-fluentd-kinaba</h3>
 
-<pre><code class="language-shell">kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init-cn/efk-elasticsearch.yaml
-kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init-cn/efk-fluentd.yaml
-kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init-cn/efk-kibana.yaml
+<pre><code class="language-shell">kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init-cn/efk-elasticsearch.yaml
+kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init-cn/efk-fluentd.yaml
+kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init-cn/efk-kibana.yaml
 </code></pre>
 
 <h3 id="prometheus">prometheus</h3>
@@ -331,7 +331,7 @@ kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operato
 kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/role_binding.yaml
 kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/operator.yaml
 
-kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/jaeger-instance.yaml
+kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init/jaeger-instance.yaml
 </code></pre>
 
 <h3 id="dashboard">dashboard</h3>

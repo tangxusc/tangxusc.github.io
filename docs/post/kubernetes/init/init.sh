@@ -14,14 +14,14 @@ export kubeappsPWD=$( kubectl get secret $(kubectl get serviceaccount kubeapps-o
 echo '开始安装 rook'
 helm install --name rook-ceph-system --namespace rook-ceph-system rook-stable/rook-ceph
 sleep 3m
-kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/rook-cluster.yaml
+kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init/rook-cluster.yaml
 sleep 3m
 export rookcephPWD=$( kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o yaml | grep "password:" | awk '{print $2}' | base64 --decode )
 
 echo '开始安装 efk'
-kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/efk-elasticsearch.yaml
-kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/efk-fluentd.yaml
-kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/efk-kibana.yaml
+kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init/efk-elasticsearch.yaml
+kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init/efk-fluentd.yaml
+kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init/efk-kibana.yaml
 
 echo '开始安装 prometheus'
 helm install --name prometheus --namespace prometheus stable/prometheus --set alertmanager.persistentVolume.storageClass=rook-ceph-block --set kubeStateMetrics.enabled=false --set pushgateway.enabled=false --set server.persistentVolume.storageClass=rook-ceph-block
@@ -37,7 +37,7 @@ kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operato
 kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/role_binding.yaml
 kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/operator.yaml
 echo '创建 jaeger实例'
-kubectl apply -f https://gitee.com/tanx/kubernetes-test/raw/master/kubernetes/init/jaeger-instance.yaml
+kubectl apply -f https://tangxusc.github.io/blog/post/kubernetes/init/jaeger-instance.yaml
 
 echo '开始安装 dashboard'
 helm install --name dashboard --namespace kube-system stable/kubernetes-dashboard --set image.repository=rancher/kubernetes-dashboard-amd64
