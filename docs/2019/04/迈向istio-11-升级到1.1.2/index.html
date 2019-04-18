@@ -466,7 +466,7 @@ spec:
 
 <p><code>istioctl proxy-config</code></p>
 
-<p><code>istio proxy-status</code></p>
+<p><code>istio proxy-status新的配置示例</code></p>
 
 <p>其他的create,get 这些命令被废弃了.</p>
 
@@ -484,7 +484,7 @@ $ kubectl get vs
 <ul>
 <li>gateway 放在 istio-system 命名空间中</li>
 <li>每一个命名空间的服务 自己配置自己的 VirtualService,DestinationRule,并在VirtualService中<code>gateway字段</code>填写<code>gateway资源</code>的名称,<strong>这样把流量引进来</strong></li>
-<li>要调用其他命名空间的服务 需要在自己命名空间中 声明VirtualService和DestinationRule,但是并不填写<code>gateway字段</code>,但是需要极度<a href="https://istio.io/help/ops/traffic-management/deploy-guidelines/#multiple-virtual-services-and-destination-rules-for-the-same-host"><strong>注意</strong></a>, 这样 服务间的熔断,故障注入等等功能也就齐活了</li>
+<li>要调用其他命名空间的服务 需要在目标命名空间中 声明VirtualService和DestinationRule,但是并不填写<code>gateway字段</code>,但是需要极度<a href="https://istio.io/help/ops/traffic-management/deploy-guidelines/#multiple-virtual-services-and-destination-rules-for-the-same-host"><strong>注意</strong></a>, 这样 服务间的熔断,故障注入等等功能也就齐活了</li>
 <li>其他的命名空间如过不需要引用就不做上一步就好了</li>
 </ul>
 
@@ -500,6 +500,7 @@ $ kubectl get vs
 <li><a href="https://istio.io/help/ops/traffic-management/locality-load-balancing/">基于位置的负载均衡</a></li>
 <li><a href="https://istio.io/about/notes/1.1/">istio 1.1发行说明</a></li>
 <li><a href="http://www.servicemesher.com/blog/istio-service-visibility/">Istio1.1新特性之限制服务可见性</a></li>
+<li><a href="https://tangxusc.github.io/blog/post/迈向istio/11-升级到1.1.2/all.yaml">新的配置示例</a></li>
 </ul>
               
             </div>

@@ -247,7 +247,7 @@ spec:
 
 `istioctl proxy-config`
 
-`istio proxy-status`
+`istio proxy-status新的配置示例`
 
 其他的create,get 这些命令被废弃了.
 
@@ -266,7 +266,7 @@ $ kubectl get vs
 
 - gateway 放在 istio-system 命名空间中
 - 每一个命名空间的服务 自己配置自己的 VirtualService,DestinationRule,并在VirtualService中`gateway字段`填写`gateway资源`的名称,**这样把流量引进来**
-- 要调用其他命名空间的服务 需要在自己命名空间中 声明VirtualService和DestinationRule,但是并不填写`gateway字段`,但是需要极度[**注意**](https://istio.io/help/ops/traffic-management/deploy-guidelines/#multiple-virtual-services-and-destination-rules-for-the-same-host), 这样 服务间的熔断,故障注入等等功能也就齐活了
+- 要调用其他命名空间的服务 需要在目标命名空间中 声明VirtualService和DestinationRule,但是并不填写`gateway字段`,但是需要极度[**注意**](https://istio.io/help/ops/traffic-management/deploy-guidelines/#multiple-virtual-services-and-destination-rules-for-the-same-host), 这样 服务间的熔断,故障注入等等功能也就齐活了
 - 其他的命名空间如过不需要引用就不做上一步就好了
 
 > 在istio1.0中是不推荐一个host配置多个VirtualService的
@@ -278,4 +278,5 @@ $ kubectl get vs
 - [基于位置的负载均衡](https://istio.io/help/ops/traffic-management/locality-load-balancing/)
 - [istio 1.1发行说明](https://istio.io/about/notes/1.1/)
 - [Istio1.1新特性之限制服务可见性](http://www.servicemesher.com/blog/istio-service-visibility/)
+- [新的配置示例](https://tangxusc.github.io/blog/post/迈向istio/11-升级到1.1.2/all.yaml)
 

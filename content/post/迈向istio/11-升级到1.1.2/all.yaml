@@ -1,0 +1,127 @@
+# debug 命令
+# istioctl proxy-config cluster pod名称 -n 命名空间
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: gw
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "test1/*.test1.svc.cluster.local"
+        - "test2/*.test2.svc.cluster.local"
+#以下写法同样生效
+#格式必须是域名格式,不能只为*
+#        - "*.test1.svc.cluster.local"
+#        - "*.test2.svc.cluster.local"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: proxy-test1
+  namespace: test1
+spec:
+  hosts:
+    - "proxy.test1.svc.cluster.local"
+  gateways:
+    - istio-system/gw
+  http:
+    - match:
+        - uri:
+            prefix: /proxy1/
+      rewrite:
+        uri: "/"
+      route:
+        - destination:
+            #host: "proxy.test1.svc.cluster.local"
+            host: proxy
+            subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: proxy-test1
+  namespace: test1
+spec:
+  host: "proxy.test1.svc.cluster.local"
+  subsets:
+    - name: v1
+      labels:
+        app: proxy
+        version: "1"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Sidecar
+metadata:
+  name: default
+  namespace: test1
+spec:
+  egress:
+    - hosts:
+        - "test2/*"
+        - "istio-system/*" #一定要允许istio-system的服务,因为会check会上报
+---
+# test2
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: proxy-test2
+  namespace: test2
+spec:
+  #  exportTo:
+  #    - "."
+  hosts:
+    - "proxy.test2.svc.cluster.local"
+  gateways:
+    - istio-system/gw
+    - mesh
+  http:
+    - match:
+      - uri:
+          prefix: /proxy2/
+        gateways:
+          - istio-system/gw
+      rewrite:
+        uri: "/"
+      route:
+        - destination:
+            #host: "proxy.test2.svc.cluster.local"
+            host: proxy
+            subset: v1
+    - match:
+      - uri:
+          prefix: /proxy2-test/
+        gateways:
+          - mesh
+      rewrite:
+        uri: "/"
+      route:
+        - destination:
+            host: proxy
+            subset: v1
+      fault:
+        abort:
+          percentage:
+            value: 20.0
+          httpStatus: 500
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: proxy-test2
+  namespace: test2
+spec:
+  #  exportTo:
+  #    - "."
+  host: "proxy.test2.svc.cluster.local"
+  subsets:
+    - name: v1
+      labels:
+        app: proxy
+        version: "1"
