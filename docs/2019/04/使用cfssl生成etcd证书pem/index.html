@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="cfssl">
+<meta name="description" content="CFSSL是CloudFlare开源的一款PKI/TLS工具,CFSSL包含一个命令行工具和一个用于签名，验证并且捆绑TLS证书的HTTP API服务,使用Go语言编写.
+
+github: https://github.com/cloudflare/cfssl
+
+下载地址: https://pkg.cfssl.org/">
+
+
+<meta property="og:description" content="CFSSL是CloudFlare开源的一款PKI/TLS工具,CFSSL包含一个命令行工具和一个用于签名，验证并且捆绑TLS证书的HTTP API服务,使用Go语言编写.
+
+github: https://github.com/cloudflare/cfssl
+
+下载地址: https://pkg.cfssl.org/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Cfssl生成etcd证书(pem)">
+<meta name="twitter:title" content="使用Cfssl生成etcd证书(pem)">
+<meta property="og:url" content="https://tangxusc.github.io/blog/2019/04/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem/">
+<meta property="twitter:url" content="https://tangxusc.github.io/blog/2019/04/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="CFSSL是CloudFlare开源的一款PKI/TLS工具,CFSSL包含一个命令行工具和一个用于签名，验证并且捆绑TLS证书的HTTP API服务,使用Go语言编写.
+
+github: https://github.com/cloudflare/cfssl
+
+下载地址: https://pkg.cfssl.org/">
+<meta name="twitter:description" content="CFSSL是CloudFlare开源的一款PKI/TLS工具,CFSSL包含一个命令行工具和一个用于签名，验证并且捆绑TLS证书的HTTP API服务,使用Go语言编写.
+
+github: https://github.com/cloudflare/cfssl
+
+下载地址: https://pkg.cfssl.org/">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-04-25T13:56:22">
+  
+  
+    <meta property="article:modified_time" content="2019-04-25T13:56:22">
+  
+  
+  
+    
+      <meta property="article:section" content="k8s">
+    
+  
+  
+    
+      <meta property="article:tag" content="cfssl">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=640">
+
+
+    <title>使用Cfssl生成etcd证书(pem)</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/blog/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/blog/2019/04/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/blog/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/blog/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/blog/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      使用Cfssl生成etcd证书(pem)
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-04-25T13:56:22&#43;08:00">
+        
+  April 25, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/k8s">k8s</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>CFSSL是CloudFlare开源的一款PKI/TLS工具,CFSSL包含一个<code>命令行工具</code>和一个用于<code>签名</code>，验证并且捆绑TLS证书的<code>HTTP API服务</code>,使用Go语言编写.</p>
+
+<p>github: <a href="https://github.com/cloudflare/cfssl">https://github.com/cloudflare/cfssl</a></p>
+
+<p>下载地址: <a href="https://pkg.cfssl.org/">https://pkg.cfssl.org/</a></p>
+
+<p>在使用etcd,kubernetes等组件的过程中会大量接触到证书的生成和使用,本文将详细说明创建etcd的证书</p>
+
+<h2 id="安装">安装</h2>
+
+<pre><code class="language-shell">wget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 
+wget https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 
+wget https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64
+chmod +x cfssl*
+</code></pre>
+
+<h2 id="获取默认配置">获取默认配置</h2>
+
+<pre><code class="language-shell">cfssl print-defaults config &gt; ca-config.json
+cfssl print-defaults csr &gt; ca-csr.json
+</code></pre>
+
+<p><code>ca-config.json</code>文件内容如下:</p>
+
+<pre><code class="language-json">{
+    &quot;signing&quot;: {
+        &quot;default&quot;: {
+            &quot;expiry&quot;: &quot;168h&quot;
+        },
+        &quot;profiles&quot;: {
+            &quot;www&quot;: {
+                &quot;expiry&quot;: &quot;8760h&quot;,
+                &quot;usages&quot;: [
+                    &quot;signing&quot;,
+                    &quot;key encipherment&quot;,
+                    &quot;server auth&quot;
+                ]
+            },
+            &quot;client&quot;: {
+                &quot;expiry&quot;: &quot;8760h&quot;,
+                &quot;usages&quot;: [
+                    &quot;signing&quot;,
+                    &quot;key encipherment&quot;,
+                    &quot;client auth&quot;
+                ]
+            }
+        }
+    }
+}
+</code></pre>
+
+<p><code>ca-csr.json</code>内容如下:</p>
+
+<pre><code class="language-json">{
+    &quot;CN&quot;: &quot;example.net&quot;,
+    &quot;hosts&quot;: [
+        &quot;example.net&quot;,
+        &quot;www.example.net&quot;
+    ],
+    &quot;key&quot;: {
+        &quot;algo&quot;: &quot;ecdsa&quot;,
+        &quot;size&quot;: 256
+    },
+    &quot;names&quot;: [
+        {
+            &quot;C&quot;: &quot;US&quot;,
+            &quot;L&quot;: &quot;CA&quot;,
+            &quot;ST&quot;: &quot;San Francisco&quot;
+        }
+    ]
+}
+</code></pre>
+
+<h2 id="生成ca证书">生成ca证书</h2>
+
+<p>将<code>ca-config.json</code>内容修改为:</p>
+
+<pre><code class="language-json">{
+    &quot;signing&quot;:{
+        &quot;default&quot;:{
+            &quot;expiry&quot;:&quot;876000h&quot;
+        },
+        &quot;profiles&quot;:{
+            &quot;etcd&quot;:{
+                &quot;usages&quot;:[
+                    &quot;signing&quot;,
+                    &quot;key encipherment&quot;,
+                    &quot;server auth&quot;,
+                    &quot;client auth&quot;
+                ],
+                &quot;expiry&quot;:&quot;876000h&quot;
+            }
+        }
+    }
+}
+</code></pre>
+
+<p>修改<code>ca-csr.json</code>文件内容为:</p>
+
+<pre><code class="language-json">{
+  &quot;CN&quot;: &quot;CA&quot;,
+  &quot;key&quot;: {
+    &quot;algo&quot;: &quot;rsa&quot;,
+    &quot;size&quot;: 2048
+  },
+  &quot;names&quot;: [
+    {
+      &quot;C&quot;: &quot;CN&quot;,
+      &quot;ST&quot;: &quot;shenzhen&quot;,
+      &quot;L&quot;: &quot;shenzhen&quot;,
+      &quot;O&quot;: &quot;etcd&quot;,
+      &quot;OU&quot;: &quot;System&quot;
+    }
+  ]
+}
+</code></pre>
+
+<blockquote>
+<p>&ldquo;CN&rdquo;：Common Name，etcd 从证书中提取该字段作为请求的用户名 (User Name)；浏览器使用该字段验证网站是否合法；
+&ldquo;O&rdquo;：Organization，etcd 从证书中提取该字段作为请求用户所属的组 (Group)；</p>
+
+<p>注意,<strong>在k8s中</strong>: 这两个参数在后面的kubernetes启用RBAC模式中很重要，因为需要设置kubelet、admin等角色权限，那么在配置证书的时候就必须配置对了，具体后面在部署kubernetes的时候会进行讲解。</p>
+</blockquote>
+
+<p>修改好配置文件后,接下来就可以生成ca证书了</p>
+
+<pre><code class="language-shell">$ cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+2019/04/25 15:02:45 [INFO] generating a new CA key and certificate from CSR
+2019/04/25 15:02:45 [INFO] generate received request
+2019/04/25 15:02:45 [INFO] received CSR
+2019/04/25 15:02:45 [INFO] generating key: rsa-2048
+2019/04/25 15:02:46 [INFO] encoded CSR
+2019/04/25 15:02:46 [INFO] signed certificate with serial number 391082240034344424489077238735720834723237930875
+</code></pre>
+
+<p>此时目录下会出现三个文件:</p>
+
+<pre><code class="language-shell">$ tree
+├── ca-config.json #这是刚才的json
+├── ca.csr
+├── ca-csr.json    #这也是刚才申请证书的json
+├── ca-key.pem
+├── ca.pem
+</code></pre>
+
+<p>这样 我们就生成了:</p>
+
+<ul>
+<li>根证书文件: <code>ca.pem</code></li>
+<li>根证书私钥: <code>ca-key.pem</code></li>
+<li>根证书申请文件: <code>ca.csr</code>  (csr是不是client ssl request?)</li>
+</ul>
+
+<h2 id="签发证书">签发证书</h2>
+
+<p>创建<code>etct-csr.json</code>,内容为:</p>
+
+<pre><code class="language-json">{
+  &quot;CN&quot;: &quot;etcd&quot;,
+  &quot;key&quot;: {
+    &quot;algo&quot;: &quot;rsa&quot;,
+    &quot;size&quot;: 2048
+  },
+  &quot;hosts&quot;: [
+    &quot;example.net&quot;,	#此处为etcd地址,可以多个
+    &quot;www.example.net&quot;
+  ],
+  &quot;names&quot;: [
+    {
+      &quot;C&quot;: &quot;CN&quot;,
+      &quot;ST&quot;: &quot;shenzhen&quot;,
+      &quot;L&quot;: &quot;shenzhen&quot;,
+      &quot;O&quot;: &quot;etcd&quot;,
+      &quot;OU&quot;: &quot;System&quot;
+    }
+  ]
+}
+</code></pre>
+
+<p>使用之前的ca证书签发etcd证书:</p>
+
+<pre><code class="language-shell">$ cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=etcd etcd-csr.json | cfssljson -bare etcd
+
+2019/04/25 15:29:57 [INFO] generate received request
+2019/04/25 15:29:57 [INFO] received CSR
+2019/04/25 15:29:57 [INFO] generating key: rsa-2048
+2019/04/25 15:29:57 [INFO] encoded CSR
+2019/04/25 15:29:57 [INFO] signed certificate with serial number 298100304200846379445095267906256802955283756560
+2019/04/25 15:29:57 [WARNING] This certificate lacks a &quot;hosts&quot; field. This makes it unsuitable for
+websites. For more information see the Baseline Requirements for the Issuance and Management
+of Publicly-Trusted Certificates, v.1.1.6, from the CA/Browser Forum (https://cabforum.org);
+specifically, section 10.2.3 (&quot;Information Requirements&quot;).
+</code></pre>
+
+<p>此时目录下会多几个文件:</p>
+
+<pre><code class="language-shell">$ tree -L 1
+├── etcd.csr
+├── etcd-csr.json
+├── etcd-key.pem
+├── etcd.pem
+</code></pre>
+
+<p>至此,etcd的证书生成完成.</p>
+
+<h2 id="启动etcd">启动etcd</h2>
+
+<pre><code class="language-shell">./etcd
+--name etcd1 \
+  --cert-file=/etcd.pem \
+  --key-file=/etcd-key.pem \
+  --peer-cert-file=/etcd.pem \
+  --peer-key-file=/etcd-key.pem \
+  --trusted-ca-file=/ca.pem \
+  --peer-trusted-ca-file=/ca.pem \
+  --initial-advertise-peer-urls http://127.0.0.1:2380 \
+  --listen-peer-urls http://127.0.0.1:2380 \
+  --listen-client-urls http://127.0.0.1:2379,http://127.0.0.1:2379 \
+  --advertise-client-urls http://127.0.0.1:2379 \
+  --initial-cluster-token etcd-cluster-token \
+  --initial-cluster etcd1=https://172.16.5.81:2380,infra2=https://172.16.5.86:2380,infra3=https://172.16.5.87:2380 \
+  --initial-cluster-state new \
+  --data-dir=/etcd-data
+</code></pre>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/cfssl/">cfssl</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/" data-tooltip="迈向istio-11 升级到1.1.2">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/" data-tooltip="迈向istio-11 升级到1.1.2">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem/">
+                <h3 class="media-heading">使用Cfssl生成etcd证书(pem)</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>CFSSL是CloudFlare开源的一款PKI/TLS工具,CFSSL包含一个<code>命令行工具</code>和一个用于<code>签名</code>，验证并且捆绑TLS证书的<code>HTTP API服务</code>,使用Go语言编写.</p>
+
+<p>github: <a href="https://github.com/cloudflare/cfssl">https://github.com/cloudflare/cfssl</a></p>
+
+<p>下载地址: <a href="https://pkg.cfssl.org/">https://pkg.cfssl.org/</a></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/">
+                <h3 class="media-heading">迈向istio-11 升级到1.1.2</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本为<code>企业级就绪</code></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-jwt%E8%AE%A4%E8%AF%81/">
+                <h3 class="media-heading">迈向istio-jwt认证</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在建设企业的各种项目中,我们一定离不开,或者总要和认证授权系统打交道,应用总会入侵一些认证和授权部分的代码,现在在java等方面有大量的安全框架,例如<code>spring security,shiro</code>等等框架,这些框架也是为了解决这个重复性的做认证和授权等功能的问题,这也是我们在单体服务的时候一直做的,将各种各样的框架集成到系统中,那么现在在微服务时代,或者说在istio有没有解决方法能解决这个问题呢,让服务真正回归业务,不再去过多的管理认证的问题呢.</p>
+
+<p>在本节中我们将会将我们的应用构建为一个需要使用jwt token才能访问的服务,在没有jwt token的情况下,将会返回401 未授权.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-opa%E6%8E%88%E6%9D%83/">
+                <h3 class="media-heading">迈向istio-opa授权</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在上一章节中,我们使用jwt进行了认证,那么我们如何对资源进行授权检查呢?</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-tls/">
+                <h3 class="media-heading">迈向istio-tls</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>我们已经完成了我们服务的路由,并且也已经有了镜像流量了,那么接下来我们要做什么呢?</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/">
+                <h3 class="media-heading">迈向istio-多服务通信</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;</p>
+
+<p>在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/">
+                <h3 class="media-heading">迈向istio-安装</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>istio-安装</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/">
+                <h3 class="media-heading">迈向istio-引入外部服务</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/">
+                <h3 class="media-heading">迈向istio-服务路由</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在上一节中,我们使用nginx开启了我们istio的第一个应用,现在我们加入另外一个服务tomcat</p>
+
+<blockquote>
+<p>本节内容基于上节内容,请先运行上一节的yaml文件,然后再体验本节内容</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E7%A4%BA%E4%BE%8B/">
+                <h3 class="media-heading">迈向istio-示例</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在上一节中我们已经成功的安装了istio的各个组件,接下来我们一起来运行一个nginx,体验一下istio的功能</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         78 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/blog/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/blog\/2019\/04\/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem\/';
+          
+            this.page.identifier = '\/2019\/04\/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

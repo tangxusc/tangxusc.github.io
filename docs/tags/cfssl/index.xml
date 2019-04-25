@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cfssl on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/blog/tags/cfssl/</link>
+    <description>Recent content in Cfssl on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 Apr 2019 13:56:22 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/blog/tags/cfssl/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>使用Cfssl生成etcd证书(pem)</title>
+      <link>https://tangxusc.github.io/blog/2019/04/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem/</link>
+      <pubDate>Thu, 25 Apr 2019 13:56:22 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/04/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem/</guid>
+      <description>&lt;p&gt;CFSSL是CloudFlare开源的一款PKI/TLS工具,CFSSL包含一个&lt;code&gt;命令行工具&lt;/code&gt;和一个用于&lt;code&gt;签名&lt;/code&gt;，验证并且捆绑TLS证书的&lt;code&gt;HTTP API服务&lt;/code&gt;,使用Go语言编写.&lt;/p&gt;
+
+&lt;p&gt;github: &lt;a href=&#34;https://github.com/cloudflare/cfssl&#34;&gt;https://github.com/cloudflare/cfssl&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;下载地址: &lt;a href=&#34;https://pkg.cfssl.org/&#34;&gt;https://pkg.cfssl.org/&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -202,6 +202,62 @@
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/">
+          迈向istio-引入外部服务
+        </a>
+      </h1>
+      
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-04-01T14:15:59&#43;08:00">
+        
+  April 1, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
+    
+  
+
+  </div>
+
+    </div>
+    <div class="postShorten-excerpt" itemprop="articleBody">
+      
+        <p>在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.</p>
+      
+      <p>
+        <a href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/" class="postShorten-excerpt_link link">Continue reading</a>
+        
+      </p>
+    </div>
+  </div>
+  
+</article>
+
+          
+            
+  
+    
+      
+        
+      
+    
+  
+
+
+  
+
+<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+  <div class="postShorten-wrap">
+    
+    <div class="postShorten-header">
+      <h1 class="postShorten-title" itemprop="headline">
         <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/">
           迈向istio-服务路由
         </a>
@@ -541,71 +597,6 @@
 </article>
 
           
-            
-  
-    
-      
-        
-      
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">
-          Controller manager高可用实现方式
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
-        
-  March 20, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/k8s">k8s</a>, 
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/controller-manager">Controller manager</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        <blockquote>
-<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://www.colabug.com/2801661.html">https://www.colabug.com/2801661.html</a></p>
-</blockquote>
-
-<p>这不是一系列入门级别的文章，也不是按部就班而来的，而是我看到哪里，发现有些代码写的精妙的地方，都值得我们学习下，顺手记录下来，一方面是让自己将来可以有迹可循，另外对大家应该也会有所帮助。而且记录本身成本并不是很高。</p>
-
-<p>高可用部署情况下，需要部署多个 controller manager （以下简称 cm ），每个 cm 需要 <code>--leader-elect=true</code>
-启动参数，即告知 cm 以高可用方式启动，谁要想进行真正的工作，必须先抢到锁，被选举为 leader 才行，而抢不到所得只能待机，在 leader 因为异常终止的时候，由剩余的其余节点再次获得锁。</p>
-      
-      <p>
-        <a href="https://tangxusc.github.io/blog/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-          
           
   <div class="pagination-bar">
     <ul class="pagination">
@@ -627,7 +618,7 @@
           </li>
         
       
-      <li class="pagination-number">page 2 of 11</li>
+      <li class="pagination-number">page 2 of 12</li>
     </ul>
   </div>
 
@@ -689,6 +680,27 @@
       <div class="no-result text-color-light text-center">no post found</div>
       <div class="results">
         
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem/">
+                <h3 class="media-heading">使用Cfssl生成etcd证书(pem)</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>CFSSL是CloudFlare开源的一款PKI/TLS工具,CFSSL包含一个<code>命令行工具</code>和一个用于<code>签名</code>，验证并且捆绑TLS证书的<code>HTTP API服务</code>,使用Go语言编写.</p>
+
+<p>github: <a href="https://github.com/cloudflare/cfssl">https://github.com/cloudflare/cfssl</a></p>
+
+<p>下载地址: <a href="https://pkg.cfssl.org/">https://pkg.cfssl.org/</a></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
         
           <div class="media">
             
@@ -851,29 +863,6 @@
             <hr>
           </div>
         
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E7%BD%91%E5%85%B3/">
-                <h3 class="media-heading">迈向istio-网关</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Apr 4, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>在上一节中我们已经成功的简单运行了istio的一个路由,也有了一番流量管理的体验,那么很多人都不禁要问,这些配置和yaml是什么意思呢?</p>
-
-<p>那接下来我们基于istio示例中的配置,一点一点的解析这些yaml文件.</p>
-
-<blockquote>
-<p>nginx.yaml中的内容为k8s的yaml文件,再此不做赘述.</p>
-</blockquote></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
       </div>
     </div>
     <div class="modal-footer">
@@ -881,7 +870,7 @@
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         77 posts found
+         78 posts found
       </p>
     </div>
   </div>
