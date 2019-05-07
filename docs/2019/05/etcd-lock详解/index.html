@@ -55,8 +55,8 @@
 
 
 
-  <meta property="og:image" content="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=640">
-  <meta property="twitter:image" content="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=640">
+  <meta property="og:image" content="https://tangxusc.github.io/blog/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/blog/photo.png">
 
 
     <title>Etcd Lock详解</title>
@@ -99,7 +99,7 @@
     
     
       
-        <img class="header-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=90" alt="Author&#39;s picture" />
+        <img class="header-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
       
     
     </a>
@@ -111,7 +111,7 @@
     
       <div class="sidebar-profile">
         <a href="https://tangxusc.github.io/blog/#about">
-          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=110" alt="Author&#39;s picture" />
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
         </a>
         <h4 class="sidebar-profile-name">苏连云</h4>
         
@@ -523,6 +523,14 @@ func (m *Mutex) Unlock(ctx context.Context) error {
 <p>revision: 由(mainID,subID)组成的唯一标识</p>
 
 <p>所以现在我们的revision就是这么来的啦&hellip;</p>
+
+<h2 id="参照">参照</h2>
+
+<p><a href="https://blog.csdn.net/u013000898/article/details/87904591">etcd实现分布式锁流程</a></p>
+
+<p><a href="https://github.com/etcd-io/etcd/blob/master/clientv3/concurrency/mutex.go#L53:2">mutex.go</a></p>
+
+<p><a href="https://github.com/etcd-io/etcd/blob/master/clientv3/concurrency/election.go#L31">election.go</a></p>
               
             </div>
           </div>
@@ -677,7 +685,7 @@ func (m *Mutex) Unlock(ctx context.Context) error {
       <i class="fa fa-remove"></i>
     </div>
     
-      <img id="about-card-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=110" alt="Author&#39;s picture" />
+      <img id="about-card-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
     
     <h4 id="about-card-name">苏连云</h4>
     
