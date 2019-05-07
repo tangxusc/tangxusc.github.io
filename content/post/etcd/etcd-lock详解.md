@@ -309,7 +309,11 @@ revision: 由(mainID,subID)组成的唯一标识
 
 所以现在我们的revision就是这么来的啦...
 
+## 参照
 
+[etcd实现分布式锁流程](https://blog.csdn.net/u013000898/article/details/87904591)
 
+[mutex.go](https://github.com/etcd-io/etcd/blob/master/clientv3/concurrency/mutex.go#L53:2)
 
+[election.go](https://github.com/etcd-io/etcd/blob/master/clientv3/concurrency/election.go#L31)
 
