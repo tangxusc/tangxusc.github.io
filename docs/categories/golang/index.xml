@@ -72,16 +72,6 @@ seelog 提供了灵活的异步调度、格式化和过滤功能。目前在 Git
     </item>
     
     <item>
-      <title>了解 etcd</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E4%BA%86%E8%A7%A3-etcd/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
-      
-      <guid>https://tangxusc.github.io/blog/2019/03/%E4%BA%86%E8%A7%A3-etcd/</guid>
-      <description>&lt;p&gt;这是一篇非常入门的文章，让你大概了解一下 etcd。写这篇文章时使用 etcd 的版本是 3.1.0。
-etcd 是以实现共享配置和服务发现为目的，提供一致性的键值存储的分布式数据库。kubernetes 等项目使用了 etcd。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
       <title>使用 Golang 利用 ectd 实现一个分布式锁</title>
       <link>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8-golang-%E5%88%A9%E7%94%A8-ectd-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>

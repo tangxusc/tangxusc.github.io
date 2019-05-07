@@ -1156,6 +1156,40 @@ kubectl apply -f myadapter.yaml
           <div class="media">
             
             <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/etcd-lock%E8%AF%A6%E8%A7%A3/">
+                <h3 class="media-heading">Etcd Lock详解</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>分布式情况下最终都会面临一个资源抢占的问题,解决问题的方法为抽象一个分布式锁,持有锁则可以操作资源,本文使用etcd实现一个分布式锁</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/etcd%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/">
+                <h3 class="media-heading">Etcd搭建及使用</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>etcd是云原生的存储基石,在kubernetes中的存储便采用的etcd.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
               <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem/">
                 <h3 class="media-heading">使用Cfssl生成etcd证书(pem)</h3>
               </a>
@@ -1169,6 +1203,23 @@ kubectl apply -f myadapter.yaml
 <p>github: <a href="https://github.com/cloudflare/cfssl">https://github.com/cloudflare/cfssl</a></p>
 
 <p>下载地址: <a href="https://pkg.cfssl.org/">https://pkg.cfssl.org/</a></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/">
+                <h3 class="media-heading">迈向istio-11 升级到1.1.2</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本为<code>企业级就绪</code></p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -1280,61 +1331,6 @@ kubectl apply -f myadapter.yaml
             <hr>
           </div>
         
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/">
-                <h3 class="media-heading">迈向istio-引入外部服务</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Apr 4, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/">
-                <h3 class="media-heading">迈向istio-服务路由</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Apr 4, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>在上一节中,我们使用nginx开启了我们istio的第一个应用,现在我们加入另外一个服务tomcat</p>
-
-<blockquote>
-<p>本节内容基于上节内容,请先运行上一节的yaml文件,然后再体验本节内容</p>
-</blockquote></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E7%A4%BA%E4%BE%8B/">
-                <h3 class="media-heading">迈向istio-示例</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Apr 4, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>在上一节中我们已经成功的安装了istio的各个组件,接下来我们一起来运行一个nginx,体验一下istio的功能</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
       </div>
     </div>
     <div class="modal-footer">
@@ -1342,7 +1338,7 @@ kubectl apply -f myadapter.yaml
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         78 posts found
+         80 posts found
       </p>
     </div>
   </div>
