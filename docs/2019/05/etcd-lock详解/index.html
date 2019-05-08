@@ -413,7 +413,7 @@ func (m *Mutex) Lock(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-    //获取到自身的revision
+    //获取到自身的revision(注意,此处CreateRevision和Revision不一定相等)
 	m.myRev = resp.Header.Revision
 	if !resp.Succeeded {
 		m.myRev = resp.Responses[0].GetResponseRange().Kvs[0].CreateRevision
@@ -439,13 +439,15 @@ func (m *Mutex) Lock(ctx context.Context) error {
 	}
 	return werr
 }
-// 等待持有锁的key删除,其他所有比当前revision大的,比最后创建小的revision的键进入等待
+// 等待持有锁的key删除
+// 内部实现为等其他所有比当前createRevision小的key,监听删除事件
 // waitDeletes efficiently waits until all keys matching the prefix and no greater
 // than the create revision.
 func waitDeletes(ctx context.Context, client *v3.Client, pfx string, maxCreateRev int64) (*pb.ResponseHeader, error) {
+    //WithLastCreate 按照CreateRevision排序,降序 例如 5 4 3 2 1 
+    //WithMaxCreateRev 获取比maxCreateRev小的key
 	getOpts := append(v3.WithLastCreate(), v3.WithMaxCreateRev(maxCreateRev))
 	for {
-        //获取到所有的比当前revision大的,比最后创建小的revision的键
 		resp, err := client.Get(ctx, pfx, getOpts...)
 		if err != nil {
 			return nil, err
