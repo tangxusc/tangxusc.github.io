@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 15 May 2019 09:15:59 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 15 May 2019 15:13:08 +0800</lastBuildDate>
     
 	<atom:link href="https://tangxusc.github.io/blog/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Client Go使用</title>
+      <link>https://tangxusc.github.io/blog/2019/05/client-go%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Wed, 15 May 2019 15:13:08 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/client-go%E4%BD%BF%E7%94%A8/</guid>
+      <description>&lt;p&gt;kubernetes提供了rest api供我们操作集群,针对go语言专门提供了client-go来操作,并且在很多controller中都使用到了client-go,本文将介绍client-go简单使用&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>golang package和module解析</title>

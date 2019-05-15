@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/client-go%E4%BD%BF%E7%94%A8/</loc>
+    <lastmod>2019-05-15T15:13:08+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/blog/2019/05/golang-package%E5%92%8Cmodule%E8%A7%A3%E6%9E%90/</loc>
     <lastmod>2019-05-15T09:15:59+08:00</lastmod>
   </url>
@@ -445,6 +450,18 @@
   </url>
   
   <url>
+    <loc>https://tangxusc.github.io/blog/categories/client/</loc>
+    <lastmod>2019-05-15T15:13:08+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/client-go/</loc>
+    <lastmod>2019-05-15T15:13:08+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/blog/tags/controller-manager/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
@@ -710,13 +727,13 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/tags/k8s/</loc>
-    <lastmod>2019-05-14T14:15:59+08:00</lastmod>
+    <lastmod>2019-05-15T15:13:08+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/blog/categories/k8s/</loc>
-    <lastmod>2019-05-14T14:15:59+08:00</lastmod>
+    <lastmod>2019-05-15T15:13:08+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -824,7 +841,7 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/post/</loc>
-    <lastmod>2019-05-15T09:15:59+08:00</lastmod>
+    <lastmod>2019-05-15T15:13:08+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -984,7 +1001,7 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/</loc>
-    <lastmod>2019-05-15T09:15:59+08:00</lastmod>
+    <lastmod>2019-05-15T15:13:08+08:00</lastmod>
     <priority>0</priority>
   </url>
   

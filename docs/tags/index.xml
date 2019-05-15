@@ -48,6 +48,15 @@
     </item>
     
     <item>
+      <title>Client Go</title>
+      <link>https://tangxusc.github.io/blog/tags/client-go/</link>
+      <pubDate>Wed, 15 May 2019 15:13:08 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/client-go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Controller Manager</title>
       <link>https://tangxusc.github.io/blog/tags/controller-manager/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
@@ -266,7 +275,7 @@
     <item>
       <title>K8s</title>
       <link>https://tangxusc.github.io/blog/tags/k8s/</link>
-      <pubDate>Tue, 14 May 2019 14:15:59 +0800</pubDate>
+      <pubDate>Wed, 15 May 2019 15:13:08 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/k8s/</guid>
       <description></description>
