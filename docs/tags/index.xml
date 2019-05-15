@@ -129,6 +129,15 @@
     </item>
     
     <item>
+      <title>Gc</title>
+      <link>https://tangxusc.github.io/blog/tags/gc/</link>
+      <pubDate>Tue, 14 May 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/gc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Git</title>
       <link>https://tangxusc.github.io/blog/tags/git/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
@@ -167,7 +176,7 @@
     <item>
       <title>Golang</title>
       <link>https://tangxusc.github.io/blog/tags/golang/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <pubDate>Wed, 15 May 2019 09:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/golang/</guid>
       <description></description>
@@ -257,7 +266,7 @@
     <item>
       <title>K8s</title>
       <link>https://tangxusc.github.io/blog/tags/k8s/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <pubDate>Tue, 14 May 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/k8s/</guid>
       <description></description>
@@ -269,6 +278,15 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/kubeadm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Kubelet</title>
+      <link>https://tangxusc.github.io/blog/tags/kubelet/</link>
+      <pubDate>Tue, 14 May 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/kubelet/</guid>
       <description></description>
     </item>
     
@@ -311,7 +329,7 @@
     <item>
       <title>Module</title>
       <link>https://tangxusc.github.io/blog/tags/module/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <pubDate>Wed, 15 May 2019 09:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/module/</guid>
       <description></description>

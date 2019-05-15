@@ -140,7 +140,7 @@
     <item>
       <title>Golang</title>
       <link>https://tangxusc.github.io/blog/categories/golang/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <pubDate>Wed, 15 May 2019 09:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/categories/golang/</guid>
       <description></description>
@@ -212,7 +212,7 @@
     <item>
       <title>K8s</title>
       <link>https://tangxusc.github.io/blog/categories/k8s/</link>
-      <pubDate>Thu, 25 Apr 2019 13:56:22 +0800</pubDate>
+      <pubDate>Tue, 14 May 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/categories/k8s/</guid>
       <description></description>
@@ -224,6 +224,15 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/categories/kubeadm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Kubelet</title>
+      <link>https://tangxusc.github.io/blog/categories/kubelet/</link>
+      <pubDate>Tue, 14 May 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/categories/kubelet/</guid>
       <description></description>
     </item>
     

@@ -6,10 +6,23 @@
     <description>Recent content in Module on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 15 May 2019 09:15:59 +0800</lastBuildDate>
     
 	<atom:link href="https://tangxusc.github.io/blog/tags/module/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>golang package和module解析</title>
+      <link>https://tangxusc.github.io/blog/2019/05/golang-package%E5%92%8Cmodule%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Wed, 15 May 2019 09:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/golang-package%E5%92%8Cmodule%E8%A7%A3%E6%9E%90/</guid>
+      <description>&lt;p&gt;go语言中的package和module是我们经常会用到的功能,本文将详细的描述这两个功能的用法.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本文基于golang 1.12.2和go module,之前老的gopath的使用方式不再推荐.&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
     
     <item>
       <title>Go模块简介</title>
@@ -18,32 +31,6 @@
       
       <guid>https://tangxusc.github.io/blog/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/</guid>
       <description>&lt;p&gt;go module模块的简介和使用&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>傻瓜式的 go modules 的讲解和代码</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E5%82%BB%E7%93%9C%E5%BC%8F%E7%9A%84-go-modules-%E7%9A%84%E8%AE%B2%E8%A7%A3%E5%92%8C%E4%BB%A3%E7%A0%81/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
-      
-      <guid>https://tangxusc.github.io/blog/2019/03/%E5%82%BB%E7%93%9C%E5%BC%8F%E7%9A%84-go-modules-%E7%9A%84%E8%AE%B2%E8%A7%A3%E5%92%8C%E4%BB%A3%E7%A0%81/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://it.520mwx.com/view/10804&#34;&gt;https://it.520mwx.com/view/10804&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;傻瓜式的 go modules 的讲解和代码&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>再探go modules使用与细节</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E5%86%8D%E6%8E%A2go-modules%E4%BD%BF%E7%94%A8%E4%B8%8E%E7%BB%86%E8%8A%82/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
-      
-      <guid>https://tangxusc.github.io/blog/2019/03/%E5%86%8D%E6%8E%A2go-modules%E4%BD%BF%E7%94%A8%E4%B8%8E%E7%BB%86%E8%8A%82/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;还有半个月 go1.12 就要发布了。这是首个将 go modules 纳入正式支持的稳定版本。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;距离 go modules 随着 go1.11 正式面向广大开发者进行体验也已经过去了半年，这段时间 go modules 也发生了一些变化，借此机会我想再次深入探讨 go modules 的使用，同时对这个新生包管理方案做一些思考。&lt;/p&gt;</description>
     </item>
     
     <item>

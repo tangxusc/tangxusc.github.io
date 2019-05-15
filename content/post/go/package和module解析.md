@@ -170,3 +170,5 @@ $ go mod tidy
 
 [Semantic Import Versioning](https://research.swtch.com/vgo-import)
 
+[go语义化版本控制](https://github.com/tangxusc/go-module-version)
+
