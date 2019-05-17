@@ -513,5 +513,5 @@ type Foo struct {
 
 [示例工程代码](https://github.com/tangxusc/code-generator-demo)
 
-
+[sample controller](https://github.com/kubernetes/sample-controller)
 
