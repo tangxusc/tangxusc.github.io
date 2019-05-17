@@ -50,9 +50,18 @@
     <item>
       <title>Client Go</title>
       <link>https://tangxusc.github.io/blog/tags/client-go/</link>
-      <pubDate>Thu, 16 May 2019 16:13:14 +0800</pubDate>
+      <pubDate>Fri, 17 May 2019 11:13:08 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/client-go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Code Generator</title>
+      <link>https://tangxusc.github.io/blog/tags/code-generator/</link>
+      <pubDate>Fri, 17 May 2019 11:13:08 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/code-generator/</guid>
       <description></description>
     </item>
     
@@ -284,7 +293,7 @@
     <item>
       <title>K8s</title>
       <link>https://tangxusc.github.io/blog/tags/k8s/</link>
-      <pubDate>Thu, 16 May 2019 16:13:14 +0800</pubDate>
+      <pubDate>Fri, 17 May 2019 11:13:08 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/k8s/</guid>
       <description></description>

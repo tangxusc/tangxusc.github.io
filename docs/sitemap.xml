@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/code-generator%E4%BD%BF%E7%94%A8/</loc>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/</loc>
     <lastmod>2019-05-16T16:13:14+08:00</lastmod>
   </url>
@@ -491,13 +496,19 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/categories/client/</loc>
-    <lastmod>2019-05-16T16:13:14+08:00</lastmod>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/blog/tags/client-go/</loc>
-    <lastmod>2019-05-16T16:13:14+08:00</lastmod>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/code-generator/</loc>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -773,13 +784,13 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/categories/k8s/</loc>
-    <lastmod>2019-05-16T16:13:14+08:00</lastmod>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/blog/tags/k8s/</loc>
-    <lastmod>2019-05-16T16:13:14+08:00</lastmod>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -887,7 +898,7 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/post/</loc>
-    <lastmod>2019-05-16T16:13:14+08:00</lastmod>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1047,7 +1058,7 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/</loc>
-    <lastmod>2019-05-16T16:13:14+08:00</lastmod>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
     <priority>0</priority>
   </url>
   
