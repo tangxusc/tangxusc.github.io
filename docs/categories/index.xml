@@ -221,7 +221,7 @@
     <item>
       <title>K8s</title>
       <link>https://tangxusc.github.io/blog/categories/k8s/</link>
-      <pubDate>Fri, 17 May 2019 11:13:08 +0800</pubDate>
+      <pubDate>Mon, 20 May 2019 15:34:24 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/categories/k8s/</guid>
       <description></description>
@@ -377,6 +377,15 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/categories/ubuntu/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Volume</title>
+      <link>https://tangxusc.github.io/blog/categories/volume/</link>
+      <pubDate>Mon, 20 May 2019 15:34:24 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/categories/volume/</guid>
       <description></description>
     </item>
     
