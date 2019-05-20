@@ -293,7 +293,7 @@
     <item>
       <title>K8s</title>
       <link>https://tangxusc.github.io/blog/tags/k8s/</link>
-      <pubDate>Fri, 17 May 2019 11:13:08 +0800</pubDate>
+      <pubDate>Mon, 20 May 2019 14:10:08 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/k8s/</guid>
       <description></description>
@@ -305,6 +305,15 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/kubeadm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Kubebuilder</title>
+      <link>https://tangxusc.github.io/blog/tags/kubebuilder/</link>
+      <pubDate>Mon, 20 May 2019 14:10:08 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/kubebuilder/</guid>
       <description></description>
     </item>
     

@@ -205,6 +205,68 @@
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
+        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-3/">
+          理解kubernetes tools/cache包-3
+        </a>
+      </h1>
+      
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-05-16T16:13:10&#43;08:00">
+        
+  May 16, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/k8s">k8s</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/client">client</a>
+    
+  
+
+  </div>
+
+    </div>
+    <div class="postShorten-excerpt" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81945559">https://blog.csdn.net/weixin_39961559/article/details/81945559</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第三节</p>
+      
+      <p>
+        <a href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-3/" class="postShorten-excerpt_link link">Continue reading</a>
+        
+      </p>
+    </div>
+  </div>
+  
+</article>
+
+            
+              
+  
+    
+      
+        
+      
+    
+  
+
+
+  
+
+<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+  <div class="postShorten-wrap">
+    
+    <div class="postShorten-header">
+      <h1 class="postShorten-title" itemprop="headline">
         <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-2/">
           理解kubernetes tools/cache包-2
         </a>
@@ -547,71 +609,6 @@ k8s运行的容器又是什么时候清除呢?</p>
 </article>
 
             
-              
-  
-    
-      
-        
-      
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">
-          Controller manager高可用实现方式
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
-        
-  March 20, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/k8s">k8s</a>, 
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/controller-manager">Controller manager</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        <blockquote>
-<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://www.colabug.com/2801661.html">https://www.colabug.com/2801661.html</a></p>
-</blockquote>
-
-<p>这不是一系列入门级别的文章，也不是按部就班而来的，而是我看到哪里，发现有些代码写的精妙的地方，都值得我们学习下，顺手记录下来，一方面是让自己将来可以有迹可循，另外对大家应该也会有所帮助。而且记录本身成本并不是很高。</p>
-
-<p>高可用部署情况下，需要部署多个 controller manager （以下简称 cm ），每个 cm 需要 <code>--leader-elect=true</code>
-启动参数，即告知 cm 以高可用方式启动，谁要想进行真正的工作，必须先抢到锁，被选举为 leader 才行，而抢不到所得只能待机，在 leader 因为异常终止的时候，由剩余的其余节点再次获得锁。</p>
-      
-      <p>
-        <a href="https://tangxusc.github.io/blog/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-            
             
   <div class="pagination-bar">
     <ul class="pagination">
@@ -709,6 +706,25 @@ k8s运行的容器又是什么时候清除呢?</p>
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><p>在kubernetes中,存储一直是一个较为头疼的问题,在面对持久化存储,我们可以选择各种文件系统,但是对于那些临时存储的文件,我们则需要一种本地存储的能力,在kubernetes1.14中为我们提供了一种本地存储<code>localPV</code>,本文将围绕此展开.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/kubebuilder%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">kubebuilder介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在之前的文章中我们讲到了kubernetes的rest api,并使用client-go等客户端来调用api.</p>
+
+<p>接下来我们将使用到kubernetes为构建controller诞生的专用工具<code>kubebuilder</code></p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -874,27 +890,6 @@ k8s运行的容器又是什么时候清除呢?</p>
             <hr>
           </div>
         
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-1/">
-                <h3 class="media-heading">理解kubernetes tools/cache包-1</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  May 5, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81938716">https://blog.csdn.net/weixin_39961559/article/details/81938716</a></p>
-</blockquote>
-
-<p>本系列深入介绍了informer的原理,这是本系列第一节</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
       </div>
     </div>
     <div class="modal-footer">
@@ -902,7 +897,7 @@ k8s运行的容器又是什么时候清除呢?</p>
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         92 posts found
+         93 posts found
       </p>
     </div>
   </div>

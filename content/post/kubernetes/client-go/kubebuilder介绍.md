@@ -1,7 +1,7 @@
 ---
 title: "kubebuilder介绍"
 date: 2019-05-20T14:10:08+08:00
-draft: true
+draft: false
 categories:
 - k8s
 - client
@@ -44,6 +44,20 @@ kubebuilder是一个基于CRD来构建kubernetes api的框架,主要可以用来
 - 自定义的controller基础行为是一致的,都是监听对象然后根据status进行某些操作
 - 使用更简单,工程更规范.
 - 默认提供Dockerfile等支持
+
+### 与client-go区别
+
+`client-go`:
+
+1. 主要体现在资源的监控上,例如pod本身的变化
+
+1. 主要提供基本的api操作和crd资源的操作,关注在资源本身
+
+`kubebuilder`:
+
+1. 主要集中关注在crd资源引起的变化上,例如crd资源的删除引起的变化,crd资源被删除后 deployment的变化等等
+
+1. 不那么关注当前crd资源的`cud`变化
 
 ## 简单使用
 
