@@ -6,10 +6,19 @@
     <description>Recent content in Tags on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 22 May 2019 14:40:58 +0800</lastBuildDate>
     
 	<atom:link href="https://tangxusc.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Affinity</title>
+      <link>https://tangxusc.github.io/blog/tags/affinity/</link>
+      <pubDate>Wed, 22 May 2019 14:40:58 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/affinity/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Annotation</title>
