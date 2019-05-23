@@ -6,10 +6,19 @@
     <description>Recent content on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 25 Apr 2019 13:56:22 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 25 Apr 2019 16:41:39 +0800</lastBuildDate>
     
 	<atom:link href="https://tangxusc.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Etcd搭建及使用</title>
+      <link>https://tangxusc.github.io/blog/2019/04/etcd%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Thu, 25 Apr 2019 16:41:39 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/04/etcd%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/</guid>
+      <description>&lt;p&gt;etcd是云原生的存储基石,在kubernetes中的存储便采用的etcd.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>使用Cfssl生成etcd证书(pem)</title>
@@ -593,16 +602,6 @@ seelog 提供了灵活的异步调度、格式化和过滤功能。目前在 Git
       <description>&lt;h2 id=&#34;简介&#34;&gt;简介&lt;/h2&gt;
 
 &lt;p&gt;​   Sonar是一个用于代码质量管理的开源平台，用于管理源代码的质量，可以从多个维度检测代码质量通过插件形式，可以支持包括java,C#,C/C++,PL/SQL,Cobol,JavaScrip,Groovy等等二十几种编程语言的代码质量管理与检测&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>了解 etcd</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E4%BA%86%E8%A7%A3-etcd/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
-      
-      <guid>https://tangxusc.github.io/blog/2019/03/%E4%BA%86%E8%A7%A3-etcd/</guid>
-      <description>&lt;p&gt;这是一篇非常入门的文章，让你大概了解一下 etcd。写这篇文章时使用 etcd 的版本是 3.1.0。
-etcd 是以实现共享配置和服务发现为目的，提供一致性的键值存储的分布式数据库。kubernetes 等项目使用了 etcd。&lt;/p&gt;</description>
     </item>
     
     <item>

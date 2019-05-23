@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tangxusc.github.io/blog/2019/04/etcd%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/</loc>
+    <lastmod>2019-04-25T16:41:39+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/blog/2019/04/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem/</loc>
     <lastmod>2019-04-25T13:56:22+08:00</lastmod>
   </url>
@@ -254,11 +259,6 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/2019/03/sonarqube%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tangxusc.github.io/blog/2019/03/%E4%BA%86%E8%A7%A3-etcd/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
   </url>
   
@@ -520,13 +520,13 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/tags/etcd/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <lastmod>2019-04-25T16:41:39+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/blog/categories/etcd/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <lastmod>2019-04-25T16:41:39+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -796,7 +796,7 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/post/</loc>
-    <lastmod>2019-04-25T13:56:22+08:00</lastmod>
+    <lastmod>2019-04-25T16:41:39+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -956,7 +956,7 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/</loc>
-    <lastmod>2019-04-25T13:56:22+08:00</lastmod>
+    <lastmod>2019-04-25T16:41:39+08:00</lastmod>
     <priority>0</priority>
   </url>
   

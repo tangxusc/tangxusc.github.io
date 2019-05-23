@@ -233,17 +233,31 @@
             <div class="main-content-wrap">
               <p>docker安装(国内环境)</p>
 
-<hr />
+<h2 id="rancher安装">rancher安装</h2>
+
+<p>此安装方式为rancher提供,此安装方式好处在于提供了兼容k8s的版本进行安装.</p>
 
 <pre><code>curl https://releases.rancher.com/install-docker/17.03.sh | sh
 </code></pre>
 
-<h5 id="普通用户运行docker命令">普通用户运行docker命令</h5>
+<h2 id="官方脚本安装">官方脚本安装</h2>
+
+<p>此安装方式是使用官方的脚本安装最新版本的docker,并使用了阿里云的源进行安装
+源是直接写入<code>/etc/apt/sources.list.d/docker.list</code>文件中</p>
+
+<pre><code class="language-shell">curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
+</code></pre>
+
+<h2 id="普通用户运行docker命令">普通用户运行docker命令</h2>
 
 <pre><code>usermod -aG docker &lt;用户名&gt;
 </code></pre>
 
-<h3 id="参照">参照</h3>
+<blockquote>
+<p>请记得注销并重新登录才能生效！</p>
+</blockquote>
+
+<h2 id="参照">参照</h2>
 
 <ul>
 <li><a href="https://rancher.com/docs/rke/v0.1.x/en/os/">https://rancher.com/docs/rke/v0.1.x/en/os/</a></li>
@@ -446,6 +460,23 @@
           <div class="media">
             
             <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/etcd%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/">
+                <h3 class="media-heading">Etcd搭建及使用</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Apr 4, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>etcd是云原生的存储基石,在kubernetes中的存储便采用的etcd.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
               <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem/">
                 <h3 class="media-heading">使用Cfssl生成etcd证书(pem)</h3>
               </a>
@@ -608,23 +639,6 @@
             <hr>
           </div>
         
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E7%A4%BA%E4%BE%8B/">
-                <h3 class="media-heading">迈向istio-示例</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Apr 4, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>在上一节中我们已经成功的安装了istio的各个组件,接下来我们一起来运行一个nginx,体验一下istio的功能</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
       </div>
     </div>
     <div class="modal-footer">
@@ -699,7 +713,7 @@ $(document).ready(function() {
             return;
           }
           var d = document, s = d.createElement('script');
-          var disqus_shortname = 'hugo-tranquilpeak-theme';
+          var disqus_shortname = 'tangxu-blog';
           s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
 
           s.setAttribute('data-timestamp', +new Date());
