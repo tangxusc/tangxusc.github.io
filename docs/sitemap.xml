@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/blog/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/</loc>
     <lastmod>2019-05-22T14:40:58+08:00</lastmod>
   </url>
@@ -485,13 +490,13 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/cap/</loc>
+    <loc>https://tangxusc.github.io/blog/categories/cap/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/categories/cap/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/cap/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -509,13 +514,13 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/cicd/</loc>
+    <loc>https://tangxusc.github.io/blog/categories/cicd/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/categories/cicd/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/cicd/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -539,19 +544,13 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/controller-manager/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://tangxusc.github.io/blog/categories/controller-manager/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/database/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/controller-manager/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -563,7 +562,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/date/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/database/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -575,7 +574,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/ddd/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/date/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -587,7 +586,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/docker/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/ddd/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -599,7 +598,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/drone/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/docker/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -611,7 +610,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/efk/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/drone/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -623,8 +622,8 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/etcd/</loc>
-    <lastmod>2019-05-07T14:38:42+08:00</lastmod>
+    <loc>https://tangxusc.github.io/blog/tags/efk/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -635,13 +634,19 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/fluentd/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <loc>https://tangxusc.github.io/blog/tags/etcd/</loc>
+    <lastmod>2019-05-07T14:38:42+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/blog/categories/fluentd/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/fluentd/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -653,19 +658,13 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/git/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://tangxusc.github.io/blog/categories/git/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/gitflow/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/git/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -677,13 +676,13 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/gitlab/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/gitflow/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/gitsubtree/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/gitlab/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -695,8 +694,8 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/golang/</loc>
-    <lastmod>2019-05-15T09:15:59+08:00</lastmod>
+    <loc>https://tangxusc.github.io/blog/tags/gitsubtree/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -707,13 +706,19 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/grpc/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <loc>https://tangxusc.github.io/blog/tags/golang/</loc>
+    <lastmod>2019-05-15T09:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/blog/categories/grpc/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/grpc/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -725,13 +730,13 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/helm/</loc>
+    <loc>https://tangxusc.github.io/blog/categories/helm/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/categories/helm/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/helm/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -749,20 +754,14 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/interceptor/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://tangxusc.github.io/blog/categories/interceptor/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/istio/</loc>
-    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+    <loc>https://tangxusc.github.io/blog/tags/interceptor/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -773,8 +772,8 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/jaeger/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <loc>https://tangxusc.github.io/blog/tags/istio/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -785,7 +784,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/java/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/jaeger/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -797,7 +796,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/jgit/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/java/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -809,25 +808,31 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/k8s/</loc>
-    <lastmod>2019-05-20T14:10:08+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tangxusc.github.io/blog/categories/k8s/</loc>
-    <lastmod>2019-05-22T14:40:58+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tangxusc.github.io/blog/tags/kubeadm/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/jgit/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
+    <loc>https://tangxusc.github.io/blog/categories/k8s/</loc>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/k8s/</loc>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/blog/categories/kubeadm/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/kubeadm/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -839,13 +844,13 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/kubelet/</loc>
+    <loc>https://tangxusc.github.io/blog/categories/kubelet/</loc>
     <lastmod>2019-05-14T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/categories/kubelet/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/kubelet/</loc>
     <lastmod>2019-05-14T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -857,13 +862,19 @@
   </url>
   
   <url>
+    <loc>https://tangxusc.github.io/blog/categories/lock/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/blog/tags/lock/</loc>
     <lastmod>2019-05-07T14:38:42+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/categories/lock/</loc>
+    <loc>https://tangxusc.github.io/blog/categories/logrus/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -875,7 +886,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/categories/logrus/</loc>
+    <loc>https://tangxusc.github.io/blog/categories/lombok/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -887,13 +898,13 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/categories/lombok/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/maven/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/maven/</loc>
+    <loc>https://tangxusc.github.io/blog/categories/module/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -905,7 +916,19 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/categories/module/</loc>
+    <loc>https://tangxusc.github.io/blog/categories/networkpolicy/</loc>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/networkpolicy/</loc>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/categories/nfs/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -917,7 +940,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/categories/nfs/</loc>
+    <loc>https://tangxusc.github.io/blog/categories/operator/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -929,20 +952,8 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/categories/operator/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://tangxusc.github.io/blog/post/</loc>
-    <lastmod>2019-05-22T14:40:58+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tangxusc.github.io/blog/tags/pprof/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -953,7 +964,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/prometheus/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/pprof/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -965,7 +976,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/proxy/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/prometheus/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -977,7 +988,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/redis/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/proxy/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -989,13 +1000,13 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A3/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/redis/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/rest/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A3/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -1007,7 +1018,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/rke/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/rest/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -1019,7 +1030,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/rook/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/rke/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -1031,13 +1042,13 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/shipyard/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/rook/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/sonarqube/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/shipyard/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -1049,14 +1060,14 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/</loc>
-    <lastmod>2019-05-22T14:40:58+08:00</lastmod>
+    <loc>https://tangxusc.github.io/blog/tags/sonarqube/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/ubuntu/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <loc>https://tangxusc.github.io/blog/tags/</loc>
+    <lastmod>2019-05-22T14:40:58+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1067,8 +1078,8 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/volume/</loc>
-    <lastmod>2019-05-20T15:34:24+08:00</lastmod>
+    <loc>https://tangxusc.github.io/blog/tags/ubuntu/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1079,13 +1090,13 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/1/01/adapter.my.config/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/volume/</loc>
+    <lastmod>2019-05-20T15:34:24+08:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/%E4%BB%A3%E7%A0%81%E6%97%A0%E5%85%B3/</loc>
-    <lastmod>2019-05-20T09:15:59+08:00</lastmod>
-    <priority>0</priority>
+    <loc>https://tangxusc.github.io/blog/1/01/adapter.my.config/</loc>
   </url>
   
   <url>
@@ -1095,8 +1106,8 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <loc>https://tangxusc.github.io/blog/tags/%E4%BB%A3%E7%A0%81%E6%97%A0%E5%85%B3/</loc>
+    <lastmod>2019-05-20T09:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1107,7 +1118,7 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/tags/%E5%89%8D%E7%AB%AF/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -1119,19 +1130,25 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/</loc>
-    <lastmod>2019-05-22T14:40:58+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://tangxusc.github.io/blog/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
+    <loc>https://tangxusc.github.io/blog/tags/%E5%89%8D%E7%AB%AF/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
+    <loc>https://tangxusc.github.io/blog/</loc>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/blog/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>

@@ -221,7 +221,7 @@
     <item>
       <title>K8s</title>
       <link>https://tangxusc.github.io/blog/categories/k8s/</link>
-      <pubDate>Wed, 22 May 2019 14:40:58 +0800</pubDate>
+      <pubDate>Thu, 23 May 2019 15:50:45 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/categories/k8s/</guid>
       <description></description>
@@ -278,6 +278,15 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/categories/module/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Networkpolicy</title>
+      <link>https://tangxusc.github.io/blog/categories/networkpolicy/</link>
+      <pubDate>Thu, 23 May 2019 15:50:45 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/categories/networkpolicy/</guid>
       <description></description>
     </item>
     
