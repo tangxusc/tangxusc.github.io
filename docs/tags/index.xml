@@ -6,10 +6,19 @@
     <description>Recent content in Tags on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 22 May 2019 14:40:58 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 28 May 2019 14:15:59 +0800</lastBuildDate>
     
 	<atom:link href="https://tangxusc.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Adapter</title>
+      <link>https://tangxusc.github.io/blog/tags/adapter/</link>
+      <pubDate>Tue, 28 May 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/adapter/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Affinity</title>
@@ -266,7 +275,7 @@
     <item>
       <title>Istio</title>
       <link>https://tangxusc.github.io/blog/tags/istio/</link>
-      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      <pubDate>Tue, 28 May 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/istio/</guid>
       <description></description>

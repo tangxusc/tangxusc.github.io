@@ -1,282 +1,638 @@
 ---
-title: "迈向istio-11 升级到1.1.2"
-date: 2019-04-01T14:15:59+08:00
+title: "迈向istio-13 自定义adapter(修改请求头)"
+date: 2019-05-28T14:15:59+08:00
 categories:
 - istio
 tags:
 - istio
+- adapter
 keywords:
 - istio
-- 1.1.2
+- adapter
 #thumbnailImage: //example.com/image.jpg
 ---
 
-istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本为`企业级就绪`
+在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.
+
+mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为`Adapter`,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作
 
 <!--more-->
 
-## 介绍
+## 前言
 
-这8个月中可以看到istio还是发生了很大的变化的,纵观历史,istio进行了三次腾飞:
+在istio的整体设计中,流量管理和mixer应该是我们交互最多的组件了.
 
-- 0.8 	不在是模型了
-- 1.0 	生产就绪了(其实没有),抛弃了ingress,模型改动比较大
-- 1.1	 企业就绪了,理清楚了流量管理的模型,sidecar不再操碎了心,pilot解放了,mixer adapter又被默认的关了,ServiceEntry存在感突然就没啦.
+流量管理我们侧重使用配置文件对我们的服务流量进行分流管理,而mixer的扩展我们更多的就需要写代码进行扩展了.
 
-废话太多了,接下来我们进入正题,去看看istio1.1到底更新了那些东西
+在isito1.1.x版本中mixer的adapter已经能修改请求的header了,这给我们带来了太多的便宜.
 
-> 注意,因个人知识有限,不会全部解析,请见谅.
+本文我们将在istio1.1.x版本中实现一个自定义的adapter,使用自定义的template,并在请求的header中注入user,serviceName等信息.
 
-## 升级内容
+> 注意: 在1.1.x版本中使用mixer的check功能,需要启用check功能,详见 [升级到1.1.2安装](/2019/04/迈向istio-11-升级到1.1.2/)
 
-### 安装
+## 自定义adapter
 
-#### 1.安装模式变化
+### 1.准备 基础环境
 
-   现在提供了两个helm chart来安装,分别为`istio-init`和`istio` 这两个职责如下:
+- istio 1.1.x
+- golang 1.2.x(go module)
+- goland (或者其他IDE)
+- [protoc并安装grpc](/2019/03/使用go-mod1.11安装grpc/)
+- k8s集群 
 
-   `istio-init`: 负责通过`job.batch/istio-init-crd-10`,`job.batch/istio-init-crd-11` 这两个job来安装istio的crd资源(一共53个,如果启用`cert-manager`则为58个),可通过命令查看:
-
-```shell
-$ kubectl get crds | grep 'istio.io\|certmanager.k8s.io' | wc -l
-53
-```
-
-   `istio`: 现在istio安装的时候是没有启用`grafana`,`kiali`的,并且已经说明使用`kiali`替换`servicegraph`,所以在安装时,需要手动开启:
-
-```yaml
-#
-# addon grafana configuration
-#
-grafana:
-  enabled: true
-#
-# addon kiali tracing configuration
-#
-kiali:
-  enabled: true
-  createDemoSecret: true
-```
-
-   并且现在支持自定义kiali的用户名密码了,如果还是使用admin/admin 那么就需要`createDemoSecret: true`
-
-   istio现在提供了一个cni组件来避免init-container的privilege问题,不过这个cni需要kubelet的cni支持,kubelet的网络就两种`kubenet`和`cni`,也就是说
-   `/etc/systemd/system/kubelet.service.d/10-kubeadm.conf`文件中的
+### 2.克隆istio源代码并编译
 
 ```shell
-Environment="KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin"
-```
-   这里的`--network-plugin=cni` 值只能是 `cni`了
-
-   现在轮到mixer自闭了(以前是sidecar忙不过来),默认的check被关闭了,那么你的adapter的check功能就不能用了,如果要使用,那么就需要开启
-
-```yaml
-# disablePolicyChecks disables mixer policy checks.
-# if mixer.policy.enabled==true then disablePolicyChecks has affect.
-# Will set the value with same name in istio config map - pilot needs to be restarted to take effect.
-  disablePolicyChecks: false
+$ mkdir -p $GOPATH/src/istio.io/ && cd $GOPATH/src/istio.io/  && git clone https://github.com/istio/istio
+## 编译istio
+$ cd $GOPATH/src/istio.io/istio && go build ./...
 ```
 
-   不过mixer的功能是有了增强,现在能`修改请求`了.
+编译主要是为了生成出mixs服务端和mixc客户端,在我们测试时将会使用到.
 
-   ServiceEntry这功能现在贼弱了,默认的出流量规则已经变成了允许所有,如要修改可以设置:
+### 3.定义模板
 
-```yaml
-# Set the default behavior of the sidecar for handling outbound traffic from the application:
-# ALLOW_ANY - outbound traffic to unknown destinations will be allowed, in case there are no
-#   services or ServiceEntries for the destination port
-# REGISTRY_ONLY - restrict outbound traffic to services defined in the service registry as well
-#   as those defined through ServiceEntries
-# ALLOW_ANY is the default in 1.1.  This means each pod will be able to make outbound requests 
-# to services outside of the mesh without any ServiceEntry.
-# REGISTRY_ONLY was the default in 1.0.  If this behavior is desired, set the value below to REGISTRY_ONLY.
-outboundTrafficPolicy:
-  mode: ALLOW_ANY
-```
-
-
-#### 2.提供了一些大家常用的安装模板
-
-   提供了几种常用的安装模板供大家选择
+在istio的源码目录中创建文件`authservice`,并在其中生成我们的模板文件:
 
 ```shell
-├── values-istio-demo-auth.yaml
-├── values-istio-demo.yaml
-├── values-istio-minimal.yaml
-├── values-istio-remote.yaml
-├── values-istio-sds-auth.yaml
+$ mkdir authservice 
 ```
 
-   当然,强烈建议你自己修改values.yaml体验istio(不介意的化,你也可以下载我的 [values.yaml]( https://tangxusc.github.io/blog/post/迈向istio/11-升级到1.1.2/values.yaml))
+在文件夹中创建文件`template.proto`,内容如下:
 
-#### 3.改进多集群集成
+```protobuf
+syntax = "proto3";
 
-   多集群提供了新的集成方式,但限于知识体系和篇幅就不在此讲述.
+//注意,和文件夹名称一致
+package authservice;
 
-### 流量管理
+import "mixer/adapter/model/v1beta1/extensions.proto";
+//声明 模板种类
+option (istio.mixer.adapter.model.v1beta1.template_variety) = TEMPLATE_VARIETY_CHECK_WITH_OUTPUT;
+//声明 输入参数
+message Template {
+  string request_jwt = 1;
+  string request_path = 2;
+  string request_method = 3;
+  string source_name= 4;
+  string source_namespace= 5;
+  string destination_name= 6;
+  string destination_namespace= 7;
+  string source_workload_name= 8;
+  string source_workload_namespace= 9;
+  string destination_workload_name= 10;
+  string destination_workload_namespace= 11;
+  string destination_service_host= 12;
+}
+//声明输出参数
+message OutputTemplate {
+  string user = 1;
+  string service_name= 2;
+}
+```
 
-#### 1.新资源`sidecar`
+在文件中我们声明了模板`template_variety`,可选值为`Check`,`Report`,`Quota`,`AttributeGenerator`等.
 
-   新的sidecar资源限制了此命名空间中的某些工作负载(全部,或者通过selecter)的访问范围,在sidecar资源中可以使用ingress和engress**字段**来限制此命名空间可以访问到其他的那些命名空间中的服务,也可以规定流量从那个端口进入
+模板的`template_variety`决定了适配器必须实现的方法签名,并且决定了mixer的整体行为.
 
-   并且此处的hosts字段的写法也有了一定的变更,现在推荐的写法是:`namespace-name/service.ns.svc.cluster.local`
+在文件中我们定义了`Template`和`OutputTemplate`对象,并分别设置了我们关注的字段(输入和输出)
 
-#### 2.`exportTo`字段
+>  整体的格式可以参照 [istio的mixer测试实例](https://github.com/istio/istio/blob/master/mixer/test/keyval/template.proto)
+>
+> 模板原型文件的具体格式可以在 [模板原型文件](https://github.com/istio/istio/wiki/Mixer-Out-Of-Process-Adapter-Dev-Guide#template-proto-file) 中看到
 
-   在1.0中 `DestinationRule,VirtualService,ServiceEntry`都是针对集群内所有的sidecar的,并没有针对单个的sidecar的选项,这导致了sidecar中存在了大量无用的其他命名空间的配置,在1.1中问题得到了**一定**解决,现在通过exportTo字段来决定你的`DestinationRule,VirtualService,ServiceEntry`是否可以暴露给全局或者当前命名空间,可选值如下:
-
-   `.` : 资源在当前命名空间中生效,也就是只会发给当前命名空间的sidecar
-
-   `*` : 资源在所有命名空间中有效,也就是所有的ns中有会有这个资源的记录
-
-   > 从这里也可以看出来,其实没有企业就绪,因为后续可以选择暴露给某个命名空间,某个服务这样才最好
-
-#### 3.基于位置的负载均衡
-
-   要启用基于位置的负载均衡需要在pilot实例中需要设置环境变量`PILOT_ENABLE_LOCALITY_LOAD_BALANCING`
-
-   然后在你的node上用label标注`Region`,`Zone`,`Sub-zone`后,例如:
+在定义了模板之后,我们需要将模板生成为go文件,命令如下:
 
 ```shell
-Region=us-west
-Zone=zone1
-#抱歉,k8s不支持sub-zone
+#在istio的根目录执行
+$ bin/mixer_codegen.sh -t authservice/template.proto
+no comment found for authservice
+authservice/template.proto:19:0: no comment found for OutputTemplate
+#省略很多...
+authservice/template.proto:16:2: no comment found for destination_service_host
+rm：是否删除有写保护的普通文件 '/istio.io/istio/authservice/template.pb.go'？n
+#此时目录下的文件
+$ tree
+.
+├── authservice.pb.html
+├── template_handler.gen.go
+├── template_handler_service.descriptor_set
+├── template_handler_service.pb.go
+├── template_handler_service.proto
+├── template.pb.go
+├── template.proto
+├── template_proto.descriptor_set
+└── template.yaml  #模板文件,描述istio的模板配置
 ```
 
-   进入k8s的集群就有了位置属性了,那么只需要在`MeshConfig`资源中定义`localityLbSetting`为
+> 其中的警告部分输出为提示我们为proto添加注释,便于生成文档
+>
+> grpc真香.
 
-```yaml
-distribute:
-  - from: us-west/zone1/*
-    to:
-      "us-west/zone1/*": 80
-      "us-west/zone2/*": 20
-  - from: us-west/zone2/*
-    to:
-      "us-west/zone1/*": 20
-      "us-west/zone2/*": 80
+### 4.生成adapter配置
+
+在`authservice`文件夹中创建子目录`config`
+
+```shell
+$ cd authservice && mkdir config && cd config
 ```
 
-#### 4.性能提升了
+在目录内创建文件`config.proto`,内容如下:
 
-   得益于sidecar资源和exportTo字段,让sidecar不再拥有所有的服务的配置,我们也不用看那么大的一个配置了(起码几千行啊),pilot也不那么累了,整体性能和延时都提升了,用性能最好的版本只有8ms的延迟了
+```protobuf
+syntax = "proto3";
+import "google/protobuf/duration.proto";
+import "gogoproto/gogo.proto";
+package config;
+message Params {
+  google.protobuf.Duration valid_duration = 1 [(gogoproto.nullable)=false, (gogoproto.stdduration) = true];
+}
+```
 
-> 详细解析请参照: [Istio1.1新特性之限制服务可见性](http://www.servicemesher.com/blog/istio-service-visibility/)
+然后通过命令生成适配器的定义:
 
-#### 5.值得注意的gateway
+```shell
+$ cd .. && bin/mixer_codegen.sh -a authservice/config/config.proto -x "-s=false -n authservice -t authservice"
+no comment found for config
+authservice/config/config.proto:4:0: no comment found for Params
+authservice/config/config.proto:5:2: no comment found for valid_duration
+#此时目录下的文件
+$tree
+.
+├── authservice.pb.html
+├── config
+│   ├── authservice.yaml  #此文件为istio的adapter描述文件
+│   ├── config.pb.go
+│   ├── config.pb.html
+│   ├── config.proto
+│   └── config.proto_descriptor
+├── template_handler.gen.go
+├── template_handler_service.descriptor_set
+├── template_handler_service.pb.go
+├── template_handler_service.proto
+├── template.pb.go
+├── template.proto
+├── template_proto.descriptor_set
+└── template.yaml
+```
 
-   在这里我一定要把这个拿出来说,虽然文档中只有小小的一句话,但是对于理解istio来说非常重要
+`-n`: 适配器名称
 
-   A: gateway中的hosts字段写法也变成了 `ns-name/service.ns.svc.cluster.local`这个模式
+`-t`: 模板名称
 
-   B: (**极其重要**) selector用来选择网关的工作负载,但是推荐的做法是 gateway资源和 istio-ingressgateway 这个容器 放在同一命名空间中,听起来有点绕,咱们把舌头捋顺:
+`-s`: [基于无会话的模型](https://github.com/istio/istio/wiki/Mixer-Out-Of-Process-Adapter-Dev-Guide#adapter-implementation-choices)
 
-   推荐做法, gateway资源放在运行istio-ingressgateway这个pod的命名空间中.
+传递这三个参数就是指定 **输出的模板文件中的适配器名称,模板名称**
 
-   其实大部分人安装都是放在istio-system的,那接下来你的gateway都要放在istio-system这里面(istio文档中推荐)
+到此处,`template`和`adapter`的描述文件就生成出来了,`handler`需要实现的接口也生成为了go文件
 
-   > 其实,网络入口的控制权限应该更高,所以确实放在istio-system中更好
+### 5.实现adapter
 
-### 安全
+在`gopath`外建立go项目,并初始化依赖:
 
-#### 1.k8s的健康检查终于可以用了
+```shell
+$ mkdir authService-1.1 && cd authService-1.1 && go mod init authService
+```
 
-   在1.0之前是不能使用健康检查的,因为在启用Policy的https加密后,所有进入sidecar的流量都需要使用https协议并且带上https的证书,但是k8s在进行健康检查的时候,它是真不知道去哪里弄个证书...
+将`istio/authservice` 拷贝至`authService-1.1`目录下
 
-> 注意 1.0的时候使用健康检查并且在集群中开启https后会出现pod频繁被杀死,因为健康检查过不了
+```shell
+$ cp -R istio/authservice authService-1.1/
+```
 
-#### 2.RbacConfig替换为ClusterRbacConfig
+在`authService-1.1`目录下建立`main.go`,内容如下:
 
-  其实在此处有一个比较麻烦的问题,如果使用istio的rbac对于很多用户量较大的企业,就需要生成许多crd的资源应用到k8s中,etcd压力是不小的,个人认为使用mixer中的OPA(open policy agent)或者自定义adapter更为合适.
+```go
+package main
 
-### 策略和遥测
+import (
+	"authService/authservice"
+	"encoding/json"
+	"fmt"
+	"github.com/gogo/googleapis/google/rpc"
+	"golang.org/x/net/context"
+	"google.golang.org/grpc"
+	"istio.io/api/mixer/adapter/model/v1beta1"
+	"istio.io/istio/mixer/pkg/status"
+	"log"
+	"net"
+)
 
-#### 1.check默认被关闭
+type AuthAdapter struct {
+}
 
-   mixer的check功能被关闭了,现在需要手动启动,1.1的性能提高有一点点原因也是得益于关闭了check功能
+func (*AuthAdapter) HandleAuthservice(ctx context.Context, request *authservice.HandleAuthserviceRequest) (*authservice.HandleAuthserviceResponse, error) {
+	bytes, e := json.Marshal(request)
+	if e != nil {
+		return nil, e
+	}
+	fmt.Println("===========请求开始=============")
+	fmt.Printf("%s \n", string(bytes))
+	fmt.Println("===========请求结束=============")
 
-   那么我们来看看check功能到底有什么问题:
+    //此处模拟认证过程,实际认证需要自行处理
+    //当传入了jwt就认为认证通过.
+    //返回user:user1,ServiceName:serviceName1 作为模拟数据
+	if len(request.Instance.RequestJwt) > 0 {
+		return &authservice.HandleAuthserviceResponse{
+			Result: &v1beta1.CheckResult{
+				Status: status.OK,
+			},
+			Output: &authservice.OutputMsg{
+				User:        "user1",
+				ServiceName: "serviceName1",
+			},
+		}, nil
+	} else {
+		return &authservice.HandleAuthserviceResponse{
+			Result: &v1beta1.CheckResult{
+				Status: rpc.Status{Code: int32(rpc.PERMISSION_DENIED)},
+			},
+			Output: &authservice.OutputMsg{
+				User:        "User_PERMISSION_DENIED",
+				ServiceName: "ServiceName_PERMISSION_DENIED",
+			},
+		}, nil
+	}
 
-   A: check功能迫使sidecar 和mixs上都需要使用缓存
+}
 
-   B: check功能是阻塞的,必须等到返回才执行下一步
+func main() {
+	//创建grpc服务器
+	server := grpc.NewServer()
+	auth := &AuthAdapter{}
+	//注册服务到grpc
+	authservice.RegisterHandleAuthserviceServiceServer(server, auth)
+	//启动9999端口监听tcp数据
+	listener, e := net.Listen("tcp", fmt.Sprintf(":%s", "9999"))
+	if e != nil {
+		log.Fatal(fmt.Sprintln("tcp监听错误,%s", e.Error()))
+	}
+	//启动
+	if e := server.Serve(listener); e != nil {
+		log.Fatal(fmt.Sprintln("grpc启动错误,%s", e.Error()))
+	}
+}
+```
 
-   C: check功能对延时还是影响挺大的,毕竟网关到具体的sidecar要check,sidecar到其他服务又要check
+### 6.测试[可选]
+#### 1, 编译mixs和mixc (如果前面已经编译,则此处不用再编译)
 
-#### 2.终于可以修改请求头了(header)
+```shell
+cd $GOPATH/src/istio.io/istio/ && make mixs && make mixc
+```
 
-   在1.0中是不能修改请求的,也就是说check返回的只有`通过/不通过`,不过现在这一情况得到了改善.
+#### 2, 创建测试文件夹及文件
 
-   现在用户传入jwt的token,在adapter中校验出结果后,可以直接在header中设置uid等等字段,不用再让下游的服务再去计算一次,减少机房热量
+```shell
+mkdir 项目根目录/testdata
+```
+新建文件`项目根目录/testdata/istio.yaml`,内容如下:
 
 ```yaml
-apiVersion: config.istio.io/v1alpha2
-kind: rule
+# handler adapter
+apiVersion: "config.istio.io/v1alpha2"
+kind: handler
 metadata:
-  name: keyval
+  name: my
   namespace: istio-system
 spec:
+  adapter: authservice
+  connection:
+    # 请一定注意,这里的地址  和正式部署的地址不一样
+    address: "localhost:9999"
+  params:
+    valid_duration: 1h
+---
+# instances
+apiVersion: "config.istio.io/v1alpha2"
+kind: instance
+metadata:
+  name: my
+  namespace: istio-system
+spec:
+  template: authservice
+  params:
+    request_jwt: request.headers["jwt"] | ""
+    request_path: request.path | "/"
+    request_method: request.method | "GET"
+    source_name: source.name | ""
+    source_namespace: source.namespace | ""
+    destination_name: destination.name | ""
+    destination_namespace: destination.namespace | ""
+    source_workload_name: source.workload.name | ""
+    source_workload_namespace: source.workload.namespace | ""
+    destination_workload_name: destination.workload.name | ""
+    destination_workload_namespace: destination.workload.namespace | ""
+    destination_service_host: destination.service.host | ""
+
+---
+# rule to dispatch to handler h1
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: r1
+  namespace: istio-system
+spec:
+  match: ""
   actions:
-  - handler: keyval.istio-system
-    instances: [ keyval ]
-    name: x
+  - handler: my.handler.istio-system
+    instances:
+      - my.instance.istio-system
+    name: result
   requestHeaderOperations:
-  - name: user-group
-    values: [ x.output.value ]
+  - name: user
+    values:
+    - result.output.user
+  - name: serviceName
+    values:
+    - result.output.service_name
 ```
 
-  
-
-#### 3. 1.2后就要移除mixer内的adapter了
-
-   现在很多mixer是放在mixer的源码内部的,影响了mixer的发布速度,你想想这么多的adapter,你都要去测试兼容性等等功能,多麻烦啊,丢给提供者自己去测试多好,享受生活
-
-### 配置
-
-#### 1.galley组件现在正式服役
-
-   其实在1.0的版本中该组件就存在,只是现在升级后正式服役了,具体使用方法请参考:
-
-   [Istio 庖丁解牛三：galley](http://www.servicemesher.com/blog/istio-analysis-3/)
-
-### 命令行
-
-#### 1.istioctl 现在只需要了解三个命令
-
-`istioctl experimental verify-install`
-
-`istioctl proxy-config`
-
-`istio proxy-status新的配置示例`
-
-其他的create,get 这些命令被废弃了.
-
-#### 2.kubectl 可以使用 短名称获取istio资源
+拷贝其他文件到testdata:
 
 ```shell
-#以前 kubelet get virtualservice
-#现在
-$ kubectl get vs
+cp $GOPATH/src/istio.io/istio/mixer/testdata/config/attributes.yaml 项目根目录/testdata/
+cp $GOPATH/src/istio.io/istio/authservice/template.yaml 项目根目录/testdata/
+cp $GOPATH/src/istio.io/istio/authservicetest/config/authservice.yaml 项目根目录/testdata/
+#拷贝完成后目录是这样的:
+/testdata$ tree
+├── attributes.yaml
+├── authservice.yaml
+├── istio.yaml
+└── template.yaml
+```
+
+#### 3, 启动adapter
+
+```shell
+# 在此,我们启动grpc服务器,并暴露在`9999`端口上
+$ go run main.go
+```
+
+#### 4, 启动mixs
+
+```shell
+./mixs server --configStoreURL=fs:///项目路径/testdata/ --log_output_level=attributes:debug
+```
+
+>  注意: 如果出现未找到mixs等错误,请配置你的Path,`$GOPATH/out/linux_amd64/release/`必须包含在path中,才能找到mixs和mixc的执行文件
+>
+> 注意: `fs://` 标示文件系统,后面是文件系统的路径,所以才会出现三个`/`
+
+#### 5, 启动mixc
+
+```shell
+./mixc check -s destination.service="svc.cluster.local" -s request.path="/test222"
+```
+
+在执行了以上命令后就可以在控制台和adapter上均可以看到结果了
+
+### 7,编译&制作镜像
+
+#### 1,编译
+
+```shell
+$ go build main.go
+```
+
+编译后将生成`main`这个可执行文件
+
+#### 2,制作为镜像
+
+在目录下创建`Dockerfile`文件,文件内容如下:
+
+```dockerfile
+FROM ubuntu
+WORKDIR /
+ADD main /main
+EXPOSE 9999
+CMD ["./main"]
+```
+
+制作docker镜像命令如下:
+
+```shell
+$ docker build -t authservice:v1 .
+```
+
+### 8,部署到k8s集群中
+
+#### 1,部署k8s编排
+
+新建文件`k8s.yaml`,内容如下:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my
+  namespace: istio-system
+  labels:
+    app: my
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: my
+      labels:
+        app: my
+    spec:
+      containers:
+        - name: my
+          # 使用上一步构建的镜像
+          image: authservice:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9999
+              protocol: TCP
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: my
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authservice
+  namespace: istio-system
+spec:
+  selector:
+    app: my
+  ports:
+  - port: 9999
+    targetPort: 9999
+    protocol: TCP
+```
+
+使用kubectl部署Deployment:
+
+```shell
+$ kubectl apply -f k8s.yaml
+```
+
+#### 2,部署istio配置
+
+新建`istio.yaml`,内容如下:
+
+```yaml
+# handler adapter
+apiVersion: "config.istio.io/v1alpha2"
+kind: handler
+metadata:
+  name: my
+  namespace: istio-system
+spec:
+  adapter: authservice
+  connection:
+  # 请一定注意,这里的地址  和正式部署的地址不一样
+    address: "authservice.istio-system:9999"
+#    address: "localhost:9999"
+# params的值为 config.proto中的配置
+  params:
+    valid_duration: 1h
+---
+# instances
+apiVersion: "config.istio.io/v1alpha2"
+kind: instance
+metadata:
+  name: my
+  namespace: istio-system
+spec:
+  #模板的名称一定要和template.proto对应
+  template: authservice
+  #模板的参数需要对应
+  params:
+    request_jwt: request.headers["jwt"] | ""
+    request_path: request.path | "/"
+    request_method: request.method | "GET"
+    source_name: source.name | ""
+    source_namespace: source.namespace | ""
+    destination_name: destination.name | ""
+    destination_namespace: destination.namespace | ""
+    source_workload_name: source.workload.name | ""
+    source_workload_namespace: source.workload.namespace | ""
+    destination_workload_name: destination.workload.name | ""
+    destination_workload_namespace: destination.workload.namespace | ""
+    destination_service_host: destination.service.host | ""
+
+---
+# rule to dispatch to handler h1
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: r1
+  namespace: istio-system
+spec:
+  match: ""
+  actions:
+  - handler: my.handler.istio-system
+    instances:
+      - my.instance.istio-system
+    name: result
+  #此属性用来配置header
+  requestHeaderOperations:
+  - name: user
+    values:
+    - result.output.user
+  - name: serviceName
+    values:
+    - result.output.service_name
+```
+
+> requestHeaderOperations的具体配置,请参照 [requestHeaderOperations](https://istio.io/docs/reference/config/policy-and-telemetry/istio.policy.v1beta1/#Rule)
+
+然后将template,adapter和istio配置文件依次部署到k8s中.
+
+```shell
+$ kubectl apply -f authservice/template.yaml
+$ kubectl apply -f authservice/config/authservice.yaml
+$ kubectl apply -f istio.yaml
+```
+
+至此,完成了整体的自定义adapter的使用. 
+
+> 官方的测试adapter 使用示例如下
+>
+> https://istio.io/docs/tasks/policy-enforcement/control-headers/
+
+
+
+
+## 答疑
+
+### 在定义mixer的模板中 很多人都会问,这`template_variety`的值在哪里定义的呢?
+
+答: 在定义模板的时候文件中有这么一句:
+
+```protobuf
+import "mixer/adapter/model/v1beta1/extensions.proto";
+```
+
+此处声明了导入`mixer/adapter/model/v1beta1/extensions.proto`文件,但是这个文件是一个相对的位置,并且使用protoc的`--proto_path`参数指定上下文.
+
+在`bin/mixer_codegen.sh`文件中([源代码](https://github.com/istio/istio/blob/master/bin/mixer_codegen.sh#L73)):
+
+```shell
+IMPORTS=(
+  "--proto_path=${ROOTDIR}"
+  "--proto_path=${ROOTDIR}/vendor/istio.io/api"
+  "--proto_path=${ROOTDIR}/vendor/github.com/gogo/protobuf"
+  "--proto_path=${ROOTDIR}/vendor/github.com/gogo/googleapis"
+  "--proto_path=$optimport"
+)
+```
+
+`--proto_path`: 指定了要去哪个目录中搜索import中导入的和要编译为.go的proto文件，可以定义多个
+
+所以实际的`extensions.proto`文件位置为:`istio.io/istio/vendor/istio.io/api/mixer/adapter/model/v1beta1/extensions.proto`,在这个文件中对于`TemplateVariety`定义如下([源代码](https://github.com/istio/istio/blob/master/vendor/istio.io/api/mixer/adapter/model/v1beta1/extensions.proto#L25)):
+
+```protobuf
+
+// The available varieties of templates, controlling the semantics of what an adapter does with each instance.
+enum TemplateVariety {
+    // Makes the template applicable for Mixer's check calls. Instances of such template are created during
+    // check calls in Mixer and passed to the handlers based on the rule configurations.
+    TEMPLATE_VARIETY_CHECK = 0;
+    // Makes the template applicable for Mixer's report calls. Instances of such template are created during
+    // report calls in Mixer and passed to the handlers based on the rule configurations.
+    TEMPLATE_VARIETY_REPORT = 1;
+    // Makes the template applicable for Mixer's quota calls. Instances of such template are created during
+    // quota check calls in Mixer and passed to the handlers based on the rule configurations.
+    TEMPLATE_VARIETY_QUOTA = 2;
+    // Makes the template applicable for Mixer's attribute generation phase. Instances of such template are created during
+    // pre-processing attribute generation phase and passed to the handlers based on the rule configurations.
+    TEMPLATE_VARIETY_ATTRIBUTE_GENERATOR = 3;
+    // Makes the template applicable for Mixer's check calls. Instances of such template are created during
+    // check calls in Mixer and passed to the handlers that produce values.
+    TEMPLATE_VARIETY_CHECK_WITH_OUTPUT = 4;
+}
+```
+
+### 生成template出现没找到镜像
+
+`Unable to find image 'gcr.io/istio-testing/protoc:xxxx' locally`
+
+答: `mixer_codegen.sh`通过docker方式工作,依赖`gcr.io/istio-testing/protoc`,所以需要拉取:
+
+```shell
+$ docker pull tangxusc/istio-protoc-mirror:latest
+$ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:2018-06-12
 ```
 
 
-## 个人理解
 
-既然升级了这么多内容,那么istio现在模型就已经有了一次较大的改变,更强调整体性(体现出了istio社区的各位贡献者的孜孜不倦的努力贡献)
+## 后语
 
-- gateway 放在 istio-system 命名空间中
-- 每一个命名空间的服务 自己配置自己的 VirtualService,DestinationRule,并在VirtualService中`gateway字段`填写`gateway资源`的名称,**这样把流量引进来**
-- 要调用其他命名空间的服务 需要在目标命名空间中 声明VirtualService和DestinationRule,但是并不填写`gateway字段`,但是需要极度[**注意**](https://istio.io/help/ops/traffic-management/deploy-guidelines/#multiple-virtual-services-and-destination-rules-for-the-same-host), 这样 服务间的熔断,故障注入等等功能也就齐活了
-- 其他的命名空间如过不需要引用就不做上一步就好了
+在使用mixer的适配器的时候,同时我们也需要注意到,mixer本身是`无状态的,带有缓存的`,所以这也同时要求我们的adapter需要最好设计为无状态的,带有缓存的,通过这两种缓存机制才能大大降低istio的qps延迟.
 
-> 在istio1.0中是不推荐一个host配置多个VirtualService的
+mixer的性能问题一直是社区中纠结的所在,并且在1.1中暂时关闭了mixer的check功能,希望在1.2中有所改善吧.
 
 ## 参考
 
-- [一个host多VirtualService配置](https://istio.io/help/ops/traffic-management/deploy-guidelines/#multiple-virtual-services-and-destination-rules-for-the-same-host)
-- [Istio 庖丁解牛三：galley](http://www.servicemesher.com/blog/istio-analysis-3/)
-- [基于位置的负载均衡](https://istio.io/help/ops/traffic-management/locality-load-balancing/)
-- [istio 1.1发行说明](https://istio.io/about/notes/1.1/)
-- [Istio1.1新特性之限制服务可见性](http://www.servicemesher.com/blog/istio-service-visibility/)
-- [新的配置示例](https://tangxusc.github.io/blog/post/迈向istio/11-升级到1.1.2/all.yaml)
-
+- [mixer 介绍(中文)](https://preliminary.istio.io/zh/docs/concepts/policies-and-telemetry/)
+- [安装grpc](/2019/03/使用go-mod1.11安装grpc/)
+- [使用kubeadm安装HA集群](/2019/03/kubeadm安装ha集群/)
+- [官方mixer测试实例](https://github.com/istio/istio/tree/master/mixer/test/keyval)
+- [proto文件导入路径](https://www.cnblogs.com/hsnblog/p/9615742.html)
+- [官方使用示例](https://istio.io/docs/tasks/policy-enforcement/control-headers/)

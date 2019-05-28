@@ -6,18 +6,20 @@
     <description>Recent content in Istio on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 01 Apr 2019 14:15:59 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 28 May 2019 14:15:59 +0800</lastBuildDate>
     
 	<atom:link href="https://tangxusc.github.io/blog/categories/istio/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>迈向istio-11 升级到1.1.2</title>
-      <link>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/</link>
-      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      <title>迈向istio-13 自定义adapter(修改请求头)</title>
+      <link>https://tangxusc.github.io/blog/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/</link>
+      <pubDate>Tue, 28 May 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/</guid>
-      <description>&lt;p&gt;istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本为&lt;code&gt;企业级就绪&lt;/code&gt;&lt;/p&gt;</description>
+      <guid>https://tangxusc.github.io/blog/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/</guid>
+      <description>&lt;p&gt;在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.&lt;/p&gt;
+
+&lt;p&gt;mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为&lt;code&gt;Adapter&lt;/code&gt;,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作&lt;/p&gt;</description>
     </item>
     
     <item>
