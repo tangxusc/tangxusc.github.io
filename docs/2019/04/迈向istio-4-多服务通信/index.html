@@ -8,18 +8,26 @@
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
 <meta name="keywords" content="istio">
-<meta name="description" content="使用到istio的时候,我发现istio对于调试方面,错误提示方面还是不怎么友好,很多时候都不知道去哪里找错误原因,突然想到飞机那么复杂的系统是如何做到一直按照正确的方式运行的呢,遂提出此错误排查清单,用于排查部分错误,各位同仁可以一句此错误清单进行异常的排查,或者一句不同的因素对错误进行处理.">
+<meta name="description" content="在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;
+
+在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务">
 
 
-<meta property="og:description" content="使用到istio的时候,我发现istio对于调试方面,错误提示方面还是不怎么友好,很多时候都不知道去哪里找错误原因,突然想到飞机那么复杂的系统是如何做到一直按照正确的方式运行的呢,遂提出此错误排查清单,用于排查部分错误,各位同仁可以一句此错误清单进行异常的排查,或者一句不同的因素对错误进行处理.">
+<meta property="og:description" content="在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;
+
+在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务">
 <meta property="og:type" content="article">
-<meta property="og:title" content="迈向istio-错误排查清单">
-<meta name="twitter:title" content="迈向istio-错误排查清单">
-<meta property="og:url" content="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95/">
-<meta property="twitter:url" content="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95/">
+<meta property="og:title" content="迈向istio-4 多服务通信">
+<meta name="twitter:title" content="迈向istio-4 多服务通信">
+<meta property="og:url" content="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/">
+<meta property="twitter:url" content="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/">
 <meta property="og:site_name" content="苏连云的博客">
-<meta property="og:description" content="使用到istio的时候,我发现istio对于调试方面,错误提示方面还是不怎么友好,很多时候都不知道去哪里找错误原因,突然想到飞机那么复杂的系统是如何做到一直按照正确的方式运行的呢,遂提出此错误排查清单,用于排查部分错误,各位同仁可以一句此错误清单进行异常的排查,或者一句不同的因素对错误进行处理.">
-<meta name="twitter:description" content="使用到istio的时候,我发现istio对于调试方面,错误提示方面还是不怎么友好,很多时候都不知道去哪里找错误原因,突然想到飞机那么复杂的系统是如何做到一直按照正确的方式运行的呢,遂提出此错误排查清单,用于排查部分错误,各位同仁可以一句此错误清单进行异常的排查,或者一句不同的因素对错误进行处理.">
+<meta property="og:description" content="在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;
+
+在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务">
+<meta name="twitter:description" content="在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;
+
+在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务">
 <meta property="og:locale" content="en-us">
 
   
@@ -57,14 +65,14 @@
   <meta property="twitter:image" content="https://tangxusc.github.io/blog/photo.png">
 
 
-    <title>迈向istio-错误排查清单</title>
+    <title>迈向istio-4 多服务通信</title>
 
     <link rel="icon" href="https://tangxusc.github.io/blog/favicon.png">
     
 
     
 
-    <link rel="canonical" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95/">
+    <link rel="canonical" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -204,7 +212,7 @@
             <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title" itemprop="headline">
-      迈向istio-错误排查清单
+      迈向istio-4 多服务通信
     </h1>
   
   
@@ -231,140 +239,467 @@
           
           <div class="post-content markdown" itemprop="articleBody">
             <div class="main-content-wrap">
-              <p>使用到istio的时候,我发现istio对于调试方面,错误提示方面还是不怎么友好,很多时候都不知道去哪里找错误原因,突然想到飞机那么复杂的系统是如何做到一直按照正确的方式运行的呢,遂提出此错误排查清单,用于排查部分错误,各位同仁可以一句此错误清单进行异常的排查,或者一句不同的因素对错误进行处理.</p>
+              <p>在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;</p>
 
-<h2 id="错误排查清单">错误排查清单</h2>
+<p>在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务</p>
 
-<ol>
-<li>#### 工作负载中的service端口必须正确的命名</li>
-</ol>
+<h2 id="服务规划">服务规划</h2>
+
+<p><img src="https://tangxusc.github.io/blog/post/迈向istio/4-多服务通信/服务图.png"/></p>
 
 <blockquote>
-<p>服务端口必须进行命名。端口名称只允许是<code>&lt;协议&gt;[-&lt;后缀&gt;-]</code>模式，其中<code>&lt;协议&gt;</code>部分可选择范围包括 <code>http</code>、<code>http2</code>、<code>grpc</code>、<code>mongo</code> 以及 <code>redis</code>，Istio 可以通过对这些协议的支持来提供路由能力。例如 <code>name: http2-foo</code> 和 <code>name: http</code> 都是有效的端口名，但 <code>name: http2foo</code> 就是无效的。如果没有给端口进行命名，或者命名没有使用指定前缀，那么这一端口的流量就会被视为普通 TCP 流量（除非<a href="https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service">显式</a>的用 <code>Protocol: UDP</code> 声明该端口是 UDP 端口）</p>
+<p>请忽略nginx,这个是我用来做测试的&hellip;</p>
 </blockquote>
 
-<ol>
-<li>#### pod必须关联到服务,并且同一端口只能同一协议</li>
-</ol>
+<h3 id="proxy服务">proxy服务</h3>
 
-<blockquote>
-<p>Pod 必须关联到service，如果一个 Pod 属于多个服务，这些服务不能再同一端口上使用不同协议，例如 HTTP 和 TCP</p>
-</blockquote>
+<p>proxy服务使用golang进行构建,serviceProxy.go文件内容如下:</p>
 
-<ol>
-<li>#### <strong>Deployment 应带有 app 以及 version 标签</strong></li>
-</ol>
+<pre><code class="language-go">package main
 
-<blockquote>
-<p>在使用 Kubernetes <code>Deployment</code> 进行 Pod 部署的时候，建议显式的为 <code>Deployment</code> 加上 <code>app</code> 以及 <code>version</code>标签。每个 Deployment 都应该有一个有意义的 <code>app</code> 标签和一个用于标识 <code>Deployment</code> 版本的 <code>version</code> 标签。<code>app</code> 标签在分布式跟踪的过程中会被用来加入上下文信息。Istio 还会用 <code>app</code> 和 <code>version</code> 标签来给遥测指标数据加入上下文信息。</p>
-</blockquote>
+import (
+	&quot;fmt&quot;
+	&quot;io/ioutil&quot;
+	&quot;log&quot;
+	&quot;net/http&quot;
+	&quot;os&quot;
+)
 
-<ol>
-<li>#### 使用短名称时,Istio 会根据规则所在的命名空间来处理这一名称，而非服务所在的命名空间</li>
-</ol>
+func main() {
+	http.HandleFunc(&quot;/proxy&quot;, handler)
+	http.HandleFunc(&quot;/index&quot;, indexHandler)
+	serve := http.ListenAndServe(&quot;0.0.0.0:8090&quot;, nil)
+	if serve != nil {
+		log.Fatalf(&quot;启动失败,%v&quot;, serve)
+	} else {
+		fmt.Fprintf(os.Stdout, &quot;启动成功&quot;)
+	}
+}
 
-<blockquote>
-<p>当使用服务的短名称时（例如使用 <code>reviews</code>，而不是 <code>reviews.default.svc.cluster.local</code>），Istio 会根据规则所在的命名空间来处理这一名称，而非服务所在的命名空间。假设 “default” 命名空间的一条规则中包含了一个 <code>reviews</code> 的 <code>host</code> 引用，就会被视为 <code>reviews.default.svc.cluster.local</code>，而不会考虑 <code>reviews</code> 服务所在的命名空间。<strong>为了避免可能的错误配置，建议使用 FQDN 来进行服务引用。</strong></p>
-</blockquote>
+func handler(writer http.ResponseWriter, request *http.Request) {
+	fmt.Printf(&quot;proxy请求begin\n&quot;)
+	request.ParseForm()
+	get := request.Form.Get(&quot;url&quot;)
+	fmt.Printf(&quot;请求地址:%s\n&quot;, get)
+	for key, value := range request.Form {
+		fmt.Printf(&quot;请求参数 [%s]:%s \n&quot;, key, value)
+	}
+	for key, value := range request.Header {
+		fmt.Printf(&quot;header参数 [%s]:%s \n&quot;, key, value)
+	}
 
-<ol>
-<li><h4 id="一个主机名只能在一个-virtualservice-中定义"><strong>一个主机名只能在一个 VirtualService 中定义</strong></h4></li>
+	client := http.DefaultClient
+	newRequest, e := http.NewRequest(&quot;GET&quot;, get, nil)
+	if e != nil {
+		fmt.Printf(&quot;NewRequest error: %v&quot;, e)
+	}
 
-<li><h4 id="保留字-mesh-用来指代网格中的所有-sidecar">保留字 <code>mesh</code> 用来指代网格中的所有 Sidecar</h4></li>
-</ol>
+	//设置header
+    //在istio中,header
+	if len(request.Header.Get(&quot;x-request-id&quot;)) &gt; 0 {
+		newRequest.Header.Set(&quot;x-request-id&quot;, request.Header.Get(&quot;x-request-id&quot;))
+	}
+	if len(request.Header.Get(&quot;x-b3-traceid&quot;)) &gt; 0 {
+		newRequest.Header.Set(&quot;x-b3-traceid&quot;, request.Header.Get(&quot;x-b3-traceid&quot;))
+	}
+	if len(request.Header.Get(&quot;x-b3-spanid&quot;)) &gt; 0 {
+		newRequest.Header.Set(&quot;x-b3-spanid&quot;, request.Header.Get(&quot;x-b3-spanid&quot;))
+	}
+	if len(request.Header.Get(&quot;x-b3-parentspanid&quot;)) &gt; 0 {
+		newRequest.Header.Set(&quot;x-b3-parentspanid&quot;, request.Header.Get(&quot;x-b3-parentspanid&quot;))
+	}
+	if len(request.Header.Get(&quot;x-b3-sampled&quot;)) &gt; 0 {
+		newRequest.Header.Set(&quot;x-b3-sampled&quot;, request.Header.Get(&quot;x-b3-sampled&quot;))
+	}
+	if len(request.Header.Get(&quot;x-b3-flags&quot;)) &gt; 0 {
+		newRequest.Header.Set(&quot;x-b3-flags&quot;, request.Header.Get(&quot;x-b3-flags&quot;))
+	}
+	if len(request.Header.Get(&quot;x-ot-span-context&quot;)) &gt; 0 {
+		newRequest.Header.Set(&quot;x-ot-span-context&quot;, request.Header.Get(&quot;x-ot-span-context&quot;))
+	}
 
-<blockquote>
-<p>mesh代表所有的sidecar,但是网关不是sidecar,要让规则同时对 <code>Gateway</code> 和网格内服务生效，需要显式的将 <code>mesh</code> 加入 <code>gateways</code>列表。</p>
-</blockquote>
+	resp, err := client.Do(newRequest)
+	if err != nil {
+		fmt.Fprintf(writer, &quot;response:%v&quot;, err)
+	} else {
+		bytes, _ := ioutil.ReadAll(resp.Body)
+		defer resp.Body.Close()
+		fmt.Fprintf(writer, &quot;%s&quot;, bytes)
+	}
+	fmt.Printf(&quot;proxy请求end\n&quot;)
+}
 
-<ol>
-<li>#### VirtualService.spec.http只对http流量生效</li>
-</ol>
+func indexHandler(writer http.ResponseWriter, request *http.Request) {
+	fmt.Printf(&quot;index请求begin\n&quot;)
+	for key, value := range request.Form {
+		fmt.Printf(&quot;请求参数 [%s]:%s \n&quot;, key, value)
+	}
+	for key, value := range request.Header {
+		fmt.Printf(&quot;header参数 [%s]:%s \n&quot;, key, value)
+	}
+	fmt.Fprintf(writer, &quot;%s&quot;, &quot;index&quot;)
+	fmt.Printf(&quot;index请求end\n&quot;)
 
-<blockquote>
-<p>http列表对名称前缀为 <code>http-</code>、<code>http2-</code>、<code>grpc-</code> 的服务端口，或者协议为 <code>HTTP</code>、<code>HTTP2</code>、<code>GRPC</code>以及终结的 TLS，另外还有使用 <code>HTTP</code>、<code>HTTP2</code> 以及 <code>GRPC</code> 协议的 <code>ServiceEntry</code> 都是有效的</p>
-</blockquote>
+}
+</code></pre>
 
-<ol>
-<li>#### VirtualService.spec.http.match.url.prefix和rewrite配合使用时,prefix的值请以<code>/</code>结尾</li>
-</ol>
+<p>将proxy服务构建为镜像:</p>
 
-<blockquote>
-<p><code>HTTPRewrite</code> 用来在 HTTP 请求被转发到目标之前，对请求内容进行部分改写, 但是prefix的值不以<code>/</code>结尾,就成了<code>302</code>跳转</p>
-</blockquote>
+<pre><code class="language-shell">$ go build serviceProxy.go
+$ docker build -t service-proxy:go-1 -f go-Dockerfile .
+</code></pre>
 
-<ol>
-<li>#### jwt认证存在一定延时</li>
-</ol>
+<h3 id="target服务">target服务</h3>
 
-<blockquote>
-<p>在配置了jwt后,并不会立即生效,存在一定的延时情况,需要等待1分钟以内.</p>
-</blockquote>
+<p>target服务使用java进行构建,TestController.java文件内容如下:</p>
 
-<ol>
-<li><h4 id="请使用kubectl-apply-应用你的配置">请使用kubectl apply 应用你的配置</h4>
+<pre><code class="language-java">package com.tanx.istio.demo;
 
-<blockquote>
-<p>在执行 <a href="https://preliminary.istio.io/docs/reference/commands/istioctl/#istioctl-proxy-status"><code>istioctl proxy-status</code></a> 命令获取代理同步状态时，Pilot 可能会发生死锁。要避免这一情况的发生，应避免使用 <code>istioctl proxy-status</code>。Pilot 进入死锁的表现是 <code>goroutine</code> 持续增长，直到耗尽内存。</p>
-</blockquote></li>
 
-<li><h4 id="调用链追踪并不是无入侵-并且还需要注意不能传入空的值">调用链追踪并不是无入侵,并且还需要注意不能传入空的值</h4>
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
-<blockquote>
-<pre><code class="language-java">if (xreq != null) {
+import java.util.Collections;
+
+@RestController
+@RequestMapping
+public class TestController {
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @RequestMapping(&quot;/proxy&quot;)
+    public String proxy(@RequestHeader(value = &quot;end-user&quot;, required = false) String user,
+                        @RequestHeader(value = &quot;x-request-id&quot;, required = false) String xreq,
+                        @RequestHeader(value = &quot;x-b3-traceid&quot;, required = false) String xtraceid,
+                        @RequestHeader(value = &quot;x-b3-spanid&quot;, required = false) String xspanid,
+                        @RequestHeader(value = &quot;x-b3-parentspanid&quot;, required = false) String xparentspanid,
+                        @RequestHeader(value = &quot;x-b3-sampled&quot;, required = false) String xsampled,
+                        @RequestHeader(value = &quot;x-b3-flags&quot;, required = false) String xflags,
+                        @RequestHeader(value = &quot;x-ot-span-context&quot;, required = false) String xotspan,
+                        String url) {
+	System.out.println(&quot;=============请求header============&quot;);
+        System.out.println(&quot;end-user:&quot;+user);
+        System.out.println(&quot;x-request-id:&quot;+xreq);
+        System.out.println(&quot;x-b3-traceid:&quot;+xtraceid);
+        System.out.println(&quot;x-b3-spanid:&quot;+xspanid);
+        System.out.println(&quot;x-b3-parentspanid:&quot;+xparentspanid);
+        System.out.println(&quot;x-b3-sampled:&quot;+xsampled);
+        System.out.println(&quot;x-b3-flags:&quot;+xflags);
+        System.out.println(&quot;x-ot-span-context:&quot;+xotspan);
+        System.out.println(&quot;=============请求header============&quot;);
+
+        System.out.println(&quot;=============请求url============&quot;);
+        System.out.println(url);
+        System.out.println(&quot;=============请求url============&quot;);
+        HttpHeaders requestHeaders = new HttpHeaders();
+        if (xreq != null) {
             requestHeaders.put(&quot;x-request-id&quot;, Collections.singletonList(xreq));
         }
-</code></pre>
-</blockquote></li>
+        if (xtraceid != null) {
+            requestHeaders.put(&quot;x-b3-traceid&quot;, Collections.singletonList(xtraceid));
+        }
+        if (xspanid != null) {
+            requestHeaders.put(&quot;x-b3-spanid&quot;, Collections.singletonList(xspanid));
+        }
+        if (xparentspanid != null) {
+            requestHeaders.put(&quot;x-b3-parentspanid&quot;, Collections.singletonList(xparentspanid));
+        }
+        if (xsampled != null) {
+            requestHeaders.put(&quot;x-b3-sampled&quot;, Collections.singletonList(xsampled));
+        }
+        if (xflags != null) {
+            requestHeaders.put(&quot;x-b3-flags&quot;, Collections.singletonList(xflags));
+        }
+        if (xotspan != null) {
+            requestHeaders.put(&quot;x-ot-span-context&quot;, Collections.singletonList(xotspan));
+        }
+        if (user != null) {
+            requestHeaders.put(&quot;end-user&quot;, Collections.singletonList(user));
+        }
 
-<li><h4 id="jaeger使用的是all-in-one的安装方式-数据是放在内存中的">jaeger使用的是all in one的安装方式,数据是放在内存中的</h4>
+        ResponseEntity&lt;String&gt; exchange = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity&lt;&gt;(requestHeaders), String.class);
+        String body = exchange.getBody();
+        System.out.println(&quot;代理返回内容为:&quot; + body);
+        return body;
+    }
+
+    @RequestMapping(&quot;index&quot;)
+    public String index(@RequestHeader(value = &quot;end-user&quot;, required = false) String user,
+                        @RequestHeader(value = &quot;x-request-id&quot;, required = false) String xreq,
+                        @RequestHeader(value = &quot;x-b3-traceid&quot;, required = false) String xtraceid,
+                        @RequestHeader(value = &quot;x-b3-spanid&quot;, required = false) String xspanid,
+                        @RequestHeader(value = &quot;x-b3-parentspanid&quot;, required = false) String xparentspanid,
+                        @RequestHeader(value = &quot;x-b3-sampled&quot;, required = false) String xsampled,
+                        @RequestHeader(value = &quot;x-b3-flags&quot;, required = false) String xflags,
+                        @RequestHeader(value = &quot;x-ot-span-context&quot;, required = false) String xotspan) {
+	System.out.println(&quot;=============请求header============&quot;);
+        System.out.println(&quot;end-user:&quot;+user);
+        System.out.println(&quot;x-request-id:&quot;+xreq);
+        System.out.println(&quot;x-b3-traceid:&quot;+xtraceid);
+        System.out.println(&quot;x-b3-spanid:&quot;+xspanid);
+        System.out.println(&quot;x-b3-parentspanid:&quot;+xparentspanid);
+        System.out.println(&quot;x-b3-sampled:&quot;+xsampled);
+        System.out.println(&quot;x-b3-flags:&quot;+xflags);
+        System.out.println(&quot;x-ot-span-context:&quot;+xotspan);
+        System.out.println(&quot;=============请求header============&quot;);
+
+        return &quot;index-java&quot;;
+    }
+
+}
+</code></pre>
+
+<p>将proxy服务构建为镜像:</p>
+
+<pre><code class="language-shell">$ mvn clean&amp;&amp;mvn package -Dmaven.test.skip=true
+$ docker build -t service-proxy:java-1 -f java-Dockerfile .
+</code></pre>
+
+<p>在这里可能会有很多人有疑问,为什么要我都构建为service-proxy名称的镜像,并且这两个镜像中还存在基本一样的行为(都开放两个接口proxy,index)?</p>
+
+<p>原因如下:</p>
+
+<ul>
+<li>我需要演示两个服务间相互调用,两个服务一致,可以让我们调用更为方便</li>
+<li>使用两种语言可以充分的模拟企业中不同的服务状态</li>
+</ul>
+
+<h2 id="kubernetes配置">kubernetes配置</h2>
+
+<p>k8s.yaml内容如下:</p>
+
+<pre><code class="language-yaml">apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: target
+ namespace: test
+ labels:
+   app: target #必须有app和version标签
+   version: v1
+spec:
+ template:
+    metadata:
+     labels:
+       app: target
+       version: v1
+    spec:
+     containers:
+     - name: target
+       image: service-proxy:java-1
+       ports:
+       - containerPort: 8090
+         name: http-target
+         protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: target
+  namespace: test
+spec:
+  type: ClusterIP
+  selector:
+    app: target
+  ports:
+    - port: 80
+      name: http-target #必须为服务端口命名,端口名称必须是形式&lt;protocol&gt;[-&lt;suffix&gt;]与http, http2, grpc, mongo, or redis as the &lt;protocol&gt;
+      protocol: TCP
+      targetPort: 8090
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: proxy
+ namespace: test
+ labels:
+   app: proxy
+   version: v1
+spec:
+ template:
+    metadata:
+     labels:
+       app: proxy
+       version: v1
+    spec:
+     containers:
+     - name: proxy
+       image: service-proxy:java-1
+       ports:
+       - containerPort: 8090
+         name: http-proxy
+         protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: proxy
+  namespace: test
+spec:
+  type: ClusterIP
+  selector:
+    app: proxy
+  ports:
+    - port: 80
+      name: http-proxy
+      protocol: TCP
+      targetPort: 8090
+</code></pre>
+
+<h3 id="部署应用">部署应用</h3>
+
+<pre><code class="language-shell">$ kubectl craete namespace test
+$ kubectl apply -f &lt; (istioctl kube-inject -f k8s.yaml)
+$ kubectl get all -n test
+</code></pre>
+
+<h3 id="部署istio编排文件">部署istio编排文件</h3>
+
+<p>istio.yaml文件如下:</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: test4
+  namespace: test
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - &quot;*&quot;
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: proxy
+  namespace: test
+spec:
+  hosts:
+  - &quot;*&quot;
+  gateways:
+  - test4
+  http:
+  - match:
+    - uri:
+        prefix: /proxy/
+    rewrite:
+      uri: &quot;/&quot;
+    route:
+    - destination:
+       host: proxy
+       subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: proxy
+  namespace: test
+spec:
+  host: proxy
+  subsets:
+  - name: v1
+    labels:
+      app: proxy
+      version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: target
+  namespace: test
+spec:
+  hosts:
+  - &quot;*&quot;
+  gateways:
+  - test4
+  http:
+  - match:
+    - uri:
+        prefix: /target/
+    rewrite:
+      uri: &quot;/&quot;
+    route:
+    - destination:
+       host: target
+       subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: target
+  namespace: test
+spec:
+  host: target
+  subsets:
+  - name: v1
+    labels:
+      app: target
+      version: v1
+</code></pre>
 
 <blockquote>
-<pre><code class="language-shell">$ kubectl get deployment.apps/istio-tracing -n istio-system -o yaml
-image: docker.io/jaegertracing/all-in-one:1.5
-</code></pre>
-</blockquote></li>
+<p>注意,在此配置文件中我使用了两个VirtualService.</p>
+</blockquote>
 
-<li><h4 id="istio使用helm安装的时候-默认追踪采样是1">istio使用helm安装的时候,默认追踪采样是1%</h4>
+<p>将我们的配置文件部署起来</p>
+
+<pre><code class="language-shell">$ kubectl apply -f istio.yaml
+</code></pre>
 
 <blockquote>
-<p>values.yaml</p>
+<p>注意:istio1.0.4在此处有一个明显的问题, 在使用istioctl create -f istio.yaml命令下会报错,但是使用kubectl apply -f istio.yaml不会报错,但是在访问gateway时,可能出现拒绝连接的情况,在删除其中(proxy,target)一个VirtualService后,又能访问.</p>
+</blockquote>
 
-<pre><code class="language-java">pilot:
-  traceSampling: 1.0
-</code></pre>
-</blockquote></li>
+<h2 id="访问应用">访问应用</h2>
 
-<li><h4 id="kiali的grafana-jaeger地址需要重写">kiali的grafana,jaeger地址需要重写</h4>
-
-<blockquote>
-<p>values.yaml</p>
-
-<pre><code class="language-yaml">kiali:
-# Override the automatically detected Grafana URL, usefull when Grafana service has no ExternalIPs
-grafanaURL: http://grafana:3000
-
-# Override the automatically detected Jaeger URL, usefull when Jaeger service has no ExternalIPs
-jaegerURL: http://jaeger-query:16686
+<pre><code class="language-shell">$ curl http://localhost:31380/proxy/proxy?url=http://target/index -v
+# 返回 index-java
+#或者通过
+$ curl http://localhost:31380/target/proxy?url=http://proxy/index -v
+#返回 index
 </code></pre>
 
-<p>注意,<em>一定要写成外部能访问到的地址</em></p>
-</blockquote></li>
+<p>这个时候打开我们的istio的dashboard(kiali) 可以看到服务间的依赖图
+<img src="https://tangxusc.github.io/blog/post/迈向istio/4-多服务通信/服务图.png"/></p>
 
-<li><h4 id="自动注入sidecar-需要admissionwebhook支持">自动注入sidecar,需要admissionWebHook支持</h4>
+<p>在grafana上可以看到一些图标信息</p>
 
-<blockquote>
-<pre><code class="language-shell">$ kubectl api-versions | grep admissionregistration
-admissionregistration.k8s.io/v1alpha1
-admissionregistration.k8s.io/v1beta1
-</code></pre>
+<p><img src="https://tangxusc.github.io/blog/post/迈向istio/4-多服务通信/grafana.png"/></p>
 
-<p>启用自动注入:</p>
+<p><img src="https://tangxusc.github.io/blog/post/迈向istio/4-多服务通信/meshDashboard.png"/></p>
 
-<pre><code class="language-shell">$ kubectl label namespace default istio-injection=enabled
-</code></pre>
-</blockquote></li>
+<p><img src="https://tangxusc.github.io/blog/post/迈向istio/4-多服务通信/pilotDashboard.png"/></p>
+
+<p><img src="https://tangxusc.github.io/blog/post/迈向istio/4-多服务通信/jaeger.png"/></p>
+
+<p>打开jaeger-query可以看到我们istio上使用的追踪信息</p>
+
+<h2 id="几个问题">几个问题</h2>
+
+<p>在我们兴高采烈的以为istio在服务通信方面很nice的时候(确实也很nice,不需要服务发现,也不需要专门的熔断就可以达到微服务中流量治理一样的效果),但是我们回头看看 有几个问题值得我们反思</p>
+
+<ol>
+<li>yaml文件配置复杂,本例中只用到了重写url,但是如果需要复杂的功能,那么yaml也相对复杂</li>
+<li>istio的追踪是服务间的调用追踪,并没有深入到应用内的调用</li>
+<li>istio的无入侵现在看来还是有一定的条件的,在追踪的时候,需要自己将上下文(header)转发到下游调用中</li>
+<li>istio追踪的时候 转发header是不区分大小写的,但是<code>空值</code>, 字符串<code>&quot;&quot;</code>会影响追踪</li>
+<li>在使用<code>VirtualService</code>的<code>http.match.url.prefix</code>的时候,如果搭配<code>rewrite</code>使用,那么<code>prefix</code>的值一定要在最后加入/,以免出现<code>302</code>浏览器跳转,导致请求不能正常被处理</li>
+<li>看到官方文档很多时候都在用<code>kubectl apply -f xxx</code> 开始很不理解,但是在出现了<code>istioctl create -f xxx</code>有些情况下不怎么好用的时候,我发现<code>kubectl apply -f</code> 其实挺好的.</li>
+<li>在默认的安装情况下,jaeger的追踪采样是1%,在我们测试的时候最好调整到合适的值,具体的调整请查看istio安装文档</li>
 </ol>
+
+<h2 id="清理">清理</h2>
+
+<pre><code class="language-shell">$ kubectl delete namespace/test
+</code></pre>
               
             </div>
           </div>
@@ -389,7 +724,7 @@ admissionregistration.k8s.io/v1beta1
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/" data-tooltip="迈向istio-安装">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-3-%E7%BD%91%E5%85%B3/" data-tooltip="迈向istio-3 网关">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -397,7 +732,7 @@ admissionregistration.k8s.io/v1beta1
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/" data-tooltip="Controller manager高可用实现方式">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/" data-tooltip="迈向istio-5 引入外部服务">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -457,7 +792,7 @@ admissionregistration.k8s.io/v1beta1
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/" data-tooltip="迈向istio-安装">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-3-%E7%BD%91%E5%85%B3/" data-tooltip="迈向istio-3 网关">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -465,7 +800,7 @@ admissionregistration.k8s.io/v1beta1
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/" data-tooltip="Controller manager高可用实现方式">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/" data-tooltip="迈向istio-5 引入外部服务">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -811,9 +1146,9 @@ $(document).ready(function() {
     
       <script>
         var disqus_config = function () {
-          this.page.url = 'https:\/\/tangxusc.github.io\/blog\/2019\/04\/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95\/';
+          this.page.url = 'https:\/\/tangxusc.github.io\/blog\/2019\/04\/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1\/';
           
-            this.page.identifier = '\/2019\/04\/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95\/'
+            this.page.identifier = '\/2019\/04\/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1\/'
           
         };
         (function() {

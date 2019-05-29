@@ -1,5 +1,5 @@
 ---
-title: "迈向istio-jwt认证"
+title: "迈向istio-8 jwt认证"
 date: 2019-04-01T14:15:59+08:00
 draft: false
 categories:

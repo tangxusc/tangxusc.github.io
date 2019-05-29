@@ -8,18 +8,18 @@
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
 <meta name="keywords" content="istio">
-<meta name="description" content="使用到istio的时候,我发现istio对于调试方面,错误提示方面还是不怎么友好,很多时候都不知道去哪里找错误原因,突然想到飞机那么复杂的系统是如何做到一直按照正确的方式运行的呢,遂提出此错误排查清单,用于排查部分错误,各位同仁可以一句此错误清单进行异常的排查,或者一句不同的因素对错误进行处理.">
+<meta name="description" content="在上一章节中,我们使用jwt进行了认证,那么我们如何对资源进行授权检查呢?">
 
 
-<meta property="og:description" content="使用到istio的时候,我发现istio对于调试方面,错误提示方面还是不怎么友好,很多时候都不知道去哪里找错误原因,突然想到飞机那么复杂的系统是如何做到一直按照正确的方式运行的呢,遂提出此错误排查清单,用于排查部分错误,各位同仁可以一句此错误清单进行异常的排查,或者一句不同的因素对错误进行处理.">
+<meta property="og:description" content="在上一章节中,我们使用jwt进行了认证,那么我们如何对资源进行授权检查呢?">
 <meta property="og:type" content="article">
-<meta property="og:title" content="迈向istio-错误排查清单">
-<meta name="twitter:title" content="迈向istio-错误排查清单">
-<meta property="og:url" content="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95/">
-<meta property="twitter:url" content="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95/">
+<meta property="og:title" content="迈向istio-9 opa授权">
+<meta name="twitter:title" content="迈向istio-9 opa授权">
+<meta property="og:url" content="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-9-opa%E6%8E%88%E6%9D%83/">
+<meta property="twitter:url" content="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-9-opa%E6%8E%88%E6%9D%83/">
 <meta property="og:site_name" content="苏连云的博客">
-<meta property="og:description" content="使用到istio的时候,我发现istio对于调试方面,错误提示方面还是不怎么友好,很多时候都不知道去哪里找错误原因,突然想到飞机那么复杂的系统是如何做到一直按照正确的方式运行的呢,遂提出此错误排查清单,用于排查部分错误,各位同仁可以一句此错误清单进行异常的排查,或者一句不同的因素对错误进行处理.">
-<meta name="twitter:description" content="使用到istio的时候,我发现istio对于调试方面,错误提示方面还是不怎么友好,很多时候都不知道去哪里找错误原因,突然想到飞机那么复杂的系统是如何做到一直按照正确的方式运行的呢,遂提出此错误排查清单,用于排查部分错误,各位同仁可以一句此错误清单进行异常的排查,或者一句不同的因素对错误进行处理.">
+<meta property="og:description" content="在上一章节中,我们使用jwt进行了认证,那么我们如何对资源进行授权检查呢?">
+<meta name="twitter:description" content="在上一章节中,我们使用jwt进行了认证,那么我们如何对资源进行授权检查呢?">
 <meta property="og:locale" content="en-us">
 
   
@@ -57,14 +57,14 @@
   <meta property="twitter:image" content="https://tangxusc.github.io/blog/photo.png">
 
 
-    <title>迈向istio-错误排查清单</title>
+    <title>迈向istio-9 opa授权</title>
 
     <link rel="icon" href="https://tangxusc.github.io/blog/favicon.png">
     
 
     
 
-    <link rel="canonical" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95/">
+    <link rel="canonical" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-9-opa%E6%8E%88%E6%9D%83/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -204,7 +204,7 @@
             <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title" itemprop="headline">
-      迈向istio-错误排查清单
+      迈向istio-9 opa授权
     </h1>
   
   
@@ -231,140 +231,422 @@
           
           <div class="post-content markdown" itemprop="articleBody">
             <div class="main-content-wrap">
-              <p>使用到istio的时候,我发现istio对于调试方面,错误提示方面还是不怎么友好,很多时候都不知道去哪里找错误原因,突然想到飞机那么复杂的系统是如何做到一直按照正确的方式运行的呢,遂提出此错误排查清单,用于排查部分错误,各位同仁可以一句此错误清单进行异常的排查,或者一句不同的因素对错误进行处理.</p>
+              <p>在上一章节中,我们使用jwt进行了认证,那么我们如何对资源进行授权检查呢?</p>
 
-<h2 id="错误排查清单">错误排查清单</h2>
+<p>在istio中,我们一个请求实际的调用链,我们来看看一个请求的流程图:</p>
 
-<ol>
-<li>#### 工作负载中的service端口必须正确的命名</li>
-</ol>
+<pre><code class="language-flow">start=&gt;start: 请求 
+end=&gt;end: 结束 
+gateway=&gt;operation: gateway
+target=&gt;operation: 目标服务
+out401=&gt;inputoutput: 返回401
+out200=&gt;inputoutput: 返回200
+mixer=&gt;condition: mixer-check 
 
-<blockquote>
-<p>服务端口必须进行命名。端口名称只允许是<code>&lt;协议&gt;[-&lt;后缀&gt;-]</code>模式，其中<code>&lt;协议&gt;</code>部分可选择范围包括 <code>http</code>、<code>http2</code>、<code>grpc</code>、<code>mongo</code> 以及 <code>redis</code>，Istio 可以通过对这些协议的支持来提供路由能力。例如 <code>name: http2-foo</code> 和 <code>name: http</code> 都是有效的端口名，但 <code>name: http2foo</code> 就是无效的。如果没有给端口进行命名，或者命名没有使用指定前缀，那么这一端口的流量就会被视为普通 TCP 流量（除非<a href="https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service">显式</a>的用 <code>Protocol: UDP</code> 声明该端口是 UDP 端口）</p>
-</blockquote>
-
-<ol>
-<li>#### pod必须关联到服务,并且同一端口只能同一协议</li>
-</ol>
-
-<blockquote>
-<p>Pod 必须关联到service，如果一个 Pod 属于多个服务，这些服务不能再同一端口上使用不同协议，例如 HTTP 和 TCP</p>
-</blockquote>
-
-<ol>
-<li>#### <strong>Deployment 应带有 app 以及 version 标签</strong></li>
-</ol>
-
-<blockquote>
-<p>在使用 Kubernetes <code>Deployment</code> 进行 Pod 部署的时候，建议显式的为 <code>Deployment</code> 加上 <code>app</code> 以及 <code>version</code>标签。每个 Deployment 都应该有一个有意义的 <code>app</code> 标签和一个用于标识 <code>Deployment</code> 版本的 <code>version</code> 标签。<code>app</code> 标签在分布式跟踪的过程中会被用来加入上下文信息。Istio 还会用 <code>app</code> 和 <code>version</code> 标签来给遥测指标数据加入上下文信息。</p>
-</blockquote>
-
-<ol>
-<li>#### 使用短名称时,Istio 会根据规则所在的命名空间来处理这一名称，而非服务所在的命名空间</li>
-</ol>
-
-<blockquote>
-<p>当使用服务的短名称时（例如使用 <code>reviews</code>，而不是 <code>reviews.default.svc.cluster.local</code>），Istio 会根据规则所在的命名空间来处理这一名称，而非服务所在的命名空间。假设 “default” 命名空间的一条规则中包含了一个 <code>reviews</code> 的 <code>host</code> 引用，就会被视为 <code>reviews.default.svc.cluster.local</code>，而不会考虑 <code>reviews</code> 服务所在的命名空间。<strong>为了避免可能的错误配置，建议使用 FQDN 来进行服务引用。</strong></p>
-</blockquote>
-
-<ol>
-<li><h4 id="一个主机名只能在一个-virtualservice-中定义"><strong>一个主机名只能在一个 VirtualService 中定义</strong></h4></li>
-
-<li><h4 id="保留字-mesh-用来指代网格中的所有-sidecar">保留字 <code>mesh</code> 用来指代网格中的所有 Sidecar</h4></li>
-</ol>
-
-<blockquote>
-<p>mesh代表所有的sidecar,但是网关不是sidecar,要让规则同时对 <code>Gateway</code> 和网格内服务生效，需要显式的将 <code>mesh</code> 加入 <code>gateways</code>列表。</p>
-</blockquote>
-
-<ol>
-<li>#### VirtualService.spec.http只对http流量生效</li>
-</ol>
-
-<blockquote>
-<p>http列表对名称前缀为 <code>http-</code>、<code>http2-</code>、<code>grpc-</code> 的服务端口，或者协议为 <code>HTTP</code>、<code>HTTP2</code>、<code>GRPC</code>以及终结的 TLS，另外还有使用 <code>HTTP</code>、<code>HTTP2</code> 以及 <code>GRPC</code> 协议的 <code>ServiceEntry</code> 都是有效的</p>
-</blockquote>
-
-<ol>
-<li>#### VirtualService.spec.http.match.url.prefix和rewrite配合使用时,prefix的值请以<code>/</code>结尾</li>
-</ol>
-
-<blockquote>
-<p><code>HTTPRewrite</code> 用来在 HTTP 请求被转发到目标之前，对请求内容进行部分改写, 但是prefix的值不以<code>/</code>结尾,就成了<code>302</code>跳转</p>
-</blockquote>
-
-<ol>
-<li>#### jwt认证存在一定延时</li>
-</ol>
-
-<blockquote>
-<p>在配置了jwt后,并不会立即生效,存在一定的延时情况,需要等待1分钟以内.</p>
-</blockquote>
-
-<ol>
-<li><h4 id="请使用kubectl-apply-应用你的配置">请使用kubectl apply 应用你的配置</h4>
-
-<blockquote>
-<p>在执行 <a href="https://preliminary.istio.io/docs/reference/commands/istioctl/#istioctl-proxy-status"><code>istioctl proxy-status</code></a> 命令获取代理同步状态时，Pilot 可能会发生死锁。要避免这一情况的发生，应避免使用 <code>istioctl proxy-status</code>。Pilot 进入死锁的表现是 <code>goroutine</code> 持续增长，直到耗尽内存。</p>
-</blockquote></li>
-
-<li><h4 id="调用链追踪并不是无入侵-并且还需要注意不能传入空的值">调用链追踪并不是无入侵,并且还需要注意不能传入空的值</h4>
-
-<blockquote>
-<pre><code class="language-java">if (xreq != null) {
-            requestHeaders.put(&quot;x-request-id&quot;, Collections.singletonList(xreq));
-        }
-</code></pre>
-</blockquote></li>
-
-<li><h4 id="jaeger使用的是all-in-one的安装方式-数据是放在内存中的">jaeger使用的是all in one的安装方式,数据是放在内存中的</h4>
-
-<blockquote>
-<pre><code class="language-shell">$ kubectl get deployment.apps/istio-tracing -n istio-system -o yaml
-image: docker.io/jaegertracing/all-in-one:1.5
-</code></pre>
-</blockquote></li>
-
-<li><h4 id="istio使用helm安装的时候-默认追踪采样是1">istio使用helm安装的时候,默认追踪采样是1%</h4>
-
-<blockquote>
-<p>values.yaml</p>
-
-<pre><code class="language-java">pilot:
-  traceSampling: 1.0
-</code></pre>
-</blockquote></li>
-
-<li><h4 id="kiali的grafana-jaeger地址需要重写">kiali的grafana,jaeger地址需要重写</h4>
-
-<blockquote>
-<p>values.yaml</p>
-
-<pre><code class="language-yaml">kiali:
-# Override the automatically detected Grafana URL, usefull when Grafana service has no ExternalIPs
-grafanaURL: http://grafana:3000
-
-# Override the automatically detected Jaeger URL, usefull when Jaeger service has no ExternalIPs
-jaegerURL: http://jaeger-query:16686
+start-&gt;gateway-&gt;mixer
+mixer(no)-&gt;out401
+mixer(yes)-&gt;target-&gt;out200
 </code></pre>
 
-<p>注意,<em>一定要写成外部能访问到的地址</em></p>
-</blockquote></li>
+<p>一个请求在到达网关后,需要请求mixer-check进行请求的授权验证,对于符合此授权验证的,则开始请求目标服务,如果不符合的,那么则会直接拒绝这个请求,向前端返回401/403</p>
 
-<li><h4 id="自动注入sidecar-需要admissionwebhook支持">自动注入sidecar,需要admissionWebHook支持</h4>
+<p>那么我们如何接入istio的授权验证呢?看过istio的可能会说istio提供了rbac的handler,那么这里有必要分析一下,istio提供的rbac的handler有什么要求.</p>
+
+<ul>
+<li>istio中所有的认证和授权都希望我们将信息放在istio的系统中,这样在本地就完成了认证和授权,则会少一次链路调用</li>
+<li>rbac的handler需要将授权信息以特定格式放在k8s的文件系统中,或者存放在k8s的etcd中</li>
+<li></li>
+</ul>
+
+<p>那么这有什么缺陷呢?</p>
+
+<ul>
+<li>有一些信息放在istio中是可以的,例如jwt的公钥,这样可以加快认证</li>
+<li>授权信息放在k8s还是有待商榷的,权限是用户*资源*权限的集合,这个集合比较大,放在etcd中是否不太合适呢?</li>
+<li>有一些地址不需要检查权限</li>
+</ul>
+
+<p>那么我们如何解决这些问题呢? 通过查找istio文档,找到了另外一种<code>open policy agent(简称OPA)</code> Handler,我们看看opa官方的介绍:</p>
 
 <blockquote>
-<pre><code class="language-shell">$ kubectl api-versions | grep admissionregistration
-admissionregistration.k8s.io/v1alpha1
-admissionregistration.k8s.io/v1beta1
+<p>OPA是一种轻量级的通用策略引擎，可以与您的服务共存。您可以将OPA集成为边车，主机级守护程序或库。</p>
+
+<p>服务通过执行*查询*将策略决策卸载到OPA 。OPA评估策略和数据以生成查询结果（将其发送回客户端）。策略使用高级声明性语言编写，可以通过文件系统或定义良好的API加载到OPA中。</p>
+</blockquote>
+
+<p>现在opa已经内置在mixer中(istio 1.0.4),可以为我们提供了一种mixer之外的认证模式:</p>
+
+<p><img src="https://tangxusc.github.io/blog/post/迈向istio/9-opa授权/opa.png"/></p>
+
+<h2 id="流程图">流程图</h2>
+
+<pre><code class="language-flow">start=&gt;start: 请求 
+end=&gt;end: 结束 
+gateway=&gt;operation: gateway
+target=&gt;operation: 目标服务
+gateway=&gt;operation: gateway
+out401=&gt;inputoutput: 返回401
+out200=&gt;inputoutput: 返回200
+opa认证=&gt;subroutine: opa认证 
+mixer=&gt;operation: mixer-check 
+认证服务=&gt;condition: 认证服务 
+
+start-&gt;gateway-&gt;mixer-&gt;opa认证-&gt;认证服务
+认证服务(no)-&gt;out401
+认证服务(yes)-&gt;target-&gt;out200
 </code></pre>
 
-<p>启用自动注入:</p>
+<h2 id="istio中的-rule-handler-instance">istio中的<code>rule</code>/<code>handler</code>/<code>instance</code></h2>
 
-<pre><code class="language-shell">$ kubectl label namespace default istio-injection=enabled
+<p>在istio中我们需要理解<code>rule</code> <code>handler</code> <code>instance</code>这三个对象,这里我简要说明一下这三个对象</p>
+
+<h3 id="handler">handler</h3>
+
+<blockquote>
+<p>适配器封装了 Mixer 和特定外部基础设施后端进行交互的必要接口，例如 <a href="https://prometheus.io/">Prometheus</a> 或者 <a href="https://cloud.google.com/logging">Stackdriver</a>。各种适配器都需要参数配置才能工作。例如日志适配器可能需要 IP 地址和端口来进行日志的输出。</p>
+</blockquote>
+
+<p>说白了,handler也就是一个适配器模式做成的小的服务,通过此服务对接各种的后端.</p>
+
+<h3 id="instance">instance</h3>
+
+<blockquote>
+<p>配置实例将请求中的属性映射成为适配器的输入。</p>
+</blockquote>
+
+<p>在isito中,mixer将请求的所有信息都看做属性,那么属性和hander输入参数之间的映射关系,则由instance维护</p>
+
+<h3 id="rule">rule</h3>
+
+<blockquote>
+<p>规则用于指定使用特定实例配置调用某一 Handler 的时机。</p>
+</blockquote>
+
+<p>规则就是用于告诉istio,什么时候,什么条件下,调用那个instance完成参数转换,然后输入到handler中.</p>
+
+<p>在清楚了这些地方以后,我们拉开大幕,开始我们的配置.</p>
+
+<h2 id="构建认证镜像">构建认证镜像</h2>
+
+<p><code>auth.go</code></p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;log&quot;
+	&quot;net/http&quot;
+	&quot;os&quot;
+)
+
+func main() {
+	http.HandleFunc(&quot;/index&quot;, index)
+	http.HandleFunc(&quot;/auth&quot;, authHandler)
+	serve := http.ListenAndServe(&quot;0.0.0.0:8090&quot;, nil)
+	if serve != nil {
+		log.Fatalf(&quot;启动失败,%v&quot;, serve)
+	} else {
+		fmt.Fprintf(os.Stdout, &quot;启动成功&quot;)
+	}
+}
+
+func authHandler(writer http.ResponseWriter, request *http.Request) {
+	fmt.Printf(&quot;authHandler请求begin\n&quot;)
+	for key, value := range request.Form {
+		fmt.Printf(&quot;请求参数 [%s]:%s \n&quot;, key, value)
+	}
+	for key, value := range request.Header {
+		fmt.Printf(&quot;header参数 [%s]:%s \n&quot;, key, value)
+	}
+	writer.WriteHeader(401)
+	fmt.Fprintf(writer, &quot;%s&quot;, &quot;401&quot;)
+	fmt.Printf(&quot;authHandler请求end\n&quot;)
+}
+
+func index(writer http.ResponseWriter, request *http.Request) {
+	fmt.Printf(&quot;index请求begin\n&quot;)
+	for key, value := range request.Form {
+		fmt.Printf(&quot;请求参数 [%s]:%s \n&quot;, key, value)
+	}
+	for key, value := range request.Header {
+		fmt.Printf(&quot;header参数 [%s]:%s \n&quot;, key, value)
+	}
+	fmt.Fprintf(writer, &quot;%s&quot;, &quot;index&quot;)
+	fmt.Printf(&quot;index请求end\n&quot;)
+
+}
 </code></pre>
-</blockquote></li>
-</ol>
+
+<p>构建镜像:</p>
+
+<pre><code class="language-shell">$ go build auth.go
+$ docker build -t auth:go-1 .
+</code></pre>
+
+<h2 id="部署k8s的服务">部署k8s的服务</h2>
+
+<p><code>k8s.yaml</code></p>
+
+<pre><code class="language-yaml">#记得开启自动注入
+#kubectl label namespace test istio-injection=enabled
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: target
+ namespace: test
+ labels:
+   app: target
+   version: v1
+spec:
+ template:
+    metadata:
+     labels:
+       app: target
+       version: v1
+    spec:
+     containers:
+     - name: target
+       image: service-proxy:go-1
+       ports:
+       - containerPort: 8090
+         name: http
+         protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: target
+  namespace: test
+spec:
+  selector:
+    app: target
+  ports:
+    - port: 80
+      name: http #一定注意命名
+      protocol: TCP
+      targetPort: 8090
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: auth
+ namespace: test
+ labels:
+   app: auth
+   version: v1
+spec:
+ template:
+    metadata:
+     labels:
+       app: auth
+       version: v1
+    spec:
+     containers:
+     - name: auth
+       image: auth:go-1
+       ports:
+       - containerPort: 8090
+         name: http
+         protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: auth
+  namespace: test
+spec:
+  selector:
+    app: auth
+  ports:
+    - port: 80
+      name: http #一定注意命名
+      protocol: TCP
+      targetPort: 8090
+</code></pre>
+
+<h3 id="在k8s中部署服务">在k8s中部署服务</h3>
+
+<pre><code class="language-shell">$ kubectl create ns test
+$ kubectl label namespace test istio-injection=enabled
+$ kubectl apply -f k8s.yaml -n test
+</code></pre>
+
+<h3 id="配置路由">配置路由</h3>
+
+<p><code>router.yaml</code></p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: target
+  namespace: test
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - &quot;*&quot;
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: target
+  namespace: test
+spec:
+  hosts:
+  - &quot;*&quot;
+  gateways:
+  - target
+  http:
+  - match:
+    - uri:
+        prefix: /target/
+    rewrite:
+      uri: &quot;/&quot;
+    route:
+    - destination:
+       host: target
+       subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: target
+  namespace: test
+spec:
+  host: target
+  subsets:
+  - name: v1
+    labels:
+      app: target
+      version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: auth
+  namespace: test
+spec:
+  hosts:
+  - &quot;*&quot;
+  gateways:
+  - target
+  http:
+  - match:
+    - uri:
+        prefix: /auth/
+    rewrite:
+      uri: &quot;/&quot;
+    route:
+    - destination:
+       host: auth
+       subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: auth
+  namespace: test
+spec:
+  host: auth
+  subsets:
+  - name: v1
+    labels:
+      app: auth
+      version: v1
+</code></pre>
+
+<p>可以看到这里的配置和以前并没有太多的变化,只是新增了一个auth的服务</p>
+
+<h3 id="部署opa认证">部署opa认证</h3>
+
+<p><code>auth.yaml</code></p>
+
+<pre><code class="language-yaml">---
+apiVersion: &quot;config.istio.io/v1alpha2&quot;
+kind: authorization
+metadata:
+  name: auth
+  namespace: test
+spec:
+ subject:
+   user: destination.service
+   groups: destination.service
+   properties:
+    iss: destination.service
+ action:
+   namespace: destination.namespace | &quot;default&quot;
+   service: destination.service | &quot;&quot;
+   path: request.path | &quot;/&quot;
+   method: request.method | &quot;post&quot;
+   properties:
+     version: destination.name | &quot;&quot;
+---
+apiVersion: config.istio.io/v1alpha2
+kind: opa
+metadata:
+  name: handler
+  namespace: test
+spec:
+  policy:
+    - |+
+      package authz
+      default allow=false
+      allow = true {
+       http.send({&quot;method&quot;: &quot;GET&quot;, &quot;url&quot;: &quot;http://auth.test.svc.cluster.local/auth?a=1&quot;,&quot;body&quot;: {&quot;a&quot;: &quot;1&quot; } } , output)
+        output.status_code=200
+      }
+  checkMethod: &quot;data.authz.allow&quot;
+  failClose: true
+---
+apiVersion: config.istio.io/v1alpha2
+kind: rule
+metadata:
+  name: authrule
+  namespace: test
+spec:
+  match: destination.service == &quot;target.test.svc.cluster.local&quot;
+  actions:
+  - handler: handler.opa.test
+    instances:
+    - auth.authorization.test
+</code></pre>
+
+<p>在<code>kind: opa</code>中,我们使用了opa的一个内置函数 http.send()发送一个请求到auth服务进行认证,如果auth返回200则标示认证成功,如果返回其他状态码则标示认证失败.</p>
+
+<blockquote>
+<p>http.send()释义</p>
+
+<p><code>http.send</code>执行HTTP请求并返回响应。<code>request</code>是一个包含键的对象<code>method</code>，<code>url</code>也可以<code>body</code>是<code>enable_redirect</code>和<code>headers</code>。例如，<code>http.send({&quot;method&quot;: &quot;get&quot;, &quot;url&quot;: &quot;http://www.openpolicyagent.org/&quot;, &quot;headers&quot;: {&quot;X-Foo&quot;:&quot;bar&quot;, &quot;X-Opa&quot;: &quot;rules&quot;}}, output)</code>。<code>output</code>为含有键的对象<code>status</code>，<code>status_code</code>并且<code>body</code>它们分别代表HTTP状态，状态码和应答体。样本输出，<code>{&quot;status&quot;: &quot;200 OK&quot;, &quot;status_code&quot;: 200, &quot;body&quot;: null</code>}。默认情况下，不会启用http重定向。要启用，请设置<code>enable_redirect</code>为<code>true</code>。</p>
+</blockquote>
+
+<h2 id="测试">测试</h2>
+
+<pre><code class="language-shell">$ curl 网关地址/target/index -v
+#返回 401
+</code></pre>
+
+<h2 id="注意">注意</h2>
+
+<ul>
+<li>jwt可以配合使用,以实现认证授权</li>
+<li>opa使用<code>rego</code>语言进行处理,<strong>不过这语言很魔性</strong></li>
+<li>这里链路有3跳,网关&gt;mixer&gt;认证,性能是有一定损失的(不过不大,很多人可能又要逼逼了,不过逼逼的人恰好暴露了自己的目光短浅)</li>
+<li>具体的业务服务在应用此模式后,不再管权限了,那么每个到服务的请求都应该进行处理</li>
+<li>在自己做测试的时候,请多<strong>注意多观察日志</strong>,istio的问题不怎么好排查</li>
+<li><strong>认证服务一定只有一个认证接口,不要有其他接口</strong>,因为访问其他接口也会进行一次认证,多了一跳链路</li>
+<li>推荐<strong>event bus</strong>方式协同</li>
+<li>TODO: 现在的示例中,我们是直接访问的auth的服务,没有解析instance中的参数,需要自行测试参数解析</li>
+</ul>
+
+<h2 id="清理">清理</h2>
+
+<pre><code class="language-shell">$ kubectl delete namespace/test
+</code></pre>
               
             </div>
           </div>
@@ -389,7 +671,7 @@ admissionregistration.k8s.io/v1beta1
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/" data-tooltip="迈向istio-安装">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-8-jwt%E8%AE%A4%E8%AF%81/" data-tooltip="迈向istio-8 jwt认证">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -397,7 +679,7 @@ admissionregistration.k8s.io/v1beta1
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/" data-tooltip="Controller manager高可用实现方式">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/" data-tooltip="迈向istio-安装">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -457,7 +739,7 @@ admissionregistration.k8s.io/v1beta1
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/" data-tooltip="迈向istio-安装">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-8-jwt%E8%AE%A4%E8%AF%81/" data-tooltip="迈向istio-8 jwt认证">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -465,7 +747,7 @@ admissionregistration.k8s.io/v1beta1
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/" data-tooltip="Controller manager高可用实现方式">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/" data-tooltip="迈向istio-安装">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -811,9 +1093,9 @@ $(document).ready(function() {
     
       <script>
         var disqus_config = function () {
-          this.page.url = 'https:\/\/tangxusc.github.io\/blog\/2019\/04\/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95\/';
+          this.page.url = 'https:\/\/tangxusc.github.io\/blog\/2019\/04\/%E8%BF%88%E5%90%91istio-9-opa%E6%8E%88%E6%9D%83\/';
           
-            this.page.identifier = '\/2019\/04\/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95\/'
+            this.page.identifier = '\/2019\/04\/%E8%BF%88%E5%90%91istio-9-opa%E6%8E%88%E6%9D%83\/'
           
         };
         (function() {

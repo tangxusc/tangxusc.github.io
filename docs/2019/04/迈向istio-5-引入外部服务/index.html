@@ -7,20 +7,38 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="">
-<meta name="description" content="">
+<meta name="keywords" content="istio">
+<meta name="description" content="在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.">
 
 
-<meta property="og:description" content="">
-<meta property="og:type" content="website">
-<meta property="og:title" content="苏连云的博客">
-<meta name="twitter:title" content="苏连云的博客">
-<meta property="og:url" content="https://tangxusc.github.io/blog/">
-<meta property="twitter:url" content="https://tangxusc.github.io/blog/">
+<meta property="og:description" content="在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="迈向istio-5 引入外部服务">
+<meta name="twitter:title" content="迈向istio-5 引入外部服务">
+<meta property="og:url" content="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/">
+<meta property="twitter:url" content="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/">
 <meta property="og:site_name" content="苏连云的博客">
-<meta property="og:description" content="">
-<meta name="twitter:description" content="">
+<meta property="og:description" content="在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.">
+<meta name="twitter:description" content="在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.">
 <meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-04-01T14:15:59">
+  
+  
+    <meta property="article:modified_time" content="2019-04-01T14:15:59">
+  
+  
+  
+    
+      <meta property="article:section" content="istio">
+    
+  
+  
+    
+      <meta property="article:tag" content="istio">
+    
+  
 
 
 <meta name="twitter:card" content="summary">
@@ -39,16 +57,14 @@
   <meta property="twitter:image" content="https://tangxusc.github.io/blog/photo.png">
 
 
-    <title>苏连云的博客</title>
+    <title>迈向istio-5 引入外部服务</title>
 
     <link rel="icon" href="https://tangxusc.github.io/blog/favicon.png">
     
-      <link rel="alternate" type="application/rss+xml" title="RSS" href="https://tangxusc.github.io/blog/index.xml">
-    
 
     
 
-    <link rel="canonical" href="https://tangxusc.github.io/blog/">
+    <link rel="canonical" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -68,7 +84,7 @@
 
   <body>
     <div id="blog">
-      <header id="header" data-behavior="1">
+      <header id="header" data-behavior="4">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
     <a class="header-title-link" href="https://tangxusc.github.io/blog/">苏连云的博客</a>
@@ -88,7 +104,7 @@
   
 </header>
 
-      <nav id="sidebar" data-behavior="1">
+      <nav id="sidebar" data-behavior="4">
   <div class="sidebar-container">
     
       <div class="sidebar-profile">
@@ -178,35 +194,20 @@
 
       
 
-      <div id="main" data-behavior="1"
+      <div id="main" data-behavior="4"
         class="
                hasCoverMetaIn
                ">
-        <section class="postShorten-group main-content-wrap">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
           
           
-            
+            <div class="post-header main-content-wrap text-left">
   
-    
-      
-        
-      
-    
+    <h1 class="post-title" itemprop="headline">
+      迈向istio-5 引入外部服务
+    </h1>
   
-
-
   
-
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-1-%E7%A4%BA%E4%BE%8B/">
-          迈向istio-1 示例
-        </a>
-      </h1>
-      
   <div class="postShorten-meta post-meta">
     
       <time itemprop="datePublished" datetime="2019-04-01T14:15:59&#43;08:00">
@@ -226,404 +227,250 @@
 
   </div>
 
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        <p>在上一节中我们已经成功的安装了istio的各个组件,接下来我们一起来运行一个nginx,体验一下istio的功能</p>
-      
-      <p>
-        <a href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-1-%E7%A4%BA%E4%BE%8B/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
+</div>
           
-            
-  
-    
-      
-        
-      
-    
-  
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.</p>
 
+<h2 id="服务规划">服务规划</h2>
 
-  
+<p><img src="https://tangxusc.github.io/blog/post/迈向istio/5-引入外部服务/外部服务.png"/></p>
 
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-10-%E8%87%AA%E5%AE%9A%E4%B9%89mixer-adapter/">
-          迈向istio-10 自定义mixer adapter
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-04-01T14:15:59&#43;08:00">
-        
-  April 1, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        <p>本节我们将自定义一个adapter,adapter和mixer通信使用grpc,所以本节需要对grpc和mixer的adapter有一定的了解.</p>
-
-<p>基于的环境:</p>
+<p>注意:istio-egressGateway这个服务是路由的出口,这样做有几个优点</p>
 
 <ul>
-<li>istio 1.0.4</li>
-<li>golang 1.11(go module)</li>
-<li>goland (或者其他go IDE)</li>
+<li><p>企业通过统一的ingressGateway控制流量的进入</p></li>
+
+<li><p>通过EgressGateway控制流量的总体出</p></li>
 </ul>
-      
-      <p>
-        <a href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-10-%E8%87%AA%E5%AE%9A%E4%B9%89mixer-adapter/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
 
-          
-            
-  
-    
-      
-        
-      
-    
-  
+<p>这样更有利于网络管理人员进行统一的流量控制和安全检查.</p>
 
+<p>但是这也会引起几个问题,希望各位注意:</p>
 
-  
+<ul>
+<li>IngressGateway需要高可用,并且流量较大</li>
+<li>EgressGateway外部出口流量一样不会小,这个时候很考研公司的基础网络环境</li>
+</ul>
 
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/">
-          迈向istio-11 升级到1.1.2
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-04-01T14:15:59&#43;08:00">
-        
-  April 1, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        <p>istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本为<code>企业级就绪</code></p>
-      
-      <p>
-        <a href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-          
-            
-  
-    
-      
-        
-      
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-2-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/">
-          迈向istio-2 服务路由
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-04-01T14:15:59&#43;08:00">
-        
-  April 1, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        <p>在上一节中,我们使用nginx开启了我们istio的第一个应用,现在我们加入另外一个服务tomcat</p>
+<p>那么在我们这一节的示例中我们引入 <code>www.baidu.com</code> 这个服务来做我们的测试</p>
 
 <blockquote>
-<p>本节内容基于上节内容,请先运行上一节的yaml文件,然后再体验本节内容</p>
+<p>注意:此节基于上节部署的服务</p>
 </blockquote>
-      
-      <p>
-        <a href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-2-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
 
-          
+<h3 id="百度-baidu-服务">百度(baidu)服务</h3>
+
+<p>istio.yaml</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: baidu
+  namespace: test
+spec:
+  hosts:
+  - &quot;www.baidu.com&quot;
+  location: MESH_EXTERNAL
+#  location: MESH_INTERNAL
+  ports:
+  - number: 80
+    name: http
+    protocol: HTTP
+  resolution: DNS
+#  endpoints:
+#  - address: www.baidu.com
+#    ports:
+#      http: 80
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-egressgateway
+  namespace: test
+spec:
+  selector:
+    istio: egressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - &quot;*&quot;
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: gateway-routing
+  namespace: test
+spec:
+  hosts:
+  - www.baidu.com
+  gateways:
+  - mesh
+  - istio-egressgateway
+  http:
+  - match:
+    - port: 80
+      gateways:
+      - mesh
+    route:
+    - destination:
+        host: istio-egressgateway.istio-system.svc.cluster.local
+  - match:
+    - port: 80
+      gateways:
+      - istio-egressgateway
+    route:
+    - destination:
+        host: www.baidu.com
+</code></pre>
+
+<p>将baidu服务部署:</p>
+
+<pre><code class="language-shell">$ istioctl create -f istio.yaml -n test
+</code></pre>
+
+<h3 id="验证服务">验证服务</h3>
+
+<p>使用curl对整个服务链路进行测试:</p>
+
+<pre><code class="language-shell">$ curl 10.108.228.41/proxy/proxy?url=http://target/proxy?url=http://www.baidu.com
+#返回百度首页内容
+</code></pre>
+
+<h2 id="配置说明">配置说明</h2>
+
+<p>istio.yaml内容中最让人疑惑的是怎么转发到egressGateway中的,这里我们需要仔细的看看这个yaml</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: baidu
+  namespace: test
+spec:
+  hosts: #声明hosts
+  - &quot;www.baidu.com&quot;
+  location: MESH_EXTERNAL #声明外部服务是不是k8s里面的服务
+  ports: #声明 协议端口等等
+  - number: 80
+    name: http
+    protocol: HTTP
+  resolution: DNS #声明这个服务怎么去查找具体的ip,怎么去访问
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: gateway-routing
+  namespace: test
+spec:
+  hosts:
+  - www.baidu.com #声明百度域名
+  gateways:
+  - mesh #此virtualService应用到那些gateway,mesh标示所有sidecar(注意是sidecar,不包括网关)
+  - istio-egressgateway #同时也应用到istio-egressgateway这个网关
+  http:
+  - match: #匹配配置,sidecar中所有的面向www.baidu.com:80的都路由到egressgateway
+    - port: 80
+      gateways:
+      - mesh 
+    route:
+    - destination:
+        host: istio-egressgateway.istio-system.svc.cluster.local
+  - match: #同时,网关中面向www.baidu.com:80的都路由到www.baidu.com,由于在ServiceEntry中已经配置了这个域名,所以会被直接应用ServiceEntry的配置
+    - port: 80
+      gateways:
+      - istio-egressgateway
+    route:
+    - destination:
+        host: www.baidu.com
+</code></pre>
+
+<h2 id="清理">清理</h2>
+
+<pre><code class="language-shell">$ kubectl delete namespace/test
+</code></pre>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
             
-  
-    
-      
-        
-      
-    
-  
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/istio/">istio</a>
 
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-3-%E7%BD%91%E5%85%B3/">
-          迈向istio-3 网关
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-04-01T14:15:59&#43;08:00">
-        
-  April 1, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        <p>在上一节中我们已经成功的简单运行了istio的一个路由,也有了一番流量管理的体验,那么很多人都不禁要问,这些配置和yaml是什么意思呢?</p>
-
-<p>那接下来我们基于istio示例中的配置,一点一点的解析这些yaml文件.</p>
-
-<blockquote>
-<p>nginx.yaml中的内容为k8s的yaml文件,再此不做赘述.</p>
-</blockquote>
-      
-      <p>
-        <a href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-3-%E7%BD%91%E5%85%B3/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-          
+                  </div>
+                
+              
             
+            <div class="post-actions-wrap">
   
-    
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/" data-tooltip="迈向istio-4 多服务通信">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/" data-tooltip="迈向istio-6 镜像流量">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
       
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
         
       
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/">
-          迈向istio-4 多服务通信
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
         </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-04-01T14:15:59&#43;08:00">
-        
-  April 1, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        <p>在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;</p>
-
-<p>在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务</p>
-      
-      <p>
-        <a href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-          
-            
-  
-    
-      
-        
-      
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/">
-          迈向istio-5 引入外部服务
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-04-01T14:15:59&#43;08:00">
-        
-  April 1, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        <p>在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.</p>
-      
-      <p>
-        <a href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-          
-          
-  <div class="pagination-bar">
-    <ul class="pagination">
-      
-        
-          <li class="pagination-prev">
-            <a class="btn btn--default btn--small" href="https://tangxusc.github.io/blog/page/3/">
-              <i class="fa fa-angle-left text-base icon-mr"></i>
-              <span>NEWER POSTS</span>
-            </a>
-          </li>
-        
-        
-          <li class="pagination-next">
-            <a class="btn btn--default btn--small" href="https://tangxusc.github.io/blog/page/5/">
-              <span>OLDER POSTS</span>
-              <i class="fa fa-angle-right text-base icon-ml"></i>
-            </a>
-          </li>
-        
-      
-      <li class="pagination-number">page 4 of 14</li>
+      </li>
     </ul>
-  </div>
+  
+</div>
 
-
-        </section>
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
         <footer id="footer" class="main-content-wrap">
   <span class="copyrights">
     &copy; 2019 苏连云. All Rights Reserved
@@ -631,6 +478,66 @@
 </footer>
 
       </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/" data-tooltip="迈向istio-4 多服务通信">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/" data-tooltip="迈向istio-6 镜像流量">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
     </div>
     
     <div id="about">
@@ -929,9 +836,36 @@ $(document).ready(function() {
 </script>
 
 
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/blog\/2019\/04\/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1\/';
+          
+            this.page.identifier = '\/2019\/04\/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
 
 
 
     
   </body>
 </html>
+

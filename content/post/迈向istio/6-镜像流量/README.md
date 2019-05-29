@@ -1,5 +1,5 @@
 ---
-title: "迈向istio-镜像流量"
+title: "迈向istio-6 镜像流量"
 date: 2019-04-01T14:15:59+08:00
 draft: false
 categories:

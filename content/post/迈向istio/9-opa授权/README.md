@@ -1,5 +1,5 @@
 ---
-title: "迈向istio-opa授权"
+title: "迈向istio-9 opa授权"
 date: 2019-04-01T14:15:59+08:00
 draft: false
 categories:

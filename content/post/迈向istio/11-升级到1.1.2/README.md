@@ -278,5 +278,5 @@ $ kubectl get vs
 - [基于位置的负载均衡](https://istio.io/help/ops/traffic-management/locality-load-balancing/)
 - [istio 1.1发行说明](https://istio.io/about/notes/1.1/)
 - [Istio1.1新特性之限制服务可见性](http://www.servicemesher.com/blog/istio-service-visibility/)
-- [新的配置示例](https://tangxusc.github.io/blog/post/迈向istio/11-升级到1.1.2/all.yaml)
+- [新的配置示例](/post/迈向istio/11-升级到1.1.2/all.yaml)
 
