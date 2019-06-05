@@ -95,7 +95,7 @@ publishDir="docs"
   identifier = "qq"
   name = "QQG:59593364"
   pre = "<i class=\"sidebar-button-icon fa fa-lg fa-qq\"></i>"
-  url = "//shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41"
+  url = "https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41"
 
 #[[menu.misc]]
 #  weight = 1
