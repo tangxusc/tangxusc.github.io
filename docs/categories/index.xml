@@ -30,6 +30,15 @@
     </item>
     
     <item>
+      <title>Client</title>
+      <link>https://tangxusc.github.io/blog/categories/client/</link>
+      <pubDate>Mon, 20 May 2019 14:10:08 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/categories/client/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Controller Manager</title>
       <link>https://tangxusc.github.io/blog/categories/controller-manager/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
@@ -95,7 +104,7 @@
     <item>
       <title>Etcd</title>
       <link>https://tangxusc.github.io/blog/categories/etcd/</link>
-      <pubDate>Thu, 25 Apr 2019 16:41:39 +0800</pubDate>
+      <pubDate>Tue, 07 May 2019 14:38:42 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/categories/etcd/</guid>
       <description></description>
@@ -140,7 +149,7 @@
     <item>
       <title>Golang</title>
       <link>https://tangxusc.github.io/blog/categories/golang/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <pubDate>Wed, 15 May 2019 09:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/categories/golang/</guid>
       <description></description>
@@ -176,7 +185,7 @@
     <item>
       <title>Istio</title>
       <link>https://tangxusc.github.io/blog/categories/istio/</link>
-      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      <pubDate>Tue, 28 May 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/categories/istio/</guid>
       <description></description>
@@ -212,7 +221,7 @@
     <item>
       <title>K8s</title>
       <link>https://tangxusc.github.io/blog/categories/k8s/</link>
-      <pubDate>Thu, 25 Apr 2019 13:56:22 +0800</pubDate>
+      <pubDate>Thu, 23 May 2019 15:50:45 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/categories/k8s/</guid>
       <description></description>
@@ -224,6 +233,15 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/categories/kubeadm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Kubelet</title>
+      <link>https://tangxusc.github.io/blog/categories/kubelet/</link>
+      <pubDate>Tue, 14 May 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/categories/kubelet/</guid>
       <description></description>
     </item>
     
@@ -260,6 +278,15 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/categories/module/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Networkpolicy</title>
+      <link>https://tangxusc.github.io/blog/categories/networkpolicy/</link>
+      <pubDate>Thu, 23 May 2019 15:50:45 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/categories/networkpolicy/</guid>
       <description></description>
     </item>
     
@@ -359,6 +386,24 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/categories/ubuntu/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Volume</title>
+      <link>https://tangxusc.github.io/blog/categories/volume/</link>
+      <pubDate>Mon, 20 May 2019 15:34:24 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/categories/volume/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>代码无关</title>
+      <link>https://tangxusc.github.io/blog/categories/%E4%BB%A3%E7%A0%81%E6%97%A0%E5%85%B3/</link>
+      <pubDate>Mon, 20 May 2019 09:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/categories/%E4%BB%A3%E7%A0%81%E6%97%A0%E5%85%B3/</guid>
       <description></description>
     </item>
     

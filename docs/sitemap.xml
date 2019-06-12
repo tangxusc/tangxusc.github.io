@@ -3,6 +3,101 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/</loc>
+    <lastmod>2019-05-28T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/</loc>
+    <lastmod>2019-05-22T14:40:58+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2019-05-20T15:34:24+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/kubebuilder%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2019-05-20T14:10:08+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/</loc>
+    <lastmod>2019-05-20T09:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/code-generator%E4%BD%BF%E7%94%A8/</loc>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/</loc>
+    <lastmod>2019-05-16T16:13:14+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/</loc>
+    <lastmod>2019-05-16T16:13:13+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/</loc>
+    <lastmod>2019-05-16T16:13:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-4/</loc>
+    <lastmod>2019-05-16T16:13:11+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-3/</loc>
+    <lastmod>2019-05-16T16:13:10+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-2/</loc>
+    <lastmod>2019-05-16T16:13:09+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-1/</loc>
+    <lastmod>2019-05-16T16:13:08+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/client-go-informer%E6%9C%BA%E5%88%B6/</loc>
+    <lastmod>2019-05-16T15:13:08+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/client-go%E4%BD%BF%E7%94%A8/</loc>
+    <lastmod>2019-05-15T15:13:08+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/golang-package%E5%92%8Cmodule%E8%A7%A3%E6%9E%90/</loc>
+    <lastmod>2019-05-15T09:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/kubelet%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/</loc>
+    <lastmod>2019-05-14T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/05/etcd-lock%E8%AF%A6%E8%A7%A3/</loc>
+    <lastmod>2019-05-07T14:38:42+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/blog/2019/04/etcd%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/</loc>
     <lastmod>2019-04-25T16:41:39+08:00</lastmod>
   </url>
@@ -13,67 +108,67 @@
   </url>
   
   <url>
+    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-0-%E5%AE%89%E8%A3%85/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-1-%E7%A4%BA%E4%BE%8B/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-10-%E8%87%AA%E5%AE%9A%E4%B9%89mixer-adapter/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/</loc>
     <lastmod>2019-04-01T14:15:59+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-jwt%E8%AE%A4%E8%AF%81/</loc>
+    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-2-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/</loc>
     <lastmod>2019-04-01T14:15:59+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-opa%E6%8E%88%E6%9D%83/</loc>
+    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-3-%E7%BD%91%E5%85%B3/</loc>
     <lastmod>2019-04-01T14:15:59+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-tls/</loc>
+    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/</loc>
     <lastmod>2019-04-01T14:15:59+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/</loc>
+    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/</loc>
     <lastmod>2019-04-01T14:15:59+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/</loc>
+    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/</loc>
     <lastmod>2019-04-01T14:15:59+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/</loc>
+    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-7-tls/</loc>
     <lastmod>2019-04-01T14:15:59+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/</loc>
+    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-8-jwt%E8%AE%A4%E8%AF%81/</loc>
     <lastmod>2019-04-01T14:15:59+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E7%A4%BA%E4%BE%8B/</loc>
-    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E7%BD%91%E5%85%B3/</loc>
-    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E8%87%AA%E5%AE%9A%E4%B9%89mixer-adapter/</loc>
+    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-9-opa%E6%8E%88%E6%9D%83/</loc>
     <lastmod>2019-04-01T14:15:59+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95/</loc>
-    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/</loc>
     <lastmod>2019-04-01T14:15:59+08:00</lastmod>
   </url>
   
@@ -303,16 +398,6 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/blog/2019/03/%E5%82%BB%E7%93%9C%E5%BC%8F%E7%9A%84-go-modules-%E7%9A%84%E8%AE%B2%E8%A7%A3%E5%92%8C%E4%BB%A3%E7%A0%81/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tangxusc.github.io/blog/2019/03/%E5%86%8D%E6%8E%A2go-modules%E4%BD%BF%E7%94%A8%E4%B8%8E%E7%BB%86%E8%8A%82/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://tangxusc.github.io/blog/2019/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
   </url>
@@ -388,6 +473,18 @@
   </url>
   
   <url>
+    <loc>https://tangxusc.github.io/blog/tags/adapter/</loc>
+    <lastmod>2019-05-28T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/affinity/</loc>
+    <lastmod>2019-05-22T14:40:58+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/blog/tags/annotation/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
@@ -431,6 +528,24 @@
   <url>
     <loc>https://tangxusc.github.io/blog/categories/cicd/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/categories/client/</loc>
+    <lastmod>2019-05-20T14:10:08+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/client-go/</loc>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/code-generator/</loc>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -520,13 +635,13 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/tags/etcd/</loc>
-    <lastmod>2019-04-25T16:41:39+08:00</lastmod>
+    <lastmod>2019-05-07T14:38:42+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/blog/categories/etcd/</loc>
-    <lastmod>2019-04-25T16:41:39+08:00</lastmod>
+    <lastmod>2019-05-07T14:38:42+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -539,6 +654,12 @@
   <url>
     <loc>https://tangxusc.github.io/blog/categories/fluentd/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/gc/</loc>
+    <lastmod>2019-05-14T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -586,13 +707,13 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/tags/golang/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <lastmod>2019-05-15T09:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/blog/categories/golang/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <lastmod>2019-05-15T09:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -627,6 +748,12 @@
   </url>
   
   <url>
+    <loc>https://tangxusc.github.io/blog/tags/informer/</loc>
+    <lastmod>2019-05-16T15:13:08+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/blog/tags/install/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
@@ -646,13 +773,13 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/tags/istio/</loc>
-    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+    <lastmod>2019-05-28T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/blog/categories/istio/</loc>
-    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+    <lastmod>2019-05-28T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -694,13 +821,13 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/tags/k8s/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/blog/categories/k8s/</loc>
-    <lastmod>2019-04-25T13:56:22+08:00</lastmod>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -717,8 +844,32 @@
   </url>
   
   <url>
+    <loc>https://tangxusc.github.io/blog/tags/kubebuilder/</loc>
+    <lastmod>2019-05-20T14:10:08+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/kubelet/</loc>
+    <lastmod>2019-05-14T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/categories/kubelet/</loc>
+    <lastmod>2019-05-14T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/local-pv/</loc>
+    <lastmod>2019-05-20T15:34:24+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/blog/tags/lock/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <lastmod>2019-05-07T14:38:42+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -760,13 +911,25 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/tags/module/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <lastmod>2019-05-15T09:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/blog/categories/module/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/networkpolicy/</loc>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/categories/networkpolicy/</loc>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -796,7 +959,7 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/post/</loc>
-    <lastmod>2019-04-25T16:41:39+08:00</lastmod>
+    <lastmod>2019-05-28T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -910,7 +1073,7 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/tags/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <lastmod>2019-05-28T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -927,7 +1090,31 @@
   </url>
   
   <url>
+    <loc>https://tangxusc.github.io/blog/tags/volume/</loc>
+    <lastmod>2019-05-20T15:34:24+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/categories/volume/</loc>
+    <lastmod>2019-05-20T15:34:24+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/blog/1/01/adapter.my.config/</loc>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/tags/%E4%BB%A3%E7%A0%81%E6%97%A0%E5%85%B3/</loc>
+    <lastmod>2019-05-20T09:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/blog/categories/%E4%BB%A3%E7%A0%81%E6%97%A0%E5%85%B3/</loc>
+    <lastmod>2019-05-20T09:15:59+08:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -956,7 +1143,7 @@
   
   <url>
     <loc>https://tangxusc.github.io/blog/</loc>
-    <lastmod>2019-04-25T16:41:39+08:00</lastmod>
+    <lastmod>2019-05-28T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   

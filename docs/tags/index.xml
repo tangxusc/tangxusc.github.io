@@ -6,10 +6,28 @@
     <description>Recent content in Tags on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 28 May 2019 14:15:59 +0800</lastBuildDate>
     
 	<atom:link href="https://tangxusc.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Adapter</title>
+      <link>https://tangxusc.github.io/blog/tags/adapter/</link>
+      <pubDate>Tue, 28 May 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/adapter/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Affinity</title>
+      <link>https://tangxusc.github.io/blog/tags/affinity/</link>
+      <pubDate>Wed, 22 May 2019 14:40:58 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/affinity/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Annotation</title>
@@ -44,6 +62,24 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/cicd/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Client Go</title>
+      <link>https://tangxusc.github.io/blog/tags/client-go/</link>
+      <pubDate>Fri, 17 May 2019 11:13:08 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/client-go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Code Generator</title>
+      <link>https://tangxusc.github.io/blog/tags/code-generator/</link>
+      <pubDate>Fri, 17 May 2019 11:13:08 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/code-generator/</guid>
       <description></description>
     </item>
     
@@ -113,7 +149,7 @@
     <item>
       <title>Etcd</title>
       <link>https://tangxusc.github.io/blog/tags/etcd/</link>
-      <pubDate>Thu, 25 Apr 2019 16:41:39 +0800</pubDate>
+      <pubDate>Tue, 07 May 2019 14:38:42 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/etcd/</guid>
       <description></description>
@@ -125,6 +161,15 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/fluentd/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Gc</title>
+      <link>https://tangxusc.github.io/blog/tags/gc/</link>
+      <pubDate>Tue, 14 May 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/gc/</guid>
       <description></description>
     </item>
     
@@ -167,7 +212,7 @@
     <item>
       <title>Golang</title>
       <link>https://tangxusc.github.io/blog/tags/golang/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <pubDate>Wed, 15 May 2019 09:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/golang/</guid>
       <description></description>
@@ -201,6 +246,15 @@
     </item>
     
     <item>
+      <title>Informer</title>
+      <link>https://tangxusc.github.io/blog/tags/informer/</link>
+      <pubDate>Thu, 16 May 2019 15:13:08 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/informer/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Install</title>
       <link>https://tangxusc.github.io/blog/tags/install/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
@@ -221,7 +275,7 @@
     <item>
       <title>Istio</title>
       <link>https://tangxusc.github.io/blog/tags/istio/</link>
-      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      <pubDate>Tue, 28 May 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/istio/</guid>
       <description></description>
@@ -257,7 +311,7 @@
     <item>
       <title>K8s</title>
       <link>https://tangxusc.github.io/blog/tags/k8s/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <pubDate>Thu, 23 May 2019 15:50:45 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/k8s/</guid>
       <description></description>
@@ -273,9 +327,36 @@
     </item>
     
     <item>
+      <title>Kubebuilder</title>
+      <link>https://tangxusc.github.io/blog/tags/kubebuilder/</link>
+      <pubDate>Mon, 20 May 2019 14:10:08 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/kubebuilder/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Kubelet</title>
+      <link>https://tangxusc.github.io/blog/tags/kubelet/</link>
+      <pubDate>Tue, 14 May 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/kubelet/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Local Pv</title>
+      <link>https://tangxusc.github.io/blog/tags/local-pv/</link>
+      <pubDate>Mon, 20 May 2019 15:34:24 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/local-pv/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Lock</title>
       <link>https://tangxusc.github.io/blog/tags/lock/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <pubDate>Tue, 07 May 2019 14:38:42 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/lock/</guid>
       <description></description>
@@ -311,9 +392,18 @@
     <item>
       <title>Module</title>
       <link>https://tangxusc.github.io/blog/tags/module/</link>
-      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      <pubDate>Wed, 15 May 2019 09:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/module/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Networkpolicy</title>
+      <link>https://tangxusc.github.io/blog/tags/networkpolicy/</link>
+      <pubDate>Thu, 23 May 2019 15:50:45 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/networkpolicy/</guid>
       <description></description>
     </item>
     
@@ -431,6 +521,24 @@
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/blog/tags/ubuntu/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Volume</title>
+      <link>https://tangxusc.github.io/blog/tags/volume/</link>
+      <pubDate>Mon, 20 May 2019 15:34:24 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/volume/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>代码无关</title>
+      <link>https://tangxusc.github.io/blog/tags/%E4%BB%A3%E7%A0%81%E6%97%A0%E5%85%B3/</link>
+      <pubDate>Mon, 20 May 2019 09:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/tags/%E4%BB%A3%E7%A0%81%E6%97%A0%E5%85%B3/</guid>
       <description></description>
     </item>
     

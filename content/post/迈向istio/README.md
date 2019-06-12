@@ -1,5 +1,5 @@
 ---
-title: "迈向istio-安装"
+title: "迈向istio-0 安装"
 date: 2019-04-01T14:15:59+08:00
 draft: false
 categories:
@@ -28,9 +28,6 @@ export PATH=$PWD/bin:$PATH
 
 ```shell
 wget https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz
-tar zxvf helm-v2.11.0-linux-amd64.tar.gz
-#或者使用我给你下载的
-wget https://gitee.com/tanx/kubernetes-test/raw/master/helm/helm-v2.11.0-linux-amd64.tar
 tar zxvf helm-v2.11.0-linux-amd64.tar.gz
 
 export PATH=$PWD/linux-amd64/:$PATH

@@ -6,10 +6,180 @@
     <description>Recent content in K8s on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 25 Apr 2019 13:56:22 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 23 May 2019 15:50:45 +0800</lastBuildDate>
     
 	<atom:link href="https://tangxusc.github.io/blog/categories/k8s/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>NetworkPolicy介绍</title>
+      <link>https://tangxusc.github.io/blog/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Thu, 23 May 2019 15:50:45 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/</guid>
+      <description>&lt;p&gt;在kubernetes中的所有的pod在默认情况下,网络都是互通的,pod接收来自任何来源的流量.&lt;/p&gt;
+
+&lt;p&gt;那么我们如何限制pod的网络通信,防止非法访问呢?&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>亲和性调度</title>
+      <link>https://tangxusc.github.io/blog/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/</link>
+      <pubDate>Wed, 22 May 2019 14:40:58 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/</guid>
+      <description>&lt;p&gt;在kubernetes中对pod的调度由调度控制器负责,在调度的时候有很大的随机性.&lt;/p&gt;
+
+&lt;p&gt;但是我们很多时候需要容器更多的分散在不同的node上,有一些情况又需要尽量集中在一起,减少网络开销&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Local Persistent Volume 介绍</title>
+      <link>https://tangxusc.github.io/blog/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Mon, 20 May 2019 15:34:24 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/</guid>
+      <description>&lt;p&gt;在kubernetes中,存储一直是一个较为头疼的问题,在面对持久化存储,我们可以选择各种文件系统,但是对于那些临时存储的文件,我们则需要一种本地存储的能力,在kubernetes1.14中为我们提供了一种本地存储&lt;code&gt;localPV&lt;/code&gt;,本文将围绕此展开.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>kubebuilder介绍</title>
+      <link>https://tangxusc.github.io/blog/2019/05/kubebuilder%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Mon, 20 May 2019 14:10:08 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/kubebuilder%E4%BB%8B%E7%BB%8D/</guid>
+      <description>&lt;p&gt;在之前的文章中我们讲到了kubernetes的rest api,并使用client-go等客户端来调用api.&lt;/p&gt;
+
+&lt;p&gt;接下来我们将使用到kubernetes为构建controller诞生的专用工具&lt;code&gt;kubebuilder&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>code-generator使用</title>
+      <link>https://tangxusc.github.io/blog/2019/05/code-generator%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Fri, 17 May 2019 11:13:08 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/code-generator%E4%BD%BF%E7%94%A8/</guid>
+      <description>&lt;p&gt;client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>理解kubernetes tools/cache包-7</title>
+      <link>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/</link>
+      <pubDate>Thu, 16 May 2019 16:13:14 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://blog.csdn.net/weixin_39961559/article/details/81948541&#34;&gt;https://blog.csdn.net/weixin_39961559/article/details/81948541&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;本系列深入介绍了informer的原理,这是本系列第七节,也是最后一节&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>理解kubernetes tools/cache包-6</title>
+      <link>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/</link>
+      <pubDate>Thu, 16 May 2019 16:13:13 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://blog.csdn.net/weixin_39961559/article/details/81948239&#34;&gt;https://blog.csdn.net/weixin_39961559/article/details/81948239&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;本系列深入介绍了informer的原理,这是本系列第六节&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>理解kubernetes tools/cache包-5</title>
+      <link>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/</link>
+      <pubDate>Thu, 16 May 2019 16:13:12 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://blog.csdn.net/weixin_39961559/article/details/81946899&#34;&gt;https://blog.csdn.net/weixin_39961559/article/details/81946899&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;本系列深入介绍了informer的原理,这是本系列第五节&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>理解kubernetes tools/cache包-4</title>
+      <link>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-4/</link>
+      <pubDate>Thu, 16 May 2019 16:13:11 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-4/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://blog.csdn.net/weixin_39961559/article/details/81946398&#34;&gt;https://blog.csdn.net/weixin_39961559/article/details/81946398&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;本系列深入介绍了informer的原理,这是本系列第四节&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>理解kubernetes tools/cache包-3</title>
+      <link>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-3/</link>
+      <pubDate>Thu, 16 May 2019 16:13:10 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-3/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://blog.csdn.net/weixin_39961559/article/details/81945559&#34;&gt;https://blog.csdn.net/weixin_39961559/article/details/81945559&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;本系列深入介绍了informer的原理,这是本系列第三节&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>理解kubernetes tools/cache包-2</title>
+      <link>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-2/</link>
+      <pubDate>Thu, 16 May 2019 16:13:09 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-2/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://blog.csdn.net/weixin_39961559/article/details/81940918&#34;&gt;https://blog.csdn.net/weixin_39961559/article/details/81940918&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;本系列深入介绍了informer的原理,这是本系列第二节&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>理解kubernetes tools/cache包-1</title>
+      <link>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-1/</link>
+      <pubDate>Thu, 16 May 2019 16:13:08 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-1/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://blog.csdn.net/weixin_39961559/article/details/81938716&#34;&gt;https://blog.csdn.net/weixin_39961559/article/details/81938716&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;本系列深入介绍了informer的原理,这是本系列第一节&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Client-Go informer机制</title>
+      <link>https://tangxusc.github.io/blog/2019/05/client-go-informer%E6%9C%BA%E5%88%B6/</link>
+      <pubDate>Thu, 16 May 2019 15:13:08 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/client-go-informer%E6%9C%BA%E5%88%B6/</guid>
+      <description>&lt;p&gt;在之前的文章中我们了解了client-go的使用,接下来我们深入的了解一下client-go中的informer机制.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Client Go使用</title>
+      <link>https://tangxusc.github.io/blog/2019/05/client-go%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Wed, 15 May 2019 15:13:08 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/client-go%E4%BD%BF%E7%94%A8/</guid>
+      <description>&lt;p&gt;kubernetes提供了rest api供我们操作集群,针对go语言专门提供了client-go来操作,并且在很多controller中都使用到了client-go,本文将介绍client-go简单使用&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>kubelet垃圾回收机制</title>
+      <link>https://tangxusc.github.io/blog/2019/05/kubelet%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/</link>
+      <pubDate>Tue, 14 May 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/blog/2019/05/kubelet%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/</guid>
+      <description>&lt;p&gt;在k8s中节点会通过docker pull机制获取外部的镜像,那么什么时候清除镜像呢?
+k8s运行的容器又是什么时候清除呢?&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>使用Cfssl生成etcd证书(pem)</title>

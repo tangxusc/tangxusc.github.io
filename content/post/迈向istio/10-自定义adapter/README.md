@@ -1,5 +1,5 @@
 ---
-title: "迈向istio-自定义mixer adapter"
+title: "迈向istio-10 自定义mixer adapter"
 date: 2019-04-01T14:15:59+08:00
 draft: false
 categories:
@@ -131,7 +131,7 @@ $ mkdir -p $GOPATH/src/istio.io/ && cd $GOPATH/src/istio.io/  && git clone https
 
 2. 安装protoc,并安装grpc插件
 
-   安装方式: [grpc安装](https://gitee.com/tanx/kubernetes-test/blob/master/go/grpc/gomod%E6%96%B9%E5%BC%8F%E5%AE%89%E8%A3%85grpc.md)
+   安装方式: [grpc安装](/2019/03/使用go-mod1.11安装grpc/)
 
 2. 编译mixs/mixc
 
@@ -141,11 +141,11 @@ $ mkdir -p $GOPATH/src/istio.io/ && cd $GOPATH/src/istio.io/  && git clone https
 
 2. 安装 k8s
 
-   [使用kubeadm安装ha集群](https://gitee.com/tanx/kubernetes-test/blob/master/kubeadm/kubeadm%E5%AE%89%E8%A3%85HA%E9%9B%86%E7%BE%A4.md) 
+   [使用kubeadm安装ha集群](/2019/03/kubeadm安装ha集群/) 
 
 2. 安装 istio
 
-   [使用helm template 方式安装istio1.04](https://gitee.com/tanx/kubernetes-test/blob/master/%E8%BF%88%E5%90%91istio/README.md) 
+   [使用helm template 方式安装istio1.04](/2019/04/迈向istio-安装/) 
 
 
 ### 初始化项目
@@ -214,7 +214,7 @@ $ go mod tidy
 
 在这里将adapter的依赖和需要替换的包全部编辑好,以免后面引入包失败.
 
-如果对go module 了解的较少,可以参考: [**傻瓜式的 go modules 的讲解和代码.md**](https://gitee.com/tanx/kubernetes-test/blob/master/go/%E5%82%BB%E7%93%9C%E5%BC%8F%E7%9A%84%20go%20modules%20%E7%9A%84%E8%AE%B2%E8%A7%A3%E5%92%8C%E4%BB%A3%E7%A0%81.md) , [**Go模块简介.md**](https://gitee.com/tanx/kubernetes-test/blob/master/go/Go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B.md)
+如果对go module 了解的较少,可以参考: [**go模块简介.md**](/2019/03/go模块简介/) , [**golang-package和module解析.md**](/2019/05/golang-package和module解析/)
 
 ### 创建my.go
 
@@ -659,7 +659,7 @@ spec:
 
 ### 部署测试服务
 
-​	测试服务部署: [nginx服务](https://gitee.com/tanx/kubernetes-test/tree/master/%E8%BF%88%E5%90%91istio/1-istio-%E7%A4%BA%E4%BE%8B)
+​	测试服务部署: [nginx服务](/2019/04/迈向istio-示例/)
 
 ### 部署adapter
 

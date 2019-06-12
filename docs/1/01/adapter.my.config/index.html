@@ -53,8 +53,8 @@ Params  config for my-adapter
 
 
 
-  <meta property="og:image" content="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=640">
-  <meta property="twitter:image" content="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=640">
+  <meta property="og:image" content="https://tangxusc.github.io/blog/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/blog/photo.png">
 
 
     <title>adapter.my.config</title>
@@ -97,7 +97,7 @@ Params  config for my-adapter
     
     
       
-        <img class="header-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=90" alt="Author&#39;s picture" />
+        <img class="header-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
       
     
     </a>
@@ -109,7 +109,7 @@ Params  config for my-adapter
     
       <div class="sidebar-profile">
         <a href="https://tangxusc.github.io/blog/#about">
-          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=110" alt="Author&#39;s picture" />
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
         </a>
         <h4 class="sidebar-profile-name">苏连云</h4>
         
@@ -402,7 +402,7 @@ Params  config for my-adapter
       <i class="fa fa-remove"></i>
     </div>
     
-      <img id="about-card-picture" src="https://www.gravatar.com/avatar/a3d740bc2618da5f5a9de4fe94c05429?s=110" alt="Author&#39;s picture" />
+      <img id="about-card-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
     
     <h4 id="about-card-name">苏连云</h4>
     
@@ -447,36 +447,36 @@ Params  config for my-adapter
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/etcd%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/">
-                <h3 class="media-heading">Etcd搭建及使用</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+                <h3 class="media-heading">迈向istio-13 自定义adapter(修改请求头)</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Apr 4, 2019
+                  May 5, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather"><p>etcd是云原生的存储基石,在kubernetes中的存储便采用的etcd.</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem/">
-                <h3 class="media-heading">使用Cfssl生成etcd证书(pem)</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Apr 4, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>CFSSL是CloudFlare开源的一款PKI/TLS工具,CFSSL包含一个<code>命令行工具</code>和一个用于<code>签名</code>，验证并且捆绑TLS证书的<code>HTTP API服务</code>,使用Go语言编写.</p>
+              <div class="media-content hide-xs font-merryweather"><p>在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.</p>
 
-<p>github: <a href="https://github.com/cloudflare/cfssl">https://github.com/cloudflare/cfssl</a></p>
+<p>mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为<code>Adapter</code>,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">NetworkPolicy介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中的所有的pod在默认情况下,网络都是互通的,pod接收来自任何来源的流量.</p>
 
-<p>下载地址: <a href="https://pkg.cfssl.org/">https://pkg.cfssl.org/</a></p></div>
+<p>那么我们如何限制pod的网络通信,防止非法访问呢?</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -485,34 +485,17 @@ Params  config for my-adapter
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/">
-                <h3 class="media-heading">迈向istio-11 升级到1.1.2</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
+                <h3 class="media-heading">亲和性调度</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Apr 4, 2019
+                  May 5, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather"><p>istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本为<code>企业级就绪</code></p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-jwt%E8%AE%A4%E8%AF%81/">
-                <h3 class="media-heading">迈向istio-jwt认证</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Apr 4, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>在建设企业的各种项目中,我们一定离不开,或者总要和认证授权系统打交道,应用总会入侵一些认证和授权部分的代码,现在在java等方面有大量的安全框架,例如<code>spring security,shiro</code>等等框架,这些框架也是为了解决这个重复性的做认证和授权等功能的问题,这也是我们在单体服务的时候一直做的,将各种各样的框架集成到系统中,那么现在在微服务时代,或者说在istio有没有解决方法能解决这个问题呢,让服务真正回归业务,不再去过多的管理认证的问题呢.</p>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中对pod的调度由调度控制器负责,在调度的时候有很大的随机性.</p>
 
-<p>在本节中我们将会将我们的应用构建为一个需要使用jwt token才能访问的服务,在没有jwt token的情况下,将会返回401 未授权.</p></div>
+<p>但是我们很多时候需要容器更多的分散在不同的node上,有一些情况又需要尽量集中在一起,减少网络开销</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -521,15 +504,15 @@ Params  config for my-adapter
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-opa%E6%8E%88%E6%9D%83/">
-                <h3 class="media-heading">迈向istio-opa授权</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">Local Persistent Volume 介绍</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Apr 4, 2019
+                  May 5, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather"><p>在上一章节中,我们使用jwt进行了认证,那么我们如何对资源进行授权检查呢?</p></div>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中,存储一直是一个较为头疼的问题,在面对持久化存储,我们可以选择各种文件系统,但是对于那些临时存储的文件,我们则需要一种本地存储的能力,在kubernetes1.14中为我们提供了一种本地存储<code>localPV</code>,本文将围绕此展开.</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -538,34 +521,17 @@ Params  config for my-adapter
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-tls/">
-                <h3 class="media-heading">迈向istio-tls</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/kubebuilder%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">kubebuilder介绍</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Apr 4, 2019
+                  May 5, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather"><p>我们已经完成了我们服务的路由,并且也已经有了镜像流量了,那么接下来我们要做什么呢?</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/">
-                <h3 class="media-heading">迈向istio-多服务通信</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Apr 4, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;</p>
+              <div class="media-content hide-xs font-merryweather"><p>在之前的文章中我们讲到了kubernetes的rest api,并使用client-go等客户端来调用api.</p>
 
-<p>在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务</p></div>
+<p>接下来我们将使用到kubernetes为构建controller诞生的专用工具<code>kubebuilder</code></p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -574,15 +540,15 @@ Params  config for my-adapter
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%AE%89%E8%A3%85/">
-                <h3 class="media-heading">迈向istio-安装</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
+                <h3 class="media-heading">今日心情-上善若水</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Apr 4, 2019
+                  May 5, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather"><p>istio-安装</p></div>
+              <div class="media-content hide-xs font-merryweather"><p>一天又一天,每一天都那么一样又不那么一样.</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -591,15 +557,15 @@ Params  config for my-adapter
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/">
-                <h3 class="media-heading">迈向istio-引入外部服务</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+                <h3 class="media-heading">code-generator使用</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Apr 4, 2019
+                  May 5, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather"><p>在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.</p></div>
+              <div class="media-content hide-xs font-merryweather"><p>client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -608,19 +574,61 @@ Params  config for my-adapter
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/">
-                <h3 class="media-heading">迈向istio-服务路由</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-7</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
-                  Apr 4, 2019
+                  May 5, 2019
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather"><p>在上一节中,我们使用nginx开启了我们istio的第一个应用,现在我们加入另外一个服务tomcat</p>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948541">https://blog.csdn.net/weixin_39961559/article/details/81948541</a></p>
+</blockquote>
 
-<blockquote>
-<p>本节内容基于上节内容,请先运行上一节的yaml文件,然后再体验本节内容</p>
-</blockquote></div>
+<p>本系列深入介绍了informer的原理,这是本系列第七节,也是最后一节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-6</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948239">https://blog.csdn.net/weixin_39961559/article/details/81948239</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第六节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-5</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81946899">https://blog.csdn.net/weixin_39961559/article/details/81946899</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第五节</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -633,7 +641,7 @@ Params  config for my-adapter
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         78 posts found
+         95 posts found
       </p>
     </div>
   </div>

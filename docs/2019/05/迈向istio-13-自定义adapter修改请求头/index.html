@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="istio, adapter">
+<meta name="description" content="在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.
+
+mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为Adapter,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作">
+
+
+<meta property="og:description" content="在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.
+
+mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为Adapter,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="迈向istio-13 自定义adapter(修改请求头)">
+<meta name="twitter:title" content="迈向istio-13 自定义adapter(修改请求头)">
+<meta property="og:url" content="https://tangxusc.github.io/blog/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+<meta property="twitter:url" content="https://tangxusc.github.io/blog/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.
+
+mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为Adapter,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作">
+<meta name="twitter:description" content="在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.
+
+mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为Adapter,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-05-28T14:15:59">
+  
+  
+    <meta property="article:modified_time" content="2019-05-28T14:15:59">
+  
+  
+  
+    
+      <meta property="article:section" content="istio">
+    
+  
+  
+    
+      <meta property="article:tag" content="istio">
+    
+      <meta property="article:tag" content="adapter">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/blog/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/blog/photo.png">
+
+
+    <title>迈向istio-13 自定义adapter(修改请求头)</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/blog/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/blog/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/blog/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/blog/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/blog/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/blog/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      迈向istio-13 自定义adapter(修改请求头)
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-05-28T14:15:59&#43;08:00">
+        
+  May 28, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.</p>
+
+<p>mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为<code>Adapter</code>,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作</p>
+
+<h2 id="前言">前言</h2>
+
+<p>在istio的整体设计中,流量管理和mixer应该是我们交互最多的组件了.</p>
+
+<p>流量管理我们侧重使用配置文件对我们的服务流量进行分流管理,而mixer的扩展我们更多的就需要写代码进行扩展了.</p>
+
+<p>在isito1.1.x版本中mixer的adapter已经能修改请求的header了,这给我们带来了太多的便宜.</p>
+
+<p>本文我们将在istio1.1.x版本中实现一个自定义的adapter,使用自定义的template,并在请求的header中注入user,serviceName等信息.</p>
+
+<blockquote>
+<p>注意: 在1.1.x版本中使用mixer的check功能,需要启用check功能,详见 <a href="https://tangxusc.github.io/blog/2019/04/迈向istio-11-升级到1.1.2/">升级到1.1.2安装</a></p>
+</blockquote>
+
+<h2 id="自定义adapter">自定义adapter</h2>
+
+<h3 id="1-准备-基础环境">1.准备 基础环境</h3>
+
+<ul>
+<li>istio 1.1.x</li>
+<li>golang 1.2.x(go module)</li>
+<li>goland (或者其他IDE)</li>
+<li><a href="https://tangxusc.github.io/blog/2019/03/使用go-mod1.11安装grpc/">protoc并安装grpc</a></li>
+<li>k8s集群</li>
+</ul>
+
+<h3 id="2-克隆istio源代码并编译">2.克隆istio源代码并编译</h3>
+
+<pre><code class="language-shell">$ mkdir -p $GOPATH/src/istio.io/ &amp;&amp; cd $GOPATH/src/istio.io/  &amp;&amp; git clone https://github.com/istio/istio
+## 编译istio
+$ cd $GOPATH/src/istio.io/istio &amp;&amp; go build ./...
+</code></pre>
+
+<p>编译主要是为了生成出mixs服务端和mixc客户端,在我们测试时将会使用到.</p>
+
+<h3 id="3-定义模板">3.定义模板</h3>
+
+<p>在istio的源码目录中创建文件<code>authservice</code>,并在其中生成我们的模板文件:</p>
+
+<pre><code class="language-shell">$ mkdir authservice 
+</code></pre>
+
+<p>在文件夹中创建文件<code>template.proto</code>,内容如下:</p>
+
+<pre><code class="language-protobuf">syntax = &quot;proto3&quot;;
+
+//注意,和文件夹名称一致
+package authservice;
+
+import &quot;mixer/adapter/model/v1beta1/extensions.proto&quot;;
+//声明 模板种类
+option (istio.mixer.adapter.model.v1beta1.template_variety) = TEMPLATE_VARIETY_CHECK_WITH_OUTPUT;
+//声明 输入参数
+message Template {
+  string request_jwt = 1;
+  string request_path = 2;
+  string request_method = 3;
+  string source_name= 4;
+  string source_namespace= 5;
+  string destination_name= 6;
+  string destination_namespace= 7;
+  string source_workload_name= 8;
+  string source_workload_namespace= 9;
+  string destination_workload_name= 10;
+  string destination_workload_namespace= 11;
+  string destination_service_host= 12;
+}
+//声明输出参数
+message OutputTemplate {
+  string user = 1;
+  string service_name= 2;
+}
+</code></pre>
+
+<p>在文件中我们声明了模板<code>template_variety</code>,可选值为<code>Check</code>,<code>Report</code>,<code>Quota</code>,<code>AttributeGenerator</code>等.</p>
+
+<p>模板的<code>template_variety</code>决定了适配器必须实现的方法签名,并且决定了mixer的整体行为.</p>
+
+<p>在文件中我们定义了<code>Template</code>和<code>OutputTemplate</code>对象,并分别设置了我们关注的字段(输入和输出)</p>
+
+<blockquote>
+<p>整体的格式可以参照 <a href="https://github.com/istio/istio/blob/master/mixer/test/keyval/template.proto">istio的mixer测试实例</a></p>
+
+<p>模板原型文件的具体格式可以在 <a href="https://github.com/istio/istio/wiki/Mixer-Out-Of-Process-Adapter-Dev-Guide#template-proto-file">模板原型文件</a> 中看到</p>
+</blockquote>
+
+<p>在定义了模板之后,我们需要将模板生成为go文件,命令如下:</p>
+
+<pre><code class="language-shell">#在istio的根目录执行
+$ bin/mixer_codegen.sh -t authservice/template.proto
+no comment found for authservice
+authservice/template.proto:19:0: no comment found for OutputTemplate
+#省略很多...
+authservice/template.proto:16:2: no comment found for destination_service_host
+rm：是否删除有写保护的普通文件 '/istio.io/istio/authservice/template.pb.go'？n
+#此时目录下的文件
+$ tree
+.
+├── authservice.pb.html
+├── template_handler.gen.go
+├── template_handler_service.descriptor_set
+├── template_handler_service.pb.go
+├── template_handler_service.proto
+├── template.pb.go
+├── template.proto
+├── template_proto.descriptor_set
+└── template.yaml  #模板文件,描述istio的模板配置
+</code></pre>
+
+<blockquote>
+<p>其中的警告部分输出为提示我们为proto添加注释,便于生成文档</p>
+
+<p>grpc真香.</p>
+</blockquote>
+
+<h3 id="4-生成adapter配置">4.生成adapter配置</h3>
+
+<p>在<code>authservice</code>文件夹中创建子目录<code>config</code></p>
+
+<pre><code class="language-shell">$ cd authservice &amp;&amp; mkdir config &amp;&amp; cd config
+</code></pre>
+
+<p>在目录内创建文件<code>config.proto</code>,内容如下:</p>
+
+<pre><code class="language-protobuf">syntax = &quot;proto3&quot;;
+import &quot;google/protobuf/duration.proto&quot;;
+import &quot;gogoproto/gogo.proto&quot;;
+package config;
+message Params {
+  google.protobuf.Duration valid_duration = 1 [(gogoproto.nullable)=false, (gogoproto.stdduration) = true];
+}
+</code></pre>
+
+<p>然后通过命令生成适配器的定义:</p>
+
+<pre><code class="language-shell">$ cd .. &amp;&amp; bin/mixer_codegen.sh -a authservice/config/config.proto -x &quot;-s=false -n authservice -t authservice&quot;
+no comment found for config
+authservice/config/config.proto:4:0: no comment found for Params
+authservice/config/config.proto:5:2: no comment found for valid_duration
+#此时目录下的文件
+$tree
+.
+├── authservice.pb.html
+├── config
+│   ├── authservice.yaml  #此文件为istio的adapter描述文件
+│   ├── config.pb.go
+│   ├── config.pb.html
+│   ├── config.proto
+│   └── config.proto_descriptor
+├── template_handler.gen.go
+├── template_handler_service.descriptor_set
+├── template_handler_service.pb.go
+├── template_handler_service.proto
+├── template.pb.go
+├── template.proto
+├── template_proto.descriptor_set
+└── template.yaml
+</code></pre>
+
+<p><code>-n</code>: 适配器名称</p>
+
+<p><code>-t</code>: 模板名称</p>
+
+<p><code>-s</code>: <a href="https://github.com/istio/istio/wiki/Mixer-Out-Of-Process-Adapter-Dev-Guide#adapter-implementation-choices">基于无会话的模型</a></p>
+
+<p>传递这三个参数就是指定 <strong>输出的模板文件中的适配器名称,模板名称</strong></p>
+
+<p>到此处,<code>template</code>和<code>adapter</code>的描述文件就生成出来了,<code>handler</code>需要实现的接口也生成为了go文件</p>
+
+<h3 id="5-实现adapter">5.实现adapter</h3>
+
+<p>在<code>gopath</code>外建立go项目,并初始化依赖:</p>
+
+<pre><code class="language-shell">$ mkdir authService-1.1 &amp;&amp; cd authService-1.1 &amp;&amp; go mod init authService
+</code></pre>
+
+<p>将<code>istio/authservice</code> 拷贝至<code>authService-1.1</code>目录下</p>
+
+<pre><code class="language-shell">$ cp -R istio/authservice authService-1.1/
+</code></pre>
+
+<p>在<code>authService-1.1</code>目录下建立<code>main.go</code>,内容如下:</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;authService/authservice&quot;
+	&quot;encoding/json&quot;
+	&quot;fmt&quot;
+	&quot;github.com/gogo/googleapis/google/rpc&quot;
+	&quot;golang.org/x/net/context&quot;
+	&quot;google.golang.org/grpc&quot;
+	&quot;istio.io/api/mixer/adapter/model/v1beta1&quot;
+	&quot;istio.io/istio/mixer/pkg/status&quot;
+	&quot;log&quot;
+	&quot;net&quot;
+)
+
+type AuthAdapter struct {
+}
+
+func (*AuthAdapter) HandleAuthservice(ctx context.Context, request *authservice.HandleAuthserviceRequest) (*authservice.HandleAuthserviceResponse, error) {
+	bytes, e := json.Marshal(request)
+	if e != nil {
+		return nil, e
+	}
+	fmt.Println(&quot;===========请求开始=============&quot;)
+	fmt.Printf(&quot;%s \n&quot;, string(bytes))
+	fmt.Println(&quot;===========请求结束=============&quot;)
+
+    //此处模拟认证过程,实际认证需要自行处理
+    //当传入了jwt就认为认证通过.
+    //返回user:user1,ServiceName:serviceName1 作为模拟数据
+	if len(request.Instance.RequestJwt) &gt; 0 {
+		return &amp;authservice.HandleAuthserviceResponse{
+			Result: &amp;v1beta1.CheckResult{
+				Status: status.OK,
+			},
+			Output: &amp;authservice.OutputMsg{
+				User:        &quot;user1&quot;,
+				ServiceName: &quot;serviceName1&quot;,
+			},
+		}, nil
+	} else {
+		return &amp;authservice.HandleAuthserviceResponse{
+			Result: &amp;v1beta1.CheckResult{
+				Status: rpc.Status{Code: int32(rpc.PERMISSION_DENIED)},
+			},
+			Output: &amp;authservice.OutputMsg{
+				User:        &quot;User_PERMISSION_DENIED&quot;,
+				ServiceName: &quot;ServiceName_PERMISSION_DENIED&quot;,
+			},
+		}, nil
+	}
+
+}
+
+func main() {
+	//创建grpc服务器
+	server := grpc.NewServer()
+	auth := &amp;AuthAdapter{}
+	//注册服务到grpc
+	authservice.RegisterHandleAuthserviceServiceServer(server, auth)
+	//启动9999端口监听tcp数据
+	listener, e := net.Listen(&quot;tcp&quot;, fmt.Sprintf(&quot;:%s&quot;, &quot;9999&quot;))
+	if e != nil {
+		log.Fatal(fmt.Sprintln(&quot;tcp监听错误,%s&quot;, e.Error()))
+	}
+	//启动
+	if e := server.Serve(listener); e != nil {
+		log.Fatal(fmt.Sprintln(&quot;grpc启动错误,%s&quot;, e.Error()))
+	}
+}
+</code></pre>
+
+<h3 id="6-测试-可选">6.测试[可选]</h3>
+
+<h4 id="1-编译mixs和mixc-如果前面已经编译-则此处不用再编译">1, 编译mixs和mixc (如果前面已经编译,则此处不用再编译)</h4>
+
+<pre><code class="language-shell">cd $GOPATH/src/istio.io/istio/ &amp;&amp; make mixs &amp;&amp; make mixc
+</code></pre>
+
+<h4 id="2-创建测试文件夹及文件">2, 创建测试文件夹及文件</h4>
+
+<pre><code class="language-shell">mkdir 项目根目录/testdata
+</code></pre>
+
+<p>新建文件<code>项目根目录/testdata/istio.yaml</code>,内容如下:</p>
+
+<pre><code class="language-yaml"># handler adapter
+apiVersion: &quot;config.istio.io/v1alpha2&quot;
+kind: handler
+metadata:
+  name: my
+  namespace: istio-system
+spec:
+  adapter: authservice
+  connection:
+    # 请一定注意,这里的地址  和正式部署的地址不一样
+    address: &quot;localhost:9999&quot;
+  params:
+    valid_duration: 1h
+---
+# instances
+apiVersion: &quot;config.istio.io/v1alpha2&quot;
+kind: instance
+metadata:
+  name: my
+  namespace: istio-system
+spec:
+  template: authservice
+  params:
+    request_jwt: request.headers[&quot;jwt&quot;] | &quot;&quot;
+    request_path: request.path | &quot;/&quot;
+    request_method: request.method | &quot;GET&quot;
+    source_name: source.name | &quot;&quot;
+    source_namespace: source.namespace | &quot;&quot;
+    destination_name: destination.name | &quot;&quot;
+    destination_namespace: destination.namespace | &quot;&quot;
+    source_workload_name: source.workload.name | &quot;&quot;
+    source_workload_namespace: source.workload.namespace | &quot;&quot;
+    destination_workload_name: destination.workload.name | &quot;&quot;
+    destination_workload_namespace: destination.workload.namespace | &quot;&quot;
+    destination_service_host: destination.service.host | &quot;&quot;
+
+---
+# rule to dispatch to handler h1
+apiVersion: &quot;config.istio.io/v1alpha2&quot;
+kind: rule
+metadata:
+  name: r1
+  namespace: istio-system
+spec:
+  match: &quot;&quot;
+  actions:
+  - handler: my.handler.istio-system
+    instances:
+      - my.instance.istio-system
+    name: result
+  requestHeaderOperations:
+  - name: user
+    values:
+    - result.output.user
+  - name: serviceName
+    values:
+    - result.output.service_name
+</code></pre>
+
+<p>拷贝其他文件到testdata:</p>
+
+<pre><code class="language-shell">cp $GOPATH/src/istio.io/istio/mixer/testdata/config/attributes.yaml 项目根目录/testdata/
+cp $GOPATH/src/istio.io/istio/authservice/template.yaml 项目根目录/testdata/
+cp $GOPATH/src/istio.io/istio/authservicetest/config/authservice.yaml 项目根目录/testdata/
+#拷贝完成后目录是这样的:
+/testdata$ tree
+├── attributes.yaml
+├── authservice.yaml
+├── istio.yaml
+└── template.yaml
+</code></pre>
+
+<h4 id="3-启动adapter">3, 启动adapter</h4>
+
+<pre><code class="language-shell"># 在此,我们启动grpc服务器,并暴露在`9999`端口上
+$ go run main.go
+</code></pre>
+
+<h4 id="4-启动mixs">4, 启动mixs</h4>
+
+<pre><code class="language-shell">./mixs server --configStoreURL=fs:///项目路径/testdata/ --log_output_level=attributes:debug
+</code></pre>
+
+<blockquote>
+<p>注意: 如果出现未找到mixs等错误,请配置你的Path,<code>$GOPATH/out/linux_amd64/release/</code>必须包含在path中,才能找到mixs和mixc的执行文件</p>
+
+<p>注意: <code>fs://</code> 标示文件系统,后面是文件系统的路径,所以才会出现三个<code>/</code></p>
+</blockquote>
+
+<h4 id="5-启动mixc">5, 启动mixc</h4>
+
+<pre><code class="language-shell">./mixc check -s destination.service=&quot;svc.cluster.local&quot; -s request.path=&quot;/test222&quot;
+</code></pre>
+
+<p>在执行了以上命令后就可以在控制台和adapter上均可以看到结果了</p>
+
+<h3 id="7-编译-制作镜像">7,编译&amp;制作镜像</h3>
+
+<h4 id="1-编译">1,编译</h4>
+
+<pre><code class="language-shell">$ go build main.go
+</code></pre>
+
+<p>编译后将生成<code>main</code>这个可执行文件</p>
+
+<h4 id="2-制作为镜像">2,制作为镜像</h4>
+
+<p>在目录下创建<code>Dockerfile</code>文件,文件内容如下:</p>
+
+<pre><code class="language-dockerfile">FROM ubuntu
+WORKDIR /
+ADD main /main
+EXPOSE 9999
+CMD [&quot;./main&quot;]
+</code></pre>
+
+<p>制作docker镜像命令如下:</p>
+
+<pre><code class="language-shell">$ docker build -t authservice:v1 .
+</code></pre>
+
+<h3 id="8-部署到k8s集群中">8,部署到k8s集群中</h3>
+
+<h4 id="1-部署k8s编排">1,部署k8s编排</h4>
+
+<p>新建文件<code>k8s.yaml</code>,内容如下:</p>
+
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my
+  namespace: istio-system
+  labels:
+    app: my
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: my
+      labels:
+        app: my
+    spec:
+      containers:
+        - name: my
+          # 使用上一步构建的镜像
+          image: authservice:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9999
+              protocol: TCP
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: my
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authservice
+  namespace: istio-system
+spec:
+  selector:
+    app: my
+  ports:
+  - port: 9999
+    targetPort: 9999
+    protocol: TCP
+</code></pre>
+
+<p>使用kubectl部署Deployment:</p>
+
+<pre><code class="language-shell">$ kubectl apply -f k8s.yaml
+</code></pre>
+
+<h4 id="2-部署istio配置">2,部署istio配置</h4>
+
+<p>新建<code>istio.yaml</code>,内容如下:</p>
+
+<pre><code class="language-yaml"># handler adapter
+apiVersion: &quot;config.istio.io/v1alpha2&quot;
+kind: handler
+metadata:
+  name: my
+  namespace: istio-system
+spec:
+  adapter: authservice
+  connection:
+  # 请一定注意,这里的地址  和正式部署的地址不一样
+    address: &quot;authservice.istio-system:9999&quot;
+#    address: &quot;localhost:9999&quot;
+# params的值为 config.proto中的配置
+  params:
+    valid_duration: 1h
+---
+# instances
+apiVersion: &quot;config.istio.io/v1alpha2&quot;
+kind: instance
+metadata:
+  name: my
+  namespace: istio-system
+spec:
+  #模板的名称一定要和template.proto对应
+  template: authservice
+  #模板的参数需要对应
+  params:
+    request_jwt: request.headers[&quot;jwt&quot;] | &quot;&quot;
+    request_path: request.path | &quot;/&quot;
+    request_method: request.method | &quot;GET&quot;
+    source_name: source.name | &quot;&quot;
+    source_namespace: source.namespace | &quot;&quot;
+    destination_name: destination.name | &quot;&quot;
+    destination_namespace: destination.namespace | &quot;&quot;
+    source_workload_name: source.workload.name | &quot;&quot;
+    source_workload_namespace: source.workload.namespace | &quot;&quot;
+    destination_workload_name: destination.workload.name | &quot;&quot;
+    destination_workload_namespace: destination.workload.namespace | &quot;&quot;
+    destination_service_host: destination.service.host | &quot;&quot;
+
+---
+# rule to dispatch to handler h1
+apiVersion: &quot;config.istio.io/v1alpha2&quot;
+kind: rule
+metadata:
+  name: r1
+  namespace: istio-system
+spec:
+  match: &quot;&quot;
+  actions:
+  - handler: my.handler.istio-system
+    instances:
+      - my.instance.istio-system
+    name: result
+  #此属性用来配置header
+  requestHeaderOperations:
+  - name: user
+    values:
+    - result.output.user
+  - name: serviceName
+    values:
+    - result.output.service_name
+</code></pre>
+
+<blockquote>
+<p>requestHeaderOperations的具体配置,请参照 <a href="https://istio.io/docs/reference/config/policy-and-telemetry/istio.policy.v1beta1/#Rule">requestHeaderOperations</a></p>
+</blockquote>
+
+<p>然后将template,adapter和istio配置文件依次部署到k8s中.</p>
+
+<pre><code class="language-shell">$ kubectl apply -f authservice/template.yaml
+$ kubectl apply -f authservice/config/authservice.yaml
+$ kubectl apply -f istio.yaml
+</code></pre>
+
+<p>至此,完成了整体的自定义adapter的使用.</p>
+
+<blockquote>
+<p>官方的测试adapter 使用示例如下</p>
+
+<p><a href="https://istio.io/docs/tasks/policy-enforcement/control-headers/">https://istio.io/docs/tasks/policy-enforcement/control-headers/</a></p>
+</blockquote>
+
+<h2 id="答疑">答疑</h2>
+
+<h3 id="在定义mixer的模板中-很多人都会问-这-template-variety-的值在哪里定义的呢">在定义mixer的模板中 很多人都会问,这<code>template_variety</code>的值在哪里定义的呢?</h3>
+
+<p>答: 在定义模板的时候文件中有这么一句:</p>
+
+<pre><code class="language-protobuf">import &quot;mixer/adapter/model/v1beta1/extensions.proto&quot;;
+</code></pre>
+
+<p>此处声明了导入<code>mixer/adapter/model/v1beta1/extensions.proto</code>文件,但是这个文件是一个相对的位置,并且使用protoc的<code>--proto_path</code>参数指定上下文.</p>
+
+<p>在<code>bin/mixer_codegen.sh</code>文件中(<a href="https://github.com/istio/istio/blob/master/bin/mixer_codegen.sh#L73">源代码</a>):</p>
+
+<pre><code class="language-shell">IMPORTS=(
+  &quot;--proto_path=${ROOTDIR}&quot;
+  &quot;--proto_path=${ROOTDIR}/vendor/istio.io/api&quot;
+  &quot;--proto_path=${ROOTDIR}/vendor/github.com/gogo/protobuf&quot;
+  &quot;--proto_path=${ROOTDIR}/vendor/github.com/gogo/googleapis&quot;
+  &quot;--proto_path=$optimport&quot;
+)
+</code></pre>
+
+<p><code>--proto_path</code>: 指定了要去哪个目录中搜索import中导入的和要编译为.go的proto文件，可以定义多个</p>
+
+<p>所以实际的<code>extensions.proto</code>文件位置为:<code>istio.io/istio/vendor/istio.io/api/mixer/adapter/model/v1beta1/extensions.proto</code>,在这个文件中对于<code>TemplateVariety</code>定义如下(<a href="https://github.com/istio/istio/blob/master/vendor/istio.io/api/mixer/adapter/model/v1beta1/extensions.proto#L25">源代码</a>):</p>
+
+<pre><code class="language-protobuf">
+// The available varieties of templates, controlling the semantics of what an adapter does with each instance.
+enum TemplateVariety {
+    // Makes the template applicable for Mixer's check calls. Instances of such template are created during
+    // check calls in Mixer and passed to the handlers based on the rule configurations.
+    TEMPLATE_VARIETY_CHECK = 0;
+    // Makes the template applicable for Mixer's report calls. Instances of such template are created during
+    // report calls in Mixer and passed to the handlers based on the rule configurations.
+    TEMPLATE_VARIETY_REPORT = 1;
+    // Makes the template applicable for Mixer's quota calls. Instances of such template are created during
+    // quota check calls in Mixer and passed to the handlers based on the rule configurations.
+    TEMPLATE_VARIETY_QUOTA = 2;
+    // Makes the template applicable for Mixer's attribute generation phase. Instances of such template are created during
+    // pre-processing attribute generation phase and passed to the handlers based on the rule configurations.
+    TEMPLATE_VARIETY_ATTRIBUTE_GENERATOR = 3;
+    // Makes the template applicable for Mixer's check calls. Instances of such template are created during
+    // check calls in Mixer and passed to the handlers that produce values.
+    TEMPLATE_VARIETY_CHECK_WITH_OUTPUT = 4;
+}
+</code></pre>
+
+<h3 id="生成template出现没找到镜像">生成template出现没找到镜像</h3>
+
+<p><code>Unable to find image 'gcr.io/istio-testing/protoc:xxxx' locally</code></p>
+
+<p>答: <code>mixer_codegen.sh</code>通过docker方式工作,依赖<code>gcr.io/istio-testing/protoc</code>,所以需要拉取:</p>
+
+<pre><code class="language-shell">$ docker pull tangxusc/istio-protoc-mirror:latest
+$ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:2018-06-12
+</code></pre>
+
+<h2 id="后语">后语</h2>
+
+<p>在使用mixer的适配器的时候,同时我们也需要注意到,mixer本身是<code>无状态的,带有缓存的</code>,所以这也同时要求我们的adapter需要最好设计为无状态的,带有缓存的,通过这两种缓存机制才能大大降低istio的qps延迟.</p>
+
+<p>mixer的性能问题一直是社区中纠结的所在,并且在1.1中暂时关闭了mixer的check功能,希望在1.2中有所改善吧.</p>
+
+<h2 id="参考">参考</h2>
+
+<ul>
+<li><a href="https://preliminary.istio.io/zh/docs/concepts/policies-and-telemetry/">mixer 介绍(中文)</a></li>
+<li><a href="https://tangxusc.github.io/blog/2019/03/使用go-mod1.11安装grpc/">安装grpc</a></li>
+<li><a href="https://tangxusc.github.io/blog/2019/03/kubeadm安装ha集群/">使用kubeadm安装HA集群</a></li>
+<li><a href="https://github.com/istio/istio/tree/master/mixer/test/keyval">官方mixer测试实例</a></li>
+<li><a href="https://www.cnblogs.com/hsnblog/p/9615742.html">proto文件导入路径</a></li>
+<li><a href="https://istio.io/docs/tasks/policy-enforcement/control-headers/">官方使用示例</a></li>
+</ul>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/istio/">istio</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/adapter/">adapter</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/" data-tooltip="NetworkPolicy介绍">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/" data-tooltip="NetworkPolicy介绍">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+                <h3 class="media-heading">迈向istio-13 自定义adapter(修改请求头)</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.</p>
+
+<p>mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为<code>Adapter</code>,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">NetworkPolicy介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中的所有的pod在默认情况下,网络都是互通的,pod接收来自任何来源的流量.</p>
+
+<p>那么我们如何限制pod的网络通信,防止非法访问呢?</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
+                <h3 class="media-heading">亲和性调度</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中对pod的调度由调度控制器负责,在调度的时候有很大的随机性.</p>
+
+<p>但是我们很多时候需要容器更多的分散在不同的node上,有一些情况又需要尽量集中在一起,减少网络开销</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">Local Persistent Volume 介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中,存储一直是一个较为头疼的问题,在面对持久化存储,我们可以选择各种文件系统,但是对于那些临时存储的文件,我们则需要一种本地存储的能力,在kubernetes1.14中为我们提供了一种本地存储<code>localPV</code>,本文将围绕此展开.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/kubebuilder%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">kubebuilder介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在之前的文章中我们讲到了kubernetes的rest api,并使用client-go等客户端来调用api.</p>
+
+<p>接下来我们将使用到kubernetes为构建controller诞生的专用工具<code>kubebuilder</code></p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
+                <h3 class="media-heading">今日心情-上善若水</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>一天又一天,每一天都那么一样又不那么一样.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+                <h3 class="media-heading">code-generator使用</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-7</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948541">https://blog.csdn.net/weixin_39961559/article/details/81948541</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第七节,也是最后一节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-6</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948239">https://blog.csdn.net/weixin_39961559/article/details/81948239</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第六节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-5</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81946899">https://blog.csdn.net/weixin_39961559/article/details/81946899</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第五节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         95 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/blog/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/blog/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/blog\/2019\/05\/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4\/';
+          
+            this.page.identifier = '\/2019\/05\/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
