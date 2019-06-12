@@ -43,17 +43,6 @@
     </item>
     
     <item>
-      <title>kubebuilder介绍</title>
-      <link>https://tangxusc.github.io/blog/2019/05/kubebuilder%E4%BB%8B%E7%BB%8D/</link>
-      <pubDate>Mon, 20 May 2019 14:10:08 +0800</pubDate>
-      
-      <guid>https://tangxusc.github.io/blog/2019/05/kubebuilder%E4%BB%8B%E7%BB%8D/</guid>
-      <description>&lt;p&gt;在之前的文章中我们讲到了kubernetes的rest api,并使用client-go等客户端来调用api.&lt;/p&gt;
-
-&lt;p&gt;接下来我们将使用到kubernetes为构建controller诞生的专用工具&lt;code&gt;kubebuilder&lt;/code&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
       <title>code-generator使用</title>
       <link>https://tangxusc.github.io/blog/2019/05/code-generator%E4%BD%BF%E7%94%A8/</link>
       <pubDate>Fri, 17 May 2019 11:13:08 +0800</pubDate>

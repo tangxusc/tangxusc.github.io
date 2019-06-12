@@ -1,7 +1,7 @@
 ---
 title: "kubebuilder介绍"
 date: 2019-05-20T14:10:08+08:00
-draft: false
+draft: true
 categories:
 - k8s
 - client
