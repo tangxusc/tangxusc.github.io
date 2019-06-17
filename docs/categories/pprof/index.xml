@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Pprof on 苏连云的博客</title>
-    <link>https://tangxusc.github.io/blog/categories/pprof/</link>
+    <link>https://tangxusc.github.io/categories/pprof/</link>
     <description>Recent content in Pprof on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
     
-	<atom:link href="https://tangxusc.github.io/blog/categories/pprof/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://tangxusc.github.io/categories/pprof/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Golang大杀器之性能剖析PProf</title>
-      <link>https://tangxusc.github.io/blog/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/</link>
+      <link>https://tangxusc.github.io/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/</guid>
+      <guid>https://tangxusc.github.io/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/</guid>
       <description>&lt;p&gt;写了几吨代码，实现了几百个接口。功能测试也通过了，终于成功的部署上线了&lt;/p&gt;
 
 &lt;p&gt;结果，性能不佳，什么鬼？&lt;/p&gt;

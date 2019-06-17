@@ -19,8 +19,8 @@ mixer处理不同基础设施后端的灵活性是通过适配器模型插件来
 <meta property="og:type" content="article">
 <meta property="og:title" content="迈向istio-13 自定义adapter(修改请求头)">
 <meta name="twitter:title" content="迈向istio-13 自定义adapter(修改请求头)">
-<meta property="og:url" content="https://tangxusc.github.io/blog/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
-<meta property="twitter:url" content="https://tangxusc.github.io/blog/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+<meta property="og:url" content="https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
 <meta property="og:site_name" content="苏连云的博客">
 <meta property="og:description" content="在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.
 
@@ -63,18 +63,18 @@ mixer处理不同基础设施后端的灵活性是通过适配器模型插件来
 
 
 
-  <meta property="og:image" content="https://tangxusc.github.io/blog/photo.png">
-  <meta property="twitter:image" content="https://tangxusc.github.io/blog/photo.png">
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
 
 
     <title>迈向istio-13 自定义adapter(修改请求头)</title>
 
-    <link rel="icon" href="https://tangxusc.github.io/blog/favicon.png">
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
     
 
     
 
-    <link rel="canonical" href="https://tangxusc.github.io/blog/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+    <link rel="canonical" href="https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -82,7 +82,7 @@ mixer处理不同基础设施后端的灵活性是通过适配器模型插件来
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
     
     
-    <link rel="stylesheet" href="https://tangxusc.github.io/blog/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
     
     
 
@@ -97,17 +97,17 @@ mixer处理不同基础设施后端的灵活性是通过适配器模型插件来
       <header id="header" data-behavior="4">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
-    <a class="header-title-link" href="https://tangxusc.github.io/blog/">苏连云的博客</a>
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
   </div>
   
     
       <a class="header-right-picture "
-         href="https://tangxusc.github.io/blog/#about">
+         href="https://tangxusc.github.io/#about">
     
     
     
       
-        <img class="header-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
       
     
     </a>
@@ -118,8 +118,8 @@ mixer处理不同基础设施后端的灵活性是通过适配器模型插件来
   <div class="sidebar-container">
     
       <div class="sidebar-profile">
-        <a href="https://tangxusc.github.io/blog/#about">
-          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
         </a>
         <h4 class="sidebar-profile-name">苏连云</h4>
         
@@ -131,7 +131,7 @@ mixer处理不同基础设施后端的灵活性是通过适配器模型插件来
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
     
       <i class="sidebar-button-icon fa fa-lg fa-home"></i>
       
@@ -141,7 +141,7 @@ mixer处理不同基础设施后端的灵活性是通过适配器模型插件来
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/categories">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
     
       <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
       
@@ -151,7 +151,7 @@ mixer处理不同基础设施后端的灵活性是通过适配器模型插件来
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/tags">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
     
       <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
       
@@ -161,7 +161,7 @@ mixer处理不同基础设施后端的灵活性是通过适配器模型插件来
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/archives">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
     
       <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
       
@@ -171,7 +171,7 @@ mixer处理不同基础设施后端的灵活性是通过适配器模型插件来
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/#about">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
     
       <i class="sidebar-button-icon fa fa-lg fa-question"></i>
       
@@ -185,7 +185,7 @@ mixer处理不同基础设施后端的灵活性是通过适配器模型插件来
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -241,7 +241,7 @@ mixer处理不同基础设施后端的灵活性是通过适配器模型插件来
   
     <span>in</span>
     
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
+      <a class="category-link" href="https://tangxusc.github.io/categories/istio">istio</a>
     
   
 
@@ -266,7 +266,7 @@ mixer处理不同基础设施后端的灵活性是通过适配器模型插件来
 <p>本文我们将在istio1.1.x版本中实现一个自定义的adapter,使用自定义的template,并在请求的header中注入user,serviceName等信息.</p>
 
 <blockquote>
-<p>注意: 在1.1.x版本中使用mixer的check功能,需要启用check功能,详见 <a href="https://tangxusc.github.io/blog/2019/04/迈向istio-11-升级到1.1.2/">升级到1.1.2安装</a></p>
+<p>注意: 在1.1.x版本中使用mixer的check功能,需要启用check功能,详见 <a href="https://tangxusc.github.io/2019/04/迈向istio-11-升级到1.1.2/">升级到1.1.2安装</a></p>
 </blockquote>
 
 <h2 id="自定义adapter">自定义adapter</h2>
@@ -277,7 +277,7 @@ mixer处理不同基础设施后端的灵活性是通过适配器模型插件来
 <li>istio 1.1.x</li>
 <li>golang 1.2.x(go module)</li>
 <li>goland (或者其他IDE)</li>
-<li><a href="https://tangxusc.github.io/blog/2019/03/使用go-mod1.11安装grpc/">protoc并安装grpc</a></li>
+<li><a href="https://tangxusc.github.io/2019/03/使用go-mod1.11安装grpc/">protoc并安装grpc</a></li>
 <li>k8s集群</li>
 </ul>
 
@@ -852,8 +852,8 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
 
 <ul>
 <li><a href="https://preliminary.istio.io/zh/docs/concepts/policies-and-telemetry/">mixer 介绍(中文)</a></li>
-<li><a href="https://tangxusc.github.io/blog/2019/03/使用go-mod1.11安装grpc/">安装grpc</a></li>
-<li><a href="https://tangxusc.github.io/blog/2019/03/kubeadm安装ha集群/">使用kubeadm安装HA集群</a></li>
+<li><a href="https://tangxusc.github.io/2019/03/使用go-mod1.11安装grpc/">安装grpc</a></li>
+<li><a href="https://tangxusc.github.io/2019/03/kubeadm安装ha集群/">使用kubeadm安装HA集群</a></li>
 <li><a href="https://github.com/istio/istio/tree/master/mixer/test/keyval">官方mixer测试实例</a></li>
 <li><a href="https://www.cnblogs.com/hsnblog/p/9615742.html">proto文件导入路径</a></li>
 <li><a href="https://istio.io/docs/tasks/policy-enforcement/control-headers/">官方使用示例</a></li>
@@ -869,9 +869,9 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
                   <div class="post-footer-tags">
                     <span class="text-color-light text-small">TAGGED IN</span><br/>
                     
-  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/istio/">istio</a>
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/istio/">istio</a>
 
-  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/adapter/">adapter</a>
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/adapter/">adapter</a>
 
                   </div>
                 
@@ -892,7 +892,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/" data-tooltip="NetworkPolicy介绍">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/" data-tooltip="NetworkPolicy介绍">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -960,7 +960,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/" data-tooltip="NetworkPolicy介绍">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/" data-tooltip="NetworkPolicy介绍">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -1012,7 +1012,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
       <i class="fa fa-remove"></i>
     </div>
     
-      <img id="about-card-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
     
     <h4 id="about-card-name">苏连云</h4>
     
@@ -1057,7 +1057,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
                 <h3 class="media-heading">迈向istio-13 自定义adapter(修改请求头)</h3>
               </a>
               <span class="media-meta">
@@ -1076,7 +1076,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
                 <h3 class="media-heading">NetworkPolicy介绍</h3>
               </a>
               <span class="media-meta">
@@ -1095,7 +1095,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
                 <h3 class="media-heading">亲和性调度</h3>
               </a>
               <span class="media-meta">
@@ -1114,7 +1114,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
                 <h3 class="media-heading">Local Persistent Volume 介绍</h3>
               </a>
               <span class="media-meta">
@@ -1131,7 +1131,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
                 <h3 class="media-heading">今日心情-上善若水</h3>
               </a>
               <span class="media-meta">
@@ -1148,7 +1148,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
                 <h3 class="media-heading">code-generator使用</h3>
               </a>
               <span class="media-meta">
@@ -1165,7 +1165,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
                 <h3 class="media-heading">理解kubernetes tools/cache包-7</h3>
               </a>
               <span class="media-meta">
@@ -1186,7 +1186,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
                 <h3 class="media-heading">理解kubernetes tools/cache包-6</h3>
               </a>
               <span class="media-meta">
@@ -1207,7 +1207,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
                 <h3 class="media-heading">理解kubernetes tools/cache包-5</h3>
               </a>
               <span class="media-meta">
@@ -1228,7 +1228,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-4/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-4/">
                 <h3 class="media-heading">理解kubernetes tools/cache包-4</h3>
               </a>
               <span class="media-meta">
@@ -1261,7 +1261,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
     
   
     
-    <div id="cover" style="background-image:url('https://tangxusc.github.io/blog/images/cover.jpg');"></div>
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
   
 
 
@@ -1273,7 +1273,7 @@ $ docker tag tangxusc/istio-protoc-mirror:latest gcr.io/istio-testing/protoc:201
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
 
 
-<script src="https://tangxusc.github.io/blog/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
 
 
 <script lang="javascript">
@@ -1308,7 +1308,7 @@ $(document).ready(function() {
     
       <script>
         var disqus_config = function () {
-          this.page.url = 'https:\/\/tangxusc.github.io\/blog\/2019\/05\/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4\/';
+          this.page.url = 'https:\/\/tangxusc.github.io\/2019\/05\/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4\/';
           
             this.page.identifier = '\/2019\/05\/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4\/'
           

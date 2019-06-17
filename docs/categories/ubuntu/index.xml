@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ubuntu on 苏连云的博客</title>
-    <link>https://tangxusc.github.io/blog/categories/ubuntu/</link>
+    <link>https://tangxusc.github.io/categories/ubuntu/</link>
     <description>Recent content in Ubuntu on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
     
-	<atom:link href="https://tangxusc.github.io/blog/categories/ubuntu/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://tangxusc.github.io/categories/ubuntu/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Ubuntu 中登录相关的日志</title>
-      <link>https://tangxusc.github.io/blog/2019/03/ubuntu-%E4%B8%AD%E7%99%BB%E5%BD%95%E7%9B%B8%E5%85%B3%E7%9A%84%E6%97%A5%E5%BF%97/</link>
+      <link>https://tangxusc.github.io/2019/03/ubuntu-%E4%B8%AD%E7%99%BB%E5%BD%95%E7%9B%B8%E5%85%B3%E7%9A%84%E6%97%A5%E5%BF%97/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/ubuntu-%E4%B8%AD%E7%99%BB%E5%BD%95%E7%9B%B8%E5%85%B3%E7%9A%84%E6%97%A5%E5%BF%97/</guid>
+      <guid>https://tangxusc.github.io/2019/03/ubuntu-%E4%B8%AD%E7%99%BB%E5%BD%95%E7%9B%B8%E5%85%B3%E7%9A%84%E6%97%A5%E5%BF%97/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://www.cnblogs.com/sparkdev/p/7694202.html&#34;&gt;https://www.cnblogs.com/sparkdev/p/7694202.html&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;

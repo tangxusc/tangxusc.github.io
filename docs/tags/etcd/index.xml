@@ -2,48 +2,48 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Etcd on 苏连云的博客</title>
-    <link>https://tangxusc.github.io/blog/tags/etcd/</link>
+    <link>https://tangxusc.github.io/tags/etcd/</link>
     <description>Recent content in Etcd on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 07 May 2019 14:38:42 +0800</lastBuildDate>
     
-	<atom:link href="https://tangxusc.github.io/blog/tags/etcd/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://tangxusc.github.io/tags/etcd/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Etcd Lock详解</title>
-      <link>https://tangxusc.github.io/blog/2019/05/etcd-lock%E8%AF%A6%E8%A7%A3/</link>
+      <link>https://tangxusc.github.io/2019/05/etcd-lock%E8%AF%A6%E8%A7%A3/</link>
       <pubDate>Tue, 07 May 2019 14:38:42 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/05/etcd-lock%E8%AF%A6%E8%A7%A3/</guid>
+      <guid>https://tangxusc.github.io/2019/05/etcd-lock%E8%AF%A6%E8%A7%A3/</guid>
       <description>&lt;p&gt;分布式情况下最终都会面临一个资源抢占的问题,解决问题的方法为抽象一个分布式锁,持有锁则可以操作资源,本文使用etcd实现一个分布式锁&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Etcd搭建及使用</title>
-      <link>https://tangxusc.github.io/blog/2019/04/etcd%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/</link>
+      <link>https://tangxusc.github.io/2019/04/etcd%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/</link>
       <pubDate>Thu, 25 Apr 2019 16:41:39 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/04/etcd%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/</guid>
+      <guid>https://tangxusc.github.io/2019/04/etcd%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/</guid>
       <description>&lt;p&gt;etcd是云原生的存储基石,在kubernetes中的存储便采用的etcd.&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>使用 Golang 利用 ectd 实现一个分布式锁</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8-golang-%E5%88%A9%E7%94%A8-ectd-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
+      <link>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8-golang-%E5%88%A9%E7%94%A8-ectd-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8-golang-%E5%88%A9%E7%94%A8-ectd-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</guid>
+      <guid>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8-golang-%E5%88%A9%E7%94%A8-ectd-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</guid>
       <description>&lt;p&gt;&lt;code&gt;etcd&lt;/code&gt;是随着&lt;code&gt;CoreOS&lt;/code&gt;项目一起成长起来的，随着 Golang 和 CoreOS 等项目在开源社区日益火热， &lt;code&gt;etcd&lt;/code&gt;作为一个高可用、强一致性的分布式 Key-Value 存储系统被越来越多的开发人员关注和使用。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>基于 go&#43;etcd 实现分布式锁</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E5%9F%BA%E4%BA%8E-go-etcd-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
+      <link>https://tangxusc.github.io/2019/03/%E5%9F%BA%E4%BA%8E-go-etcd-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E5%9F%BA%E4%BA%8E-go-etcd-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</guid>
+      <guid>https://tangxusc.github.io/2019/03/%E5%9F%BA%E4%BA%8E-go-etcd-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</guid>
       <description>&lt;p&gt;基于 go+etcd 实现分布式锁,主要使用的是租约机制&lt;/p&gt;</description>
     </item>
     

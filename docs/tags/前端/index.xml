@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>前端 on 苏连云的博客</title>
-    <link>https://tangxusc.github.io/blog/tags/%E5%89%8D%E7%AB%AF/</link>
+    <link>https://tangxusc.github.io/tags/%E5%89%8D%E7%AB%AF/</link>
     <description>Recent content in 前端 on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
     
-	<atom:link href="https://tangxusc.github.io/blog/tags/%E5%89%8D%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://tangxusc.github.io/tags/%E5%89%8D%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>前端加载私有文件随想</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E5%89%8D%E7%AB%AF%E5%8A%A0%E8%BD%BD%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E9%9A%8F%E6%83%B3/</link>
+      <link>https://tangxusc.github.io/2019/03/%E5%89%8D%E7%AB%AF%E5%8A%A0%E8%BD%BD%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E9%9A%8F%E6%83%B3/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E5%89%8D%E7%AB%AF%E5%8A%A0%E8%BD%BD%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E9%9A%8F%E6%83%B3/</guid>
+      <guid>https://tangxusc.github.io/2019/03/%E5%89%8D%E7%AB%AF%E5%8A%A0%E8%BD%BD%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E9%9A%8F%E6%83%B3/</guid>
       <description>&lt;p&gt;在前后端分离的工程中,前后端通信链路由前端调用后端,变成了前端&amp;ndash;&amp;gt;api gateway&amp;ndash;&amp;gt;后端,那么前端在加载一些私有资源(需要权限,需要认证)等文件时会存在无法传入token的问题
 本文是针对前端加载资源的随想&lt;/p&gt;</description>
     </item>

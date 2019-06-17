@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Logrus on 苏连云的博客</title>
-    <link>https://tangxusc.github.io/blog/categories/logrus/</link>
+    <link>https://tangxusc.github.io/categories/logrus/</link>
     <description>Recent content in Logrus on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
     
-	<atom:link href="https://tangxusc.github.io/blog/categories/logrus/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://tangxusc.github.io/categories/logrus/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>golang日志库</title>
-      <link>https://tangxusc.github.io/blog/2019/03/golang%E6%97%A5%E5%BF%97%E5%BA%93/</link>
+      <link>https://tangxusc.github.io/2019/03/golang%E6%97%A5%E5%BF%97%E5%BA%93/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/golang%E6%97%A5%E5%BF%97%E5%BA%93/</guid>
+      <guid>https://tangxusc.github.io/2019/03/golang%E6%97%A5%E5%BF%97%E5%BA%93/</guid>
       <description>&lt;p&gt;golang 标准库的日志框架非常简单，仅仅提供了 print，panic 和 fatal 三个函数对于更精细的日志级别、日志&lt;a href=&#34;https://www.baidu.com/s?wd=%E6%96%87%E4%BB%B6%E5%88%86%E5%89%B2&amp;amp;tn=24004469_oem_dg&amp;amp;rsv_dl=gh_pl_sl_csd&#34;&gt;文件分割&lt;/a&gt;以及日志分发等方面并没有提供支持。所以催生了很多第三方的日志库，但是在 golang 的世界里，没有一个日志库像 slf4j 那样在 Java 中具有绝对统治地位。golang 中，流行的日志框架包括 logrus、zap、zerolog、seelog 等。
 logrus 是目前 Github 上 star 数量最多的日志库，目前 (2018.08，下同)star 数量为 8119，fork 数为 1031。logrus 功能强大，性能高效，而且具有高度灵活性，提供了自定义插件的功能。很多开源项目，如 docker，prometheus 等，都是用了 logrus 来记录其日志。
 zap 是 &lt;a href=&#34;https://www.baidu.com/s?wd=Uber&amp;amp;tn=24004469_oem_dg&amp;amp;rsv_dl=gh_pl_sl_csd&#34;&gt;Uber&lt;/a&gt; 推出的一个快速、结构化的分级日志库。具有强大的 ad-hoc 分析功能，并且具有灵活的仪表盘。zap 目前在 GitHub 上的 star 数量约为 4.3k。

@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Module on 苏连云的博客</title>
-    <link>https://tangxusc.github.io/blog/tags/module/</link>
+    <link>https://tangxusc.github.io/tags/module/</link>
     <description>Recent content in Module on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 15 May 2019 09:15:59 +0800</lastBuildDate>
     
-	<atom:link href="https://tangxusc.github.io/blog/tags/module/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://tangxusc.github.io/tags/module/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>golang package和module解析</title>
-      <link>https://tangxusc.github.io/blog/2019/05/golang-package%E5%92%8Cmodule%E8%A7%A3%E6%9E%90/</link>
+      <link>https://tangxusc.github.io/2019/05/golang-package%E5%92%8Cmodule%E8%A7%A3%E6%9E%90/</link>
       <pubDate>Wed, 15 May 2019 09:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/05/golang-package%E5%92%8Cmodule%E8%A7%A3%E6%9E%90/</guid>
+      <guid>https://tangxusc.github.io/2019/05/golang-package%E5%92%8Cmodule%E8%A7%A3%E6%9E%90/</guid>
       <description>&lt;p&gt;go语言中的package和module是我们经常会用到的功能,本文将详细的描述这两个功能的用法.&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -26,19 +26,19 @@
     
     <item>
       <title>Go模块简介</title>
-      <link>https://tangxusc.github.io/blog/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/</link>
+      <link>https://tangxusc.github.io/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/</guid>
+      <guid>https://tangxusc.github.io/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/</guid>
       <description>&lt;p&gt;go module模块的简介和使用&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>如何使用 go get 下载 gitlab 私有项目</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-go-get-%E4%B8%8B%E8%BD%BD-gitlab-%E7%A7%81%E6%9C%89%E9%A1%B9%E7%9B%AE/</link>
+      <link>https://tangxusc.github.io/2019/03/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-go-get-%E4%B8%8B%E8%BD%BD-gitlab-%E7%A7%81%E6%9C%89%E9%A1%B9%E7%9B%AE/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-go-get-%E4%B8%8B%E8%BD%BD-gitlab-%E7%A7%81%E6%9C%89%E9%A1%B9%E7%9B%AE/</guid>
+      <guid>https://tangxusc.github.io/2019/03/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-go-get-%E4%B8%8B%E8%BD%BD-gitlab-%E7%A7%81%E6%9C%89%E9%A1%B9%E7%9B%AE/</guid>
       <description>&lt;p&gt;在我们使用golang开发项目时,会遇到私有仓库问题,本文章讲解golang中私有仓库的使用&lt;/p&gt;</description>
     </item>
     

@@ -2,30 +2,30 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Lock on 苏连云的博客</title>
-    <link>https://tangxusc.github.io/blog/tags/lock/</link>
+    <link>https://tangxusc.github.io/tags/lock/</link>
     <description>Recent content in Lock on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 07 May 2019 14:38:42 +0800</lastBuildDate>
     
-	<atom:link href="https://tangxusc.github.io/blog/tags/lock/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://tangxusc.github.io/tags/lock/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Etcd Lock详解</title>
-      <link>https://tangxusc.github.io/blog/2019/05/etcd-lock%E8%AF%A6%E8%A7%A3/</link>
+      <link>https://tangxusc.github.io/2019/05/etcd-lock%E8%AF%A6%E8%A7%A3/</link>
       <pubDate>Tue, 07 May 2019 14:38:42 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/05/etcd-lock%E8%AF%A6%E8%A7%A3/</guid>
+      <guid>https://tangxusc.github.io/2019/05/etcd-lock%E8%AF%A6%E8%A7%A3/</guid>
       <description>&lt;p&gt;分布式情况下最终都会面临一个资源抢占的问题,解决问题的方法为抽象一个分布式锁,持有锁则可以操作资源,本文使用etcd实现一个分布式锁&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Java 读写锁实现原理</title>
-      <link>https://tangxusc.github.io/blog/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</link>
+      <link>https://tangxusc.github.io/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</guid>
+      <guid>https://tangxusc.github.io/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://my.oschina.net/editorial-story/blog/1928306&#34;&gt;https://my.oschina.net/editorial-story/blog/1928306&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;

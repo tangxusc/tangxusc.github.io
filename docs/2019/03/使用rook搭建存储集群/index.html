@@ -23,8 +23,8 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用rook搭建存储集群">
 <meta name="twitter:title" content="使用rook搭建存储集群">
-<meta property="og:url" content="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/">
-<meta property="twitter:url" content="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/">
+<meta property="og:url" content="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/">
 <meta property="og:site_name" content="苏连云的博客">
 <meta property="og:description" content="rook是云原生的存储协调器,为各种存储提供解决方案,提供自我管理,自我扩展,自我修复的存储服务,在kubernetes中实际实现是operator方式.
 
@@ -77,18 +77,18 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
 
 
 
-  <meta property="og:image" content="https://tangxusc.github.io/blog/photo.png">
-  <meta property="twitter:image" content="https://tangxusc.github.io/blog/photo.png">
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
 
 
     <title>使用rook搭建存储集群</title>
 
-    <link rel="icon" href="https://tangxusc.github.io/blog/favicon.png">
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
     
 
     
 
-    <link rel="canonical" href="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/">
+    <link rel="canonical" href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -96,7 +96,7 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
     
     
-    <link rel="stylesheet" href="https://tangxusc.github.io/blog/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
     
     
 
@@ -111,17 +111,17 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
       <header id="header" data-behavior="4">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
-    <a class="header-title-link" href="https://tangxusc.github.io/blog/">苏连云的博客</a>
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
   </div>
   
     
       <a class="header-right-picture "
-         href="https://tangxusc.github.io/blog/#about">
+         href="https://tangxusc.github.io/#about">
     
     
     
       
-        <img class="header-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
       
     
     </a>
@@ -132,8 +132,8 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
   <div class="sidebar-container">
     
       <div class="sidebar-profile">
-        <a href="https://tangxusc.github.io/blog/#about">
-          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
         </a>
         <h4 class="sidebar-profile-name">苏连云</h4>
         
@@ -145,7 +145,7 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
     
       <i class="sidebar-button-icon fa fa-lg fa-home"></i>
       
@@ -155,7 +155,7 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/categories">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
     
       <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
       
@@ -165,7 +165,7 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/tags">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
     
       <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
       
@@ -175,7 +175,7 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/archives">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
     
       <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
       
@@ -185,7 +185,7 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/#about">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
     
       <i class="sidebar-button-icon fa fa-lg fa-question"></i>
       
@@ -199,7 +199,7 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -255,11 +255,11 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
   
     <span>in</span>
     
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/kubeadm">kubeadm</a>, 
+      <a class="category-link" href="https://tangxusc.github.io/categories/kubeadm">kubeadm</a>, 
     
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/k8s">k8s</a>, 
+      <a class="category-link" href="https://tangxusc.github.io/categories/k8s">k8s</a>, 
     
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/rook">rook</a>
+      <a class="category-link" href="https://tangxusc.github.io/categories/rook">rook</a>
     
   
 
@@ -674,11 +674,11 @@ spec:
                   <div class="post-footer-tags">
                     <span class="text-color-light text-small">TAGGED IN</span><br/>
                     
-  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/kubeadm/">kubeadm</a>
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/kubeadm/">kubeadm</a>
 
-  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/k8s/">k8s</a>
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/k8s/">k8s</a>
 
-  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/rook/">rook</a>
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/rook/">rook</a>
 
                   </div>
                 
@@ -691,7 +691,7 @@ spec:
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/" data-tooltip="使用nfs作为k8s的PersistentVolume">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/" data-tooltip="使用nfs作为k8s的PersistentVolume">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -699,7 +699,7 @@ spec:
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8shipyard-proxy%E5%BC%80%E5%90%AFdocker-remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A32375/" data-tooltip="使用shipyard proxy开启docker remote远程端口(2375)">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8shipyard-proxy%E5%BC%80%E5%90%AFdocker-remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A32375/" data-tooltip="使用shipyard proxy开启docker remote远程端口(2375)">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -759,7 +759,7 @@ spec:
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/" data-tooltip="使用nfs作为k8s的PersistentVolume">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/" data-tooltip="使用nfs作为k8s的PersistentVolume">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -767,7 +767,7 @@ spec:
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/03/%E4%BD%BF%E7%94%A8shipyard-proxy%E5%BC%80%E5%90%AFdocker-remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A32375/" data-tooltip="使用shipyard proxy开启docker remote远程端口(2375)">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8shipyard-proxy%E5%BC%80%E5%90%AFdocker-remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A32375/" data-tooltip="使用shipyard proxy开启docker remote远程端口(2375)">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -819,7 +819,7 @@ spec:
       <i class="fa fa-remove"></i>
     </div>
     
-      <img id="about-card-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
     
     <h4 id="about-card-name">苏连云</h4>
     
@@ -864,7 +864,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
                 <h3 class="media-heading">迈向istio-13 自定义adapter(修改请求头)</h3>
               </a>
               <span class="media-meta">
@@ -883,7 +883,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
                 <h3 class="media-heading">NetworkPolicy介绍</h3>
               </a>
               <span class="media-meta">
@@ -902,7 +902,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
                 <h3 class="media-heading">亲和性调度</h3>
               </a>
               <span class="media-meta">
@@ -921,7 +921,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
                 <h3 class="media-heading">Local Persistent Volume 介绍</h3>
               </a>
               <span class="media-meta">
@@ -938,7 +938,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
                 <h3 class="media-heading">今日心情-上善若水</h3>
               </a>
               <span class="media-meta">
@@ -955,7 +955,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
                 <h3 class="media-heading">code-generator使用</h3>
               </a>
               <span class="media-meta">
@@ -972,7 +972,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
                 <h3 class="media-heading">理解kubernetes tools/cache包-7</h3>
               </a>
               <span class="media-meta">
@@ -993,7 +993,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
                 <h3 class="media-heading">理解kubernetes tools/cache包-6</h3>
               </a>
               <span class="media-meta">
@@ -1014,7 +1014,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
                 <h3 class="media-heading">理解kubernetes tools/cache包-5</h3>
               </a>
               <span class="media-meta">
@@ -1035,7 +1035,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-4/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-4/">
                 <h3 class="media-heading">理解kubernetes tools/cache包-4</h3>
               </a>
               <span class="media-meta">
@@ -1068,7 +1068,7 @@ spec:
     
   
     
-    <div id="cover" style="background-image:url('https://tangxusc.github.io/blog/images/cover.jpg');"></div>
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
   
 
 
@@ -1080,7 +1080,7 @@ spec:
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
 
 
-<script src="https://tangxusc.github.io/blog/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
 
 
 <script lang="javascript">
@@ -1115,7 +1115,7 @@ $(document).ready(function() {
     
       <script>
         var disqus_config = function () {
-          this.page.url = 'https:\/\/tangxusc.github.io\/blog\/2019\/03\/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4\/';
+          this.page.url = 'https:\/\/tangxusc.github.io\/2019\/03\/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4\/';
           
             this.page.identifier = '\/2019\/03\/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4\/'
           

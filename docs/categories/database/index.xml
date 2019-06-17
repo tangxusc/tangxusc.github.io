@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Database on 苏连云的博客</title>
-    <link>https://tangxusc.github.io/blog/categories/database/</link>
+    <link>https://tangxusc.github.io/categories/database/</link>
     <description>Recent content in Database on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
     
-	<atom:link href="https://tangxusc.github.io/blog/categories/database/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://tangxusc.github.io/categories/database/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>树形结构的数据库表 Schema 设计 - 基于左右值编码</title>
-      <link>https://tangxusc.github.io/blog/2019/03/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8-schema-%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E4%BA%8E%E5%B7%A6%E5%8F%B3%E5%80%BC%E7%BC%96%E7%A0%81/</link>
+      <link>https://tangxusc.github.io/2019/03/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8-schema-%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E4%BA%8E%E5%B7%A6%E5%8F%B3%E5%80%BC%E7%BC%96%E7%A0%81/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8-schema-%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E4%BA%8E%E5%B7%A6%E5%8F%B3%E5%80%BC%E7%BC%96%E7%A0%81/</guid>
+      <guid>https://tangxusc.github.io/2019/03/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8-schema-%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E4%BA%8E%E5%B7%A6%E5%8F%B3%E5%80%BC%E7%BC%96%E7%A0%81/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://www.cnblogs.com/M-D-Luffy/p/4712846.html&#34;&gt;https://www.cnblogs.com/M-D-Luffy/p/4712846.html&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;

@@ -19,8 +19,8 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="迈向istio-6 镜像流量">
 <meta name="twitter:title" content="迈向istio-6 镜像流量">
-<meta property="og:url" content="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/">
-<meta property="twitter:url" content="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/">
+<meta property="og:url" content="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/">
 <meta property="og:site_name" content="苏连云的博客">
 <meta property="og:description" content="我们在前面几个章节中使用了两个服务(proxy,target),现在我们想对target进行一次升级,但是现在我们这个代码写的还不够好(没人能说他的代码一次就是期望的行为),希望通过复制一部分现在的流量 用来测试这个服务是否正确,那么这个时候就会使用到istio的镜像流量功能了
 
@@ -61,18 +61,18 @@
 
 
 
-  <meta property="og:image" content="https://tangxusc.github.io/blog/photo.png">
-  <meta property="twitter:image" content="https://tangxusc.github.io/blog/photo.png">
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
 
 
     <title>迈向istio-6 镜像流量</title>
 
-    <link rel="icon" href="https://tangxusc.github.io/blog/favicon.png">
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
     
 
     
 
-    <link rel="canonical" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/">
+    <link rel="canonical" href="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -80,7 +80,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
     
     
-    <link rel="stylesheet" href="https://tangxusc.github.io/blog/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
     
     
 
@@ -95,17 +95,17 @@
       <header id="header" data-behavior="4">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
-    <a class="header-title-link" href="https://tangxusc.github.io/blog/">苏连云的博客</a>
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
   </div>
   
     
       <a class="header-right-picture "
-         href="https://tangxusc.github.io/blog/#about">
+         href="https://tangxusc.github.io/#about">
     
     
     
       
-        <img class="header-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
       
     
     </a>
@@ -116,8 +116,8 @@
   <div class="sidebar-container">
     
       <div class="sidebar-profile">
-        <a href="https://tangxusc.github.io/blog/#about">
-          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
         </a>
         <h4 class="sidebar-profile-name">苏连云</h4>
         
@@ -129,7 +129,7 @@
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
     
       <i class="sidebar-button-icon fa fa-lg fa-home"></i>
       
@@ -139,7 +139,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/categories">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
     
       <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
       
@@ -149,7 +149,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/tags">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
     
       <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
       
@@ -159,7 +159,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/archives">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
     
       <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
       
@@ -169,7 +169,7 @@
 
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://tangxusc.github.io/blog/#about">
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
     
       <i class="sidebar-button-icon fa fa-lg fa-question"></i>
       
@@ -183,7 +183,7 @@
       
   <li class="sidebar-button">
     
-      <a class="sidebar-button-link " href="https://github.com/tangxusc/blog" target="_blank" rel="noopener">
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
     
       <i class="sidebar-button-icon fa fa-lg fa-github"></i>
       
@@ -239,7 +239,7 @@
   
     <span>in</span>
     
-      <a class="category-link" href="https://tangxusc.github.io/blog/categories/istio">istio</a>
+      <a class="category-link" href="https://tangxusc.github.io/categories/istio">istio</a>
     
   
 
@@ -255,7 +255,7 @@
 
 <h2 id="服务图">服务图</h2>
 
-<p><img src="https://tangxusc.github.io/blog/post/迈向istio/6-镜像流量/服务图.png"/></p>
+<p><img src="https://tangxusc.github.io/post/迈向istio/6-镜像流量/服务图.png"/></p>
 
 <h3 id="target代码">target代码</h3>
 
@@ -370,7 +370,7 @@ $ istioctl create -f istio.yaml -n test
 
 <h3 id="验证配置">验证配置</h3>
 
-<p><img src="https://tangxusc.github.io/blog/post/迈向istio/6-镜像流量/服务图.png"/></p>
+<p><img src="https://tangxusc.github.io/post/迈向istio/6-镜像流量/服务图.png"/></p>
 
 <p>好了,现在可以开始我们正式的表演</p>
 
@@ -389,7 +389,7 @@ $ kubectl logs -f target-85fb8c6f7f-2cxpb -n test -c target
 
 <p>现在就可以看到实际上流量到达的是target,但是新的版本v2也接收到了请求的流量,那么我们再看kiali上的展示:</p>
 
-<p><img src="https://tangxusc.github.io/blog/post/迈向istio/6-镜像流量/效果.png"/></p>
+<p><img src="https://tangxusc.github.io/post/迈向istio/6-镜像流量/效果.png"/></p>
 
 <h3 id="配置说明">配置说明</h3>
 
@@ -521,7 +521,7 @@ spec:
                   <div class="post-footer-tags">
                     <span class="text-color-light text-small">TAGGED IN</span><br/>
                     
-  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/blog/tags/istio/">istio</a>
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/istio/">istio</a>
 
                   </div>
                 
@@ -534,7 +534,7 @@ spec:
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/" data-tooltip="迈向istio-5 引入外部服务">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/" data-tooltip="迈向istio-5 引入外部服务">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -542,7 +542,7 @@ spec:
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-7-tls/" data-tooltip="迈向istio-7 tls">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-7-tls/" data-tooltip="迈向istio-7 tls">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -602,7 +602,7 @@ spec:
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/" data-tooltip="迈向istio-5 引入外部服务">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/" data-tooltip="迈向istio-5 引入外部服务">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -610,7 +610,7 @@ spec:
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/blog/2019/04/%E8%BF%88%E5%90%91istio-7-tls/" data-tooltip="迈向istio-7 tls">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-7-tls/" data-tooltip="迈向istio-7 tls">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -662,7 +662,7 @@ spec:
       <i class="fa fa-remove"></i>
     </div>
     
-      <img id="about-card-picture" src="https://tangxusc.github.io/blog/photo.png" alt="Author&#39;s picture" />
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
     
     <h4 id="about-card-name">苏连云</h4>
     
@@ -707,7 +707,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
                 <h3 class="media-heading">迈向istio-13 自定义adapter(修改请求头)</h3>
               </a>
               <span class="media-meta">
@@ -726,7 +726,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
                 <h3 class="media-heading">NetworkPolicy介绍</h3>
               </a>
               <span class="media-meta">
@@ -745,7 +745,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
                 <h3 class="media-heading">亲和性调度</h3>
               </a>
               <span class="media-meta">
@@ -764,7 +764,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
                 <h3 class="media-heading">Local Persistent Volume 介绍</h3>
               </a>
               <span class="media-meta">
@@ -781,7 +781,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
                 <h3 class="media-heading">今日心情-上善若水</h3>
               </a>
               <span class="media-meta">
@@ -798,7 +798,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
                 <h3 class="media-heading">code-generator使用</h3>
               </a>
               <span class="media-meta">
@@ -815,7 +815,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
                 <h3 class="media-heading">理解kubernetes tools/cache包-7</h3>
               </a>
               <span class="media-meta">
@@ -836,7 +836,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
                 <h3 class="media-heading">理解kubernetes tools/cache包-6</h3>
               </a>
               <span class="media-meta">
@@ -857,7 +857,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
                 <h3 class="media-heading">理解kubernetes tools/cache包-5</h3>
               </a>
               <span class="media-meta">
@@ -878,7 +878,7 @@ spec:
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/blog/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-4/">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-4/">
                 <h3 class="media-heading">理解kubernetes tools/cache包-4</h3>
               </a>
               <span class="media-meta">
@@ -911,7 +911,7 @@ spec:
     
   
     
-    <div id="cover" style="background-image:url('https://tangxusc.github.io/blog/images/cover.jpg');"></div>
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
   
 
 
@@ -923,7 +923,7 @@ spec:
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
 
 
-<script src="https://tangxusc.github.io/blog/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
 
 
 <script lang="javascript">
@@ -958,7 +958,7 @@ $(document).ready(function() {
     
       <script>
         var disqus_config = function () {
-          this.page.url = 'https:\/\/tangxusc.github.io\/blog\/2019\/04\/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F\/';
+          this.page.url = 'https:\/\/tangxusc.github.io\/2019\/04\/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F\/';
           
             this.page.identifier = '\/2019\/04\/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F\/'
           

@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Sonarqube on 苏连云的博客</title>
-    <link>https://tangxusc.github.io/blog/tags/sonarqube/</link>
+    <link>https://tangxusc.github.io/tags/sonarqube/</link>
     <description>Recent content in Sonarqube on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
     
-	<atom:link href="https://tangxusc.github.io/blog/tags/sonarqube/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://tangxusc.github.io/tags/sonarqube/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Jenkins Sonar Github 代码质量管理</title>
-      <link>https://tangxusc.github.io/blog/2019/03/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86/</link>
+      <link>https://tangxusc.github.io/2019/03/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86/</guid>
+      <guid>https://tangxusc.github.io/2019/03/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://segmentfault.com/a/1190000015592863&#34;&gt;https://segmentfault.com/a/1190000015592863&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -26,10 +26,10 @@
     
     <item>
       <title>sonarqube使用指南</title>
-      <link>https://tangxusc.github.io/blog/2019/03/sonarqube%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</link>
+      <link>https://tangxusc.github.io/2019/03/sonarqube%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</link>
       <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
       
-      <guid>https://tangxusc.github.io/blog/2019/03/sonarqube%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</guid>
+      <guid>https://tangxusc.github.io/2019/03/sonarqube%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</guid>
       <description>&lt;h2 id=&#34;简介&#34;&gt;简介&lt;/h2&gt;
 
 &lt;p&gt;​   Sonar是一个用于代码质量管理的开源平台，用于管理源代码的质量，可以从多个维度检测代码质量通过插件形式，可以支持包括java,C#,C/C++,PL/SQL,Cobol,JavaScrip,Groovy等等二十几种编程语言的代码质量管理与检测&lt;/p&gt;</description>
