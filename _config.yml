@@ -1,0 +1,5 @@
+deploy:
+  type: git
+  repository: git@github.com:tangxusc/tangxusc.github.io.git
+  branch: master
+source: "docs"
