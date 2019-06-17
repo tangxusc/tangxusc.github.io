@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="client-go, client, code-generator">
+<meta name="description" content="client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..">
+
+
+<meta property="og:description" content="client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..">
+<meta property="og:type" content="article">
+<meta property="og:title" content="code-generator使用">
+<meta name="twitter:title" content="code-generator使用">
+<meta property="og:url" content="https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..">
+<meta name="twitter:description" content="client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-05-17T11:13:08">
+  
+  
+    <meta property="article:modified_time" content="2019-05-17T11:13:08">
+  
+  
+  
+    
+      <meta property="article:section" content="k8s">
+    
+      <meta property="article:section" content="client">
+    
+  
+  
+    
+      <meta property="article:tag" content="k8s">
+    
+      <meta property="article:tag" content="client-go">
+    
+      <meta property="article:tag" content="code-generator">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>code-generator使用</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      code-generator使用
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-05-17T11:13:08&#43;08:00">
+        
+  May 17, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/k8s">k8s</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/client">client</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..</p>
+
+<h2 id="code-generator">code-generator</h2>
+
+<p>在使用kubernetes的过程中,使用到一定阶段不可避免的就是使用第三方资源,那么如果操作第三方资源就成了一个问题,虽然有client-go的方式操作,但是此方式只提供了rest api和 dynamic client来操作第三方资源,需要自己实现反序列化等功能.</p>
+
+<p>那么我们不禁想问: 有没有一个更好的方法来做呢?</p>
+
+<p>在kubernetes的源码中我们经常可以看到code-generator的身影,没错, 这工具就是来做这样一个事情的:</p>
+
+<p>code-generator提供了以下工具为kubernetes中的资源生成代码:</p>
+
+<p><code>deepcopy-gen</code>: 生成深度拷贝方法,避免性能开销</p>
+
+<p><code>client-gen</code>:为资源生成标准的操作方法(get,list,create,update,patch,delete,deleteCollection,watch)</p>
+
+<p><code>informer-gen</code>: 生成informer,提供事件机制来相应kubernetes的event</p>
+
+<p><code>lister-gen</code>: 为get和list方法提供只读缓存层</p>
+
+<p>其中informer和listers是构建controller的基础,kubebuilder也是基于informer的机制生成的代码.</p>
+
+<p>code-generator还专门整合了这些gen,形成了<a href="https://github.com/kubernetes/code-generator/blob/master/generate-groups.sh">generate-groups.sh</a>和<a href="https://github.com/kubernetes/code-generator/blob/master/generate-internal-groups.sh">generate-internal-groups.sh</a>这两个脚本.</p>
+
+<p>接下来我们就一起来使用这些脚本生成我们的自定义crd资源的代码.</p>
+
+<h2 id="演示">演示</h2>
+
+<h3 id="1-初始化项目">1,初始化项目</h3>
+
+<p>项目使用go.mod管理,所以在初始化项目的同时,我们需要初始化依赖库</p>
+
+<pre><code class="language-shell">#创建目录
+$ mkdir code-generator-test &amp;&amp; cd code-generator-test
+#初始化项目
+$ go mod init code-generator-test
+# 获取依赖
+$ go get k8s.io/apimachinery@v0.0.0-20190425132440-17f84483f500
+$ go get k8s.io/client-go@v0.0.0-20190425172711-65184652c889
+$ go get k8s.io/code-generator@v0.0.0-20190419212335-ff26e7842f9d
+</code></pre>
+
+<h3 id="2-初始化crd资源类型">2,初始化crd资源类型</h3>
+
+<p>在初始化了项目后,需要建立好自己的crd struct,然后使用code-generator生成我们的代码.</p>
+
+<pre><code class="language-shell">$ mkdir -p api/samplecontroller/v1alpha1 &amp;&amp; cd api/samplecontroller/v1alpha1
+</code></pre>
+
+<blockquote>
+<p>此处我们的自定义资源的group为<code>samplecontroller</code>,版本为<code>v1alpha1</code></p>
+</blockquote>
+
+<p>在文件夹中新建:</p>
+
+<p><code>doc.go</code></p>
+
+<pre><code class="language-go">// +k8s:deepcopy-gen=package
+// +groupName=samplecontroller.k8s.io
+
+// v1alpha1版本的api包
+package v1alpha1
+</code></pre>
+
+<p><code>types.go</code></p>
+
+<pre><code class="language-go">package v1alpha1
+
+import (
+	metav1 &quot;k8s.io/apimachinery/pkg/apis/meta/v1&quot;
+)
+
+// +genclient
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
+// Foo is a specification for a Foo resource
+type Foo struct {
+	metav1.TypeMeta   `json:&quot;,inline&quot;`
+	metav1.ObjectMeta `json:&quot;metadata,omitempty&quot;`
+
+	Spec   FooSpec   `json:&quot;spec&quot;`
+	Status FooStatus `json:&quot;status&quot;`
+}
+
+// FooSpec is the spec for a Foo resource
+type FooSpec struct {
+	DeploymentName string `json:&quot;deploymentName&quot;`
+	Replicas       *int32 `json:&quot;replicas&quot;`
+}
+
+// FooStatus is the status for a Foo resource
+type FooStatus struct {
+	AvailableReplicas int32 `json:&quot;availableReplicas&quot;`
+}
+
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
+// FooList is a list of Foo resources
+type FooList struct {
+	metav1.TypeMeta `json:&quot;,inline&quot;`
+	metav1.ListMeta `json:&quot;metadata&quot;`
+
+	Items []Foo `json:&quot;items&quot;`
+}
+
+</code></pre>
+
+<h3 id="3-创建生成脚本">3,创建生成脚本</h3>
+
+<p>有了crd的定义后,我们需要准备我们的构建脚本和对依赖进行一定的修改.</p>
+
+<pre><code class="language-shell">$ mkdir hack &amp;&amp; cd hack
+</code></pre>
+
+<p>建立<code>tools.go</code>来依赖<code>code-generator</code>,因为在没有代码使用code-generator时,go module 默认不会为我们依赖此包.</p>
+
+<pre><code class="language-go">// +build tools
+
+/*
+Copyright 2019 The Kubernetes Authors.
+
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+// This package imports things required by build scripts, to force `go mod` to see them as dependencies
+package tools
+
+import _ &quot;k8s.io/code-generator&quot;
+</code></pre>
+
+<p>同时 编写我们的构建脚本:</p>
+
+<p><code>update-codegen.sh</code></p>
+
+<pre><code class="language-shell">#!/usr/bin/env bash
+
+# Copyright 2017 The Kubernetes Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+# generate the code with:
+# --output-base    because this script should also be able to run inside the vendor dir of
+#                  k8s.io/kubernetes. The output-base is needed for the generators to output into the vendor dir
+#                  instead of the $GOPATH directly. For normal projects this can be dropped.
+../vendor/k8s.io/code-generator/generate-groups.sh \
+  &quot;deepcopy,client,informer,lister&quot; \
+  code-generator-test/generated \
+  code-generator-test/api \
+  samplecontroller:v1alpha1 \
+  --go-header-file $(pwd)/boilerplate.go.txt \
+  --output-base $(pwd)/../../
+</code></pre>
+
+<p>可以看到<code>generate-groups.sh</code>其中有几个参数,使用命令可以看到如下:</p>
+
+<pre><code class="language-shell">Usage: generate-groups.sh &lt;generators&gt; &lt;output-package&gt; &lt;apis-package&gt; &lt;groups-versions&gt; ...
+
+  &lt;generators&gt;        the generators comma separated to run (deepcopy,defaulter,client,lister,informer) or &quot;all&quot;.
+  &lt;output-package&gt;    the output package name (e.g. github.com/example/project/pkg/generated).
+  &lt;apis-package&gt;      the external types dir (e.g. github.com/example/api or github.com/example/project/pkg/apis).
+  &lt;groups-versions&gt;   the groups and their versions in the format &quot;groupA:v1,v2 groupB:v1 groupC:v2&quot;, relative
+                      to &lt;api-package&gt;.
+  ...                 arbitrary flags passed to all generator binaries.
+
+
+Examples:
+  generate-groups.sh all             github.com/example/project/pkg/client github.com/example/project/pkg/apis &quot;foo:v1 bar:v1alpha1,v1beta1&quot;
+  generate-groups.sh deepcopy,client github.com/example/project/pkg/client github.com/example/project/pkg/apis &quot;foo:v1 bar:v1alpha1,v1beta1&quot;
+</code></pre>
+
+<p>在构建api时,我们还提供了文件头,所以我们在此也创建文件头:</p>
+
+<p><code>boilerplate.go.txt</code></p>
+
+<pre><code class="language-txt">/*
+Copyright The Kubernetes Authors.
+
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+</code></pre>
+
+<p>当然,这个文件的头是可以定制的.</p>
+
+<h3 id="4-生成api">4,生成api</h3>
+
+<p>当我们做好这些准备工作后就可以开始生成我们的crd资源的clientset等api了.</p>
+
+<pre><code class="language-shell"># 生成vendor文件夹
+$ go mod vendor
+# 进入项目根目录,为vendor中的code-generator赋予权限
+$ chmod -R 777 vendor
+# 调用脚本生成代码
+$ cd hack &amp;&amp; ./update-codegen.sh
+Generating deepcopy funcs
+Generating clientset for samplecontroller:v1alpha1 at code-generator-test/generated/clientset
+Generating listers for samplecontroller:v1alpha1 at code-generator-test/generated/listers
+Generating informers for samplecontroller:v1alpha1 at code-generator-test/generated/informers
+
+#此时目录变为如下情况
+$cd ../ &amp;&amp; tree -L 3
+.
+├── api
+│   └── samplecontroller
+│       └── v1alpha1
+├── generated
+│   ├── clientset
+│   │   └── versioned
+│   ├── informers
+│   │   └── externalversions
+│   └── listers
+│       └── samplecontroller
+├── go.mod
+├── go.sum
+├── hack
+│   ├── boilerplate.go.txt
+│   ├── tools.go
+│   └── update-codegen.sh
+</code></pre>
+
+<p>仔细观察,发现<code>code-generator-test/api/samplecontroller/v1alpha1</code>下多出了一个<code>zz_generated.deepcopy.go</code>的文件,在<code>generated</code>文件夹下生成了<code>clientset</code>和<code>informers</code>和<code>listers</code>三个文件夹</p>
+
+<h3 id="5-使用">5,使用</h3>
+
+<p>在生成了客户端代码后,我们还是需要手动的注册这个crd资源,才能正真使用这个client,不然在编译时会出现如下错误</p>
+
+<pre><code class="language-shell"># code-generator-test/generated/clientset/versioned/scheme
+generated/clientset/versioned/scheme/register.go:35:2: undefined: v1alpha1.AddToScheme
+# code-generator-test/generated/listers/samplecontroller/v1alpha1
+generated/listers/samplecontroller/v1alpha1/foo.go:92:34: undefined: v1alpha1.Resource
+</code></pre>
+
+<p>由编译的错误提示,可以看到,需要提供<code>v1alpha1.AddToScheme</code>和<code>v1alpha1.Resource</code>这两个变量供client注册.</p>
+
+<p>所以我们还需要在<code>v1alpha1</code>下新建一个<code>register.go</code>文件,内容如下:</p>
+
+<pre><code class="language-go">/*
+Copyright 2017 The Kubernetes Authors.
+
+Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package v1alpha1
+
+import (
+	metav1 &quot;k8s.io/apimachinery/pkg/apis/meta/v1&quot;
+	&quot;k8s.io/apimachinery/pkg/runtime&quot;
+	&quot;k8s.io/apimachinery/pkg/runtime/schema&quot;
+)
+
+// SchemeGroupVersion is group version used to register these objects
+// 注册自己的自定义资源
+var SchemeGroupVersion = schema.GroupVersion{Group: &quot;samplecontroller.k8s.io&quot;, Version: &quot;v1alpha1&quot;}
+
+// Kind takes an unqualified kind and returns back a Group qualified GroupKind
+func Kind(kind string) schema.GroupKind {
+	return SchemeGroupVersion.WithKind(kind).GroupKind()
+}
+
+// Resource takes an unqualified resource and returns a Group qualified GroupResource
+func Resource(resource string) schema.GroupResource {
+	return SchemeGroupVersion.WithResource(resource).GroupResource()
+}
+
+var (
+	SchemeBuilder = runtime.NewSchemeBuilder(addKnownTypes)
+	AddToScheme   = SchemeBuilder.AddToScheme
+)
+
+// Adds the list of known types to Scheme.
+func addKnownTypes(scheme *runtime.Scheme) error {
+	//注意,添加了foo/foolist 两个资源到scheme
+	scheme.AddKnownTypes(SchemeGroupVersion,
+		&amp;Foo{},
+		&amp;FooList{},
+	)
+	metav1.AddToGroupVersion(scheme, SchemeGroupVersion)
+	return nil
+}
+</code></pre>
+
+<p>其中需要修改的地方我都用中文注释出来了.</p>
+
+<h3 id="6-测试">6,测试</h3>
+
+<p>在完成以上的工作后,我们可以写一个测试函数来测试,示例代码如下:</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;code-generator-test/generated/clientset/versioned&quot;
+	&quot;code-generator-test/generated/clientset/versioned/typed/samplecontroller/v1alpha1&quot;
+	&quot;code-generator-test/generated/informers/externalversions&quot;
+	&quot;fmt&quot;
+	metav1 &quot;k8s.io/apimachinery/pkg/apis/meta/v1&quot;
+	&quot;k8s.io/client-go/tools/clientcmd&quot;
+	&quot;testing&quot;
+	&quot;time&quot;
+)
+
+func TestClient(t *testing.T) {
+    config, e := clientcmd.BuildConfigFromFlags(&quot;10.30.21.238:6443&quot;, &quot;/home/tangxu/.kube/config&quot;)
+	if e != nil {
+		panic(e.Error())
+	}
+    //注意,这里使用的是v1alpha1这个包
+	client, e := v1alpha1.NewForConfig(config)
+	if e != nil {
+		panic(e.Error())
+	}
+	fooList, e := client.Foos(&quot;test&quot;).List(metav1.ListOptions{})
+	fmt.Println(fooList, e)
+
+    //注意 这里的versioned包
+	clientset, e := versioned.NewForConfig(config)
+	factory := externalversions.NewSharedInformerFactory(clientset, 30*time.Second)
+	foo, e := factory.Samplecontroller().V1alpha1().Foos().Lister().Foos(&quot;test&quot;).Get(&quot;test&quot;)
+	if e != nil {
+		panic(e.Error())
+	}
+	fmt.Println(foo, e)
+}
+</code></pre>
+
+<p>通过上面的示例,我们就可以看到我们的clientset和informer使用方式和原生的kubernetes的资源使用方式一模一样了.</p>
+
+<h2 id="tag">tag</h2>
+
+<p>在实际的操作了一个生成crd的client之后,是不是觉得crd整体的生成下来还是相对简单的.</p>
+
+<p>不过在我们使用的时候不知道是否有关注到这样一个细节,在我们的源代码中出现了很多</p>
+
+<p><code>doc.go</code></p>
+
+<pre><code class="language-go">// +k8s:deepcopy-gen=package,register
+// +groupName=samplecontroller.k8s.io
+</code></pre>
+
+<p><code>types.go</code></p>
+
+<pre><code class="language-go">// +genclient
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+</code></pre>
+
+<p>出现了这样的tag,这些tag到底是什么意思呢,有什么作用呢?</p>
+
+<h3 id="分类">分类</h3>
+
+<p>其实code-generator将tag分为了两种,</p>
+
+<p><code>Global tags</code>: 全局的tag,放在具体版本的doc.go文件中</p>
+
+<p><code>Local tags</code>: 本地的tag,放在types.go文件中的具体的struct上.</p>
+
+<p>tag的使用语法为:</p>
+
+<pre><code class="language-go">// +tag-name 
+或
+// +tag-name=value
+</code></pre>
+
+<p>并且 这些注释块必须分开,<strong>这也是源代码中 注释存在分割的原因.</strong> 接下来,详细了解一下这两个文件中的注释吧..</p>
+
+<h3 id="global">Global</h3>
+
+<p>全局的tag是写在doc.go中的,典型的内容如下:</p>
+
+<pre><code class="language-go">// +k8s:deepcopy-gen=package
+
+
+// Package v1 is the v1 version of the API.
+// +groupName=example.com
+package v1
+</code></pre>
+
+<blockquote>
+<p>注意: 空行不能省</p>
+</blockquote>
+
+<p><code>+k8s:deepcopy-gen=</code>: 它告诉deepcopy默认为该包中的每一个类型创建deepcopy方法</p>
+
+<p>如果不需要深度复制,可以选择关闭此功能<code>// +k8s:deepcopy-gen=false</code></p>
+
+<p>如果不启用包级别的深度复制,那么就需要在每个类型上加入深度复制<code>// +k8s:deepcopy-gen=true</code></p>
+
+<p><code>+groupName</code>: 定义group的名称,注意别弄错了.</p>
+
+<blockquote>
+<p>注意 这里是 <strong>+k8s:deepcopy-gen=</strong>,最后是 <strong>=</strong> ,和local中的区别开来.</p>
+</blockquote>
+
+<h3 id="local">local</h3>
+
+<p>本地的tag直接写在类型上,典型的内容如下:</p>
+
+<pre><code class="language-go">// +genclient
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
+// Foo is a specification for a Foo resource
+type Foo struct {
+	metav1.TypeMeta   `json:&quot;,inline&quot;`
+	metav1.ObjectMeta `json:&quot;metadata,omitempty&quot;`
+
+	Spec   FooSpec   `json:&quot;spec&quot;`
+	Status FooStatus `json:&quot;status&quot;`
+}
+</code></pre>
+
+<p>可以看到local支持两种tag</p>
+
+<p><code>+genclient</code>: 此标签是告诉client-gen,为此类型创建clientset,但也有以下几种用法.</p>
+
+<p><strong>1,</strong>对于集群范围内的资源(没有namespace限制的),需要使用<code>// +genclient:nonNamespaced</code>,生成的clientset中的namespace()方法就不再需要传入参数</p>
+
+<p><strong>2,</strong>使用子资源分离的,例如/status分离的,则需要使用<code>+genclient:noStatus</code>,来避免更新到status资源(当然代码的struct中也没有status)</p>
+
+<p><strong>3,</strong>对于其他的值,这里不做过多的解释,请参照</p>
+
+<pre><code class="language-go">// +genclient:noVerbs
+// +genclient:onlyVerbs=create,delete
+// +genclient:skipVerbs=get,list,create,update,patch,delete,deleteCollection,watch
+// +genclient:method=Create,verb=create,result=k8s.io/apimachinery/pkg/apis/meta/v1.Status
+</code></pre>
+
+<p><code>+k8s:deepcopy-gen:interfaces=</code>: 为struct生成实现 <code>tag值</code>的DeepCopyXxx方法</p>
+
+<p>例如:<code>// +k8s:deepcopy-gen:interfaces=example.com/pkg/apis/example.SomeInterface</code></p>
+
+<p>将生成 <code>DeepCopySomeInterface() SomeInterface</code>方法</p>
+
+<h2 id="参照">参照</h2>
+
+<p><a href="https://blog.openshift.com/kubernetes-deep-dive-code-generation-customresources/">Kubernetes Deep Dive: Code Generation for CustomResources</a></p>
+
+<p><a href="https://github.com/kubernetes/code-generator">code-generator</a></p>
+
+<p><a href="https://github.com/tangxusc/code-generator-demo">示例工程代码</a></p>
+
+<p><a href="https://github.com/kubernetes/sample-controller">sample controller</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/k8s/">k8s</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/client-go/">client-go</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/code-generator/">code-generator</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/" data-tooltip="今日心情-上善若水">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/" data-tooltip="理解kubernetes tools/cache包-7">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/" data-tooltip="今日心情-上善若水">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/" data-tooltip="理解kubernetes tools/cache包-7">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+                <h3 class="media-heading">迈向istio-13 自定义adapter(修改请求头)</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.</p>
+
+<p>mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为<code>Adapter</code>,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">NetworkPolicy介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中的所有的pod在默认情况下,网络都是互通的,pod接收来自任何来源的流量.</p>
+
+<p>那么我们如何限制pod的网络通信,防止非法访问呢?</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
+                <h3 class="media-heading">亲和性调度</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中对pod的调度由调度控制器负责,在调度的时候有很大的随机性.</p>
+
+<p>但是我们很多时候需要容器更多的分散在不同的node上,有一些情况又需要尽量集中在一起,减少网络开销</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">Local Persistent Volume 介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中,存储一直是一个较为头疼的问题,在面对持久化存储,我们可以选择各种文件系统,但是对于那些临时存储的文件,我们则需要一种本地存储的能力,在kubernetes1.14中为我们提供了一种本地存储<code>localPV</code>,本文将围绕此展开.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
+                <h3 class="media-heading">今日心情-上善若水</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>一天又一天,每一天都那么一样又不那么一样.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+                <h3 class="media-heading">code-generator使用</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-7</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948541">https://blog.csdn.net/weixin_39961559/article/details/81948541</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第七节,也是最后一节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-6</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948239">https://blog.csdn.net/weixin_39961559/article/details/81948239</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第六节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-5</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81946899">https://blog.csdn.net/weixin_39961559/article/details/81946899</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第五节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-4/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-4</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81946398">https://blog.csdn.net/weixin_39961559/article/details/81946398</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第四节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         94 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2019\/05\/code-generator%E4%BD%BF%E7%94%A8\/';
+          
+            this.page.identifier = '\/2019\/05\/code-generator%E4%BD%BF%E7%94%A8\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

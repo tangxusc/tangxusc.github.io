@@ -1,0 +1,10 @@
+groups:
+  - name: "test-alert"
+    rules:
+    - alert: downInstance
+      expr: up == 1
+      for: 5m
+      labels:
+        nodeDown: true
+      annotations:
+        test: "{{$value}},{{$labels.nodeDown}},{{$labels.instance}}"

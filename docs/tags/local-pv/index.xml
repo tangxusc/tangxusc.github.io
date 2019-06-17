@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Local Pv on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/tags/local-pv/</link>
+    <description>Recent content in Local Pv on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 20 May 2019 15:34:24 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/tags/local-pv/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Local Persistent Volume 介绍</title>
+      <link>https://tangxusc.github.io/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/</link>
+      <pubDate>Mon, 20 May 2019 15:34:24 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/</guid>
+      <description>&lt;p&gt;在kubernetes中,存储一直是一个较为头疼的问题,在面对持久化存储,我们可以选择各种文件系统,但是对于那些临时存储的文件,我们则需要一种本地存储的能力,在kubernetes1.14中为我们提供了一种本地存储&lt;code&gt;localPV&lt;/code&gt;,本文将围绕此展开.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

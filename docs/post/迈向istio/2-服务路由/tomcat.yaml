@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: tomcat
+ namespace: test
+ labels:
+   app: tomcat
+   version: v1
+spec:
+ template:
+    metadata:
+     labels:
+       app: tomcat
+       version: v1
+    spec:
+     containers:
+     - name: tomcat
+       image: tomcat:8
+       ports:
+       - containerPort: 8080
+         name: http
+         protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: tomcat
+  namespace: test
+spec:
+  type: ClusterIP
+  selector:
+    app: tomcat
+  ports:
+    - port: 8890
+      protocol: TCP
+      targetPort: 8080

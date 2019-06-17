@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gitsubtree on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/categories/gitsubtree/</link>
+    <description>Recent content in Gitsubtree on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/categories/gitsubtree/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>git subtree 教程</title>
+      <link>https://tangxusc.github.io/2019/03/git-subtree-%E6%95%99%E7%A8%8B/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/git-subtree-%E6%95%99%E7%A8%8B/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://segmentfault.com/a/1190000012002151&#34;&gt;https://segmentfault.com/a/1190000012002151&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;关于子仓库或者说是仓库共用，git 官方推荐的工具是 git subtree。 我自己也用了一段时间的 git subtree，感觉比 git submodule 好用，但是也有一些缺点，在可接受的范围内。
+所以对于仓库共用，在 git subtree 与 git submodule 之中选择的话，我推荐 git subtree。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>git版本控制最佳实践</title>
+      <link>https://tangxusc.github.io/2019/03/git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</guid>
+      <description>&lt;p&gt;git版本控制最佳实践&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

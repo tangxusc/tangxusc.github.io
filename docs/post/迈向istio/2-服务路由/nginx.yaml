@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: nginx
+ namespace: test
+ labels:
+   app: nginx
+   version: v1
+spec:
+ template:
+    metadata:
+     labels:
+       app: nginx
+       version: v1
+    spec:
+     containers:
+     - name: nginx
+       image: nginx
+       ports:
+       - containerPort: 80
+         name: http
+         protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx
+  namespace: test
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx
+  ports:
+    - port: 7890
+      protocol: TCP
+      targetPort: 80

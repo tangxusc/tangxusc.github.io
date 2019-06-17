@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="sonarqube">
+<meta name="description" content="
+本文由 简悦 SimpRead 转码， 原文地址 https://segmentfault.com/a/1190000015592863
+
+
+Jenkins Sonar Github 代码质量管理">
+
+
+<meta property="og:description" content="
+本文由 简悦 SimpRead 转码， 原文地址 https://segmentfault.com/a/1190000015592863
+
+
+Jenkins Sonar Github 代码质量管理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins Sonar Github 代码质量管理">
+<meta name="twitter:title" content="Jenkins Sonar Github 代码质量管理">
+<meta property="og:url" content="https://tangxusc.github.io/2019/03/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2019/03/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+本文由 简悦 SimpRead 转码， 原文地址 https://segmentfault.com/a/1190000015592863
+
+
+Jenkins Sonar Github 代码质量管理">
+<meta name="twitter:description" content="
+本文由 简悦 SimpRead 转码， 原文地址 https://segmentfault.com/a/1190000015592863
+
+
+Jenkins Sonar Github 代码质量管理">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-03-20T14:15:59">
+  
+  
+    <meta property="article:modified_time" content="2019-03-20T14:15:59">
+  
+  
+  
+    
+      <meta property="article:section" content="sonarqube">
+    
+  
+  
+    
+      <meta property="article:tag" content="sonarqube">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>Jenkins Sonar Github 代码质量管理</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2019/03/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Jenkins Sonar Github 代码质量管理
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
+        
+  March 20, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/sonarqube">sonarqube</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://segmentfault.com/a/1190000015592863">https://segmentfault.com/a/1190000015592863</a></p>
+</blockquote>
+
+<p>Jenkins Sonar Github 代码质量管理</p>
+
+<h1 id="背景">背景</h1>
+
+<p>前阵子老美的 Audit 要求各个开发组截图各自 repository 的 Sonar Analysis Report，我跑去 Sonarqube 一看。。。好家伙！全是红灯，简直惨不忍睹</p>
+
+<p><img src="https://segmentfault.com/img/bVbdAmb?w=1310&amp;h=1204" alt="" /></p>
+
+<p>当然这其中有历史问题，因为我们是半路接管的欧美 team 的 code，很多 issue 都是 old code 所遗留的。</p>
+
+<p><img src="https://segmentfault.com/img/bVbdAmA?w=500&amp;h=327" alt="" /></p>
+
+<p>不逃避责任，其中也有一部分是我们后续提交的新代码造成的，通过项目 2 年来的日积月累，issue 多的有点积重难返，sonarqube 虽然在每次 jenkins build 都会生成 report，但是我们却没有把它作为 build 成功失败的一个硬指标。只要 build 成功通过 QA 测试就好了嘛！管他娘的 sonar quality gate</p>
+
+<h1 id="结果">结果</h1>
+
+<p>为了出一份体面漂亮的 report 给 audit，我不得不快马加鞭的 checkout -b quick_fix_sonar_issues, 花了一整天的功夫把 block 和 critical 的 issue 降到了阈值以下。</p>
+
+<p><strong>临阵磨枪的我体会到了以下 3 个痛点</strong></p>
+
+<ol>
+<li>有些 Sonar 能检测出来的 issue，确实能规避一些产品上的潜在 bug</li>
+<li>有些同事在 code 中犯的错误真的很低级，但是人工 code review 中很难被发现，不是我的锅，我现在却在为同事擦屁股。</li>
+<li>虽然快速 fix 了 issue，但是 code 的 owner 并不是我，我有可能为了迎合 sonar 的 rule 而产生了潜在的新的 issue，而和 owner 去一一 check 又增加了很多沟通成本，另外 owner 很有可能已经离职了</li>
+</ol>
+
+<h1 id="思考">思考</h1>
+
+<p>囧则思变！如何改进我们的开发流程？在代码开发阶段就能让 Sonar 分析出问题？强制 owner 必须解决完 issue 才能提交代码？
+嗯！是时候对目前存在弊端的开发流程进行改进了！</p>
+
+<h3 id="老的开发流程">老的开发流程</h3>
+
+<p>先介绍下目前的基础设施：</p>
+
+<ul>
+<li>通过 GitHub 来管理 source</li>
+<li>通过 Github Pull Request 来实现 Code Review（以前用 gerrit 但是我以 UI 太丑为由号召开发们拒绝使用）</li>
+<li>通过 Jenkins 来实现持续集成</li>
+<li>通过 Sonarqube 来实现代码分析（形同虚设）</li>
+</ul>
+
+<p>老的流程：</p>
+
+<ol>
+<li>当一个新 feature 来临时</li>
+<li>owner 从 master（受保护的）分支 checkout 一个 feature_dev_branch 做开发</li>
+<li>开发完成后，提交 pull request（PR）请求合并到 master</li>
+<li>技术 leader 对 PR 进行 code review 并 approve 后，feature_dev_branch 合并到 master。</li>
+<li>Merge 触发触发 Jenkins 自动 build，Jenkins 触发 Sonarqube scan 产生 report（仅仅生成 report）</li>
+<li>Build 成功则进行 package 的 deploy 以及后续 Automation Testing 等流程</li>
+<li>交付 QA 测试</li>
+</ol>
+
+<h3 id="改进后的开发流程">改进后的开发流程：</h3>
+
+<ol>
+<li>当一个新 feature 来临时</li>
+<li>owner 从 master （受保护的）分支 checkout 一个 feature_dev_branch 做开发</li>
+<li>开发完成后，提交 pull request（PR）请求合并到 master</li>
+<li><strong>PR 自动触发 Jenkins，Jenkins 触发 Sonar 分析本次提交的 new code</strong></li>
+<li><strong>Sonar 将 report 和 issue 以 comments 的方式写到 Github PR 里，并作为硬性的 check point</strong></li>
+<li><strong>Owner 对 PR 进行反复 commit 直至通过 Sonar 的分析</strong></li>
+<li>技术 leader 对 PR 进行 code review 并 approve 后，feature_dev_branch 合并到 master。</li>
+<li>Merge 触发触发 Jenkins 自动 build，Jenkins 触发 Sonarqube scan 产生 report（仅仅生成 report）</li>
+<li>Build 成功则进行 package 的 deploy 以及后续 Automation Testing 等流程</li>
+<li>交付 QA 测试</li>
+</ol>
+
+<p>加了 3 步，使得 new code 通过 sonar 检测成为一个硬性指标，把 issue 扼杀在萌芽中，把锅甩在最前面</p>
+
+<p><img src="https://segmentfault.com/img/bVbdAtz?w=1564&amp;h=1276" alt="" /></p>
+
+<p><img src="https://segmentfault.com/img/bVbdAtq?w=1552&amp;h=1272" alt="" /></p>
+
+<p><img src="https://segmentfault.com/img/bVbdAzt?w=1706&amp;h=822" alt="" /></p>
+
+<h1 id="哇-太-cool-了">哇！！！太 Cool 了！</h1>
+
+<h2 id="跟我一步步完成-jenkins-和-sonar-的配置">跟我一步步完成 Jenkins 和 Sonar 的配置</h2>
+
+<p>什么？你竟然不知道 Jenkins 是个啥？！那你操个哪门子的心去优化开发流程，好好搬你的砖，写你的 bug！
+咳咳！建议你转发本文给负责 devops 的同事，请他吃饭让他帮忙配置</p>
+
+<h4 id="jenkins-需要一个-plugin-叫做-github-pull-request-builder">Jenkins 需要一个 plugin，叫做 github pull request builder</h4>
+
+<p>它的作用是生成在 Jenkins 和 Github 之间生成 webhook，似的 PR 可以自动触发 Jenkins 的 Build</p>
+
+<p><img src="https://segmentfault.com/img/bVbdAuI?w=2090&amp;h=380" alt="" /></p>
+
+<h4 id="稍微配置下这个插件-画红线的地方很重要">稍微配置下这个插件，画红线的地方很重要</h4>
+
+<p><img src="https://segmentfault.com/img/bVbdAvu?w=2594&amp;h=1184" alt="" /></p>
+
+<h4 id="jenkins-还需要一个-plugin-叫做-sonarqube-scanner">Jenkins 还需要一个 plugin，叫做 SonarQube Scanner</h4>
+
+<p>它的作用是让 Jenkins 去触发 Sonar 的分析</p>
+
+<p><img src="https://segmentfault.com/img/bVbdAwl?w=2436&amp;h=556" alt="" /></p>
+
+<h4 id="稍微配置下这个插件-画红线的地方很重要-1">稍微配置下这个插件，画红线的地方很重要</h4>
+
+<p>没听说的 Sonar？没有现成的 Sonar Server? 额，继续请 devops 吃饭吧&hellip;</p>
+
+<p><img src="https://segmentfault.com/img/bVbdAxr?w=1920&amp;h=868" alt="" /></p>
+
+<p><img src="https://segmentfault.com/img/bVbdAw5?w=1846&amp;h=1114" alt="" /></p>
+
+<h4 id="sonarqube-里-注意是-sonarqube-里-不是-jenkins-里-也需要安装一个-plugin-名字叫-github">Sonarqube 里（注意是 Sonarqube 里，不是 Jenkins 里）也需要安装一个 plugin，名字叫 Github</h4>
+
+<p>它的作用是 当 Sonar 检测完毕后，把生成的 report 和 issue 的分析以 comments 的方式写回到 Github 的 PR 中</p>
+
+<p><img src="https://segmentfault.com/img/bVbdAxG?w=2796&amp;h=608" alt="" /></p>
+
+<h4 id="稍微配置下这个插件-画红线的地方很重要-2">稍微配置下这个插件，画红线的地方很重要</h4>
+
+<p><img src="https://segmentfault.com/img/bVbdAxN?w=1546&amp;h=934" alt="" /></p>
+
+<h4 id="接下去就是配置-jenkins-的-project-了">接下去就是配置 Jenkins 的 project 了</h4>
+
+<p>废话不多，只贴关键配置，红线部分很重要</p>
+
+<p><img src="https://segmentfault.com/img/bVbdAxR?w=1850&amp;h=1014" alt="" /></p>
+
+<p><img src="https://segmentfault.com/img/bVbdAyl?w=1852&amp;h=940" alt="" /></p>
+
+<p>Advanced 里可以勾上这一条（虽然是 Dangerous），因为我们 Github 是企业版，所以能提 PR 的人是有权限控制的，如果是用官网的 github 管理代码请慎用这个选项，建议使用黑白名单来控制触发的条件。
+<img src="https://segmentfault.com/img/bVbdAyo?w=1142&amp;h=70" alt="" /></p>
+
+<p>以下是 Sonar 的配置，很重要，注意 analysis mode 只能选择 preview，preview mode 不会真正的在 Sonar 上生成 report 哦。</p>
+
+<p><img src="https://segmentfault.com/img/bVbdAzd?w=2118&amp;h=978" alt="" /></p>
+
+<h1 id="写在最后">写在最后</h1>
+
+<p>Jenkins 的安装，Sonar 的安装啥的，教程我就不放 link 了，这种大路教程一搜一大堆（我个人建议你用 docker 安装）
+作为一个开发，我觉得这些基本的，能提升工作效率的工具还是要掌握一下的，并不是说只有 devops 才会用到这些工具，谁不喜欢偷懒呢，这些都是偷懒的好帮手。</p>
+
+<p>截止发稿时，这个流程还存在一些些小 bug，比如 preview mode 的 sonar 分析不能跟 sonar 中 quality gate 进行结合，sonar js 不能分析 parse 有问题的 js 文件等等，还显得不够完美，我们也在通过其它的 workaround 来 100% 实现理想中的开发流程，如果你有好的建议欢迎留言。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/sonarqube/">sonarqube</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/" data-tooltip="Java注释处理和创建构建器">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/kubernetes-operator-sdk/" data-tooltip="Kubernetes Operator SDK">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/" data-tooltip="Java注释处理和创建构建器">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/kubernetes-operator-sdk/" data-tooltip="Kubernetes Operator SDK">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+                <h3 class="media-heading">迈向istio-13 自定义adapter(修改请求头)</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.</p>
+
+<p>mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为<code>Adapter</code>,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">NetworkPolicy介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中的所有的pod在默认情况下,网络都是互通的,pod接收来自任何来源的流量.</p>
+
+<p>那么我们如何限制pod的网络通信,防止非法访问呢?</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
+                <h3 class="media-heading">亲和性调度</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中对pod的调度由调度控制器负责,在调度的时候有很大的随机性.</p>
+
+<p>但是我们很多时候需要容器更多的分散在不同的node上,有一些情况又需要尽量集中在一起,减少网络开销</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">Local Persistent Volume 介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中,存储一直是一个较为头疼的问题,在面对持久化存储,我们可以选择各种文件系统,但是对于那些临时存储的文件,我们则需要一种本地存储的能力,在kubernetes1.14中为我们提供了一种本地存储<code>localPV</code>,本文将围绕此展开.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
+                <h3 class="media-heading">今日心情-上善若水</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>一天又一天,每一天都那么一样又不那么一样.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+                <h3 class="media-heading">code-generator使用</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-7</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948541">https://blog.csdn.net/weixin_39961559/article/details/81948541</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第七节,也是最后一节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-6</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948239">https://blog.csdn.net/weixin_39961559/article/details/81948239</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第六节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-5</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81946899">https://blog.csdn.net/weixin_39961559/article/details/81946899</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第五节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-4/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-4</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81946398">https://blog.csdn.net/weixin_39961559/article/details/81946398</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第四节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         94 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2019\/03\/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86\/';
+          
+            this.page.identifier = '\/2019\/03\/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

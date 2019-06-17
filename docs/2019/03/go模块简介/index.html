@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="golang, module">
+<meta name="description" content="go module模块的简介和使用">
+
+
+<meta property="og:description" content="go module模块的简介和使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go模块简介">
+<meta name="twitter:title" content="Go模块简介">
+<meta property="og:url" content="https://tangxusc.github.io/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="go module模块的简介和使用">
+<meta name="twitter:description" content="go module模块的简介和使用">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-03-20T14:15:59">
+  
+  
+    <meta property="article:modified_time" content="2019-03-20T14:15:59">
+  
+  
+  
+    
+      <meta property="article:section" content="golang">
+    
+      <meta property="article:section" content="module">
+    
+  
+  
+    
+      <meta property="article:tag" content="golang">
+    
+      <meta property="article:tag" content="module">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>Go模块简介</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Go模块简介
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
+        
+  March 20, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/golang">golang</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/module">module</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>go module模块的简介和使用</p>
+
+<blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://roberto.selbach.ca/intro-to-go-modules/">https://roberto.selbach.ca/intro-to-go-modules/</a></p>
+</blockquote>
+
+<h1 id="go模块简介">Go模块简介</h1>
+
+<p>发表于 2018年8月18日(<a href="https://roberto.selbach.ca/intro-to-go-modules/">https://roberto.selbach.ca/intro-to-go-modules/</a>) 作者：<a href="https://roberto.selbach.ca/author/robteix/">Roberto Selbach</a></p>
+
+<p>即将发布的Go编程语言版本1.11将为_模块_带来实验性支持  ，几天前Go.A的新依赖管理系统，<a href="https://roberto.selbach.ca/playing-with-go-modules/">我写了一篇关于它的快速帖子</a>。自那篇文章上线以来，事情发生了一些变化，因为我们现在非常接近新版本，我认为现在是另一篇文章更适合实践的好时机。所以这就是我们要做的：我们将创建一个新的包，然后我们将发布一些版本，看看它是如何工作的。</p>
+
+<h2 id="创建模块">创建模块</h2>
+
+<p>首先要做的事情。让我们创建我们的包。我们称之为“testmod”。这里有一个重要的细节：<strong>这个目录应该</strong> <strong><em>在</em></strong><strong>你的</strong><strong><em>外面，</em></strong><strong>因为默认情况下，模块支持在其中被禁用</strong>。Go模块是可能在某些时候完全消除的第一步。<strong><code>$GOPATH</code></strong><code>$GOPATH</code></p>
+
+<pre><code>$ mkdir testmod
+$ cd testmod
+
+</code></pre>
+
+<p>我们的包很简单：</p>
+
+<pre><code>package testmod
+
+import &quot;fmt&quot; 
+
+// Hi returns a friendly greeting
+func Hi(name string) string {
+   return fmt.Sprintf(&quot;Hi, %s&quot;, name)
+}
+</code></pre>
+
+<p>包完成但它仍然不是_模块_。让我们改变这一点。</p>
+
+<pre><code>$ go mod init github.com/robteix/testmod
+go: creating new go.mod: module github.com/robteix/testmod
+</code></pre>
+
+<p>这将<code>go.mod</code>在包目录中创建一个新文件，其中包含以下内容：</p>
+
+<pre><code>module github.com/robteix/testmod
+</code></pre>
+
+<p>这里不是很多，但这有效地将我们的包变成了一个  _模块_。我们现在可以将这个代码推送到一个存储库：</p>
+
+<pre><code>$ git init 
+$ git add * 
+$ git commit -am &quot;First commit&quot; 
+$ git push -u origin master
+</code></pre>
+
+<p>到目前为止，任何愿意使用此软件包的人都会<code>go get</code> ：</p>
+
+<pre><code>$ go get github.com/robteix/testmod
+</code></pre>
+
+<p>这将获取最新的代码<code>master</code>。这仍然有效，但我们应该停止这样做，因为我们有一个Better Way™。提取<code>master</code>本质上是危险的，因为我们永远无法确定包裹作者没有做出会破坏我们使用的改变。这就是模块旨在解决的问题。</p>
+
+<h2 id="模块版本控制快速入门">模块版本控制快速入门</h2>
+
+<p>Go模块是  _版本化的_，并且某些版本有一些特殊性。您将需要熟悉<a href="https://semver.org">语义版本控制</a>背后的概念。更重要的是，Go将在查找版本时使用存储库标记，并且某些版本与其他版本不同：例如版本2和更高版本应具有与版本0和版本不同的导入路径（我们将会这样做。）同样，默认情况下，Go将获取存储库中可用的最新_标记版本_。这是一个重要的问题，因为您可能习惯使用master分支。您现在需要记住的是，要发布我们的包，我们需要使用该版本标记我们的存储库。所以，让我们这样做。</p>
+
+<h2 id="我们的第一个版本">我们的第一个版本</h2>
+
+<p>现在我们的包已经准备就绪，我们可以将它发布到全世界。我们使用版本标签来完成此操作。让我们发布我们的1.0.0版本：</p>
+
+<pre><code>$ git tag v1.0.0
+$ git push --tags
+</code></pre>
+
+<p>这会在我的Github存储库上创建一个标记，将当前提交标记为1.0.0版本.Go不以任何方式强制执行，但一个好主意是创建一个新分支（“v1”）以便我们可以推送错误修复。</p>
+
+<pre><code>$ git checkout -b v1
+$ git push -u origin v1
+</code></pre>
+
+<p>现在我们可以继续工作，<code>master</code>而不必担心破坏我们的发布。</p>
+
+<h2 id="使用我们的模块">使用我们的模块</h2>
+
+<p>现在我们准备好使用该模块了。我们将创建一个使用我们新包的简单程序：</p>
+
+<pre><code>package main
+
+import (
+    &quot;fmt&quot;
+
+    &quot;github.com/robteix/testmod&quot;
+)
+
+func main() {
+    fmt.Println(testmod.Hi(&quot;roberto&quot;))
+}
+</code></pre>
+
+<p>到目前为止，你会<code>go get github.com/robteix/testmod</code>去下载软件包，但是使用模块，这会变得更有趣。首先，我们需要在新程序中启用模块。</p>
+
+<pre><code>$ go mod init mod
+</code></pre>
+
+<p>正如您对我们上面所看到的那样期望，这将创建一个<code>go.mod</code>包含模块名称的新文件：</p>
+
+<pre><code>module mod
+</code></pre>
+
+<p>当我们尝试构建新程序时，事情会变得更有趣：</p>
+
+<pre><code>$ go build
+go: finding github.com/robteix/testmod v1.0.0
+go: downloading github.com/robteix/testmod v1.0.0
+</code></pre>
+
+<p>我们可以看到，该<code>go</code>命令会自动进行并获取程序导入的包。如果我们检查我们的<code>go.mod</code>文件，我们发现情况发生了变化：</p>
+
+<pre><code>module mod
+require github.com/robteix/testmod v1.0.0
+</code></pre>
+
+<p>我们现在也有一个名为的新文件<code>go.sum</code>，其中包含包的哈希值，以确保我们拥有正确的版本和文件。</p>
+
+<pre><code>github.com/robteix/testmod v1.0.0 h1:9EdH0EArQ/rkpss9Tj8gUnwx3w5p0jkzJrd5tRAhxnA=
+github.com/robteix/testmod v1.0.0/go.mod h1:UVhi5McON9ZLc5kl5iN2bTXlL6ylcxE9VInV71RrlO8=
+</code></pre>
+
+<h2 id="制作错误修正版">制作错误修正版</h2>
+
+<p>现在让我们说我们意识到我们的包装有问题：问候语缺少ponctuation！人们很生气，因为我们的友好问候不够友好。所以我们将修复它并发布一个新版本：</p>
+
+<pre><code>// Hi returns a friendly greeting
+func Hi(name string) string {
+-       return fmt.Sprintf(&quot;Hi, %s&quot;, name)
++       return fmt.Sprintf(&quot;Hi, %s!&quot;, name)
+}
+</code></pre>
+
+<p>我们在v1分支中做了这个改变，因为它与我们以后为v2做的事情无关，但在现实生活中，也许你会在它中进行<code>master</code> ，然后再回传它。无论哪种方式，我们都需要在我们的v1分支中进行修复并将其标记为新版本。</p>
+
+<pre><code>$ git commit -m &quot;Emphasize our friendliness&quot; testmod.go
+$ git tag v1.0.1
+$ git push --tags origin v1
+</code></pre>
+
+<h2 id="更新模块">更新模块</h2>
+
+<p>默认情况下，Go不会在没有被询问的情况下更新模块。这是一个Good Thing™，因为我们希望在我们的构建中具有可预测性。如果Go模块每次出现新版本时都会自动更新，我们将回到Go1.11之前的不文明时代。不，我们需要  <em>告诉</em> Go为我们更新模块。我们通过使用我们的老朋友来做到这一点<code>go get</code>：</p>
+
+<ul>
+<li>运行  <code>go get -u</code> 以使用最新的  <em>次要</em>  版本_或补丁_版本（即它将从1.0.0更新为1.0.1，如果可用，则更新为1.1.0）</li>
+<li>运行  <code>go get -u=patch</code> 以使用最新的  <em>补丁</em>  版本（即，将更新到1.0.1但_不会_更新  到1.1.0）</li>
+<li>运行<code>go get package@version</code> 以更新到特定版本（例如<code>github.com/robteix/testmod@v1.0.1</code>）</li>
+</ul>
+
+<p>在上面的列表中，似乎没有办法更新到最新的  _主要_版本。这有一个很好的理由，正如我们稍后会看到的那样。由于我们的程序使用的是我们软件包的1.0.0版，我们刚刚创建了1.0.1版本，  以下_任何_命令都会将我们更新为1.0.1：</p>
+
+<pre><code class="language-shell">$ go get -u
+$ go get -u=patch
+$ go get github.com/robteix/testmod@v1.0.1
+</code></pre>
+
+<p>运行后，比如说，<code>go get -u</code> 我们<code>go.mod</code> 改为：</p>
+
+<pre><code>module mod
+require github.com/robteix/testmod v1.0.1
+</code></pre>
+
+<h2 id="主要版本">主要版本</h2>
+
+<p>根据语义版本语义，主要版本  与未成年人_不同_。主要版本可以破坏向后兼容性。从Go模块的角度来看，主要版本是  完全_不同的包_。这听起来可能听起来很奇怪，但它是有道理的：两个版本的库彼此不兼容是两个不同的库。让我们对我们的包进行重大改变，不是吗？随着时间的推移，我们意识到我们的API太简单了，对于我们用户的用例来说太有限了，所以我们需要更改<code>Hi()</code> 函数以为问候语言采用新参数：</p>
+
+<pre><code>package testmod
+
+import (
+    &quot;errors&quot;
+    &quot;fmt&quot; 
+) 
+
+// Hi returns a friendly greeting in language lang
+func Hi(name, lang string) (string, error) {
+    switch lang {
+    case &quot;en&quot;:
+        return fmt.Sprintf(&quot;Hi, %s!&quot;, name), nil
+    case &quot;pt&quot;:
+        return fmt.Sprintf(&quot;Oi, %s!&quot;, name), nil
+    case &quot;es&quot;:
+        return fmt.Sprintf(&quot;¡Hola, %s!&quot;, name), nil
+    case &quot;fr&quot;:
+        return fmt.Sprintf(&quot;Bonjour, %s!&quot;, name), nil
+    default:
+        return &quot;&quot;, errors.New(&quot;unknown language&quot;)
+    }
+}
+</code></pre>
+
+<p>使用我们的API的现有软件将会中断，因为它们（a）不传递语言参数，（b）不期望错误返回。我们的新API不再与版本1.x兼容，所以是时候将版本提升到2.0.0。我之前提到过一些版本有一些特性，现在就是这种情况。<strong>版本2</strong> <strong><em>及更高</em></strong><strong>版本</strong> <strong>应更改导入路径。</strong>它们现在是不同的库。我们通过将新_版本路径_附加  到模块名称的末尾来实现。</p>
+
+<pre><code>module github.com/robteix/testmod/v2
+</code></pre>
+
+<p>其余部分与之前相同，我们推送它，将其标记为v2.0.0（并可选择创建v2分支。）</p>
+
+<pre><code>$ git commit testmod.go -m &quot;Change Hi to allow multilang&quot;
+$ git checkout -b v2 # optional but recommended
+$ echo &quot;module github.com/robteix/testmod/v2&quot; &gt; go.mod
+$ git commit go.mod -m &quot;Bump version to v2&quot;
+$ git tag v2.0.0
+$ git push --tags origin v2 # or master if we don't have a branch
+</code></pre>
+
+<h2 id="更新到主要版本">更新到主要版本</h2>
+
+<p>即使我们已经发布了一个新的不兼容版本的库，现有的软件  _也不会中断_，因为它将继续使用现有的1.0.1版本。<code>go get -u</code> _不会_得到版本2.0.0.At一些点，但是，我作为图书馆用户，可能需要升级到2.0.0版本，因为也许我是谁需要多语言support.I这些用户中的一个做，但修改我的程序相应：</p>
+
+<pre><code>package main
+
+import (
+    &quot;fmt&quot;
+    &quot;github.com/robteix/testmod/v2&quot; 
+)
+
+func main() {
+    g, err := testmod.Hi(&quot;Roberto&quot;, &quot;pt&quot;)
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(g)
+}
+</code></pre>
+
+<p>然后当我运行时<code>go build</code>，它将为我提取2.0.0版本。请注意，即使导入路径以“v2”结尾，Go仍将通过其正确的名称（“testmod”）引用该模块。正如我之前提到的，主要版本是出于所有意图和目的而完全不同的包。Go模块根本不会链接这两个模块。这意味着我们可以在同一个二进制文件中使用两个不兼容的版本：</p>
+
+<pre><code>package main
+import (
+    &quot;fmt&quot;
+    &quot;github.com/robteix/testmod&quot;
+    testmodML &quot;github.com/robteix/testmod/v2&quot;
+)
+
+func main() {
+    fmt.Println(testmod.Hi(&quot;Roberto&quot;))
+    g, err := testmodML.Hi(&quot;Roberto&quot;, &quot;pt&quot;)
+    if err != nil {
+        panic(err)
+    }
+    fmt.Println(g)
+}
+</code></pre>
+
+<p>这消除了依赖关系管理的常见问题：依赖关系依赖于同一个库的不同版本。</p>
+
+<h2 id="整理它">整理它</h2>
+
+<p>回到以前仅使用testmod 2.0.0的版本，如果我们检查<code>go.mod</code> 现在的内容，我们会注意到：</p>
+
+<pre><code>module mod
+require github.com/robteix/testmod v1.0.1
+require github.com/robteix/testmod/v2 v2.0.0
+</code></pre>
+
+<p>默认情况下，<code>go.mod</code> 除非您要求，否则Go不会删除依赖项。如果您具有不再使用且想要清理的依赖项，则可以使用新<code>tidy</code>命令：</p>
+
+<pre><code>$ go mod tidy
+</code></pre>
+
+<p>现在我们只剩下真正使用的依赖项了。</p>
+
+<h2 id="vendoring">Vendoring</h2>
+
+<p>Go模块<code>vendor/</code> 默认忽略该目录。我们的想法是_最终_取消售卖<sup id="fnref-1772-0"><a href="#fn-1772-0">1</a></sup>。但是如果我们仍然希望将版本化的依赖项添加到我们的版本控制中，我们仍然可以这样做：</p>
+
+<pre><code>$ go mod vendor
+</code></pre>
+
+<p>这将<code>vendor/</code> 在项目的根目录下创建一个目录，其中包含所有依赖项的源代码<code>go build</code> 。默认情况下，将忽略此目录的内容。如果要从<code>vendor/</code> 目录构建依赖项，则需要请求它。</p>
+
+<pre><code>$ go build -mod vendor
+</code></pre>
+
+<p>我希望许多愿意使用vendoring的开发人员可以<code>go build</code>在他们的开发机器上正常运行并<code>-mod vendor</code> 在他们的CI中使用.At，Go模块正在逐渐从销售的想法转向使用Go模块代理，以便那些不想依赖的人上游版本直接控制服务。有些方法可以保证<code>go</code>不会到达网络（例如<code>GOPROXY=off</code>），但这些是未来博客文章的主题。</p>
+
+<h2 id="结论">结论</h2>
+
+<p>这篇文章可能看起来有点令人生畏，但我试图一起解释很多东西。现实情况是，现在Go模块基本上是透明的。我们总是在代码中导入包，<code>go</code>命令会处理剩下的内容。当我们构建一些东西时，依赖项将自动获取。它还消除了使用的需要，<code>$GOPATH</code>这对于那些无法理解为什么必须进入特定目录的新Go开发人员来说是个障碍。<del>供应（非正式）被弃用以支持使用代理。</del><sup id="fnref2:1772-0"><a href="#fn-1772-0">1</a></sup>我可能会单独关于Go模块代理的帖子。_（更新：<a href="https://roberto.selbach.ca/go-proxies/">现场直播</a>。）</p>
+
+<hr />
+
+<ol>
+<li>我认为这有点过于强烈，人们留下的印象是现在正在删除销售。事实并非如此。供应仍然有效，尽管与以前略有不同。似乎有_希望<em>用更好的东西取代售卖，这可能是也可能不是代理。但就目前而言，这就是它：渴望更好的解决方案。直到一个很好的替代发现Vendoring不会消失（如果有的话）。  <a href="#fnref-1772-0">↩</a> <a href="#fnref2:1772-0">↩</a></em></li>
+</ol>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/golang/">golang</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/module/">module</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/" data-tooltip="Golang大杀器之性能剖析PProf">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/intellij-idea-%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84-rest-%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8B%E7%BB%8D/" data-tooltip="Intellij IDEA 基于编辑器的 REST 客户端介绍">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/" data-tooltip="Golang大杀器之性能剖析PProf">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/intellij-idea-%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84-rest-%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8B%E7%BB%8D/" data-tooltip="Intellij IDEA 基于编辑器的 REST 客户端介绍">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+                <h3 class="media-heading">迈向istio-13 自定义adapter(修改请求头)</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.</p>
+
+<p>mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为<code>Adapter</code>,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">NetworkPolicy介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中的所有的pod在默认情况下,网络都是互通的,pod接收来自任何来源的流量.</p>
+
+<p>那么我们如何限制pod的网络通信,防止非法访问呢?</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
+                <h3 class="media-heading">亲和性调度</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中对pod的调度由调度控制器负责,在调度的时候有很大的随机性.</p>
+
+<p>但是我们很多时候需要容器更多的分散在不同的node上,有一些情况又需要尽量集中在一起,减少网络开销</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">Local Persistent Volume 介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中,存储一直是一个较为头疼的问题,在面对持久化存储,我们可以选择各种文件系统,但是对于那些临时存储的文件,我们则需要一种本地存储的能力,在kubernetes1.14中为我们提供了一种本地存储<code>localPV</code>,本文将围绕此展开.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
+                <h3 class="media-heading">今日心情-上善若水</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>一天又一天,每一天都那么一样又不那么一样.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+                <h3 class="media-heading">code-generator使用</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-7</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948541">https://blog.csdn.net/weixin_39961559/article/details/81948541</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第七节,也是最后一节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-6</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948239">https://blog.csdn.net/weixin_39961559/article/details/81948239</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第六节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-5</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81946899">https://blog.csdn.net/weixin_39961559/article/details/81946899</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第五节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-4/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-4</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81946398">https://blog.csdn.net/weixin_39961559/article/details/81946398</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第四节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         94 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2019\/03\/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B\/';
+          
+            this.page.identifier = '\/2019\/03\/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

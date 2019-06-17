@@ -1,0 +1,83 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: test4
+  namespace: test
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: proxy
+  namespace: test
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - test4
+  http:
+  - match:
+    - uri:
+        prefix: /proxy/
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+       host: proxy
+       subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: proxy
+  namespace: test
+spec:
+  host: proxy
+  subsets:
+  - name: v1
+    labels:
+      app: proxy
+      version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: target
+  namespace: test
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - test4
+  http:
+  - match:
+    - uri:
+        prefix: /target/
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+       host: target
+       subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: target
+  namespace: test
+spec:
+  host: target
+  subsets:
+  - name: v1
+    labels:
+      app: target
+      version: v1

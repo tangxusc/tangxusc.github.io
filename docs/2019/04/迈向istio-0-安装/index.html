@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="istio">
+<meta name="description" content="istio-安装">
+
+
+<meta property="og:description" content="istio-安装">
+<meta property="og:type" content="article">
+<meta property="og:title" content="迈向istio-0 安装">
+<meta name="twitter:title" content="迈向istio-0 安装">
+<meta property="og:url" content="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-0-%E5%AE%89%E8%A3%85/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-0-%E5%AE%89%E8%A3%85/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="istio-安装">
+<meta name="twitter:description" content="istio-安装">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-04-01T14:15:59">
+  
+  
+    <meta property="article:modified_time" content="2019-04-01T14:15:59">
+  
+  
+  
+    
+      <meta property="article:section" content="istio">
+    
+  
+  
+    
+      <meta property="article:tag" content="istio">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>迈向istio-0 安装</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-0-%E5%AE%89%E8%A3%85/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      迈向istio-0 安装
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-04-01T14:15:59&#43;08:00">
+        
+  April 1, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/istio">istio</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>istio-安装</p>
+
+<p>[TOC]</p>
+
+<h2 id="下载istio的release">下载istio的release</h2>
+
+<pre><code class="language-shell">curl -L https://git.io/getLatestIstio | sh -
+cd istio-1.0.2
+#设置环境变量,以便后面可以执行istioctl命令
+export PATH=$PWD/bin:$PATH
+</code></pre>
+
+<h2 id="下载helm">下载helm</h2>
+
+<pre><code class="language-shell">wget https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz
+tar zxvf helm-v2.11.0-linux-amd64.tar.gz
+
+export PATH=$PWD/linux-amd64/:$PATH
+</code></pre>
+
+<h2 id="开始安装">开始安装</h2>
+
+<pre><code class="language-shell">$ kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml
+</code></pre>
+
+<p>有两种方式均可以安装istio,这里我们使用helm生成yaml的方式(因为helm的方式安装的istio,不用再去自己下载gcr.io中的镜像)</p>
+
+<p>因为我本人使用的是本地电脑,所以我需要对istio安装的参数进行一定的修改,具体修改如下:</p>
+
+<ol>
+<li><p>复制一个新的istio-1.0.2/install/kubernetes/helm/istio/values.yaml文件出来</p></li>
+
+<li><p>修改gateways为NodePort</p>
+
+<pre><code class="language-yaml">gateways:
+ enabled: true
+#省略n多节点
+   type: ClusterIP #修改为NodePort
+</code></pre></li>
+
+<li><p>启用grafana,将grafana节点下的enabled修改为true</p>
+
+<pre><code class="language-yaml">grafana:
+ enabled: false #修改为true
+ #省略...
+ service:
+   annotations: {}
+   name: http
+   type: ClusterIP #修改为NodePort
+   externalPort: 3000
+   internalPort: 3000
+</code></pre></li>
+
+<li><p>启用prometheus</p>
+
+<pre><code class="language-yaml">prometheus:
+ enabled: true
+ replicaCount: 1
+ hub: docker.io/prom
+ tag: v2.3.1
+   
+ service:
+   annotations: {}
+   nodePort:
+     enabled: false #修改为true
+     port: 32090
+</code></pre></li>
+
+<li><p>启用servicegraph</p>
+
+<pre><code class="language-yaml">servicegraph:
+ enabled: false #修改为true
+ replicaCount: 1
+ image: servicegraph
+ service:
+   annotations: {}
+   name: http
+   type: ClusterIP #修改为NodePort
+   externalPort: 8088
+   internalPort: 8088
+</code></pre></li>
+
+<li><p>启用jaeger</p>
+
+<pre><code class="language-yaml">tracing:
+ enabled: false #修改为true
+ provider: jaeger
+ #省略...
+ service:
+   annotations: {}
+   name: http
+   type: ClusterIP #修改为NodePort
+   externalPort: 9411
+   internalPort: 9411
+</code></pre></li>
+
+<li><p>(可选) 修改追踪</p>
+
+<pre><code class="language-yaml">pilot:
+ enabled: true
+ replicaCount: 1
+ autoscaleMin: 1
+ autoscaleMax: 5
+ image: pilot
+ sidecar: true
+ traceSampling: 1.0 #修改为100.0,默认采样1%,但是在测试阶段 可以采取大量采样模式
+</code></pre></li>
+
+<li><p>(可选) 启用kiali</p>
+
+<pre><code class="language-yaml">kiali:
+ enabled: false #修改为true
+ replicaCount: 1
+ hub: docker.io/kiali
+ tag: v0.9
+ ingress:
+</code></pre></li>
+</ol>
+
+<p>修改完成后保存文件</p>
+
+<pre><code class="language-shell">$ helm template install/kubernetes/helm/istio --name istio --namespace istio-system -f 修改后的value路径.yaml &gt; ./istio.yaml
+$ kubectl create namespace istio-system
+$ kubectl apply -f ./istio.yaml
+</code></pre>
+
+<blockquote>
+<p>在安装istio的过程中某一些镜像下载的时间过长,请耐心等待.</p>
+</blockquote>
+
+<h2 id="确认安装">确认安装</h2>
+
+<pre><code class="language-shell">tangxu@tangxu-pc:~$ kubectl get all -n istio-system
+NAME                                            READY   STATUS      RESTARTS   AGE
+pod/grafana-75485f89b9-sv7dd                    1/1     Running     0          4h
+pod/istio-citadel-84fb7985bf-dfbw7              1/1     Running     0          4h
+pod/istio-cleanup-secrets-knqpr                 0/1     Completed   0          4h
+pod/istio-egressgateway-bd9fb967d-dxgjw         1/1     Running     0          4h
+pod/istio-galley-655c4f9ccd-g9m6p               1/1     Running     0          4h
+pod/istio-grafana-post-install-nj4kh            0/1     Completed   0          4h
+pod/istio-ingressgateway-688865c5f7-sszft       1/1     Running     0          4h
+pod/istio-pilot-6cd69dc444-jhgmr                2/2     Running     0          4h
+pod/istio-policy-6b9f4697d-pv6bx                2/2     Running     0          4h
+pod/istio-sidecar-injector-8975849b4-j9mwx      1/1     Running     0          4h
+pod/istio-statsd-prom-bridge-7f44bb5ddb-g7vrf   1/1     Running     0          4h
+pod/istio-telemetry-6b5579595f-24mj5            2/2     Running     0          4h
+pod/istio-tracing-ff94688bb-976q2               1/1     Running     0          4h
+pod/prometheus-84bd4b9796-gz6tw                 1/1     Running     0          4h
+pod/servicegraph-749b5b897c-wfb79               1/1     Running     3          4h
+</code></pre>
+
+<p>所有组件都running后,则标示安装成功.</p>
+
+<h3 id="查看istio各种仪表盘">查看istio各种仪表盘</h3>
+
+<pre><code class="language-shell">tangxu@tangxu-pc:~$ kubectl get service -n istio-system
+NAME                       TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                                                                                                   AGE
+grafana                    NodePort    10.111.139.30    &lt;none&gt;        3000:31978/TCP                                                                                                            4h
+istio-citadel              ClusterIP   10.106.229.144   &lt;none&gt;        8060/TCP,9093/TCP                                                                                                         4h
+istio-egressgateway        ClusterIP   10.96.22.182     &lt;none&gt;        80/TCP,443/TCP                                                                                                            4h
+istio-galley               ClusterIP   10.107.252.51    &lt;none&gt;        443/TCP,9093/TCP                                                                                                          4h
+istio-ingressgateway       NodePort    10.103.0.73      &lt;none&gt;        80:31380/TCP,443:31390/TCP,31400:31400/TCP,15011:31524/TCP,8060:30507/TCP,853:31293/TCP,15030:32557/TCP,15031:31969/TCP   4h
+istio-pilot                ClusterIP   10.98.212.161    &lt;none&gt;        15010/TCP,15011/TCP,8080/TCP,9093/TCP                                                                                     4h
+istio-policy               ClusterIP   10.96.248.139    &lt;none&gt;        9091/TCP,15004/TCP,9093/TCP                                                                                               4h
+istio-sidecar-injector     ClusterIP   10.111.135.28    &lt;none&gt;        443/TCP                                                                                                                   4h
+istio-statsd-prom-bridge   ClusterIP   10.111.240.15    &lt;none&gt;        9102/TCP,9125/UDP                                                                                                         4h
+istio-telemetry            ClusterIP   10.108.66.51     &lt;none&gt;        9091/TCP,15004/TCP,9093/TCP,42422/TCP                                                                                     4h
+jaeger-agent               ClusterIP   None             &lt;none&gt;        5775/UDP,6831/UDP,6832/UDP                                                                                                4h
+jaeger-collector           ClusterIP   10.99.92.164     &lt;none&gt;        14267/TCP,14268/TCP                                                                                                       4h
+jaeger-query               ClusterIP   10.103.249.192   &lt;none&gt;        16686/TCP                                                                                                                 4h
+prometheus                 ClusterIP   10.99.4.46       &lt;none&gt;        9090/TCP                                                                                                                  4h
+prometheus-nodeport        NodePort    10.100.130.42    &lt;none&gt;        9090:32090/TCP                                                                                                            4h
+servicegraph               NodePort    10.96.147.205    &lt;none&gt;        8088:32756/TCP                                                                                                            4h
+tracing                    ClusterIP   10.109.29.44     &lt;none&gt;        80/TCP                                                                                                                    4h
+zipkin                     NodePort    10.110.200.41    &lt;none&gt;        9411:31037/TCP                                                                                                            4h
+
+</code></pre>
+
+<h3 id="各仪表盘地址">各仪表盘地址</h3>
+
+<pre><code class="language-shell">grafana 			http://node:31978
+ingressgateway		http://node:31380
+prometheus			http://node:32090
+servicegraph		http://node:32756
+tracing				http://node:31037
+</code></pre>
+
+<h3 id="仪表盘预览">仪表盘预览</h3>
+
+<p><img src="https://tangxusc.github.io/post/迈向istio/istio+Naftis+Kiali.gif"/></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/istio/">istio</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/04/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem/" data-tooltip="使用Cfssl生成etcd证书(pem)">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-1-%E7%A4%BA%E4%BE%8B/" data-tooltip="迈向istio-1 示例">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/04/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem/" data-tooltip="使用Cfssl生成etcd证书(pem)">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-1-%E7%A4%BA%E4%BE%8B/" data-tooltip="迈向istio-1 示例">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+                <h3 class="media-heading">迈向istio-13 自定义adapter(修改请求头)</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.</p>
+
+<p>mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为<code>Adapter</code>,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">NetworkPolicy介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中的所有的pod在默认情况下,网络都是互通的,pod接收来自任何来源的流量.</p>
+
+<p>那么我们如何限制pod的网络通信,防止非法访问呢?</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
+                <h3 class="media-heading">亲和性调度</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中对pod的调度由调度控制器负责,在调度的时候有很大的随机性.</p>
+
+<p>但是我们很多时候需要容器更多的分散在不同的node上,有一些情况又需要尽量集中在一起,减少网络开销</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">Local Persistent Volume 介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中,存储一直是一个较为头疼的问题,在面对持久化存储,我们可以选择各种文件系统,但是对于那些临时存储的文件,我们则需要一种本地存储的能力,在kubernetes1.14中为我们提供了一种本地存储<code>localPV</code>,本文将围绕此展开.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
+                <h3 class="media-heading">今日心情-上善若水</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>一天又一天,每一天都那么一样又不那么一样.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+                <h3 class="media-heading">code-generator使用</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-7</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948541">https://blog.csdn.net/weixin_39961559/article/details/81948541</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第七节,也是最后一节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-6</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948239">https://blog.csdn.net/weixin_39961559/article/details/81948239</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第六节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-5</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81946899">https://blog.csdn.net/weixin_39961559/article/details/81946899</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第五节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-4/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-4</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81946398">https://blog.csdn.net/weixin_39961559/article/details/81946398</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第四节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         94 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2019\/04\/%E8%BF%88%E5%90%91istio-0-%E5%AE%89%E8%A3%85\/';
+          
+            this.page.identifier = '\/2019\/04\/%E8%BF%88%E5%90%91istio-0-%E5%AE%89%E8%A3%85\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
