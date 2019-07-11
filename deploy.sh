@@ -9,7 +9,7 @@ echo '5,hugo'
 echo '6,git add .'
 echo '7,git commit'
 echo '8,git push origin master:master'
-echo '9,git push origin master:master'
+echo '9,git push origin origin:origin'
 echo '-------------------------------'
 
 sleep 5s
@@ -52,6 +52,6 @@ git push origin master:master
 sleep 2s
 echo '-------------------------------'
 echo '9,git push origin origin:origin'
-9,git push origin origin:origin
+git push origin origin:origin
 sleep 2s
 echo '部署完成...'
