@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nfs on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/categories/nfs/</link>
+    <description>Recent content in Nfs on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/categories/nfs/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>使用nfs作为k8s的PersistentVolume</title>
+      <link>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/</guid>
+      <description>&lt;p&gt;使用nfs作为k8s的PersistentVolume&lt;/p&gt;
+
+&lt;p&gt;在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选&lt;/p&gt;
+
+&lt;p&gt;本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

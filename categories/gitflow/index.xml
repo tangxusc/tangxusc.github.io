@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gitflow on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/categories/gitflow/</link>
+    <description>Recent content in Gitflow on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/categories/gitflow/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Gitflow 工作流</title>
+      <link>https://tangxusc.github.io/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/</guid>
+      <description>&lt;p&gt;&lt;code&gt;Gitflow&lt;/code&gt;工作流定义了一个围绕项目发布的严格分支模型。虽然比&lt;a href=&#34;http://blog.jobbole.com/76857/&#34;&gt;功能分支工作流&lt;/a&gt;复杂几分，但提供了用于一个健壮的用于管理大型项目的框架。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Gitflow&lt;/code&gt;工作流没有用超出功能分支工作流的概念和命令，而是为不同的分支分配一个很明确的角色，并定义分支之间如何和什么时候进行交互。除了使用功能分支，在做准备、维护和记录发布也使用各自的分支。当然你可以用上功能分支工作流所有的好处：&lt;code&gt;Pull Requests&lt;/code&gt;、隔离实验性开发和更高效的协作。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

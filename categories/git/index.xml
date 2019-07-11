@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Git on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/categories/git/</link>
+    <description>Recent content in Git on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/categories/git/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Gitflow 工作流</title>
+      <link>https://tangxusc.github.io/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/</guid>
+      <description>&lt;p&gt;&lt;code&gt;Gitflow&lt;/code&gt;工作流定义了一个围绕项目发布的严格分支模型。虽然比&lt;a href=&#34;http://blog.jobbole.com/76857/&#34;&gt;功能分支工作流&lt;/a&gt;复杂几分，但提供了用于一个健壮的用于管理大型项目的框架。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Gitflow&lt;/code&gt;工作流没有用超出功能分支工作流的概念和命令，而是为不同的分支分配一个很明确的角色，并定义分支之间如何和什么时候进行交互。除了使用功能分支，在做准备、维护和记录发布也使用各自的分支。当然你可以用上功能分支工作流所有的好处：&lt;code&gt;Pull Requests&lt;/code&gt;、隔离实验性开发和更高效的协作。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>git subtree 教程</title>
+      <link>https://tangxusc.github.io/2019/03/git-subtree-%E6%95%99%E7%A8%8B/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/git-subtree-%E6%95%99%E7%A8%8B/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://segmentfault.com/a/1190000012002151&#34;&gt;https://segmentfault.com/a/1190000012002151&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;关于子仓库或者说是仓库共用，git 官方推荐的工具是 git subtree。 我自己也用了一段时间的 git subtree，感觉比 git submodule 好用，但是也有一些缺点，在可接受的范围内。
+所以对于仓库共用，在 git subtree 与 git submodule 之中选择的话，我推荐 git subtree。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>git 必须要熟练掌握的命令</title>
+      <link>https://tangxusc.github.io/2019/03/git-%E5%BF%85%E9%A1%BB%E8%A6%81%E7%86%9F%E7%BB%83%E6%8E%8C%E6%8F%A1%E7%9A%84%E5%91%BD%E4%BB%A4/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/git-%E5%BF%85%E9%A1%BB%E8%A6%81%E7%86%9F%E7%BB%83%E6%8E%8C%E6%8F%A1%E7%9A%84%E5%91%BD%E4%BB%A4/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://segmentfault.com/a/1190000013241889&#34;&gt;https://segmentfault.com/a/1190000013241889&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;因为结合了开发中可能遇到的场景，篇幅较长，不过我觉得很有助于你理解 git 的运作机制，而不是死记硬背命令。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>git常用命令速查表</title>
+      <link>https://tangxusc.github.io/2019/03/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5%E8%A1%A8/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5%E8%A1%A8/</guid>
+      <description>&lt;p&gt;git常用命令速查表&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>git指令列表</title>
+      <link>https://tangxusc.github.io/2019/03/git%E6%8C%87%E4%BB%A4%E5%88%97%E8%A1%A8/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/git%E6%8C%87%E4%BB%A4%E5%88%97%E8%A1%A8/</guid>
+      <description>&lt;p&gt;git指令列表&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>git版本控制最佳实践</title>
+      <link>https://tangxusc.github.io/2019/03/git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</guid>
+      <description>&lt;p&gt;git版本控制最佳实践&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>用 JGit 通过 Java 来操作 Git</title>
+      <link>https://tangxusc.github.io/2019/03/%E7%94%A8-jgit-%E9%80%9A%E8%BF%87-java-%E6%9D%A5%E6%93%8D%E4%BD%9C-git/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/%E7%94%A8-jgit-%E9%80%9A%E8%BF%87-java-%E6%9D%A5%E6%93%8D%E4%BD%9C-git/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://eclipse.org/jgit/&#34;&gt;JGit&lt;/a&gt; 是一个由 &lt;a href=&#34;https://www.eclipse.org/org/&#34;&gt;Eclipse 基金会&lt;/a&gt;开发、用于操作 git 的纯 Java 库。它本身也是 Eclispe 的一部分，实际上 Eclipse 的插件 &lt;a href=&#34;http://www.eclipse.org/egit/&#34;&gt;EGit&lt;/a&gt; 便是基于 JGit 的。如果你像我这样有使用代码来操作 git 的需求，那就准备好拥抱 JGit 吧。目前来看别的竞品没它靠谱。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

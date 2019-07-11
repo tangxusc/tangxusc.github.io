@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rke on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/tags/rke/</link>
+    <description>Recent content in Rke on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/tags/rke/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>RKE安装kubernetes集群</title>
+      <link>https://tangxusc.github.io/2019/03/rke%E5%AE%89%E8%A3%85kubernetes%E9%9B%86%E7%BE%A4/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/rke%E5%AE%89%E8%A3%85kubernetes%E9%9B%86%E7%BE%A4/</guid>
+      <description>&lt;p&gt;RKE安装kubernetes集群&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
