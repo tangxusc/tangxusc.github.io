@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kubeadm on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/categories/kubeadm/</link>
+    <description>Recent content in Kubeadm on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/categories/kubeadm/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>jaeger-operator安装</title>
+      <link>https://tangxusc.github.io/2019/03/jaeger-operator%E5%AE%89%E8%A3%85/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/jaeger-operator%E5%AE%89%E8%A3%85/</guid>
+      <description>&lt;p&gt;jaeger-operator安装&lt;/p&gt;
+
+&lt;p&gt;在一个成规模的微服务系统中,一个功能不单由这一个服务完成,而是多个服务协作来共同完成,但是如果其中一个服务出现了错误,对于错误的追踪,对于整个调用链的追踪便成为了难题.&lt;/p&gt;
+
+&lt;p&gt;好在外国佬遇到了这些问题,指定了&lt;code&gt;opentracing&lt;/code&gt;规范,并且提供了例如&lt;code&gt;zipkin&lt;/code&gt;,&lt;code&gt;pinpoint&lt;/code&gt;,&lt;code&gt;jaeger&lt;/code&gt;等工具供我们使用&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>kubeadm安装HA集群</title>
+      <link>https://tangxusc.github.io/2019/03/kubeadm%E5%AE%89%E8%A3%85ha%E9%9B%86%E7%BE%A4/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/kubeadm%E5%AE%89%E8%A3%85ha%E9%9B%86%E7%BE%A4/</guid>
+      <description>&lt;p&gt;鉴于使用二进制的方式安装较为复杂,且不太好处理证书的生成,分发等问题,并且对性能没有较高的要求,所以强烈推荐使用此模式,具体下来这个模式的好处为:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;官方提供的工具,有官方的文档支持&lt;/li&gt;
+&lt;li&gt;安装贼简单,没有其他的依赖&lt;/li&gt;
+&lt;li&gt;扩展性强,有官方的一些扩展支持&lt;/li&gt;
+&lt;li&gt;集群全部以容器启动,所以没那么多你需要管理的service&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>kubeadm生成的token过期后，集群增加节点</title>
+      <link>https://tangxusc.github.io/2019/03/kubeadm%E7%94%9F%E6%88%90%E7%9A%84token%E8%BF%87%E6%9C%9F%E5%90%8E%E9%9B%86%E7%BE%A4%E5%A2%9E%E5%8A%A0%E8%8A%82%E7%82%B9/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/kubeadm%E7%94%9F%E6%88%90%E7%9A%84token%E8%BF%87%E6%9C%9F%E5%90%8E%E9%9B%86%E7%BE%A4%E5%A2%9E%E5%8A%A0%E8%8A%82%E7%82%B9/</guid>
+      <description>&lt;p&gt;kubeadm生成的token过期后，集群增加节点&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>prometheus和alertmanager监控并发送邮件</title>
+      <link>https://tangxusc.github.io/2019/03/prometheus%E5%92%8Calertmanager%E7%9B%91%E6%8E%A7%E5%B9%B6%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/prometheus%E5%92%8Calertmanager%E7%9B%91%E6%8E%A7%E5%B9%B6%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/</guid>
+      <description>&lt;p&gt;prometheus和alertmanager监控并发送邮件&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用 kubeadm 搭建 Kubernetes(1.10.2) 集群（国内环境）</title>
+      <link>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8-kubeadm-%E6%90%AD%E5%BB%BA-kubernetes1.10.2-%E9%9B%86%E7%BE%A4%E5%9B%BD%E5%86%85%E7%8E%AF%E5%A2%83/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8-kubeadm-%E6%90%AD%E5%BB%BA-kubernetes1.10.2-%E9%9B%86%E7%BE%A4%E5%9B%BD%E5%86%85%E7%8E%AF%E5%A2%83/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码， 原文地址 &lt;a href=&#34;https://www.cnblogs.com/RainingNight/p/using-kubeadm-to-create-a-cluster.html&#34;&gt;https://www.cnblogs.com/RainingNight/p/using-kubeadm-to-create-a-cluster.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;使用 kubeadm 搭建 Kubernetes(1.10.2) 集群（国内环境）&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用nfs作为k8s的PersistentVolume</title>
+      <link>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/</guid>
+      <description>&lt;p&gt;使用nfs作为k8s的PersistentVolume&lt;/p&gt;
+
+&lt;p&gt;在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选&lt;/p&gt;
+
+&lt;p&gt;本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用rook搭建存储集群</title>
+      <link>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/</guid>
+      <description>&lt;p&gt;rook是云原生的存储&lt;strong&gt;协调器&lt;/strong&gt;,为各种存储提供解决方案,提供自我管理,自我扩展,自我修复的存储服务,在kubernetes中实际实现是operator方式.&lt;/p&gt;
+
+&lt;p&gt;在rook 0.9版本中,Ceph已经是&lt;strong&gt;beta&lt;/strong&gt;支持状态了.&lt;/p&gt;
+
+&lt;p&gt;Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多年生产部署的块存储，对象存储和共享文件系统.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>自动部署k8s基础应用</title>
+      <link>https://tangxusc.github.io/2019/03/%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2k8s%E5%9F%BA%E7%A1%80%E5%BA%94%E7%94%A8/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2k8s%E5%9F%BA%E7%A1%80%E5%BA%94%E7%94%A8/</guid>
+      <description>&lt;p&gt;自动部署k8s基础应用&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

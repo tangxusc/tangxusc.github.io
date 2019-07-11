@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jaeger on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/categories/jaeger/</link>
+    <description>Recent content in Jaeger on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/categories/jaeger/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>jaeger-operator安装</title>
+      <link>https://tangxusc.github.io/2019/03/jaeger-operator%E5%AE%89%E8%A3%85/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/jaeger-operator%E5%AE%89%E8%A3%85/</guid>
+      <description>&lt;p&gt;jaeger-operator安装&lt;/p&gt;
+
+&lt;p&gt;在一个成规模的微服务系统中,一个功能不单由这一个服务完成,而是多个服务协作来共同完成,但是如果其中一个服务出现了错误,对于错误的追踪,对于整个调用链的追踪便成为了难题.&lt;/p&gt;
+
+&lt;p&gt;好在外国佬遇到了这些问题,指定了&lt;code&gt;opentracing&lt;/code&gt;规范,并且提供了例如&lt;code&gt;zipkin&lt;/code&gt;,&lt;code&gt;pinpoint&lt;/code&gt;,&lt;code&gt;jaeger&lt;/code&gt;等工具供我们使用&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

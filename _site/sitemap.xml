@@ -1,0 +1,1156 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/07/%E4%BD%BF%E7%94%A8spring-5%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84-%E7%AE%80%E6%B4%81%E7%89%88/</loc>
+    <lastmod>2019-07-11T09:30:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/</loc>
+    <lastmod>2019-05-28T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/</loc>
+    <lastmod>2019-05-22T14:40:58+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2019-05-20T15:34:24+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/</loc>
+    <lastmod>2019-05-20T09:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/</loc>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/</loc>
+    <lastmod>2019-05-16T16:13:14+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/</loc>
+    <lastmod>2019-05-16T16:13:13+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/</loc>
+    <lastmod>2019-05-16T16:13:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-4/</loc>
+    <lastmod>2019-05-16T16:13:11+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-3/</loc>
+    <lastmod>2019-05-16T16:13:10+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-2/</loc>
+    <lastmod>2019-05-16T16:13:09+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-1/</loc>
+    <lastmod>2019-05-16T16:13:08+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/client-go-informer%E6%9C%BA%E5%88%B6/</loc>
+    <lastmod>2019-05-16T15:13:08+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/client-go%E4%BD%BF%E7%94%A8/</loc>
+    <lastmod>2019-05-15T15:13:08+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/golang-package%E5%92%8Cmodule%E8%A7%A3%E6%9E%90/</loc>
+    <lastmod>2019-05-15T09:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/kubelet%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/</loc>
+    <lastmod>2019-05-14T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/05/etcd-lock%E8%AF%A6%E8%A7%A3/</loc>
+    <lastmod>2019-05-07T14:38:42+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/etcd%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/</loc>
+    <lastmod>2019-04-25T16:41:39+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/%E4%BD%BF%E7%94%A8cfssl%E7%94%9F%E6%88%90etcd%E8%AF%81%E4%B9%A6pem/</loc>
+    <lastmod>2019-04-25T13:56:22+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-0-%E5%AE%89%E8%A3%85/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-1-%E7%A4%BA%E4%BE%8B/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-10-%E8%87%AA%E5%AE%9A%E4%B9%89mixer-adapter/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-2-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-3-%E7%BD%91%E5%85%B3/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-7-tls/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-8-jwt%E8%AE%A4%E8%AF%81/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-9-opa%E6%8E%88%E6%9D%83/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95/</loc>
+    <lastmod>2019-04-01T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/go-%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8F%8A-pprof-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/golang%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90pprof/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/go%E6%A8%A1%E5%9D%97%E7%AE%80%E4%BB%8B/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/intellij-idea-%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84-rest-%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/java-%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7-%E6%8F%92%E4%BB%B6%E5%8C%96%E6%B3%A8%E8%A7%A3%E5%A4%84%E7%90%86-apipluggable-annotation-processing-api/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/java8-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/java%E6%B3%A8%E9%87%8A%E5%A4%84%E7%90%86%E5%92%8C%E5%88%9B%E5%BB%BA%E6%9E%84%E5%BB%BA%E5%99%A8/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/jenkins-sonar-github-%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E7%AE%A1%E7%90%86/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/kubernetes-operator-sdk/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/lombok-%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E4%B8%8E%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/minikube-%E5%AE%89%E8%A3%85/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/operator-%E5%8E%9F%E7%90%86/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/rke%E5%AE%89%E8%A3%85kubernetes%E9%9B%86%E7%BE%A4/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/ubuntu-%E4%B8%AD%E7%99%BB%E5%BD%95%E7%9B%B8%E5%85%B3%E7%9A%84%E6%97%A5%E5%BF%97/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/docker-maven-plugin%E4%BD%BF%E7%94%A8/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/docker%E5%85%A5%E9%97%A8/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/docker%E5%AE%89%E8%A3%85%E5%9B%BD%E5%86%85%E7%8E%AF%E5%A2%83/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/drone-ci%E7%9A%84%E5%AE%89%E8%A3%85docker%E7%89%88%E6%9C%AC/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/fluentd-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/grpc-interceptor/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/git-subtree-%E6%95%99%E7%A8%8B/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/git-%E5%BF%85%E9%A1%BB%E8%A6%81%E7%86%9F%E7%BB%83%E6%8E%8C%E6%8F%A1%E7%9A%84%E5%91%BD%E4%BB%A4/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5%E8%A1%A8/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/git%E6%8C%87%E4%BB%A4%E5%88%97%E8%A1%A8/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/git%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/golang%E6%97%A5%E5%BF%97%E5%BA%93/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/helm%E7%AE%80%E4%BB%8B/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/jaeger-operator%E5%AE%89%E8%A3%85/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/jgit%E8%8E%B7%E5%8F%96git%E4%BB%93%E5%BA%93%E4%B8%AD%E7%9A%84%E9%83%A8%E5%88%86%E6%96%87%E4%BB%B6/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/kubeadm%E5%AE%89%E8%A3%85ha%E9%9B%86%E7%BE%A4/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/kubeadm%E7%94%9F%E6%88%90%E7%9A%84token%E8%BF%87%E6%9C%9F%E5%90%8E%E9%9B%86%E7%BE%A4%E5%A2%9E%E5%8A%A0%E8%8A%82%E7%82%B9/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/prometheus%E5%92%8Calertmanager%E7%9B%91%E6%8E%A7%E5%B9%B6%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/redis%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/sonarqube%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E4%BA%94%E5%88%86%E9%92%9F%E8%AF%BB%E6%87%82-uml-%E7%B1%BB%E5%9B%BE/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E4%BB%8E%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%80%E8%87%B4%E6%80%A7%E8%B0%88%E5%88%B0-cap-%E7%90%86%E8%AE%BAbase-%E7%90%86%E8%AE%BA/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8-golang-%E5%88%A9%E7%94%A8-ectd-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8-kubeadm-%E6%90%AD%E5%BB%BA-kubernetes1.10.2-%E9%9B%86%E7%BE%A4%E5%9B%BD%E5%86%85%E7%8E%AF%E5%A2%83/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8go-mod1.11%E5%AE%89%E8%A3%85grpc/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8shipyard-proxy%E5%BC%80%E5%90%AFdocker-remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A32375/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E5%89%8D%E7%AB%AF%E5%8A%A0%E8%BD%BD%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E9%9A%8F%E6%83%B3/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E5%9C%A8golang%E4%B8%AD%E5%88%9B%E5%BB%BA%E8%B0%83%E7%94%A8%E5%9B%BE/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E5%9F%BA%E4%BA%8E-go-etcd-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E5%A6%82%E4%BD%95%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E7%94%A8-ddd-%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E7%94%B5%E5%95%86%E7%BD%91%E7%AB%99/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-go-get-%E4%B8%8B%E8%BD%BD-gitlab-%E7%A7%81%E6%9C%89%E9%A1%B9%E7%9B%AE/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8-schema-%E8%AE%BE%E8%AE%A1-%E5%9F%BA%E4%BA%8E%E5%B7%A6%E5%8F%B3%E5%80%BC%E7%BC%96%E7%A0%81/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E6%BA%90%E4%BB%A3%E7%A0%81%E5%B0%B1%E6%98%AF%E8%AE%BE%E8%AE%A1/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E7%94%A8-jgit-%E9%80%9A%E8%BF%87-java-%E6%9D%A5%E6%93%8D%E4%BD%9C-git/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2k8s%E5%9F%BA%E7%A1%80%E5%BA%94%E7%94%A8/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E8%AE%BE%E7%BD%AE%E7%BB%88%E7%AB%AF%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%81%E4%B8%83-%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F-state%E5%AF%B9%E8%B1%A1%E8%A1%8C%E4%B8%BA%E5%9E%8B/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2019/03/%E9%85%8D%E7%BD%AEredis%E5%A4%96%E7%BD%91%E5%8F%AF%E8%AE%BF%E9%97%AE/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/adapter/</loc>
+    <lastmod>2019-05-28T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/affinity/</loc>
+    <lastmod>2019-05-22T14:40:58+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/annotation/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/archives/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/cap/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/cap/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/cfssl/</loc>
+    <lastmod>2019-04-25T13:56:22+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/cicd/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/cicd/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/client/</loc>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/client-go/</loc>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/code-generator/</loc>
+    <lastmod>2019-05-17T11:13:08+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/controller-manager/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/controller-manager/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/database/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/database/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/date/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/date/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/ddd/</loc>
+    <lastmod>2019-07-11T09:30:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/ddd/</loc>
+    <lastmod>2019-07-11T09:30:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/docker/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/docker/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/drone/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/drone/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/efk/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/efk/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/etcd/</loc>
+    <lastmod>2019-05-07T14:38:42+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/etcd/</loc>
+    <lastmod>2019-05-07T14:38:42+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/fluentd/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/fluentd/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/gc/</loc>
+    <lastmod>2019-05-14T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/git/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/git/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/gitflow/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/gitflow/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/gitlab/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/gitsubtree/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/gitsubtree/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/golang/</loc>
+    <lastmod>2019-05-15T09:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/golang/</loc>
+    <lastmod>2019-05-15T09:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/grpc/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/grpc/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/ha/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/helm/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/helm/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/informer/</loc>
+    <lastmod>2019-05-16T15:13:08+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/install/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/interceptor/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/interceptor/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/istio/</loc>
+    <lastmod>2019-05-28T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/istio/</loc>
+    <lastmod>2019-05-28T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/jaeger/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/jaeger/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/java/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/java/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/jgit/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/jgit/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/k8s/</loc>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/k8s/</loc>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/kubeadm/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/kubeadm/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/kubelet/</loc>
+    <lastmod>2019-05-14T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/kubelet/</loc>
+    <lastmod>2019-05-14T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/local-pv/</loc>
+    <lastmod>2019-05-20T15:34:24+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/lock/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/lock/</loc>
+    <lastmod>2019-05-07T14:38:42+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/logrus/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/logrus/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/lombok/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/lombok/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/maven/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/module/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/module/</loc>
+    <lastmod>2019-05-15T09:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/networkpolicy/</loc>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/networkpolicy/</loc>
+    <lastmod>2019-05-23T15:50:45+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/nfs/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/nfs/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/operator/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/operator/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/post/</loc>
+    <lastmod>2019-07-11T09:30:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/pprof/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/pprof/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/prometheus/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/prometheus/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/proxy/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/proxy/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/redis/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/redis/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A3/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/rest/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/rest/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/rke/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/rke/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/rook/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/rook/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/shipyard/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/sonarqube/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/sonarqube/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/</loc>
+    <lastmod>2019-05-28T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/ubuntu/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/ubuntu/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/volume/</loc>
+    <lastmod>2019-05-20T15:34:24+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/volume/</loc>
+    <lastmod>2019-05-20T15:34:24+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/1/01/adapter.my.config/</loc>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/%E4%BB%A3%E7%A0%81%E6%97%A0%E5%85%B3/</loc>
+    <lastmod>2019-05-20T09:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/%E4%BB%A3%E7%A0%81%E6%97%A0%E5%85%B3/</loc>
+    <lastmod>2019-05-20T09:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/%E5%89%8D%E7%AB%AF/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/%E5%89%8D%E7%AB%AF/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/</loc>
+    <lastmod>2019-07-11T09:30:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+</urlset>

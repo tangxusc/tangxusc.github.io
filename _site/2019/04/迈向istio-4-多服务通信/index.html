@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="istio">
+<meta name="description" content="在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;
+
+在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务">
+
+
+<meta property="og:description" content="在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;
+
+在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="迈向istio-4 多服务通信">
+<meta name="twitter:title" content="迈向istio-4 多服务通信">
+<meta property="og:url" content="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;
+
+在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务">
+<meta name="twitter:description" content="在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;
+
+在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-04-01T14:15:59">
+  
+  
+    <meta property="article:modified_time" content="2019-04-01T14:15:59">
+  
+  
+  
+    
+      <meta property="article:section" content="istio">
+    
+  
+  
+    
+      <meta property="article:tag" content="istio">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>迈向istio-4 多服务通信</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      迈向istio-4 多服务通信
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-04-01T14:15:59&#43;08:00">
+        
+  April 1, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/istio">istio</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;</p>
+
+<p>在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务</p>
+
+<h2 id="服务规划">服务规划</h2>
+
+<p><img src="https://tangxusc.github.io/post/迈向istio/4-多服务通信/服务图.png"/></p>
+
+<blockquote>
+<p>请忽略nginx,这个是我用来做测试的&hellip;</p>
+</blockquote>
+
+<h3 id="proxy服务">proxy服务</h3>
+
+<p>proxy服务使用golang进行构建,serviceProxy.go文件内容如下:</p>
+
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;io/ioutil&quot;
+	&quot;log&quot;
+	&quot;net/http&quot;
+	&quot;os&quot;
+)
+
+func main() {
+	http.HandleFunc(&quot;/proxy&quot;, handler)
+	http.HandleFunc(&quot;/index&quot;, indexHandler)
+	serve := http.ListenAndServe(&quot;0.0.0.0:8090&quot;, nil)
+	if serve != nil {
+		log.Fatalf(&quot;启动失败,%v&quot;, serve)
+	} else {
+		fmt.Fprintf(os.Stdout, &quot;启动成功&quot;)
+	}
+}
+
+func handler(writer http.ResponseWriter, request *http.Request) {
+	fmt.Printf(&quot;proxy请求begin\n&quot;)
+	request.ParseForm()
+	get := request.Form.Get(&quot;url&quot;)
+	fmt.Printf(&quot;请求地址:%s\n&quot;, get)
+	for key, value := range request.Form {
+		fmt.Printf(&quot;请求参数 [%s]:%s \n&quot;, key, value)
+	}
+	for key, value := range request.Header {
+		fmt.Printf(&quot;header参数 [%s]:%s \n&quot;, key, value)
+	}
+
+	client := http.DefaultClient
+	newRequest, e := http.NewRequest(&quot;GET&quot;, get, nil)
+	if e != nil {
+		fmt.Printf(&quot;NewRequest error: %v&quot;, e)
+	}
+
+	//设置header
+    //在istio中,header
+	if len(request.Header.Get(&quot;x-request-id&quot;)) &gt; 0 {
+		newRequest.Header.Set(&quot;x-request-id&quot;, request.Header.Get(&quot;x-request-id&quot;))
+	}
+	if len(request.Header.Get(&quot;x-b3-traceid&quot;)) &gt; 0 {
+		newRequest.Header.Set(&quot;x-b3-traceid&quot;, request.Header.Get(&quot;x-b3-traceid&quot;))
+	}
+	if len(request.Header.Get(&quot;x-b3-spanid&quot;)) &gt; 0 {
+		newRequest.Header.Set(&quot;x-b3-spanid&quot;, request.Header.Get(&quot;x-b3-spanid&quot;))
+	}
+	if len(request.Header.Get(&quot;x-b3-parentspanid&quot;)) &gt; 0 {
+		newRequest.Header.Set(&quot;x-b3-parentspanid&quot;, request.Header.Get(&quot;x-b3-parentspanid&quot;))
+	}
+	if len(request.Header.Get(&quot;x-b3-sampled&quot;)) &gt; 0 {
+		newRequest.Header.Set(&quot;x-b3-sampled&quot;, request.Header.Get(&quot;x-b3-sampled&quot;))
+	}
+	if len(request.Header.Get(&quot;x-b3-flags&quot;)) &gt; 0 {
+		newRequest.Header.Set(&quot;x-b3-flags&quot;, request.Header.Get(&quot;x-b3-flags&quot;))
+	}
+	if len(request.Header.Get(&quot;x-ot-span-context&quot;)) &gt; 0 {
+		newRequest.Header.Set(&quot;x-ot-span-context&quot;, request.Header.Get(&quot;x-ot-span-context&quot;))
+	}
+
+	resp, err := client.Do(newRequest)
+	if err != nil {
+		fmt.Fprintf(writer, &quot;response:%v&quot;, err)
+	} else {
+		bytes, _ := ioutil.ReadAll(resp.Body)
+		defer resp.Body.Close()
+		fmt.Fprintf(writer, &quot;%s&quot;, bytes)
+	}
+	fmt.Printf(&quot;proxy请求end\n&quot;)
+}
+
+func indexHandler(writer http.ResponseWriter, request *http.Request) {
+	fmt.Printf(&quot;index请求begin\n&quot;)
+	for key, value := range request.Form {
+		fmt.Printf(&quot;请求参数 [%s]:%s \n&quot;, key, value)
+	}
+	for key, value := range request.Header {
+		fmt.Printf(&quot;header参数 [%s]:%s \n&quot;, key, value)
+	}
+	fmt.Fprintf(writer, &quot;%s&quot;, &quot;index&quot;)
+	fmt.Printf(&quot;index请求end\n&quot;)
+
+}
+</code></pre>
+
+<p>将proxy服务构建为镜像:</p>
+
+<pre><code class="language-shell">$ go build serviceProxy.go
+$ docker build -t service-proxy:go-1 -f go-Dockerfile .
+</code></pre>
+
+<h3 id="target服务">target服务</h3>
+
+<p>target服务使用java进行构建,TestController.java文件内容如下:</p>
+
+<pre><code class="language-java">package com.tanx.istio.demo;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
+
+@RestController
+@RequestMapping
+public class TestController {
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @RequestMapping(&quot;/proxy&quot;)
+    public String proxy(@RequestHeader(value = &quot;end-user&quot;, required = false) String user,
+                        @RequestHeader(value = &quot;x-request-id&quot;, required = false) String xreq,
+                        @RequestHeader(value = &quot;x-b3-traceid&quot;, required = false) String xtraceid,
+                        @RequestHeader(value = &quot;x-b3-spanid&quot;, required = false) String xspanid,
+                        @RequestHeader(value = &quot;x-b3-parentspanid&quot;, required = false) String xparentspanid,
+                        @RequestHeader(value = &quot;x-b3-sampled&quot;, required = false) String xsampled,
+                        @RequestHeader(value = &quot;x-b3-flags&quot;, required = false) String xflags,
+                        @RequestHeader(value = &quot;x-ot-span-context&quot;, required = false) String xotspan,
+                        String url) {
+	System.out.println(&quot;=============请求header============&quot;);
+        System.out.println(&quot;end-user:&quot;+user);
+        System.out.println(&quot;x-request-id:&quot;+xreq);
+        System.out.println(&quot;x-b3-traceid:&quot;+xtraceid);
+        System.out.println(&quot;x-b3-spanid:&quot;+xspanid);
+        System.out.println(&quot;x-b3-parentspanid:&quot;+xparentspanid);
+        System.out.println(&quot;x-b3-sampled:&quot;+xsampled);
+        System.out.println(&quot;x-b3-flags:&quot;+xflags);
+        System.out.println(&quot;x-ot-span-context:&quot;+xotspan);
+        System.out.println(&quot;=============请求header============&quot;);
+
+        System.out.println(&quot;=============请求url============&quot;);
+        System.out.println(url);
+        System.out.println(&quot;=============请求url============&quot;);
+        HttpHeaders requestHeaders = new HttpHeaders();
+        if (xreq != null) {
+            requestHeaders.put(&quot;x-request-id&quot;, Collections.singletonList(xreq));
+        }
+        if (xtraceid != null) {
+            requestHeaders.put(&quot;x-b3-traceid&quot;, Collections.singletonList(xtraceid));
+        }
+        if (xspanid != null) {
+            requestHeaders.put(&quot;x-b3-spanid&quot;, Collections.singletonList(xspanid));
+        }
+        if (xparentspanid != null) {
+            requestHeaders.put(&quot;x-b3-parentspanid&quot;, Collections.singletonList(xparentspanid));
+        }
+        if (xsampled != null) {
+            requestHeaders.put(&quot;x-b3-sampled&quot;, Collections.singletonList(xsampled));
+        }
+        if (xflags != null) {
+            requestHeaders.put(&quot;x-b3-flags&quot;, Collections.singletonList(xflags));
+        }
+        if (xotspan != null) {
+            requestHeaders.put(&quot;x-ot-span-context&quot;, Collections.singletonList(xotspan));
+        }
+        if (user != null) {
+            requestHeaders.put(&quot;end-user&quot;, Collections.singletonList(user));
+        }
+
+        ResponseEntity&lt;String&gt; exchange = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity&lt;&gt;(requestHeaders), String.class);
+        String body = exchange.getBody();
+        System.out.println(&quot;代理返回内容为:&quot; + body);
+        return body;
+    }
+
+    @RequestMapping(&quot;index&quot;)
+    public String index(@RequestHeader(value = &quot;end-user&quot;, required = false) String user,
+                        @RequestHeader(value = &quot;x-request-id&quot;, required = false) String xreq,
+                        @RequestHeader(value = &quot;x-b3-traceid&quot;, required = false) String xtraceid,
+                        @RequestHeader(value = &quot;x-b3-spanid&quot;, required = false) String xspanid,
+                        @RequestHeader(value = &quot;x-b3-parentspanid&quot;, required = false) String xparentspanid,
+                        @RequestHeader(value = &quot;x-b3-sampled&quot;, required = false) String xsampled,
+                        @RequestHeader(value = &quot;x-b3-flags&quot;, required = false) String xflags,
+                        @RequestHeader(value = &quot;x-ot-span-context&quot;, required = false) String xotspan) {
+	System.out.println(&quot;=============请求header============&quot;);
+        System.out.println(&quot;end-user:&quot;+user);
+        System.out.println(&quot;x-request-id:&quot;+xreq);
+        System.out.println(&quot;x-b3-traceid:&quot;+xtraceid);
+        System.out.println(&quot;x-b3-spanid:&quot;+xspanid);
+        System.out.println(&quot;x-b3-parentspanid:&quot;+xparentspanid);
+        System.out.println(&quot;x-b3-sampled:&quot;+xsampled);
+        System.out.println(&quot;x-b3-flags:&quot;+xflags);
+        System.out.println(&quot;x-ot-span-context:&quot;+xotspan);
+        System.out.println(&quot;=============请求header============&quot;);
+
+        return &quot;index-java&quot;;
+    }
+
+}
+</code></pre>
+
+<p>将proxy服务构建为镜像:</p>
+
+<pre><code class="language-shell">$ mvn clean&amp;&amp;mvn package -Dmaven.test.skip=true
+$ docker build -t service-proxy:java-1 -f java-Dockerfile .
+</code></pre>
+
+<p>在这里可能会有很多人有疑问,为什么要我都构建为service-proxy名称的镜像,并且这两个镜像中还存在基本一样的行为(都开放两个接口proxy,index)?</p>
+
+<p>原因如下:</p>
+
+<ul>
+<li>我需要演示两个服务间相互调用,两个服务一致,可以让我们调用更为方便</li>
+<li>使用两种语言可以充分的模拟企业中不同的服务状态</li>
+</ul>
+
+<h2 id="kubernetes配置">kubernetes配置</h2>
+
+<p>k8s.yaml内容如下:</p>
+
+<pre><code class="language-yaml">apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: target
+ namespace: test
+ labels:
+   app: target #必须有app和version标签
+   version: v1
+spec:
+ template:
+    metadata:
+     labels:
+       app: target
+       version: v1
+    spec:
+     containers:
+     - name: target
+       image: service-proxy:java-1
+       ports:
+       - containerPort: 8090
+         name: http-target
+         protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: target
+  namespace: test
+spec:
+  type: ClusterIP
+  selector:
+    app: target
+  ports:
+    - port: 80
+      name: http-target #必须为服务端口命名,端口名称必须是形式&lt;protocol&gt;[-&lt;suffix&gt;]与http, http2, grpc, mongo, or redis as the &lt;protocol&gt;
+      protocol: TCP
+      targetPort: 8090
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: proxy
+ namespace: test
+ labels:
+   app: proxy
+   version: v1
+spec:
+ template:
+    metadata:
+     labels:
+       app: proxy
+       version: v1
+    spec:
+     containers:
+     - name: proxy
+       image: service-proxy:java-1
+       ports:
+       - containerPort: 8090
+         name: http-proxy
+         protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: proxy
+  namespace: test
+spec:
+  type: ClusterIP
+  selector:
+    app: proxy
+  ports:
+    - port: 80
+      name: http-proxy
+      protocol: TCP
+      targetPort: 8090
+</code></pre>
+
+<h3 id="部署应用">部署应用</h3>
+
+<pre><code class="language-shell">$ kubectl craete namespace test
+$ kubectl apply -f &lt; (istioctl kube-inject -f k8s.yaml)
+$ kubectl get all -n test
+</code></pre>
+
+<h3 id="部署istio编排文件">部署istio编排文件</h3>
+
+<p>istio.yaml文件如下:</p>
+
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: test4
+  namespace: test
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - &quot;*&quot;
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: proxy
+  namespace: test
+spec:
+  hosts:
+  - &quot;*&quot;
+  gateways:
+  - test4
+  http:
+  - match:
+    - uri:
+        prefix: /proxy/
+    rewrite:
+      uri: &quot;/&quot;
+    route:
+    - destination:
+       host: proxy
+       subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: proxy
+  namespace: test
+spec:
+  host: proxy
+  subsets:
+  - name: v1
+    labels:
+      app: proxy
+      version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: target
+  namespace: test
+spec:
+  hosts:
+  - &quot;*&quot;
+  gateways:
+  - test4
+  http:
+  - match:
+    - uri:
+        prefix: /target/
+    rewrite:
+      uri: &quot;/&quot;
+    route:
+    - destination:
+       host: target
+       subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: target
+  namespace: test
+spec:
+  host: target
+  subsets:
+  - name: v1
+    labels:
+      app: target
+      version: v1
+</code></pre>
+
+<blockquote>
+<p>注意,在此配置文件中我使用了两个VirtualService.</p>
+</blockquote>
+
+<p>将我们的配置文件部署起来</p>
+
+<pre><code class="language-shell">$ kubectl apply -f istio.yaml
+</code></pre>
+
+<blockquote>
+<p>注意:istio1.0.4在此处有一个明显的问题, 在使用istioctl create -f istio.yaml命令下会报错,但是使用kubectl apply -f istio.yaml不会报错,但是在访问gateway时,可能出现拒绝连接的情况,在删除其中(proxy,target)一个VirtualService后,又能访问.</p>
+</blockquote>
+
+<h2 id="访问应用">访问应用</h2>
+
+<pre><code class="language-shell">$ curl http://localhost:31380/proxy/proxy?url=http://target/index -v
+# 返回 index-java
+#或者通过
+$ curl http://localhost:31380/target/proxy?url=http://proxy/index -v
+#返回 index
+</code></pre>
+
+<p>这个时候打开我们的istio的dashboard(kiali) 可以看到服务间的依赖图
+<img src="https://tangxusc.github.io/post/迈向istio/4-多服务通信/服务图.png"/></p>
+
+<p>在grafana上可以看到一些图标信息</p>
+
+<p><img src="https://tangxusc.github.io/post/迈向istio/4-多服务通信/grafana.png"/></p>
+
+<p><img src="https://tangxusc.github.io/post/迈向istio/4-多服务通信/meshDashboard.png"/></p>
+
+<p><img src="https://tangxusc.github.io/post/迈向istio/4-多服务通信/pilotDashboard.png"/></p>
+
+<p><img src="https://tangxusc.github.io/post/迈向istio/4-多服务通信/jaeger.png"/></p>
+
+<p>打开jaeger-query可以看到我们istio上使用的追踪信息</p>
+
+<h2 id="几个问题">几个问题</h2>
+
+<p>在我们兴高采烈的以为istio在服务通信方面很nice的时候(确实也很nice,不需要服务发现,也不需要专门的熔断就可以达到微服务中流量治理一样的效果),但是我们回头看看 有几个问题值得我们反思</p>
+
+<ol>
+<li>yaml文件配置复杂,本例中只用到了重写url,但是如果需要复杂的功能,那么yaml也相对复杂</li>
+<li>istio的追踪是服务间的调用追踪,并没有深入到应用内的调用</li>
+<li>istio的无入侵现在看来还是有一定的条件的,在追踪的时候,需要自己将上下文(header)转发到下游调用中</li>
+<li>istio追踪的时候 转发header是不区分大小写的,但是<code>空值</code>, 字符串<code>&quot;&quot;</code>会影响追踪</li>
+<li>在使用<code>VirtualService</code>的<code>http.match.url.prefix</code>的时候,如果搭配<code>rewrite</code>使用,那么<code>prefix</code>的值一定要在最后加入/,以免出现<code>302</code>浏览器跳转,导致请求不能正常被处理</li>
+<li>看到官方文档很多时候都在用<code>kubectl apply -f xxx</code> 开始很不理解,但是在出现了<code>istioctl create -f xxx</code>有些情况下不怎么好用的时候,我发现<code>kubectl apply -f</code> 其实挺好的.</li>
+<li>在默认的安装情况下,jaeger的追踪采样是1%,在我们测试的时候最好调整到合适的值,具体的调整请查看istio安装文档</li>
+</ol>
+
+<h2 id="清理">清理</h2>
+
+<pre><code class="language-shell">$ kubectl delete namespace/test
+</code></pre>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/istio/">istio</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-3-%E7%BD%91%E5%85%B3/" data-tooltip="迈向istio-3 网关">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/" data-tooltip="迈向istio-5 引入外部服务">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-3-%E7%BD%91%E5%85%B3/" data-tooltip="迈向istio-3 网关">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/" data-tooltip="迈向istio-5 引入外部服务">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/07/%E4%BD%BF%E7%94%A8spring-5%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84-%E7%AE%80%E6%B4%81%E7%89%88/">
+                <h3 class="media-heading">使用Spring 5实现响应式微服务架构-简洁版</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>随着以 Dubbo、Spring Cloud 等框架为代表的分布式服务调用和治理工具的大行其道，以及以 Docker、Kubernetes 等容器技术的日渐成熟，微服务架构（Microservices Architecture）毫无疑问是近年来最热门的一种服务化架构模式。所谓微服务，就是一些具有足够小的粒度、能够相互协作且自治的服务体系。正因为每个微服务都比较简单，仅关注于完成一个业务功能，所以具备技术、业务和组织上的优势 <sup>[1]</sup>。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+                <h3 class="media-heading">迈向istio-13 自定义adapter(修改请求头)</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.</p>
+
+<p>mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为<code>Adapter</code>,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">NetworkPolicy介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中的所有的pod在默认情况下,网络都是互通的,pod接收来自任何来源的流量.</p>
+
+<p>那么我们如何限制pod的网络通信,防止非法访问呢?</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
+                <h3 class="media-heading">亲和性调度</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中对pod的调度由调度控制器负责,在调度的时候有很大的随机性.</p>
+
+<p>但是我们很多时候需要容器更多的分散在不同的node上,有一些情况又需要尽量集中在一起,减少网络开销</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">Local Persistent Volume 介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中,存储一直是一个较为头疼的问题,在面对持久化存储,我们可以选择各种文件系统,但是对于那些临时存储的文件,我们则需要一种本地存储的能力,在kubernetes1.14中为我们提供了一种本地存储<code>localPV</code>,本文将围绕此展开.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
+                <h3 class="media-heading">今日心情-上善若水</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>一天又一天,每一天都那么一样又不那么一样.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+                <h3 class="media-heading">code-generator使用</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-7</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948541">https://blog.csdn.net/weixin_39961559/article/details/81948541</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第七节,也是最后一节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-6</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948239">https://blog.csdn.net/weixin_39961559/article/details/81948239</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第六节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-5</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81946899">https://blog.csdn.net/weixin_39961559/article/details/81946899</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第五节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         95 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2019\/04\/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1\/';
+          
+            this.page.identifier = '\/2019\/04\/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

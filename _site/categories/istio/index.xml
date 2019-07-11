@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Istio on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/categories/istio/</link>
+    <description>Recent content in Istio on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 28 May 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/categories/istio/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>迈向istio-13 自定义adapter(修改请求头)</title>
+      <link>https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/</link>
+      <pubDate>Tue, 28 May 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/</guid>
+      <description>&lt;p&gt;在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.&lt;/p&gt;
+
+&lt;p&gt;mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为&lt;code&gt;Adapter&lt;/code&gt;,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>迈向istio-0 安装</title>
+      <link>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-0-%E5%AE%89%E8%A3%85/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-0-%E5%AE%89%E8%A3%85/</guid>
+      <description>&lt;p&gt;istio-安装&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>迈向istio-1 示例</title>
+      <link>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-1-%E7%A4%BA%E4%BE%8B/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-1-%E7%A4%BA%E4%BE%8B/</guid>
+      <description>&lt;p&gt;在上一节中我们已经成功的安装了istio的各个组件,接下来我们一起来运行一个nginx,体验一下istio的功能&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>迈向istio-10 自定义mixer adapter</title>
+      <link>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-10-%E8%87%AA%E5%AE%9A%E4%B9%89mixer-adapter/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-10-%E8%87%AA%E5%AE%9A%E4%B9%89mixer-adapter/</guid>
+      <description>&lt;p&gt;本节我们将自定义一个adapter,adapter和mixer通信使用grpc,所以本节需要对grpc和mixer的adapter有一定的了解.&lt;/p&gt;
+
+&lt;p&gt;基于的环境:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;istio 1.0.4&lt;/li&gt;
+&lt;li&gt;golang 1.11(go module)&lt;/li&gt;
+&lt;li&gt;goland (或者其他go IDE)&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>迈向istio-11 升级到1.1.2</title>
+      <link>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-11-%E5%8D%87%E7%BA%A7%E5%88%B01.1.2/</guid>
+      <description>&lt;p&gt;istio经过8个月的发展和社区中的各位大佬的孜孜不倦的贡献,终于发布了1.1版本,新版本为&lt;code&gt;企业级就绪&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>迈向istio-2 服务路由</title>
+      <link>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-2-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-2-%E6%9C%8D%E5%8A%A1%E8%B7%AF%E7%94%B1/</guid>
+      <description>&lt;p&gt;在上一节中,我们使用nginx开启了我们istio的第一个应用,现在我们加入另外一个服务tomcat&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;本节内容基于上节内容,请先运行上一节的yaml文件,然后再体验本节内容&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>迈向istio-3 网关</title>
+      <link>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-3-%E7%BD%91%E5%85%B3/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-3-%E7%BD%91%E5%85%B3/</guid>
+      <description>&lt;p&gt;在上一节中我们已经成功的简单运行了istio的一个路由,也有了一番流量管理的体验,那么很多人都不禁要问,这些配置和yaml是什么意思呢?&lt;/p&gt;
+
+&lt;p&gt;那接下来我们基于istio示例中的配置,一点一点的解析这些yaml文件.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;nginx.yaml中的内容为k8s的yaml文件,再此不做赘述.&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>迈向istio-4 多服务通信</title>
+      <link>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-4-%E5%A4%9A%E6%9C%8D%E5%8A%A1%E9%80%9A%E4%BF%A1/</guid>
+      <description>&lt;p&gt;在之前的示例中,我们在istio中启动了nginx,tomcat等服务,那在此节中,我们再深入的进行一些功能的使用;&lt;/p&gt;
+
+&lt;p&gt;在微服务的背景下,现在越来越多的被拆分为单个服务了,那么这些服务怎么在istio上运行,服务间如何进行通信呢?在本节中我们将尝试构建一个proxy服务和target服务&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>迈向istio-5 引入外部服务</title>
+      <link>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-5-%E5%BC%95%E5%85%A5%E5%A4%96%E9%83%A8%E6%9C%8D%E5%8A%A1/</guid>
+      <description>&lt;p&gt;在istio中所有的流量都是通过istio的initContainer启动的时候对iptable进行了劫持的,那么外部流量就无法通过dns等服务发现机制进行路由了,这个时候怎么办呢? 这一节我们就来解决这个问题.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>迈向istio-6 镜像流量</title>
+      <link>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-6-%E9%95%9C%E5%83%8F%E6%B5%81%E9%87%8F/</guid>
+      <description>&lt;p&gt;我们在前面几个章节中使用了两个服务(proxy,target),现在我们想对target进行一次升级,但是现在我们这个代码写的还不够好(没人能说他的代码一次就是期望的行为),希望通过复制一部分现在的流量 用来测试这个服务是否正确,那么这个时候就会使用到istio的镜像流量功能了&lt;/p&gt;
+
+&lt;p&gt;好了,大幕拉开,开始我们的表演.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>迈向istio-7 tls</title>
+      <link>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-7-tls/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-7-tls/</guid>
+      <description>&lt;p&gt;我们已经完成了我们服务的路由,并且也已经有了镜像流量了,那么接下来我们要做什么呢?&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>迈向istio-8 jwt认证</title>
+      <link>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-8-jwt%E8%AE%A4%E8%AF%81/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-8-jwt%E8%AE%A4%E8%AF%81/</guid>
+      <description>&lt;p&gt;在建设企业的各种项目中,我们一定离不开,或者总要和认证授权系统打交道,应用总会入侵一些认证和授权部分的代码,现在在java等方面有大量的安全框架,例如&lt;code&gt;spring security,shiro&lt;/code&gt;等等框架,这些框架也是为了解决这个重复性的做认证和授权等功能的问题,这也是我们在单体服务的时候一直做的,将各种各样的框架集成到系统中,那么现在在微服务时代,或者说在istio有没有解决方法能解决这个问题呢,让服务真正回归业务,不再去过多的管理认证的问题呢.&lt;/p&gt;
+
+&lt;p&gt;在本节中我们将会将我们的应用构建为一个需要使用jwt token才能访问的服务,在没有jwt token的情况下,将会返回401 未授权.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>迈向istio-9 opa授权</title>
+      <link>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-9-opa%E6%8E%88%E6%9D%83/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-9-opa%E6%8E%88%E6%9D%83/</guid>
+      <description>&lt;p&gt;在上一章节中,我们使用jwt进行了认证,那么我们如何对资源进行授权检查呢?&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>迈向istio-错误排查清单</title>
+      <link>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95/</link>
+      <pubDate>Mon, 01 Apr 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/04/%E8%BF%88%E5%90%91istio-%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5%E6%B8%85%E5%8D%95/</guid>
+      <description>&lt;p&gt;使用到istio的时候,我发现istio对于调试方面,错误提示方面还是不怎么友好,很多时候都不知道去哪里找错误原因,突然想到飞机那么复杂的系统是如何做到一直按照正确的方式运行的呢,遂提出此错误排查清单,用于排查部分错误,各位同仁可以一句此错误清单进行异常的排查,或者一句不同的因素对错误进行处理.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

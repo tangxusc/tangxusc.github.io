@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="ubuntu">
+<meta name="description" content="
+本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/sparkdev/p/7694202.html
+
+
+Ubuntu 中登录相关的日志">
+
+
+<meta property="og:description" content="
+本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/sparkdev/p/7694202.html
+
+
+Ubuntu 中登录相关的日志">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu 中登录相关的日志">
+<meta name="twitter:title" content="Ubuntu 中登录相关的日志">
+<meta property="og:url" content="https://tangxusc.github.io/2019/03/ubuntu-%E4%B8%AD%E7%99%BB%E5%BD%95%E7%9B%B8%E5%85%B3%E7%9A%84%E6%97%A5%E5%BF%97/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2019/03/ubuntu-%E4%B8%AD%E7%99%BB%E5%BD%95%E7%9B%B8%E5%85%B3%E7%9A%84%E6%97%A5%E5%BF%97/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/sparkdev/p/7694202.html
+
+
+Ubuntu 中登录相关的日志">
+<meta name="twitter:description" content="
+本文由 简悦 SimpRead 转码， 原文地址 https://www.cnblogs.com/sparkdev/p/7694202.html
+
+
+Ubuntu 中登录相关的日志">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-03-20T14:15:59">
+  
+  
+    <meta property="article:modified_time" content="2019-03-20T14:15:59">
+  
+  
+  
+    
+      <meta property="article:section" content="ubuntu">
+    
+  
+  
+    
+      <meta property="article:tag" content="ubuntu">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>Ubuntu 中登录相关的日志</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2019/03/ubuntu-%E4%B8%AD%E7%99%BB%E5%BD%95%E7%9B%B8%E5%85%B3%E7%9A%84%E6%97%A5%E5%BF%97/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Ubuntu 中登录相关的日志
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
+        
+  March 20, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/ubuntu">ubuntu</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://www.cnblogs.com/sparkdev/p/7694202.html">https://www.cnblogs.com/sparkdev/p/7694202.html</a></p>
+</blockquote>
+
+<p><a href="https://www.cnblogs.com/sparkdev/p/7694202.html">Ubuntu 中登录相关的日志</a></p>
+
+<p>登录相关的日志涉及到系统的安全，所以是系统管理中非常重要的一部分内容。本文试图对登录相关的日志做一个整理。</p>
+
+<h1 id="var-log-auth-log">/var/log/auth.log</h1>
+
+<p>这是一个文本文件，记录了所有和用户认证相关的日志。无论是我们通过 ssh 登录，还是通过 sudo 执行命令都会在 auth.log 中产生记录。执行</p>
+
+<pre>$ ssh nick@myserver</pre>
+
+<p><img src="https://images2017.cnblogs.com/blog/952033/201710/952033-20171019184236006-135946666.png" alt="" /></p>
+
+<p>上图显示日志记录了通过秘钥认证的方式登录主机并退出的过程。</p>
+
+<p>再执行下面的命令试试：</p>
+
+<pre>$ sudo vim /etc/passwd</pre>
+
+<p><img src="https://images2017.cnblogs.com/blog/952033/201710/952033-20171019184325349-1758988378.png" alt="" /></p>
+
+<p>日志同样会详细的记录本次 sudo 操作的过程。从中我们可以看到是哪个用户通过 sudo 执行了什么命令！</p>
+
+<h1 id="var-run-utmp">/var/run/utmp</h1>
+
+<p>这是一个二进制文件，所以不能直接通过文本编辑器查看其内容。
+它记录当前登录的每个用户的信息。因此这个文件会随着用户登录和注销系统而不断变化，它只保留当时联机的用户记录，不会为用户保留永久的记录。系统中需要查询当前用户状态的程序，如 who、w、users 等就需要访问这个文件。</p>
+
+<h1 id="var-log-wtmp">/var/log/wtmp</h1>
+
+<p>这是一个二进制文件，所以不能直接通过文本编辑器查看其内容。
+该日志文件永久记录每个用户登录、注销及系统的启动、停机的事件。因此随着系统正常运行时间的增加，该文件的大小也会越来越大，增加的速度取决于系统用户登录的次数。该日志文件可以用来查看用户的登录记录，last 命令就通过访问这个文件获得这些信息。</p>
+
+<h1 id="var-log-btmp">/var/log/btmp</h1>
+
+<p>这是一个二进制文件，所以不能直接通过文本编辑器查看其内容。
+这个文件记录的是所有失败的登录尝试，使用 last 命令及其 -f 选项可以查看这个文件的内容：</p>
+
+<pre>$ sudo last -f /var/log/btmp</pre>
+
+<p><img src="https://images2017.cnblogs.com/blog/952033/201710/952033-20171019184638896-356181046.png" alt="" /></p>
+
+<h1 id="var-log-lastlog">/var/log/lastlog</h1>
+
+<p>这是一个二进制文件，所以不能直接通过文本编辑器查看其内容。
+它会记录系统中所有用户最近一次登陆的信息。比如我们通过 ssh 登录时提示的此用户最后一次的登录时间，就是从这个文件中取出的：</p>
+
+<p><img src="https://images2017.cnblogs.com/blog/952033/201710/952033-20171019184723693-1877670689.png" alt="" /></p>
+
+<p>其实这个文件的主要使用者是 lastlog 命令。</p>
+
+<p>特别是 /var/run/utmp、/var/log/wtmp 和 /var/log/lastlog 这三个文件，它们都是日志系统中的关键文件，并且具有如下的逻辑联系：
+当一个用户登录系统时，login 程序在 lastlog 文件中查看用户的 UID。如果该用户存在，就把该用户上次登录、注销的时间以及从哪个主机登录的信息写到标准输出中。然后 login 程序在 lastlog 中记录新的登录时间，并打开 utmp 文件添加用户本次的登录记录。接下来，login 程序打开 wtmp 文件并添加用户在 utmp 文件中的记录。当用户退出时会把更新的 utmp 文件中的记录添加到 wtmp 文件中，并从 utmp 文件中删除用户的记录。</p>
+
+<p>我们可以看到除了 auth.log 文件，其它几个文件都是二进制文件，因而不能使用 less 之类的命令直接查看。下面我们来介绍和登录相关的一些命令，其实它们几乎都是通过查询这些日志文件来提供信息的。</p>
+
+<h1 id="lastlog-命令">lastlog 命令</h1>
+
+<p>lastlog 命令用来显示系统中所有用户最近一次登陆的信息：</p>
+
+<p><img src="https://images2017.cnblogs.com/blog/952033/201710/952033-20171019184908615-825712918.png" alt="" /></p>
+
+<p>图中显示的只是完整列表的一部分，<strong>Never logged in</strong> 表示该用户从来没有登陆过。如果要查看某个用户的最后登陆信息，可使用 -u 选项：</p>
+
+<p><img src="https://images2017.cnblogs.com/blog/952033/201710/952033-20171019185056099-1399081424.png" alt="" /></p>
+
+<p>其实 lastlog 命令就是从 /var/log/lastlog 文件中取出的内容。</p>
+
+<h1 id="last-命令">last 命令</h1>
+
+<p>last 命令用来显示用户最近登录的信息。执行 last 命令，它会读取 /var/log/wtmp 文件的内容。并把该文件记录的用户登录历史全部显示出来：</p>
+
+<pre>$ last</pre>
+
+<p><img src="https://images2017.cnblogs.com/blog/952033/201710/952033-20171019185144693-420680731.png" alt="" /></p>
+
+<p>信息记录了谁在什么时间从哪里登录了服务器，登录了多长时间。需要注意的是系统中的 wtmp 日志文件经常会被轮转，所以有时你需要显式的指定 last 命令从哪个文件中读取信息：</p>
+
+<pre>$ last -f /var/log/wtmp.1</pre>
+
+<p><img src="https://images2017.cnblogs.com/blog/952033/201710/952033-20171019185213037-374406928.png" alt="" /></p>
+
+<p>如果我们想快速知道系统最后一次的重启时间，可以使用下面的命令：</p>
+
+<pre>$ last reboot</pre>
+
+<p><img src="https://images2017.cnblogs.com/blog/952033/201710/952033-20171019185242381-62203389.png" alt="" /></p>
+
+<h1 id="who-命令">who 命令</h1>
+
+<p>who 命令通过查询 /var/run/utmp 文件来显式系统中当前登录的每个用户。默认的输出包括用户名、终端类型、登录日期及远程主机：</p>
+
+<p><img src="https://images2017.cnblogs.com/blog/952033/201710/952033-20171019185319506-196798027.png" alt="" /></p>
+
+<h1 id="w-命令">w 命令</h1>
+
+<p>如果能够查询到当前登录系统的用户都在干什么是不是一件令人很兴奋的事情呢！使用 w 命令就可以做到：</p>
+
+<pre>$ w</pre>
+
+<p><img src="https://images2017.cnblogs.com/blog/952033/201710/952033-20171019185352787-179540294.png" alt="" /></p>
+
+<p>我们可以看到用户 nick 同时登录了两个终端，在其中一个终端中执行了 w 命令，而在另一个终端中正通过 vim 编辑  /etc/passwd 文件！
+其实 w 命令是先通过查询 utmp 文件获得当前登录的用户，然后显示每个用户和它所运行的进程信息。</p>
+
+<h1 id="users-命令">users 命令</h1>
+
+<p>users 命令用单独的一行打印出当前登录的用户，每个显示的用户名对应一个登录会话。如果一个用户有不止一个登录会话，那他的用户名将显示多次：</p>
+
+<p><img src="https://images2017.cnblogs.com/blog/952033/201710/952033-20171019185456177-339635231.png" alt="" /></p>
+
+<p>因为 nick 通过三个终端登录了主机，所以在同一行中名字出现了三次。</p>
+
+<h1 id="总结">总结</h1>
+
+<p>本文整理了 Ubuntu 系统中常见的一些与登录相关的文件和命令。通过它们可以快速的查看当前用户的登录情况和所有用户登录登出的历史记录，并且可以查询到用户使用 root 权限执行的操作。这对我们维护系统的安全和用户的管理都非常有帮助。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/ubuntu/">ubuntu</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/rke%E5%AE%89%E8%A3%85kubernetes%E9%9B%86%E7%BE%A4/" data-tooltip="RKE安装kubernetes集群">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/docker-maven-plugin%E4%BD%BF%E7%94%A8/" data-tooltip="docker maven plugin使用">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/rke%E5%AE%89%E8%A3%85kubernetes%E9%9B%86%E7%BE%A4/" data-tooltip="RKE安装kubernetes集群">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/docker-maven-plugin%E4%BD%BF%E7%94%A8/" data-tooltip="docker maven plugin使用">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/07/%E4%BD%BF%E7%94%A8spring-5%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84-%E7%AE%80%E6%B4%81%E7%89%88/">
+                <h3 class="media-heading">使用Spring 5实现响应式微服务架构-简洁版</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>随着以 Dubbo、Spring Cloud 等框架为代表的分布式服务调用和治理工具的大行其道，以及以 Docker、Kubernetes 等容器技术的日渐成熟，微服务架构（Microservices Architecture）毫无疑问是近年来最热门的一种服务化架构模式。所谓微服务，就是一些具有足够小的粒度、能够相互协作且自治的服务体系。正因为每个微服务都比较简单，仅关注于完成一个业务功能，所以具备技术、业务和组织上的优势 <sup>[1]</sup>。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+                <h3 class="media-heading">迈向istio-13 自定义adapter(修改请求头)</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.</p>
+
+<p>mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为<code>Adapter</code>,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">NetworkPolicy介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中的所有的pod在默认情况下,网络都是互通的,pod接收来自任何来源的流量.</p>
+
+<p>那么我们如何限制pod的网络通信,防止非法访问呢?</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
+                <h3 class="media-heading">亲和性调度</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中对pod的调度由调度控制器负责,在调度的时候有很大的随机性.</p>
+
+<p>但是我们很多时候需要容器更多的分散在不同的node上,有一些情况又需要尽量集中在一起,减少网络开销</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">Local Persistent Volume 介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中,存储一直是一个较为头疼的问题,在面对持久化存储,我们可以选择各种文件系统,但是对于那些临时存储的文件,我们则需要一种本地存储的能力,在kubernetes1.14中为我们提供了一种本地存储<code>localPV</code>,本文将围绕此展开.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
+                <h3 class="media-heading">今日心情-上善若水</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>一天又一天,每一天都那么一样又不那么一样.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+                <h3 class="media-heading">code-generator使用</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-7</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948541">https://blog.csdn.net/weixin_39961559/article/details/81948541</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第七节,也是最后一节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-6</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948239">https://blog.csdn.net/weixin_39961559/article/details/81948239</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第六节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-5</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81946899">https://blog.csdn.net/weixin_39961559/article/details/81946899</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第五节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         95 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2019\/03\/ubuntu-%E4%B8%AD%E7%99%BB%E5%BD%95%E7%9B%B8%E5%85%B3%E7%9A%84%E6%97%A5%E5%BF%97\/';
+          
+            this.page.identifier = '\/2019\/03\/ubuntu-%E4%B8%AD%E7%99%BB%E5%BD%95%E7%9B%B8%E5%85%B3%E7%9A%84%E6%97%A5%E5%BF%97\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

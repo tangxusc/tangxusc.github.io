@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Maven on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/tags/maven/</link>
+    <description>Recent content in Maven on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/tags/maven/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>docker maven plugin使用</title>
+      <link>https://tangxusc.github.io/2019/03/docker-maven-plugin%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Wed, 20 Mar 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/03/docker-maven-plugin%E4%BD%BF%E7%94%A8/</guid>
+      <description>&lt;p&gt;随着容器化的进行，测试环境和线上环境开始尝试容器化发布。因此需要将现有的maven工程进行容器化，容器化的好处不言而喻，但是针对原先没有解耦的应用（容器配置和代码耦合在一起），制作镜像还是有些成本的。本文主要记录对于webx和springboot应用的镜像制作。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

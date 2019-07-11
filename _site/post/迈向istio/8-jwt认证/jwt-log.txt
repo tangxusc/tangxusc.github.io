@@ -1,0 +1,34 @@
+TOKEN=$(curl https://raw.githubusercontent.com/istio/istio/master/security/tools/jwt/samples/demo.jwt -s) && curl --header "Authorization: Bearer $TOKEN" 10.104.177.196/headers -v
+*   Trying 10.104.177.196...
+* TCP_NODELAY set
+* Connected to 10.104.177.196 (10.104.177.196) port 80 (#0)
+> GET /headers HTTP/1.1
+> Host: 10.104.177.196
+> User-Agent: curl/7.60.0
+> Accept: */*
+> Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IkRIRmJwb0lVcXJZOHQyenBBMnFYZkNtcjVWTzVaRXI0UnpIVV8tZW52dlEiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjQ2ODU5ODk3MDAsImZvbyI6ImJhciIsImlhdCI6MTUzMjM4OTcwMCwiaXNzIjoidGVzdGluZ0BzZWN1cmUuaXN0aW8uaW8iLCJzdWIiOiJ0ZXN0aW5nQHNlY3VyZS5pc3Rpby5pbyJ9.CfNnxWP2tcnR9q0vxyxweaF3ovQYHYZl82hAUsn21bwQd9zP7c-LS9qd_vpdLG4Tn1A15NxfCjp5f7QNBUo-KC9PJqYpgGbaXhaGx7bEdFWjcwv3nZzvc7M__ZpaCERdwU7igUmJqYGBYQ51vr2njU9ZimyKkfDe3axcyiBZde7G6dabliUosJvvKOPcKIWPccCgefSj_GNfwIip3-SsFdlR7BtbVUcqR-yv-XOxJ3Uc1MI0tz3uMiiZcyPV7sNCU4KRnemRIMHVOfuvHsU60_GhGbiSFzgPTAa9WTltbnarTbxudb_YEOx12JiwYToeX0DCPb43W1tzIBxgm8NxUg
+> 
+< HTTP/1.1 200 OK
+< server: envoy
+< date: Tue, 04 Dec 2018 06:46:06 GMT
+< content-type: application/json
+< access-control-allow-origin: *
+< access-control-allow-credentials: true
+< content-length: 968
+< x-envoy-upstream-service-time: 3
+< 
+{
+  "headers": {
+    "Accept": "*/*", 
+    "Authorization": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IkRIRmJwb0lVcXJZOHQyenBBMnFYZkNtcjVWTzVaRXI0UnpIVV8tZW52dlEiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjQ2ODU5ODk3MDAsImZvbyI6ImJhciIsImlhdCI6MTUzMjM4OTcwMCwiaXNzIjoidGVzdGluZ0BzZWN1cmUuaXN0aW8uaW8iLCJzdWIiOiJ0ZXN0aW5nQHNlY3VyZS5pc3Rpby5pbyJ9.CfNnxWP2tcnR9q0vxyxweaF3ovQYHYZl82hAUsn21bwQd9zP7c-LS9qd_vpdLG4Tn1A15NxfCjp5f7QNBUo-KC9PJqYpgGbaXhaGx7bEdFWjcwv3nZzvc7M__ZpaCERdwU7igUmJqYGBYQ51vr2njU9ZimyKkfDe3axcyiBZde7G6dabliUosJvvKOPcKIWPccCgefSj_GNfwIip3-SsFdlR7BtbVUcqR-yv-XOxJ3Uc1MI0tz3uMiiZcyPV7sNCU4KRnemRIMHVOfuvHsU60_GhGbiSFzgPTAa9WTltbnarTbxudb_YEOx12JiwYToeX0DCPb43W1tzIBxgm8NxUg", 
+    "Content-Length": "0", 
+    "Host": "10.104.177.196", 
+    "User-Agent": "curl/7.60.0", 
+    "X-B3-Sampled": "1", 
+    "X-B3-Spanid": "ab58d5419c8dfd13", 
+    "X-B3-Traceid": "ab58d5419c8dfd13", 
+    "X-Envoy-Internal": "true", 
+    "X-Request-Id": "8e968560-9ce0-9c67-b674-98a22613e884"
+  }
+}
+* Connection #0 to host 10.104.177.196 left intact

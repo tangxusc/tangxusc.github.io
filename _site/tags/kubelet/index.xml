@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kubelet on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/tags/kubelet/</link>
+    <description>Recent content in Kubelet on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 14 May 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/tags/kubelet/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>kubelet垃圾回收机制</title>
+      <link>https://tangxusc.github.io/2019/05/kubelet%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/</link>
+      <pubDate>Tue, 14 May 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/05/kubelet%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/</guid>
+      <description>&lt;p&gt;在k8s中节点会通过docker pull机制获取外部的镜像,那么什么时候清除镜像呢?
+k8s运行的容器又是什么时候清除呢?&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,5 @@
+groups:
+  - name: test
+    rules:
+      - record: up:total
+        expr: sum(up) by (instance)
