@@ -21,7 +21,7 @@ disqusShortname = "tangxu-blog"
 # googleAnalytics = "UA-123-45"
 paginate = 7
 canonifyurls = true
-publishDir="docs"
+#publishDir="docs"
 
 [permalinks]
   post = "/:year/:month/:slug/"
