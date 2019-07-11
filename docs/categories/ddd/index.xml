@@ -6,10 +6,19 @@
     <description>Recent content in Ddd on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 11 Jul 2019 09:30:59 +0800</lastBuildDate>
     
 	<atom:link href="https://tangxusc.github.io/categories/ddd/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>使用Spring 5实现响应式微服务架构-简洁版</title>
+      <link>https://tangxusc.github.io/2019/07/%E4%BD%BF%E7%94%A8spring-5%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84-%E7%AE%80%E6%B4%81%E7%89%88/</link>
+      <pubDate>Thu, 11 Jul 2019 09:30:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/07/%E4%BD%BF%E7%94%A8spring-5%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84-%E7%AE%80%E6%B4%81%E7%89%88/</guid>
+      <description>&lt;p&gt;随着以 Dubbo、Spring Cloud 等框架为代表的分布式服务调用和治理工具的大行其道，以及以 Docker、Kubernetes 等容器技术的日渐成熟，微服务架构（Microservices Architecture）毫无疑问是近年来最热门的一种服务化架构模式。所谓微服务，就是一些具有足够小的粒度、能够相互协作且自治的服务体系。正因为每个微服务都比较简单，仅关注于完成一个业务功能，所以具备技术、业务和组织上的优势 &lt;sup&gt;[1]&lt;/sup&gt;。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>分布式事务Saga模式</title>

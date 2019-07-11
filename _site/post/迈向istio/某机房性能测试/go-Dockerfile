@@ -1,5 +1,0 @@
-FROM ubuntu
-WORKDIR /
-ADD serviceProxy /serviceProxy
-EXPOSE 8090
-CMD ["./serviceProxy"]

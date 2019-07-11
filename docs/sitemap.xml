@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tangxusc.github.io/2019/07/%E4%BD%BF%E7%94%A8spring-5%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84-%E7%AE%80%E6%B4%81%E7%89%88/</loc>
+    <lastmod>2019-07-11T09:30:59+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/</loc>
     <lastmod>2019-05-28T14:15:59+08:00</lastmod>
   </url>
@@ -468,10 +473,6 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/1/01/</loc>
-  </url>
-  
-  <url>
     <loc>https://tangxusc.github.io/tags/adapter/</loc>
     <lastmod>2019-05-28T14:15:59+08:00</lastmod>
     <priority>0</priority>
@@ -586,13 +587,13 @@
   
   <url>
     <loc>https://tangxusc.github.io/tags/ddd/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <lastmod>2019-07-11T09:30:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/categories/ddd/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <lastmod>2019-07-11T09:30:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -952,7 +953,7 @@
   
   <url>
     <loc>https://tangxusc.github.io/post/</loc>
-    <lastmod>2019-05-28T14:15:59+08:00</lastmod>
+    <lastmod>2019-07-11T09:30:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1136,7 +1137,7 @@
   
   <url>
     <loc>https://tangxusc.github.io/</loc>
-    <lastmod>2019-05-28T14:15:59+08:00</lastmod>
+    <lastmod>2019-07-11T09:30:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   

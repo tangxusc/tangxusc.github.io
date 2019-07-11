@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 May 2019 14:15:59 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 11 Jul 2019 09:30:59 +0800</lastBuildDate>
     
 	<atom:link href="https://tangxusc.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>使用Spring 5实现响应式微服务架构-简洁版</title>
+      <link>https://tangxusc.github.io/2019/07/%E4%BD%BF%E7%94%A8spring-5%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84-%E7%AE%80%E6%B4%81%E7%89%88/</link>
+      <pubDate>Thu, 11 Jul 2019 09:30:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/07/%E4%BD%BF%E7%94%A8spring-5%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84-%E7%AE%80%E6%B4%81%E7%89%88/</guid>
+      <description>&lt;p&gt;随着以 Dubbo、Spring Cloud 等框架为代表的分布式服务调用和治理工具的大行其道，以及以 Docker、Kubernetes 等容器技术的日渐成熟，微服务架构（Microservices Architecture）毫无疑问是近年来最热门的一种服务化架构模式。所谓微服务，就是一些具有足够小的粒度、能够相互协作且自治的服务体系。正因为每个微服务都比较简单，仅关注于完成一个业务功能，所以具备技术、业务和组织上的优势 &lt;sup&gt;[1]&lt;/sup&gt;。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>迈向istio-13 自定义adapter(修改请求头)</title>
@@ -1055,27 +1064,6 @@ seelog 提供了灵活的异步调度、格式化和过滤功能。目前在 Git
 &lt;/blockquote&gt;
 
 &lt;p&gt;配置redis外网可访问&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://tangxusc.github.io/1/01/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://tangxusc.github.io/1/01/</guid>
-      <description>title: &amp;ldquo;使用Spring 5实现响应式微服务架构-简洁版&amp;rdquo; date: 2019-07-11T09:30:59+08:00 draft: false categories: - DDD tags: - DDD keywords: - DDD
- 本文由 简悦 SimpRead 转码， 原文地址 https://www.toutiao.com/i6712191658521264647/?w2atif=1&amp;amp;channel=__all__
- 随着以 Dubbo、Spring Cloud 等框架为代表的分布式服务调用和治理工具的大行其道，以及以 Docker、Kubernetes 等容器技术的日渐成熟，微服务架构（Microservices Architecture）毫无疑问是近年来最热门的一种服务化架构模式。所谓微服务，就是一些具有足够小的粒度、能够相互协作且自治的服务体系。正因为每个微服务都比较简单，仅关注于完成一个业务功能，所以具备技术、业务和组织上的优势 [1]。
-另一方面，随着 Spring 5 的正式发布，我们引来了响应式编程（Reactive Programming）的全新发展时期。Spring 5 中内嵌了响应式 Web 框架、响应式数据访问、响应式消息通信等多种响应式组件，从而极大地简化了响应式应用程序的开发过程和难度。
-本章作为全书的开篇，将对微服务架构和响应式系统（Reactive System）的核心概念做简要介绍，同时给出两者之间的整合点，即如何构建响应式微服务架构。在本章最后，我们也会给出全书的组织架构以总领全书。
-响应式系统核心概念 在本节中，我们将带领大家进入响应式系统的世界。为了让大家更好地理解响应式编程和响应式系统的核心概念，我们将先从传统编程方法出发逐步引出响应式编程方法。同时，我们还将通过响应式宣言（Reactive Manifesto）了解响应式系统的基本特性和设计理念。
-从传统编程方法到响应式编程方法 在电商系统中，订单查询是一个典型的业务场景。用户可以通过多种维度获取自己已下订单的列表信息和各个订单的明细信息。我们就通过订单查询这一特定场景来分析传统编程方法和响应式编程方法之间的区别。
-1．订单查询场景的传统方法 在典型的三层架构中，图 1-1 展示了基于传统实现方法的订单查询场景时序图。一般用户会使用前端组件所提供的操作入口进行订单查询，然后该操作入口会调用后台系统的服务层，服务层再调用数据访问层，进而访问数据库，数据从数据库中获取之后逐层返回，最后显示在包括前端服务或用户操作界面在内的前端组件上。
-图 1-1 订单查询场景的传统实现方法时序图
-显然，在图 1-1 所展示的整个过程中，前端组件通过主动拉取的方式从数据库中获取数据。如果用户不触发前端操作，那么就无法获取数据库中的数据状态。也就是说，前端组件对数据库中的任何数据变更一无所知。
-2．订单查询场景的响应式方法 主动拉取数据的方式在某些场景下可以运作得很好，但如果我们希望数据库中的数据一有变化就通知到前端组件，这种方式就不是很合理。这种场景下，我们希望前端组件通过注册机制获取数据变更的事件，图 1-2 展示了这一过程。
-在图 1-2 中，我们并不是直接访问数据库来获取数据，而是订阅了 OrderChangedEvent 事件。当订单数据发生任何变化时，系统就会生成这一事件，然后通过一定的方式传播出来。而订阅了该事件的服务就会捕获该事件，从而通过前端组件响应该事件。事件处理的基本步骤涉及对某个特定事件进行订阅，然后等待事件的发生。如果不需要再对该事件做出响应，我们就可以取消对事件的订阅。
-图 1-2 订单查询场景的响应式实现方法时序图</description>
     </item>
     
     <item>
