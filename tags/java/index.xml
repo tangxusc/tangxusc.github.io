@@ -6,10 +6,21 @@
     <description>Recent content in Java on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Mar 2019 14:15:59 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 17 Jul 2019 14:15:59 +0800</lastBuildDate>
     
 	<atom:link href="https://tangxusc.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>技术经理:求求你,别再乱改数据库连接池的大小了！</title>
+      <link>https://tangxusc.github.io/2019/07/%E6%8A%80%E6%9C%AF%E7%BB%8F%E7%90%86%E6%B1%82%E6%B1%82%E4%BD%A0%E5%88%AB%E5%86%8D%E4%B9%B1%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%BA%86/</link>
+      <pubDate>Wed, 17 Jul 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/07/%E6%8A%80%E6%9C%AF%E7%BB%8F%E7%90%86%E6%B1%82%E6%B1%82%E4%BD%A0%E5%88%AB%E5%86%8D%E4%B9%B1%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%BA%86/</guid>
+      <description>&lt;p&gt;基本上来说，大部分项目都需要跟数据库做交互，那么，数据库连接池的大小设置成多大合适呢？
+一些开发老鸟可能还会告诉你：&lt;strong&gt;没关系，尽量设置的大些，比如设置成 200，这样数据库性能会高些，吞吐量也会大些！&lt;/strong&gt;
+你也许会点头称是，真的是这样吗？看完这篇文章，也许会颠覆你的认知哦！&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Intellij IDEA 基于编辑器的 REST 客户端介绍</title>

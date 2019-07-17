@@ -7,60 +7,44 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
-<meta name="keywords" content="kubeadm, k8s, rook">
-<meta name="description" content="rook是云原生的存储协调器,为各种存储提供解决方案,提供自我管理,自我扩展,自我修复的存储服务,在kubernetes中实际实现是operator方式.
-
-在rook 0.9版本中,Ceph已经是beta支持状态了.
-
-Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多年生产部署的块存储，对象存储和共享文件系统.">
+<meta name="keywords" content="java">
+<meta name="description" content="基本上来说，大部分项目都需要跟数据库做交互，那么，数据库连接池的大小设置成多大合适呢？
+一些开发老鸟可能还会告诉你：没关系，尽量设置的大些，比如设置成 200，这样数据库性能会高些，吞吐量也会大些！
+你也许会点头称是，真的是这样吗？看完这篇文章，也许会颠覆你的认知哦！">
 
 
-<meta property="og:description" content="rook是云原生的存储协调器,为各种存储提供解决方案,提供自我管理,自我扩展,自我修复的存储服务,在kubernetes中实际实现是operator方式.
-
-在rook 0.9版本中,Ceph已经是beta支持状态了.
-
-Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多年生产部署的块存储，对象存储和共享文件系统.">
+<meta property="og:description" content="基本上来说，大部分项目都需要跟数据库做交互，那么，数据库连接池的大小设置成多大合适呢？
+一些开发老鸟可能还会告诉你：没关系，尽量设置的大些，比如设置成 200，这样数据库性能会高些，吞吐量也会大些！
+你也许会点头称是，真的是这样吗？看完这篇文章，也许会颠覆你的认知哦！">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用rook搭建存储集群">
-<meta name="twitter:title" content="使用rook搭建存储集群">
-<meta property="og:url" content="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/">
-<meta property="twitter:url" content="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/">
+<meta property="og:title" content="技术经理:求求你,别再乱改数据库连接池的大小了！">
+<meta name="twitter:title" content="技术经理:求求你,别再乱改数据库连接池的大小了！">
+<meta property="og:url" content="https://tangxusc.github.io/2019/07/%E6%8A%80%E6%9C%AF%E7%BB%8F%E7%90%86%E6%B1%82%E6%B1%82%E4%BD%A0%E5%88%AB%E5%86%8D%E4%B9%B1%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%BA%86/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2019/07/%E6%8A%80%E6%9C%AF%E7%BB%8F%E7%90%86%E6%B1%82%E6%B1%82%E4%BD%A0%E5%88%AB%E5%86%8D%E4%B9%B1%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%BA%86/">
 <meta property="og:site_name" content="苏连云的博客">
-<meta property="og:description" content="rook是云原生的存储协调器,为各种存储提供解决方案,提供自我管理,自我扩展,自我修复的存储服务,在kubernetes中实际实现是operator方式.
-
-在rook 0.9版本中,Ceph已经是beta支持状态了.
-
-Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多年生产部署的块存储，对象存储和共享文件系统.">
-<meta name="twitter:description" content="rook是云原生的存储协调器,为各种存储提供解决方案,提供自我管理,自我扩展,自我修复的存储服务,在kubernetes中实际实现是operator方式.
-
-在rook 0.9版本中,Ceph已经是beta支持状态了.
-
-Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多年生产部署的块存储，对象存储和共享文件系统.">
+<meta property="og:description" content="基本上来说，大部分项目都需要跟数据库做交互，那么，数据库连接池的大小设置成多大合适呢？
+一些开发老鸟可能还会告诉你：没关系，尽量设置的大些，比如设置成 200，这样数据库性能会高些，吞吐量也会大些！
+你也许会点头称是，真的是这样吗？看完这篇文章，也许会颠覆你的认知哦！">
+<meta name="twitter:description" content="基本上来说，大部分项目都需要跟数据库做交互，那么，数据库连接池的大小设置成多大合适呢？
+一些开发老鸟可能还会告诉你：没关系，尽量设置的大些，比如设置成 200，这样数据库性能会高些，吞吐量也会大些！
+你也许会点头称是，真的是这样吗？看完这篇文章，也许会颠覆你的认知哦！">
 <meta property="og:locale" content="en-us">
 
   
-    <meta property="article:published_time" content="2019-03-20T14:15:59">
+    <meta property="article:published_time" content="2019-07-17T14:15:59">
   
   
-    <meta property="article:modified_time" content="2019-03-20T14:15:59">
+    <meta property="article:modified_time" content="2019-07-17T14:15:59">
   
   
   
     
-      <meta property="article:section" content="kubeadm">
-    
-      <meta property="article:section" content="k8s">
-    
-      <meta property="article:section" content="rook">
+      <meta property="article:section" content="java">
     
   
   
     
-      <meta property="article:tag" content="kubeadm">
-    
-      <meta property="article:tag" content="k8s">
-    
-      <meta property="article:tag" content="rook">
+      <meta property="article:tag" content="java">
     
   
 
@@ -81,14 +65,14 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
   <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
 
 
-    <title>使用rook搭建存储集群</title>
+    <title>技术经理:求求你,别再乱改数据库连接池的大小了！</title>
 
     <link rel="icon" href="https://tangxusc.github.io/favicon.png">
     
 
     
 
-    <link rel="canonical" href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/">
+    <link rel="canonical" href="https://tangxusc.github.io/2019/07/%E6%8A%80%E6%9C%AF%E7%BB%8F%E7%90%86%E6%B1%82%E6%B1%82%E4%BD%A0%E5%88%AB%E5%86%8D%E4%B9%B1%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%BA%86/">
 
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
@@ -238,15 +222,15 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
             <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title" itemprop="headline">
-      使用rook搭建存储集群
+      技术经理:求求你,别再乱改数据库连接池的大小了！
     </h1>
   
   
   <div class="postShorten-meta post-meta">
     
-      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
+      <time itemprop="datePublished" datetime="2019-07-17T14:15:59&#43;08:00">
         
-  March 20, 2019
+  July 17, 2019
 
       </time>
     
@@ -255,11 +239,7 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
   
     <span>in</span>
     
-      <a class="category-link" href="https://tangxusc.github.io/categories/kubeadm">kubeadm</a>, 
-    
-      <a class="category-link" href="https://tangxusc.github.io/categories/k8s">k8s</a>, 
-    
-      <a class="category-link" href="https://tangxusc.github.io/categories/rook">rook</a>
+      <a class="category-link" href="https://tangxusc.github.io/categories/java">java</a>
     
   
 
@@ -269,400 +249,185 @@ Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多�
           
           <div class="post-content markdown" itemprop="articleBody">
             <div class="main-content-wrap">
-              <p>rook是云原生的存储<strong>协调器</strong>,为各种存储提供解决方案,提供自我管理,自我扩展,自我修复的存储服务,在kubernetes中实际实现是operator方式.</p>
-
-<p>在rook 0.9版本中,Ceph已经是<strong>beta</strong>支持状态了.</p>
-
-<p>Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多年生产部署的块存储，对象存储和共享文件系统.</p>
-
-<h2 id="安装">安装</h2>
-
-<p>rook提供了operator的方式来处理ceph存储的安装,所以此处安装使用helm来安装rook</p>
-
-<pre><code class="language-shell">helm repo add rook-stable https://charts.rook.io/stable
-helm install --namespace rook-ceph-system rook-stable/rook-ceph
-</code></pre>
-
-<h2 id="ceph集群">ceph集群</h2>
-
-<p>安装了rook后,还需要在rook中声明CRD来建立ceph集群</p>
-
-<p><code>cluster.yaml</code></p>
-
-<pre><code class="language-yaml">apiVersion: v1
-kind: Namespace
-metadata:
-  name: rook-ceph
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: rook-ceph-osd
-  namespace: rook-ceph
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: rook-ceph-mgr
-  namespace: rook-ceph
----
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1beta1
-metadata:
-  name: rook-ceph-osd
-  namespace: rook-ceph
-rules:
-- apiGroups: [&quot;&quot;]
-  resources: [&quot;configmaps&quot;]
-  verbs: [ &quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;delete&quot; ]
----
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1beta1
-metadata:
-  name: rook-ceph-mgr-system
-  namespace: rook-ceph
-rules:
-- apiGroups:
-  - &quot;&quot;
-  resources:
-  - configmaps
-  verbs:
-  - get
-  - list
-  - watch
----
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1beta1
-metadata:
-  name: rook-ceph-mgr
-  namespace: rook-ceph
-rules:
-- apiGroups:
-  - &quot;&quot;
-  resources:
-  - pods
-  - services
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - batch
-  resources:
-  - jobs
-  verbs:
-  - get
-  - list
-  - watch
-  - create
-  - update
-  - delete
-- apiGroups:
-  - ceph.rook.io
-  resources:
-  - &quot;*&quot;
-  verbs:
-  - &quot;*&quot;
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
-metadata:
-  name: rook-ceph-cluster-mgmt
-  namespace: rook-ceph
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: rook-ceph-cluster-mgmt
-subjects:
-- kind: ServiceAccount
-  name: rook-ceph-system
-  namespace: rook-ceph-system #注意,这里一定要授权给rook的namespace中的account
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
-metadata:
-  name: rook-ceph-osd
-  namespace: rook-ceph
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: rook-ceph-osd
-subjects:
-- kind: ServiceAccount
-  name: rook-ceph-osd
-  namespace: rook-ceph
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
-metadata:
-  name: rook-ceph-mgr
-  namespace: rook-ceph
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: rook-ceph-mgr
-subjects:
-- kind: ServiceAccount
-  name: rook-ceph-mgr
-  namespace: rook-ceph
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
-metadata:
-  name: rook-ceph-mgr-system
-  namespace: rook-ceph-system	#注意,这里是绑定rook系统的role到rook-ceph系统中
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: rook-ceph-mgr-system
-subjects:
-- kind: ServiceAccount
-  name: rook-ceph-mgr
-  namespace: rook-ceph
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
-metadata:
-  name: rook-ceph-mgr-cluster
-  namespace: rook-ceph
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: rook-ceph-mgr-cluster
-subjects:
-- kind: ServiceAccount
-  name: rook-ceph-mgr
-  namespace: rook-ceph
----
-apiVersion: ceph.rook.io/v1
-kind: CephCluster
-metadata:
-  name: rook-ceph
-  namespace: rook-ceph
-spec:
-  cephVersion:
-    image: ceph/ceph:v13.2.4-20190315
-  dataDirHostPath: /var/lib/rook
-  dashboard:
-    enabled: true
-  mon:
-    count: 3
-    allowMultiplePerNode: true
-  storage:
-    useAllNodes: true
-    useAllDevices: false
-    config:
-      databaseSizeMB: &quot;1024&quot;
-      journalSizeMB: &quot;1024&quot;
-</code></pre>
+              <p>基本上来说，大部分项目都需要跟数据库做交互，那么，数据库连接池的大小设置成多大合适呢？
+一些开发老鸟可能还会告诉你：<strong>没关系，尽量设置的大些，比如设置成 200，这样数据库性能会高些，吞吐量也会大些！</strong>
+你也许会点头称是，真的是这样吗？看完这篇文章，也许会颠覆你的认知哦！</p>
 
 <blockquote>
-<p>注意: rolebinding 需要注意有一些地方是和之前使用helm安装的时候的namespace中的资源绑定</p>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://mp.weixin.qq.com/s/Ucp1eXc0CVbFmbvMdmEjkw">https://mp.weixin.qq.com/s/Ucp1eXc0CVbFmbvMdmEjkw</a></p>
 
-<p>ceph的image 可以通过<a href="https://hub.docker.com/r/ceph/ceph/tags">https://hub.docker.com/r/ceph/ceph/tags</a> 查看</p>
+<p>文章翻译整理自: <a href="https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing">https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing</a></p>
 </blockquote>
 
-<h2 id="安装dashboard">安装dashboard</h2>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/knmrNHnmCLFlyqde2t1OWgc3Zd5Uz6HSUVTRxawWmtcYsINQo3Rz7wibfYAFTwZiaOpqk53XoaXpzDYGmGxibxJfg/640?wx_fmt=png" alt="" /></p>
 
-<p><img src="dashboard.png" alt="dashboard" /></p>
+<h2 id="目录">目录</h2>
 
-<p>在上一步的安装命令中如果启用了dashboard,则可以看到以下service</p>
+<ul>
+<li><p>一、笔者前言</p></li>
 
-<pre><code class="language-shell">$ kubectl -n rook-ceph get service
-NAME                         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
-rook-ceph-mgr                ClusterIP   10.108.111.192   &lt;none&gt;        9283/TCP         3h
-rook-ceph-mgr-dashboard      ClusterIP   10.110.113.240   &lt;none&gt;        8443/TCP         3h
-</code></pre>
+<li><p>二、正菜开始</p></li>
 
-<p>dashboard默认的登录名称为<code>admin</code>,默认密码需要查看secret <code>rook-ceph-dashboard-password</code>,并使用base64解析出来:</p>
+<li><p>三、假设你的服务有 1 万并发的访问</p></li>
 
-<pre><code class="language-shell">$ kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o yaml | grep &quot;password:&quot; | awk '{print $2}' | base64 --decode
-3UWLhC0FIK
-</code></pre>
+<li><p>四、为啥有这种效果?</p></li>
 
-<p>如果想将dashboard暴露到外部,可以通过自定义service的方式,操作如下:</p>
+<li><p>五、其他应该考虑到的因素</p></li>
 
-<p>dashboard-ext.yaml</p>
+<li><p>六、连接数计算公式</p></li>
 
-<pre><code class="language-yaml">apiVersion: v1
-kind: Service
-metadata:
-  name: rook-ceph-mgr-dashboard-external-https
-  namespace: rook-ceph
-  labels:
-    app: rook-ceph-mgr
-    rook_cluster: rook-ceph
-spec:
-  ports:
-  - name: dashboard
-    port: 8443
-    protocol: TCP
-    targetPort: 8443
-  selector:
-    app: rook-ceph-mgr
-    rook_cluster: rook-ceph
-  sessionAffinity: None
-  type: NodePort
-</code></pre>
+<li><p>七、结论：你需要的是一个小连接池，和一个等待连接的线程队列</p></li>
 
-<pre><code class="language-shell">$ kubectl create -f dashboard-ext.yaml
-$ kubectl -n rook-ceph get service
-NAME                                    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
-rook-ceph-mgr                           ClusterIP   10.108.111.192   &lt;none&gt;        9283/TCP         4h
-rook-ceph-mgr-dashboard                 ClusterIP   10.110.113.240   &lt;none&gt;        8443/TCP         4h
-rook-ceph-mgr-dashboard-external-https  NodePort    10.101.209.6     &lt;none&gt;        8443:31176/TCP   4h
-</code></pre>
+<li><p>八、额外需要注意的点</p></li>
+</ul>
 
-<h2 id="创建块存储">创建块存储</h2>
+<h2 id="一-前言">一、前言</h2>
 
-<p><code>storageclass.yaml</code></p>
+<p>基本上来说，大部分项目都需要跟数据库做交互，那么，数据库连接池的大小设置成多大合适呢？</p>
 
-<pre><code class="language-yaml">apiVersion: ceph.rook.io/v1
-kind: CephBlockPool
-metadata:
-  name: replicapool
-  namespace: rook-ceph
-spec:
-  failureDomain: host
-  replicated:
-    size: 3
-</code></pre>
+<p>一些开发老鸟可能还会告诉你：<strong>没关系，尽量设置的大些，比如设置成 200，这样数据库性能会高些，吞吐量也会大些！</strong></p>
 
-<h2 id="创建storageclass">创建storageclass</h2>
+<p>你也许会点头称是，真的是这样吗？看完这篇文章，也许会颠覆你的认知哦！</p>
 
-<p><code>storageclass.yaml</code></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/knmrNHnmCLFlyqde2t1OWgc3Zd5Uz6HSGibuUnnaibMzCt6eFx6atSOc9MvSspUd30Hz48yfAI26ibMWGLvPic41zQ/640?wx_fmt=jpeg" alt="" /></p>
 
-<pre><code class="language-yaml">apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-   name: rook-ceph-block
-provisioner: ceph.rook.io/block
-parameters:
-  blockPool: replicapool
-  clusterNamespace: rook-ceph
-  fstype: xfs
-reclaimPolicy: Retain
-</code></pre>
+<h2 id="二-正菜开始">二、正菜开始</h2>
 
-<h2 id="elasticsearch-demo">ElasticSearch-Demo</h2>
+<p>可以很直接的说，关于数据库连接池大小的设置，每个开发者都可能在一环节掉进坑里，事实上呢，大部分程序员可能都会依靠自己的直觉去设置它的大小，设置成 100 ？思量许久后，自顾自想，应该差不多吧？</p>
 
-<p>以ElasticSearch在k8s中的部署为例,为大家展示使用:</p>
+<h2 id="三-假设你的服务有-1-万并发的访问">三、假设你的服务有 1 万并发的访问</h2>
 
-<p><code>es.yaml</code></p>
+<p>不妨意淫一下，你手里有个网站，并发压力虽然还没到 Facebook 那个级别，但是呢？也有个 1 万上下的并发量！也就是说差不多 2 万左右的 TPS。</p>
 
-<pre><code class="language-yaml"># RBAC authn and authz
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: elasticsearch-logging
-  namespace: kube-system
-  labels:
-    k8s-app: elasticsearch-logging
-    kubernetes.io/cluster-service: &quot;true&quot;
-    addonmanager.kubernetes.io/mode: Reconcile
----
-kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: elasticsearch-logging
-  labels:
-    k8s-app: elasticsearch-logging
-    kubernetes.io/cluster-service: &quot;true&quot;
-    addonmanager.kubernetes.io/mode: Reconcile
-rules:
-  - apiGroups:
-      - &quot;&quot;
-    resources:
-      - &quot;services&quot;
-      - &quot;namespaces&quot;
-      - &quot;endpoints&quot;
-    verbs:
-      - &quot;get&quot;
----
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  namespace: kube-system
-  name: elasticsearch-logging
-  labels:
-    k8s-app: elasticsearch-logging
-    kubernetes.io/cluster-service: &quot;true&quot;
-    addonmanager.kubernetes.io/mode: Reconcile
-subjects:
-  - kind: ServiceAccount
-    name: elasticsearch-logging
-    namespace: kube-system
-    apiGroup: &quot;&quot;
-roleRef:
-  kind: ClusterRole
-  name: elasticsearch-logging
-  apiGroup: &quot;&quot;
----
-# Elasticsearch deployment itself
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: elasticsearch-logging
-  namespace: kube-system
-  labels:
-    k8s-app: elasticsearch-logging
-    version: v6.3.0
-    kubernetes.io/cluster-service: &quot;true&quot;
-    addonmanager.kubernetes.io/mode: Reconcile
-spec:
-  serviceName: elasticsearch-logging
-  replicas: 2
-  selector:
-    matchLabels:
-      k8s-app: elasticsearch-logging
-      version: v6.3.0
-  template:
-    metadata:
-      labels:
-        k8s-app: elasticsearch-logging
-        version: v6.3.0
-        kubernetes.io/cluster-service: &quot;true&quot;
-    spec:
-      serviceAccountName: elasticsearch-logging
-      containers:
-        - image: k8s.gcr.io/elasticsearch:v6.3.0
-          name: elasticsearch-logging
-          resources:
-            limits:
-              cpu: 1000m
-            requests:
-              cpu: 100m
-          ports:
-            - containerPort: 9200
-              name: db
-              protocol: TCP
-            - containerPort: 9300
-              name: transport
-              protocol: TCP
-          volumeMounts:
-            - name: elasticsearch-logging
-              mountPath: /data
-          env:
-            - name: &quot;NAMESPACE&quot;
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-      initContainers:
-        - image: alpine:3.6
-          command: [&quot;/sbin/sysctl&quot;, &quot;-w&quot;, &quot;vm.max_map_count=262144&quot;]
-          name: elasticsearch-logging-init
-          securityContext:
-            privileged: true
-  volumeClaimTemplates:
-    - metadata:
-        name: elasticsearch-logging
-      spec:
-        accessModes: [&quot;ReadWriteOnce&quot;,&quot;ReadOnlyMany&quot;,&quot;ReadWriteMany&quot;]
-        storageClassName: rook-ceph-block	#此处为上一步创建的storageclass名称
-        resources:
-          requests:
-            storage: 100G
-</code></pre>
+<p>那么问题来了！<strong>这个网站的数据库连接池应该设置成多大合适呢？</strong></p>
+
+<p>其实这个问法本身就是有问题的，我们需要反过来问，正确问法应该是：</p>
+
+<p><strong>“这个网站的数据库连接池应该设置成多小合适呢？”</strong></p>
+
+<blockquote>
+<p>PS: 这里有一个 Oracle 性能小组发布的简短视频，链接地址为 <a href="http://www.dailymotion.com/video/x2s8uec，友情提示，需要科学上网才能访问哦！">http://www.dailymotion.com/video/x2s8uec，友情提示，需要科学上网才能访问哦！</a></p>
+</blockquote>
+
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/knmrNHnmCLFlyqde2t1OWgc3Zd5Uz6HShDCoQ9cXCzyZRd9sliaps4jf4nX4XgCY4kyvLyY71YERrMia7FPDZtDg/640?wx_fmt=png" alt="" /></p>
+
+<p>口述一下，视频中对 Oracle 数据库进行了压力测试，模拟 9600 个并发线程来操作数据库，每两次数据库操作之间 sleep 550ms，注意，视频中刚开始设置的线程池大小为 2048。</p>
+
+<p>让我们来看看数据库连接池的大小为 2048 性能测试结果的鬼样子：</p>
+
+<p><strong>每个请求要在连接池队列里等待 33ms，获得连接之后，执行 SQL 需要耗时 77ms, CPU 消耗维持在 95% 左右；</strong></p>
+
+<p>接下来，我们将连接池的大小改小点，设置成 1024，其他测试参数不变，结果咋样？</p>
+
+<p><strong>&ldquo;这里，获取连接等待时长基本不变，但是 SQL 的执行耗时降低了！&rdquo;</strong></p>
+
+<p>哎呦，有长进哦！</p>
+
+<p>接下来，我们再设置小些，连接池的大小降低到 96，并发数等其他参数不变，看看结果如何：</p>
+
+<p><strong>每个请求在连接池队列中的平均等待时间为 1ms, SQL 执行耗时为 2ms</strong>.</p>
+
+<p>我去！什么鬼？</p>
+
+<p><strong>我们没调整任何东西，仅仅只是将数据库连接池的大小降低了，这样，就能把之前平均 100ms 响应时间缩短到了 3ms。吞吐量指数级上升啊！</strong></p>
+
+<p>你这也太溜了！</p>
+
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/knmrNHnmCLFlyqde2t1OWgc3Zd5Uz6HSzuyF0VABIkqkB1LXzgRTmRpAEPmhmkEEgQUpvzmg04jiaice4t8llvvg/640?wx_fmt=jpeg" alt="" /></p>
+
+<h2 id="四-为啥有这种效果">四、为啥有这种效果?</h2>
+
+<p>我们不妨想一下，为啥 Nginx 内部仅仅使用了 4 个线程，其性能就大大超越了 100 个进程的 Apache HTTPD 呢？追究其原因的话，回想一下计算机科学的基础知识，答案其实非常明显。</p>
+
+<p>要知道，即使是单核 CPU 的计算机也能 “同时” 运行着数百个线程。但我们其实都知道，这只不过是操作系统快速切换时间片，跟我们玩的一个小把戏罢了。</p>
+
+<p>一核 CPU 同一时刻只能执行一个线程，然后操作系统切换上下文，CPU 核心快速调度，执行另一个线程的代码，不停反复，给我们造成了所有进程同时运行假象。</p>
+
+<p>其实，在一核 CPU 的机器上，顺序执行 <strong>A</strong> 和 <strong>B</strong> 永远比通过时间分片切换 “同时” 执行 <strong>A</strong> 和 <strong>B</strong> 要快，其中原因，学过操作系统这门课程的童鞋应该很清楚。一旦线程的数量超过了 CPU 核心的数量，再增加线程数系统就只会更慢，而不是更快，因为这里涉及到上下文切换耗费的额外的性能。</p>
+
+<p>说到这里，你应该恍然大悟了 ……</p>
+
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/knmrNHnmCLFlyqde2t1OWgc3Zd5Uz6HSaKRBYnpQcKpPIL4F6sRxMPohJicMF5lUAicJL8NLtWfyqJ7vsbyRokIA/640?wx_fmt=jpeg" alt="" /></p>
+
+<h2 id="五-其他应该考虑到的因素">五、其他应该考虑到的因素</h2>
+
+<p>上小节中说到了主要原因，但其实没有这么简单，我们还需要考虑到一些其他的因素。</p>
+
+<p>当我们在寻找数据库的性能瓶颈时，大致可归为三类：</p>
+
+<ul>
+<li><p><strong>CPU</strong></p></li>
+
+<li><p><strong>磁盘 IO</strong></p></li>
+
+<li><p><strong>网络 IO</strong></p></li>
+</ul>
+
+<p>也许你会说，还有内存这一因素？内存的确是需要考虑的，但是比起<strong>磁盘 IO</strong> 和<strong>网络 IO</strong>，稍显微不足道，这里就不加了。</p>
+
+<p>假设我们不考虑磁盘 IO 和网络 IO，就很好定论了，在一个 8 核的服务器上，数据库连接数 / 线程数设置为 8 能够提供最优的性能，如果再增加连接数，反而会因为上下文切换导致性能下降。</p>
+
+<p>大家都知道，数据库通常把数据存储在磁盘上，而磁盘呢，通常是由一些旋转着的金属碟片和一个装在步进马达上的读写头组成的。读 / 写头同一时刻只能出现在一个位置，当它需要再次执行读写操作时，它必须 “寻址” 到另外一个位置才能完成任务。所以呢？这里就有了<strong>寻址的耗时</strong>，此外还有<strong>旋转耗时</strong>，读写头需要等待磁盘碟片上的目标数据 “旋转到位” 才能进行读写操作。使用缓存当然是能够提升性能的，但上述原理仍然适用。</p>
+
+<p>在这段（&rdquo;I/O 等待&rdquo;）时间内，线程是处于 “阻塞” 等待状态，也就是说没干啥正事！此时操作系统可以将这个空闲的 CPU 核心用于服务其他线程。</p>
+
+<p>这里我们可以总结一下，当你的线程处理的是 I/O 密集型业务时，便可以让线程 / 连接数设置的比 CPU 核心大一些，这样就能够在同样的时间内，完成更多的工作，提升吞吐量。</p>
+
+<p>那么问题又来了？</p>
+
+<p>大小设置成多少合适呢？</p>
+
+<p>这要取决于<strong>磁盘</strong>，如果你使用的是 SSD 固态硬盘，它不需要寻址，也不需要旋转碟片。打住打住！！！你千万可别理所当然的认为：“<strong>既然 SSD 速度更快，我们把线程数的大小设置的大些吧！！</strong>”</p>
+
+<p>结论正好相反！无需寻址和没有旋回耗时的确意味着<strong>更少的阻塞</strong>，所以更少的线程（更接近于 CPU 核心数）会发挥出更高的性能。只有当阻塞密集时，更多的线程数才能发挥出更好的性能。</p>
+
+<p>上面我们已经说过了磁盘 IO, 接下来我们谈谈网络 IO！</p>
+
+<p>网络 IO 其实也是非常相似的。通过以太网接口读写数据时也会造成阻塞，10G 带宽会比 1G 带宽的阻塞耗时少一些，而 1G 带宽又会比 100M 带宽的阻塞少一些。通常情况下，我们把网络 IO 放在第三顺位来考虑，然而有些人会在性能计算中忽略网络 IO 带来的影响。</p>
+
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/knmrNHnmCLFlyqde2t1OWgc3Zd5Uz6HSm7DDlSVzxBPC8gdku8K2zC26Y9SStxXjsSsCbnvE4c4xtK31AShkEw/640?wx_fmt=png" alt="" /></p>
+
+<p>上图是 PostgreSQL 的基准性能测试数据，从图中我们可以看到，TPS 在连接数达到 50 时开始变缓。回过头来想下，在上面 Oracle 的性能测试视频中，测试人员们将连接数从 2048 降到了 96，实际上 96 还是太高了，除非你的服务器 CPU 核心数有 16 或 32。</p>
+
+<h2 id="六-连接数计算公式">六、连接数计算公式</h2>
+
+<p>下面公式由 PostgreSQL 提供，不过底层原理是不变的，它适用于市面上绝大部分数据库产品。还有，你应该模拟预期的访问量，并通过下面的公式先设置一个偏合理的值，然后在实际的测试中，通过微调，来寻找最合适的连接数大小。</p>
+
+<p><strong>连接数 = ((核心数 * 2) + 有效磁盘数)</strong></p>
+
+<blockquote>
+<p>核心数不应包含超线程 (hyper thread)，即使打开了超线程也是如此，如果热点数据全被缓存了，那么有效磁盘数实际是 0，随着缓存命中率的下降，有效磁盘数也逐渐趋近于实际的磁盘数。另外需要注意，这一公式作用于 SSD 的效果如何，尚未明了。</p>
+</blockquote>
+
+<p>好了，按照这个公式，如果说你的服务器 CPU 是 4 核 i7 的，连接池大小应该为 <code>((4*2)+1)=9</code>。</p>
+
+<p>取个整, 我们就设置为 10 吧。你这个行不行啊？10 也太小了吧！</p>
+
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/knmrNHnmCLFlyqde2t1OWgc3Zd5Uz6HSqV3bAKvTwVSWK8I2a1wbnLfb1hjepAcc46sI7Rh3kJr0cwBduGwwoA/640?wx_fmt=jpeg" alt="" /></p>
+
+<p>你要是觉得不太行的话，可以跑个性能测试看看，我们可以保证，它能轻松支撑 3000 用户以 6000 TPS 的速率并发执行简单查询的场景。你还可以将连接池大小超过 10，那时，你会看到响应时长开始增加，TPS 开始下降。</p>
+
+<h2 id="七-结论-你需要的是一个小连接池-和一个等待连接的线程队列">七、结论：你需要的是一个小连接池，和一个等待连接的线程队列</h2>
+
+<p>假设说你有 10000 个并发访问，而你设置了连接池大小为 10000，你怕是石乐志哦。</p>
+
+<p>改成 1000，太高？改成 100？还是太多了。</p>
+
+<p>你仅仅需要一个大小为 10 数据库连接池，然后让剩下的业务线程都在队列里等待就可以了。</p>
+
+<blockquote>
+<p>连接池中的连接数量大小应该设置成：数据库能够有效同时进行的查询任务数（通常情况下来说不会高于 2*CPU 核心数）。</p>
+</blockquote>
+
+<p>你应该经常会看到一些用户量不是很大的 web 应用中，为应付大约十来个的并发，却将数据库连接池设置成 100， 200 的情况。请不要过度配置您的数据库连接池的大小。</p>
+
+<h2 id="八-额外需要注意的点">八、额外需要注意的点</h2>
+
+<p>实际上，连接池的大小的设置还是要结合实际的业务场景来说事。</p>
+
+<p>比如说，你的系统同时混合了<strong>长事务</strong>和<strong>短事务</strong>，这时，根据上面的公式来计算就很难办了。正确的做法应该是创建两个连接池，一个服务于长事务，一个服务于 &ldquo;实时&rdquo; 查询，也就是短事务。</p>
+
+<p>还有一种情况，比方说一个系统执行一个任务队列，业务上要求同一时间内只允许执行一定数量的任务，这时，我们就应该让并发任务数去适配连接池连接数，而不是连接数大小去适配并发任务数。</p>
               
             </div>
           </div>
@@ -674,11 +439,7 @@ spec:
                   <div class="post-footer-tags">
                     <span class="text-color-light text-small">TAGGED IN</span><br/>
                     
-  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/kubeadm/">kubeadm</a>
-
-  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/k8s/">k8s</a>
-
-  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/rook/">rook</a>
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/java/">java</a>
 
                   </div>
                 
@@ -691,7 +452,7 @@ spec:
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/" data-tooltip="使用nfs作为k8s的PersistentVolume">
+                <a class="post-action-btn btn btn--disabled">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -699,7 +460,7 @@ spec:
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8shipyard-proxy%E5%BC%80%E5%90%AFdocker-remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A32375/" data-tooltip="使用shipyard proxy开启docker remote远程端口(2375)">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/07/%E4%BD%BF%E7%94%A8spring-5%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84-%E7%AE%80%E6%B4%81%E7%89%88/" data-tooltip="使用Spring 5实现响应式微服务架构-简洁版">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -759,7 +520,7 @@ spec:
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/" data-tooltip="使用nfs作为k8s的PersistentVolume">
+                <a class="post-action-btn btn btn--disabled">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -767,7 +528,7 @@ spec:
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8shipyard-proxy%E5%BC%80%E5%90%AFdocker-remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A32375/" data-tooltip="使用shipyard proxy开启docker remote远程端口(2375)">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/07/%E4%BD%BF%E7%94%A8spring-5%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84-%E7%AE%80%E6%B4%81%E7%89%88/" data-tooltip="使用Spring 5实现响应式微服务架构-简洁版">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -1109,9 +870,9 @@ $(document).ready(function() {
     
       <script>
         var disqus_config = function () {
-          this.page.url = 'https:\/\/tangxusc.github.io\/2019\/03\/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4\/';
+          this.page.url = 'https:\/\/tangxusc.github.io\/2019\/07\/%E6%8A%80%E6%9C%AF%E7%BB%8F%E7%90%86%E6%B1%82%E6%B1%82%E4%BD%A0%E5%88%AB%E5%86%8D%E4%B9%B1%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%BA%86\/';
           
-            this.page.identifier = '\/2019\/03\/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4\/'
+            this.page.identifier = '\/2019\/07\/%E6%8A%80%E6%9C%AF%E7%BB%8F%E7%90%86%E6%B1%82%E6%B1%82%E4%BD%A0%E5%88%AB%E5%86%8D%E4%B9%B1%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%BA%86\/'
           
         };
         (function() {

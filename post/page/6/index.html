@@ -212,6 +212,71 @@
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
+        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">
+          Controller manager高可用实现方式
+        </a>
+      </h1>
+      
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
+        
+  March 20, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/k8s">k8s</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/controller-manager">Controller manager</a>
+    
+  
+
+  </div>
+
+    </div>
+    <div class="postShorten-excerpt" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://www.colabug.com/2801661.html">https://www.colabug.com/2801661.html</a></p>
+</blockquote>
+
+<p>这不是一系列入门级别的文章，也不是按部就班而来的，而是我看到哪里，发现有些代码写的精妙的地方，都值得我们学习下，顺手记录下来，一方面是让自己将来可以有迹可循，另外对大家应该也会有所帮助。而且记录本身成本并不是很高。</p>
+
+<p>高可用部署情况下，需要部署多个 controller manager （以下简称 cm ），每个 cm 需要 <code>--leader-elect=true</code>
+启动参数，即告知 cm 以高可用方式启动，谁要想进行真正的工作，必须先抢到锁，被选举为 leader 才行，而抢不到所得只能待机，在 leader 因为异常终止的时候，由剩余的其余节点再次获得锁。</p>
+      
+      <p>
+        <a href="https://tangxusc.github.io/2019/03/controller-manager%E9%AB%98%E5%8F%AF%E7%94%A8%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/" class="postShorten-excerpt_link link">Continue reading</a>
+        
+      </p>
+    </div>
+  </div>
+  
+</article>
+
+          
+            
+  
+    
+      
+        
+      
+    
+  
+
+
+  
+
+<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+  <div class="postShorten-wrap">
+    
+    <div class="postShorten-header">
+      <h1 class="postShorten-title" itemprop="headline">
         <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/gitflow-%E5%B7%A5%E4%BD%9C%E6%B5%81/">
           Gitflow 工作流
         </a>
@@ -558,68 +623,6 @@
 </article>
 
           
-            
-  
-    
-      
-        
-      
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">
-          Java 读写锁实现原理
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
-        
-  March 20, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/categories/java">java</a>, 
-    
-      <a class="category-link" href="https://tangxusc.github.io/categories/lock">lock</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        <blockquote>
-<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://my.oschina.net/editorial-story/blog/1928306">https://my.oschina.net/editorial-story/blog/1928306</a></p>
-</blockquote>
-
-<p>最近做的一个小项目中有这样的需求：整个项目有一份*config.json*保存着项目的一些配置，是存储在本地文件的一个资源，并且应用中存在读写（读 &gt;&gt; 写）更新问题。既然读写并发操作，那么就涉及到操作互斥，这里自然想到了读写锁，本文对读写锁方面的知识做个梳理。</p>
-      
-      <p>
-        <a href="https://tangxusc.github.io/2019/03/java-%E8%AF%BB%E5%86%99%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-          
           
   <div class="pagination-bar">
     <ul class="pagination">
@@ -703,6 +706,25 @@
       <div class="no-result text-color-light text-center">no post found</div>
       <div class="results">
         
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/07/%E6%8A%80%E6%9C%AF%E7%BB%8F%E7%90%86%E6%B1%82%E6%B1%82%E4%BD%A0%E5%88%AB%E5%86%8D%E4%B9%B1%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%BA%86/">
+                <h3 class="media-heading">技术经理:求求你,别再乱改数据库连接池的大小了！</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>基本上来说，大部分项目都需要跟数据库做交互，那么，数据库连接池的大小设置成多大合适呢？
+一些开发老鸟可能还会告诉你：<strong>没关系，尽量设置的大些，比如设置成 200，这样数据库性能会高些，吞吐量也会大些！</strong>
+你也许会点头称是，真的是这样吗？看完这篇文章，也许会颠覆你的认知哦！</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
         
           <div class="media">
             
@@ -871,27 +893,6 @@
             <hr>
           </div>
         
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-5/">
-                <h3 class="media-heading">理解kubernetes tools/cache包-5</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  May 5, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81946899">https://blog.csdn.net/weixin_39961559/article/details/81946899</a></p>
-</blockquote>
-
-<p>本系列深入介绍了informer的原理,这是本系列第五节</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
       </div>
     </div>
     <div class="modal-footer">
@@ -899,7 +900,7 @@
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         95 posts found
+         96 posts found
       </p>
     </div>
   </div>
