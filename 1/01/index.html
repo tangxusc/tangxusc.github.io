@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="">
+<meta name="description" content="浅谈认证的发展历史及方向 简介 在企业信息系统的建设过程中,认证是我们必须面临的问题,从用户的登录,PC端,移动端,智能设备的访问,到关键业务的强身份认证,多因子确认,从实现业务操作安全,到实现转账,系统间的通信,与外部系统的集成等等都少不聊认证的参与,而当今云计算容器化的崛起,认证方式也从最初的cookie,session等手段发展到了现在的多端登录,多因子强认证,多端扫码,api令牌,用户目录等多种方式,并且针对用户的认证方式和手段的创新从未停止过,也会一直不断发展.
+本文将与大家一起从认证的角度看看系统建设中的那些事.
+发展历史 单体应用时期 企业在IT系统的建设初期,大多需求都是针对具体的领域中的业务,所以在建设过程中专注于系统业务的快速实现,对于认证的实现,往往都采用简单的账号密码进行认证(登录),并在登录后返回服务器的cookie/session,作为登录后用户的登录凭据,其交互流程如下:
+在此模式下,系统提供单一的账号密码的认证方式,用户使用系统管理员或自行注册的账号密码进行登录,后端的服务器根据用户提交的账号密码进行认证,并依托于web服务器中间件(例如:tomcat,jetty,weblogic)对于session的实现,将凭据保存到session中.
+SOA时期 在一个一个的业务系统慢慢的建设过程中,企业信息化能力得到了较大的提升,各系统搭建方便了企业中的各领域内的业务的快速开展,信息交换,产生了较大的价值,但是各业务系统间的信息却无法快速整合,难以形成集体效益.
+这时,各系统的壁垒也越来越高,主要表现如下:
+ 各系统有独立的认证方式 各系统间的交互以人工协调为主 各系统间领域不同,对业务的字段要求也不一致  随着问题的产生,解决方案也逐渐诞生,在面对以上问题时,SOA脚踏祥云,披着彩霞,以英雄的姿态在各系统之间诞生了.
+SOA以面向服务的方式整合各个单体系统,将其变为整个信息化系统中的服务,不再成为孤岛,通过中立的接口通信方式将各系统连接起来,在此时期CAS,SSO,ESB等等闪耀的明珠熠熠生辉,这时期典型的认证流程如下:
+ CAS 是 Yale 大学发起的一个开源项目，旨在为 Web 应用系统提供一种可靠的单点登录方法，CAS 在 2004 年 12 月正式成为 JA-SIG 的一个项目。
+ CAS以独立的CAS Server组件为各系统提供用户的认证功能,再也不用去记下来各系统的登录账号密码,但是也遗留下来很多的问题:
+ 各系统需要自行实现CAS Client的协议(也就是重定向等动作) 系统间的相互调用未被关注 还主要关注在浏览器端,并未延伸到app,智能设备  前后端分离时期 在一个系统中,前端和后端主要关注点是不一致的:
+ 前端以静态资源为主,期望尽可能的利用浏览器缓存; 职责更明确,对中间件的要求也更明确; 在开发期间,前端严重依赖后端; 后端追求的是高并发,高可用,高性能,安全,存储,业务执行,前端追求的是页面表现,流畅展示,兼容性,用户体验  既然SOA时,拆分了专门的CAS Server为认证提供服务,那么前端的资源因为和后端关注的不一样,也理应分离出去,但拆分前端和后端也会面临以下问题:
+ 后端的session无法在前端使用; 前端还需要前后端分离的框架; 需要一个网关来路由前后端资源(因nginx支持静态资源,顺势使用); 因前端无法使用session,那么需要提供一种更好的认证方式  虽然面临的不止以上的这些问题,但是前后端分离已成不可阻挡的趋势,同时jwt认证逐步在各系统中被应用,典型的交互方式如下:
+此模式优点也非常明显:
+ token机制实际上已经可以脱离浏览器支持; 前端因框架工具等支持出现了很大提升; token是无状态的,后端多实例支持较为方便(避免了以前的session共享);  但是,SOA中的需要入侵业务系统才能支持jwt认证和系统间相互调用的问题还是没有得到妥善解决.
+ 至此,前端在angular,vue,react这些工具和框架的加持下,从jquery进入到了mv*时代,前端也从jquery组件进入到了三大框架三分天下的时代
+ 微服务时期 得益于spring cloud和一系列基于此的框架开源,后端(特别是java)进入到了一个新的时代,后端也从ssh/ssm进入到了spring cloud为主的微服务时代,后端开始强调业务上的区分,系统的限界上下文的战略设计.">
+
+
+<meta property="og:description" content="浅谈认证的发展历史及方向 简介 在企业信息系统的建设过程中,认证是我们必须面临的问题,从用户的登录,PC端,移动端,智能设备的访问,到关键业务的强身份认证,多因子确认,从实现业务操作安全,到实现转账,系统间的通信,与外部系统的集成等等都少不聊认证的参与,而当今云计算容器化的崛起,认证方式也从最初的cookie,session等手段发展到了现在的多端登录,多因子强认证,多端扫码,api令牌,用户目录等多种方式,并且针对用户的认证方式和手段的创新从未停止过,也会一直不断发展.
+本文将与大家一起从认证的角度看看系统建设中的那些事.
+发展历史 单体应用时期 企业在IT系统的建设初期,大多需求都是针对具体的领域中的业务,所以在建设过程中专注于系统业务的快速实现,对于认证的实现,往往都采用简单的账号密码进行认证(登录),并在登录后返回服务器的cookie/session,作为登录后用户的登录凭据,其交互流程如下:
+在此模式下,系统提供单一的账号密码的认证方式,用户使用系统管理员或自行注册的账号密码进行登录,后端的服务器根据用户提交的账号密码进行认证,并依托于web服务器中间件(例如:tomcat,jetty,weblogic)对于session的实现,将凭据保存到session中.
+SOA时期 在一个一个的业务系统慢慢的建设过程中,企业信息化能力得到了较大的提升,各系统搭建方便了企业中的各领域内的业务的快速开展,信息交换,产生了较大的价值,但是各业务系统间的信息却无法快速整合,难以形成集体效益.
+这时,各系统的壁垒也越来越高,主要表现如下:
+ 各系统有独立的认证方式 各系统间的交互以人工协调为主 各系统间领域不同,对业务的字段要求也不一致  随着问题的产生,解决方案也逐渐诞生,在面对以上问题时,SOA脚踏祥云,披着彩霞,以英雄的姿态在各系统之间诞生了.
+SOA以面向服务的方式整合各个单体系统,将其变为整个信息化系统中的服务,不再成为孤岛,通过中立的接口通信方式将各系统连接起来,在此时期CAS,SSO,ESB等等闪耀的明珠熠熠生辉,这时期典型的认证流程如下:
+ CAS 是 Yale 大学发起的一个开源项目，旨在为 Web 应用系统提供一种可靠的单点登录方法，CAS 在 2004 年 12 月正式成为 JA-SIG 的一个项目。
+ CAS以独立的CAS Server组件为各系统提供用户的认证功能,再也不用去记下来各系统的登录账号密码,但是也遗留下来很多的问题:
+ 各系统需要自行实现CAS Client的协议(也就是重定向等动作) 系统间的相互调用未被关注 还主要关注在浏览器端,并未延伸到app,智能设备  前后端分离时期 在一个系统中,前端和后端主要关注点是不一致的:
+ 前端以静态资源为主,期望尽可能的利用浏览器缓存; 职责更明确,对中间件的要求也更明确; 在开发期间,前端严重依赖后端; 后端追求的是高并发,高可用,高性能,安全,存储,业务执行,前端追求的是页面表现,流畅展示,兼容性,用户体验  既然SOA时,拆分了专门的CAS Server为认证提供服务,那么前端的资源因为和后端关注的不一样,也理应分离出去,但拆分前端和后端也会面临以下问题:
+ 后端的session无法在前端使用; 前端还需要前后端分离的框架; 需要一个网关来路由前后端资源(因nginx支持静态资源,顺势使用); 因前端无法使用session,那么需要提供一种更好的认证方式  虽然面临的不止以上的这些问题,但是前后端分离已成不可阻挡的趋势,同时jwt认证逐步在各系统中被应用,典型的交互方式如下:
+此模式优点也非常明显:
+ token机制实际上已经可以脱离浏览器支持; 前端因框架工具等支持出现了很大提升; token是无状态的,后端多实例支持较为方便(避免了以前的session共享);  但是,SOA中的需要入侵业务系统才能支持jwt认证和系统间相互调用的问题还是没有得到妥善解决.
+ 至此,前端在angular,vue,react这些工具和框架的加持下,从jquery进入到了mv*时代,前端也从jquery组件进入到了三大框架三分天下的时代
+ 微服务时期 得益于spring cloud和一系列基于此的框架开源,后端(特别是java)进入到了一个新的时代,后端也从ssh/ssm进入到了spring cloud为主的微服务时代,后端开始强调业务上的区分,系统的限界上下文的战略设计.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="苏连云的博客">
+<meta name="twitter:title" content="苏连云的博客">
+<meta property="og:url" content="https://tangxusc.github.io/1/01/">
+<meta property="twitter:url" content="https://tangxusc.github.io/1/01/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="浅谈认证的发展历史及方向 简介 在企业信息系统的建设过程中,认证是我们必须面临的问题,从用户的登录,PC端,移动端,智能设备的访问,到关键业务的强身份认证,多因子确认,从实现业务操作安全,到实现转账,系统间的通信,与外部系统的集成等等都少不聊认证的参与,而当今云计算容器化的崛起,认证方式也从最初的cookie,session等手段发展到了现在的多端登录,多因子强认证,多端扫码,api令牌,用户目录等多种方式,并且针对用户的认证方式和手段的创新从未停止过,也会一直不断发展.
+本文将与大家一起从认证的角度看看系统建设中的那些事.
+发展历史 单体应用时期 企业在IT系统的建设初期,大多需求都是针对具体的领域中的业务,所以在建设过程中专注于系统业务的快速实现,对于认证的实现,往往都采用简单的账号密码进行认证(登录),并在登录后返回服务器的cookie/session,作为登录后用户的登录凭据,其交互流程如下:
+在此模式下,系统提供单一的账号密码的认证方式,用户使用系统管理员或自行注册的账号密码进行登录,后端的服务器根据用户提交的账号密码进行认证,并依托于web服务器中间件(例如:tomcat,jetty,weblogic)对于session的实现,将凭据保存到session中.
+SOA时期 在一个一个的业务系统慢慢的建设过程中,企业信息化能力得到了较大的提升,各系统搭建方便了企业中的各领域内的业务的快速开展,信息交换,产生了较大的价值,但是各业务系统间的信息却无法快速整合,难以形成集体效益.
+这时,各系统的壁垒也越来越高,主要表现如下:
+ 各系统有独立的认证方式 各系统间的交互以人工协调为主 各系统间领域不同,对业务的字段要求也不一致  随着问题的产生,解决方案也逐渐诞生,在面对以上问题时,SOA脚踏祥云,披着彩霞,以英雄的姿态在各系统之间诞生了.
+SOA以面向服务的方式整合各个单体系统,将其变为整个信息化系统中的服务,不再成为孤岛,通过中立的接口通信方式将各系统连接起来,在此时期CAS,SSO,ESB等等闪耀的明珠熠熠生辉,这时期典型的认证流程如下:
+ CAS 是 Yale 大学发起的一个开源项目，旨在为 Web 应用系统提供一种可靠的单点登录方法，CAS 在 2004 年 12 月正式成为 JA-SIG 的一个项目。
+ CAS以独立的CAS Server组件为各系统提供用户的认证功能,再也不用去记下来各系统的登录账号密码,但是也遗留下来很多的问题:
+ 各系统需要自行实现CAS Client的协议(也就是重定向等动作) 系统间的相互调用未被关注 还主要关注在浏览器端,并未延伸到app,智能设备  前后端分离时期 在一个系统中,前端和后端主要关注点是不一致的:
+ 前端以静态资源为主,期望尽可能的利用浏览器缓存; 职责更明确,对中间件的要求也更明确; 在开发期间,前端严重依赖后端; 后端追求的是高并发,高可用,高性能,安全,存储,业务执行,前端追求的是页面表现,流畅展示,兼容性,用户体验  既然SOA时,拆分了专门的CAS Server为认证提供服务,那么前端的资源因为和后端关注的不一样,也理应分离出去,但拆分前端和后端也会面临以下问题:
+ 后端的session无法在前端使用; 前端还需要前后端分离的框架; 需要一个网关来路由前后端资源(因nginx支持静态资源,顺势使用); 因前端无法使用session,那么需要提供一种更好的认证方式  虽然面临的不止以上的这些问题,但是前后端分离已成不可阻挡的趋势,同时jwt认证逐步在各系统中被应用,典型的交互方式如下:
+此模式优点也非常明显:
+ token机制实际上已经可以脱离浏览器支持; 前端因框架工具等支持出现了很大提升; token是无状态的,后端多实例支持较为方便(避免了以前的session共享);  但是,SOA中的需要入侵业务系统才能支持jwt认证和系统间相互调用的问题还是没有得到妥善解决.
+ 至此,前端在angular,vue,react这些工具和框架的加持下,从jquery进入到了mv*时代,前端也从jquery组件进入到了三大框架三分天下的时代
+ 微服务时期 得益于spring cloud和一系列基于此的框架开源,后端(特别是java)进入到了一个新的时代,后端也从ssh/ssm进入到了spring cloud为主的微服务时代,后端开始强调业务上的区分,系统的限界上下文的战略设计.">
+<meta name="twitter:description" content="浅谈认证的发展历史及方向 简介 在企业信息系统的建设过程中,认证是我们必须面临的问题,从用户的登录,PC端,移动端,智能设备的访问,到关键业务的强身份认证,多因子确认,从实现业务操作安全,到实现转账,系统间的通信,与外部系统的集成等等都少不聊认证的参与,而当今云计算容器化的崛起,认证方式也从最初的cookie,session等手段发展到了现在的多端登录,多因子强认证,多端扫码,api令牌,用户目录等多种方式,并且针对用户的认证方式和手段的创新从未停止过,也会一直不断发展.
+本文将与大家一起从认证的角度看看系统建设中的那些事.
+发展历史 单体应用时期 企业在IT系统的建设初期,大多需求都是针对具体的领域中的业务,所以在建设过程中专注于系统业务的快速实现,对于认证的实现,往往都采用简单的账号密码进行认证(登录),并在登录后返回服务器的cookie/session,作为登录后用户的登录凭据,其交互流程如下:
+在此模式下,系统提供单一的账号密码的认证方式,用户使用系统管理员或自行注册的账号密码进行登录,后端的服务器根据用户提交的账号密码进行认证,并依托于web服务器中间件(例如:tomcat,jetty,weblogic)对于session的实现,将凭据保存到session中.
+SOA时期 在一个一个的业务系统慢慢的建设过程中,企业信息化能力得到了较大的提升,各系统搭建方便了企业中的各领域内的业务的快速开展,信息交换,产生了较大的价值,但是各业务系统间的信息却无法快速整合,难以形成集体效益.
+这时,各系统的壁垒也越来越高,主要表现如下:
+ 各系统有独立的认证方式 各系统间的交互以人工协调为主 各系统间领域不同,对业务的字段要求也不一致  随着问题的产生,解决方案也逐渐诞生,在面对以上问题时,SOA脚踏祥云,披着彩霞,以英雄的姿态在各系统之间诞生了.
+SOA以面向服务的方式整合各个单体系统,将其变为整个信息化系统中的服务,不再成为孤岛,通过中立的接口通信方式将各系统连接起来,在此时期CAS,SSO,ESB等等闪耀的明珠熠熠生辉,这时期典型的认证流程如下:
+ CAS 是 Yale 大学发起的一个开源项目，旨在为 Web 应用系统提供一种可靠的单点登录方法，CAS 在 2004 年 12 月正式成为 JA-SIG 的一个项目。
+ CAS以独立的CAS Server组件为各系统提供用户的认证功能,再也不用去记下来各系统的登录账号密码,但是也遗留下来很多的问题:
+ 各系统需要自行实现CAS Client的协议(也就是重定向等动作) 系统间的相互调用未被关注 还主要关注在浏览器端,并未延伸到app,智能设备  前后端分离时期 在一个系统中,前端和后端主要关注点是不一致的:
+ 前端以静态资源为主,期望尽可能的利用浏览器缓存; 职责更明确,对中间件的要求也更明确; 在开发期间,前端严重依赖后端; 后端追求的是高并发,高可用,高性能,安全,存储,业务执行,前端追求的是页面表现,流畅展示,兼容性,用户体验  既然SOA时,拆分了专门的CAS Server为认证提供服务,那么前端的资源因为和后端关注的不一样,也理应分离出去,但拆分前端和后端也会面临以下问题:
+ 后端的session无法在前端使用; 前端还需要前后端分离的框架; 需要一个网关来路由前后端资源(因nginx支持静态资源,顺势使用); 因前端无法使用session,那么需要提供一种更好的认证方式  虽然面临的不止以上的这些问题,但是前后端分离已成不可阻挡的趋势,同时jwt认证逐步在各系统中被应用,典型的交互方式如下:
+此模式优点也非常明显:
+ token机制实际上已经可以脱离浏览器支持; 前端因框架工具等支持出现了很大提升; token是无状态的,后端多实例支持较为方便(避免了以前的session共享);  但是,SOA中的需要入侵业务系统才能支持jwt认证和系统间相互调用的问题还是没有得到妥善解决.
+ 至此,前端在angular,vue,react这些工具和框架的加持下,从jquery进入到了mv*时代,前端也从jquery组件进入到了三大框架三分天下的时代
+ 微服务时期 得益于spring cloud和一系列基于此的框架开源,后端(特别是java)进入到了一个新的时代,后端也从ssh/ssm进入到了spring cloud为主的微服务时代,后端开始强调业务上的区分,系统的限界上下文的战略设计.">
+<meta property="og:locale" content="en-us">
+
+  
+  
+  
+  
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>苏连云的博客</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/1/01/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="0001-01-01T00:00:00Z">
+        
+  January 1, 1
+
+      </time>
+    
+    
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<h1 id="浅谈认证的发展历史及方向">浅谈认证的发展历史及方向</h1>
+
+<h2 id="简介">简介</h2>
+
+<p>在企业信息系统的建设过程中,认证是我们必须面临的问题,从用户的登录,PC端,移动端,智能设备的访问,到关键业务的强身份认证,多因子确认,从实现业务操作安全,到实现转账,系统间的通信,与外部系统的集成等等都少不聊认证的参与,而当今云计算容器化的崛起,认证方式也从最初的cookie,session等手段发展到了现在的多端登录,多因子强认证,多端扫码,api令牌,用户目录等多种方式,并且针对用户的认证方式和手段的创新从未停止过,也会一直不断发展.</p>
+
+<p>本文将与大家一起从认证的角度看看系统建设中的那些事.</p>
+
+<h2 id="发展历史">发展历史</h2>
+
+<h3 id="单体应用时期">单体应用时期</h3>
+
+<p>企业在IT系统的建设初期,大多需求都是针对具体的领域中的业务,所以在建设过程中专注于系统业务的快速实现,对于认证的实现,往往都采用简单的账号密码进行认证(登录),并在登录后返回服务器的cookie/session,作为登录后用户的登录凭据,其交互流程如下:</p>
+
+<p><img src="https://tangxusc.github.io/post/分布式/浅谈认证/img_1.png"/></p>
+
+<p>在此模式下,系统提供单一的账号密码的认证方式,用户使用系统管理员或自行注册的账号密码进行登录,后端的服务器根据用户提交的账号密码进行认证,并依托于web服务器中间件(例如:tomcat,jetty,weblogic)对于session的实现,将凭据保存到session中.</p>
+
+<h3 id="soa时期">SOA时期</h3>
+
+<p>在一个一个的业务系统慢慢的建设过程中,企业信息化能力得到了较大的提升,各系统搭建方便了企业中的各领域内的业务的快速开展,信息交换,产生了较大的价值,但是各业务系统间的信息却无法快速整合,难以形成集体效益.</p>
+
+<p>这时,各系统的壁垒也越来越高,主要表现如下:</p>
+
+<ul>
+<li>各系统有独立的认证方式</li>
+<li>各系统间的交互以人工协调为主</li>
+<li>各系统间领域不同,对业务的字段要求也不一致</li>
+</ul>
+
+<p>随着问题的产生,解决方案也逐渐诞生,在面对以上问题时,SOA脚踏祥云,披着彩霞,以英雄的姿态在各系统之间诞生了.</p>
+
+<p>SOA以面向服务的方式整合各个单体系统,将其变为整个信息化系统中的服务,不再成为孤岛,通过中立的接口通信方式将各系统连接起来,在此时期CAS,SSO,ESB等等闪耀的明珠熠熠生辉,这时期典型的认证流程如下:</p>
+
+<p><img src="https://tangxusc.github.io/post/分布式/浅谈认证/img_2.png"/></p>
+
+<blockquote>
+<p>CAS 是 Yale 大学发起的一个开源项目，旨在为 Web 应用系统提供一种可靠的单点登录方法，CAS 在 2004 年 12 月正式成为 JA-SIG 的一个项目。</p>
+</blockquote>
+
+<p>CAS以独立的CAS Server组件为各系统提供用户的认证功能,再也不用去记下来各系统的登录账号密码,但是也遗留下来很多的问题:</p>
+
+<ul>
+<li>各系统需要自行实现CAS Client的协议(也就是重定向等动作)</li>
+<li>系统间的相互调用未被关注</li>
+<li>还主要关注在浏览器端,并未延伸到app,智能设备</li>
+</ul>
+
+<h3 id="前后端分离时期">前后端分离时期</h3>
+
+<p>在一个系统中,前端和后端主要关注点是不一致的:</p>
+
+<ol>
+<li>前端以静态资源为主,期望尽可能的利用浏览器缓存;</li>
+<li>职责更明确,对中间件的要求也更明确;</li>
+<li>在开发期间,前端严重依赖后端;</li>
+<li>后端追求的是高并发,高可用,高性能,安全,存储,业务执行,前端追求的是页面表现,流畅展示,兼容性,用户体验</li>
+</ol>
+
+<p>既然SOA时,拆分了专门的CAS Server为认证提供服务,那么前端的资源因为和后端关注的不一样,也理应分离出去,但拆分前端和后端也会面临以下问题:</p>
+
+<ul>
+<li>后端的session无法在前端使用;</li>
+<li>前端还需要前后端分离的框架;</li>
+<li>需要一个网关来路由前后端资源(因nginx支持静态资源,顺势使用);</li>
+<li>因前端无法使用session,那么需要提供一种更好的认证方式</li>
+</ul>
+
+<p>虽然面临的不止以上的这些问题,但是前后端分离已成不可阻挡的趋势,同时jwt认证逐步在各系统中被应用,典型的交互方式如下:</p>
+
+<p><img src="https://tangxusc.github.io/post/分布式/浅谈认证/img_3.png"/></p>
+
+<p>此模式优点也非常明显:</p>
+
+<ul>
+<li>token机制实际上已经可以脱离浏览器支持;</li>
+<li>前端因框架工具等支持出现了很大提升;</li>
+<li>token是无状态的,后端多实例支持较为方便(避免了以前的session共享);</li>
+</ul>
+
+<p>但是,SOA中的需要入侵业务系统才能支持jwt认证和系统间相互调用的问题还是没有得到妥善解决.</p>
+
+<blockquote>
+<p>至此,前端在angular,vue,react这些工具和框架的加持下,从jquery进入到了mv*时代,前端也从jquery组件进入到了三大框架三分天下的时代</p>
+</blockquote>
+
+<h3 id="微服务时期">微服务时期</h3>
+
+<p>得益于spring cloud和一系列基于此的框架开源,后端(特别是java)进入到了一个新的时代,后端也从ssh/ssm进入到了spring cloud为主的微服务时代,后端开始强调业务上的区分,系统的限界上下文的战略设计.</p>
+
+<p>微服务更专注业务的划分,各业务系统使用各自适合的语言专注自身业务特点进行建设,而不入侵各系统实现认证则成为了一个必要的要求.</p>
+
+<p>此时,zuul,spring cloud gateway等网关又成了冉冉的新星,为认证提供了很大的施展空间.</p>
+
+<p>此时的认证如下:</p>
+
+<p><img src="https://tangxusc.github.io/post/分布式/浅谈认证/img_4.png"/></p>
+
+<p>通过独立的认证中心,专注为认证服务,其优势如下:</p>
+
+<ul>
+<li>职责更为明确</li>
+<li>对业务系统无入侵(在网关和认证服务中完成认证)</li>
+<li>认证中心可以提供更多的认证模式</li>
+<li>对于其他语言也有较好的支持</li>
+</ul>
+
+<p>在此时期,因spring cloud系列带给我们太多技术上的便利,也导致了java语言在微服务中占据的优势较为明显,其他语言只能通过spring cloud sidecar方式间接接入系统中,虽有劣势,但是在中等规模的系统中也还可以接受.</p>
+
+<h2 id="云时代建设方向">云时代建设方向</h2>
+
+<p>微服务的崛起,也出现了新的问题: 如何大规模标准化的部署和运维这些服务?如何做到真正的跨语言?</p>
+
+<p>docker的出现,解决了标准化部署的问题;</p>
+
+<p>kubernetes以容器化编排王者的姿态为我们解决了大规模部署,运维等问题;</p>
+
+<p>以Istio为首的Service Mesh方案则在积极的推进跨语言;</p>
+
+<p>那么在此模式下我们的认证又是怎么样的呢?</p>
+
+<p><img src="https://tangxusc.github.io/post/分布式/浅谈认证/img_5.png"/></p>
+
+<p>得益于kubernetes,istio这些工具,此方案优点如下:</p>
+
+<ul>
+<li>无入侵支持认证</li>
+<li>不再依赖具体某语言的框架,跨语言支持</li>
+<li>认证中心可以根据用户属性决定路由(金丝雀部署)</li>
+<li>各业务服务中注入sidecar,支持服务间TLS加密</li>
+<li>认证等功能向基础设施转移,服务更&rdquo;业务化&rdquo;</li>
+<li>基础设施功能更为齐备,并且可以提供较多扩展</li>
+<li>针对内部和外部分开认证和授权</li>
+</ul>
+
+<p>在多&rdquo;云&rdquo;的时代,我们的认证方式也需要多样化,认证也将分为两个大的体系:</p>
+
+<h3 id="内部系统认证">内部系统认证</h3>
+
+<p>内部认证主要针对企业内部的信息化系统,为这些内部的信息化系统提供用户的认证功能,用户通过认证服务进行认证,并通过网关转发认证后的用户标识,业务系统不再关注认证.</p>
+
+<p>针对内部系统间的相互调用,提供TLS加密功能,保障内部调用的安全性.</p>
+
+<h3 id="外部系统授权">外部系统授权</h3>
+
+<p>外部的系统与内部的系统交互应以OAuth2/OIDC等协议为核心的开放平台为主,通过协议来完成与第三方系统的协作授权,并保证系统的安全性.</p>
+
+<h2 id="总结">总结</h2>
+
+<p>在架构的衍进过程中,认证系统和认证方式也在不断的衍化进步,针对多种的认证方式,需要理清其中关系,逐步系统性的建设.</p>
+
+<p>在互联网的浪潮之中,创新不止,浪潮不息.</p>
+
+<h2 id="参照">参照</h2>
+
+<p><a href="https://baike.baidu.com/item/SOA/2140650?fr=aladdin">百科:SOA</a></p>
+
+<p><a href="https://baike.baidu.com/item/CAS/1329561?fr=aladdin">百科:CAS</a></p>
+
+<p><a href="https://spring.io/projects/spring-cloud">Spring Cloud官方网站</a></p>
+
+<p><a href="https://baike.baidu.com/item/oAuth/7153134">百科:OAuth协议</a></p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/%E9%85%8D%E7%BD%AEredis%E5%A4%96%E7%BD%91%E5%8F%AF%E8%AE%BF%E9%97%AE/" data-tooltip="配置redis外网可访问">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/1/01/adapter.my.config/" data-tooltip="adapter.my.config">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/03/%E9%85%8D%E7%BD%AEredis%E5%A4%96%E7%BD%91%E5%8F%AF%E8%AE%BF%E9%97%AE/" data-tooltip="配置redis外网可访问">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/1/01/adapter.my.config/" data-tooltip="adapter.my.config">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/07/%E6%8A%80%E6%9C%AF%E7%BB%8F%E7%90%86%E6%B1%82%E6%B1%82%E4%BD%A0%E5%88%AB%E5%86%8D%E4%B9%B1%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%BA%86/">
+                <h3 class="media-heading">技术经理:求求你,别再乱改数据库连接池的大小了！</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>基本上来说，大部分项目都需要跟数据库做交互，那么，数据库连接池的大小设置成多大合适呢？
+一些开发老鸟可能还会告诉你：<strong>没关系，尽量设置的大些，比如设置成 200，这样数据库性能会高些，吞吐量也会大些！</strong>
+你也许会点头称是，真的是这样吗？看完这篇文章，也许会颠覆你的认知哦！</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/07/%E4%BD%BF%E7%94%A8spring-5%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84-%E7%AE%80%E6%B4%81%E7%89%88/">
+                <h3 class="media-heading">使用Spring 5实现响应式微服务架构-简洁版</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>随着以 Dubbo、Spring Cloud 等框架为代表的分布式服务调用和治理工具的大行其道，以及以 Docker、Kubernetes 等容器技术的日渐成熟，微服务架构（Microservices Architecture）毫无疑问是近年来最热门的一种服务化架构模式。所谓微服务，就是一些具有足够小的粒度、能够相互协作且自治的服务体系。正因为每个微服务都比较简单，仅关注于完成一个业务功能，所以具备技术、业务和组织上的优势 <sup>[1]</sup>。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+                <h3 class="media-heading">迈向istio-13 自定义adapter(修改请求头)</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.</p>
+
+<p>mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为<code>Adapter</code>,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">NetworkPolicy介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中的所有的pod在默认情况下,网络都是互通的,pod接收来自任何来源的流量.</p>
+
+<p>那么我们如何限制pod的网络通信,防止非法访问呢?</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
+                <h3 class="media-heading">亲和性调度</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中对pod的调度由调度控制器负责,在调度的时候有很大的随机性.</p>
+
+<p>但是我们很多时候需要容器更多的分散在不同的node上,有一些情况又需要尽量集中在一起,减少网络开销</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">Local Persistent Volume 介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中,存储一直是一个较为头疼的问题,在面对持久化存储,我们可以选择各种文件系统,但是对于那些临时存储的文件,我们则需要一种本地存储的能力,在kubernetes1.14中为我们提供了一种本地存储<code>localPV</code>,本文将围绕此展开.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
+                <h3 class="media-heading">今日心情-上善若水</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>一天又一天,每一天都那么一样又不那么一样.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
+                <h3 class="media-heading">code-generator使用</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-7</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948541">https://blog.csdn.net/weixin_39961559/article/details/81948541</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第七节,也是最后一节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-6/">
+                <h3 class="media-heading">理解kubernetes tools/cache包-6</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948239">https://blog.csdn.net/weixin_39961559/article/details/81948239</a></p>
+</blockquote>
+
+<p>本系列深入介绍了informer的原理,这是本系列第六节</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         97 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/1\/01\/';
+          
+            this.page.identifier = '\/1\/01\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
