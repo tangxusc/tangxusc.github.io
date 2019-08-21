@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Auth on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/categories/auth/</link>
+    <description>Recent content in Auth on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 21 Aug 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/categories/auth/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>浅谈认证的发展历史及方向</title>
+      <link>https://tangxusc.github.io/2019/08/%E6%B5%85%E8%B0%88%E8%AE%A4%E8%AF%81%E7%9A%84%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2%E5%8F%8A%E6%96%B9%E5%90%91/</link>
+      <pubDate>Wed, 21 Aug 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/08/%E6%B5%85%E8%B0%88%E8%AE%A4%E8%AF%81%E7%9A%84%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2%E5%8F%8A%E6%96%B9%E5%90%91/</guid>
+      <description>&lt;p&gt;在企业信息系统的建设过程中,认证是我们必须面临的问题,从用户的登录,PC端,移动端,智能设备的访问,到关键业务的强身份认证,多因子确认,从实现业务操作安全,到实现转账,系统间的通信,与外部系统的集成等等都少不聊认证的参与,而当今云计算容器化的崛起,认证方式也从最初的cookie,session等手段发展到了现在的多端登录,多因子强认证,多端扫码,api令牌,用户目录等多种方式,并且针对用户的认证方式和手段的创新从未停止过,也会一直不断发展.&lt;/p&gt;
+
+&lt;p&gt;本文将与大家一起从认证的角度看看系统建设中的那些事.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tangxusc.github.io/2019/08/%E6%B5%85%E8%B0%88%E8%AE%A4%E8%AF%81%E7%9A%84%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2%E5%8F%8A%E6%96%B9%E5%90%91/</loc>
+    <lastmod>2019-08-21T14:15:59+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/2019/07/%E6%8A%80%E6%9C%AF%E7%BB%8F%E7%90%86%E6%B1%82%E6%B1%82%E4%BD%A0%E5%88%AB%E5%86%8D%E4%B9%B1%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%BA%86/</loc>
     <lastmod>2019-07-17T14:15:59+08:00</lastmod>
   </url>
@@ -478,10 +483,6 @@
   </url>
   
   <url>
-    <loc>https://tangxusc.github.io/1/01/</loc>
-  </url>
-  
-  <url>
     <loc>https://tangxusc.github.io/tags/adapter/</loc>
     <lastmod>2019-05-28T14:15:59+08:00</lastmod>
     <priority>0</priority>
@@ -505,6 +506,18 @@
   </url>
   
   <url>
+    <loc>https://tangxusc.github.io/tags/auth/</loc>
+    <lastmod>2019-08-21T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/categories/auth/</loc>
+    <lastmod>2019-08-21T14:15:59+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://tangxusc.github.io/tags/cap/</loc>
     <lastmod>2019-03-20T14:15:59+08:00</lastmod>
     <priority>0</priority>
@@ -518,7 +531,7 @@
   
   <url>
     <loc>https://tangxusc.github.io/categories/</loc>
-    <lastmod>2019-03-20T14:15:59+08:00</lastmod>
+    <lastmod>2019-08-21T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -962,7 +975,7 @@
   
   <url>
     <loc>https://tangxusc.github.io/post/</loc>
-    <lastmod>2019-07-17T14:15:59+08:00</lastmod>
+    <lastmod>2019-08-21T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -1146,7 +1159,7 @@
   
   <url>
     <loc>https://tangxusc.github.io/</loc>
-    <lastmod>2019-07-17T14:15:59+08:00</lastmod>
+    <lastmod>2019-08-21T14:15:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
