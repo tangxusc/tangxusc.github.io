@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0-DEV with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="proto">
+<meta name="description" content="
+本文由 简悦 SimpRead 转码，原文地址 https://blog.csdn.net/u011518120/article/details/54604615
+英文原文：[Language Guide (proto3)](https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#gen
+
+
+这个指南描述了如何使用 Protocol buffer 语言去描述你的 protocol buffer 数据， 包括 .proto 文件符号和如何从. proto 文件生成类。">
+
+
+<meta property="og:description" content="
+本文由 简悦 SimpRead 转码，原文地址 https://blog.csdn.net/u011518120/article/details/54604615
+英文原文：[Language Guide (proto3)](https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#gen
+
+
+这个指南描述了如何使用 Protocol buffer 语言去描述你的 protocol buffer 数据， 包括 .proto 文件符号和如何从. proto 文件生成类。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Protobuf3语言指南">
+<meta name="twitter:title" content="Protobuf3语言指南">
+<meta property="og:url" content="https://tangxusc.github.io/2019/11/protobuf3%E8%AF%AD%E8%A8%80%E6%8C%87%E5%8D%97/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2019/11/protobuf3%E8%AF%AD%E8%A8%80%E6%8C%87%E5%8D%97/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+本文由 简悦 SimpRead 转码，原文地址 https://blog.csdn.net/u011518120/article/details/54604615
+英文原文：[Language Guide (proto3)](https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#gen
+
+
+这个指南描述了如何使用 Protocol buffer 语言去描述你的 protocol buffer 数据， 包括 .proto 文件符号和如何从. proto 文件生成类。">
+<meta name="twitter:description" content="
+本文由 简悦 SimpRead 转码，原文地址 https://blog.csdn.net/u011518120/article/details/54604615
+英文原文：[Language Guide (proto3)](https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#gen
+
+
+这个指南描述了如何使用 Protocol buffer 语言去描述你的 protocol buffer 数据， 包括 .proto 文件符号和如何从. proto 文件生成类。">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-11-15T09:15:59">
+  
+  
+    <meta property="article:modified_time" content="2019-11-15T09:15:59">
+  
+  
+  
+    
+      <meta property="article:section" content="proto">
+    
+  
+  
+    
+      <meta property="article:tag" content="proto">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>Protobuf3语言指南</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2019/11/protobuf3%E8%AF%AD%E8%A8%80%E6%8C%87%E5%8D%97/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Protobuf3语言指南
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-11-15T09:15:59&#43;08:00">
+        
+  November 15, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/proto">proto</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码，原文地址 <a href="https://blog.csdn.net/u011518120/article/details/54604615">https://blog.csdn.net/u011518120/article/details/54604615</a>
+英文原文：[Language Guide (proto3)](<a href="https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#gen">https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#gen</a></p>
+</blockquote>
+
+<p>这个指南描述了如何使用 Protocol buffer 语言去描述你的 protocol buffer 数据， 包括 .proto 文件符号和如何从. proto 文件生成类。</p>
+
+<h1 id="定义一个消息类型">定义一个消息类型</h1>
+
+<p>先来看一个非常简单的例子。假设你想定义一个 “搜索请求” 的消息格式，每一个请求含有一个查询字符串、你感兴趣的查询结果所在的页数，以及每一页多少条查询结果。可以采用如下的方式来定义消息类型的. proto 文件了：</p>
+
+<pre><code class="language-protobuf">syntax = &quot;proto3&quot;;
+
+message SearchRequest {
+  string query = 1;
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+}
+</code></pre>
+
+<ul>
+<li>文件的第一行指定了你正在使用 proto3 语法：如果你没有指定这个，编译器会使用 proto2。这个指定语法行必须是文件的非空非注释的第一个行。</li>
+<li>SearchRequest 消息格式有 3 个字段，在消息中承载的数据分别对应于每一个字段。其中每个字段都有一个名字和一种类型。</li>
+</ul>
+
+<h2 id="指定字段类型">指定字段类型</h2>
+
+<p>在上面的例子中，所有字段都是标量类型：两个整型（page_number 和 result_per_page），一个 string 类型（query）。当然，你也可以为字段指定其他的合成类型，包括枚举（enumerations）或其他消息类型。</p>
+
+<h2 id="分配标识号">分配标识号</h2>
+
+<p>正如你所见，在消息定义中，每个字段都有唯一的一个数字标识符。这些标识符是用来在消息的二进制格式中识别各个字段的，一旦开始使用就不能够再改变。注：[1,15] 之内的标识号在编码的时候会占用一个字节。[16,2047] 之内的标识号则占用 2 个字节。所以应该为那些频繁出现的消息元素保留 [1,15] 之内的标识号。切记：要为将来有可能添加的、频繁出现的标识号预留一些标识号。</p>
+
+<p>最小的标识号可以从 1 开始，最大到 2^29 - 1, or 536,870,911。不可以使用其中的 [19000－19999]（ (从 FieldDescriptor::kFirstReservedNumber 到 FieldDescriptor::kLastReservedNumber)）的标识号， Protobuf 协议实现中对这些进行了预留。如果非要在. proto 文件中使用这些预留标识号，编译时就会报警。同样你也不能使用早期<a href="https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#reserved">保留</a>的标识号。</p>
+
+<h2 id="指定字段规则">指定字段规则</h2>
+
+<p>所指定的消息字段修饰符必须是如下之一：</p>
+
+<ul>
+<li>singular：一个格式良好的消息应该有 0 个或者 1 个这种字段（但是不能超过 1 个）。</li>
+
+<li><p>repeated：在一个格式良好的消息中，这种字段可以重复任意多次（包括 0 次）。重复的值的顺序会被保留。</p>
+
+<p>在 proto3 中，repeated 的标量域默认情况虾使用 packed。</p>
+
+<p>你可以了解更多的 pakced 属性在 <a href="https://developers.google.com/protocol-buffers/docs/encoding?hl=zh-cn#packed">Protocol Buffer 编码</a></p></li>
+</ul>
+
+<h2 id="添加更多消息类型">添加更多消息类型</h2>
+
+<p>在一个. proto 文件中可以定义多个消息类型。在定义多个相关的消息的时候，这一点特别有用——例如，如果想定义与 SearchResponse 消息类型对应的回复消息格式的话，你可以将它添加到相同的. proto 文件中，如：</p>
+
+<pre><code class="language-protobuf">message SearchRequest {
+  string query = 1;
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+}
+
+message SearchResponse {
+ ...
+}
+</code></pre>
+
+<h2 id="添加注释">添加注释</h2>
+
+<p>向. proto 文件添加注释，可以使用 C/C++/java 风格的双斜杠（//） 语法格式，如：</p>
+
+<pre><code class="language-protobuf">message SearchRequest {
+  string query = 1;
+  int32 page_number = 2;  // Which page number do we want?
+  int32 result_per_page = 3;  // Number of results to return per page.
+}
+</code></pre>
+
+<h2 id="保留标识符-reserved">保留标识符（Reserved）</h2>
+
+<p>如果你通过删除或者注释所有域，以后的用户可以重用标识号当你重新更新类型的时候。如果你使用旧版本加载相同的. proto 文件这会导致严重的问题，包括数据损坏、隐私错误等等。现在有一种确保不会发生这种情况的方法就是指定保留标识符（and/or names, which can also cause issues for JSON serialization 不明白什么意思），protocol buffer 的编译器会警告未来尝试使用这些域标识符的用户。</p>
+
+<pre><code class="language-protobuf">message Foo {
+  reserved 2, 15, 9 to 11;
+  reserved &quot;foo&quot;, &quot;bar&quot;;
+}
+</code></pre>
+
+<p>注：不要在同一行 reserved 声明中同时声明域名字和标识号</p>
+
+<h2 id="从-proto-文件生成了什么">从. proto 文件生成了什么？</h2>
+
+<p>当用 protocol buffer 编译器来运行. proto 文件时，编译器将生成所选择语言的代码，这些代码可以操作在. proto 文件中定义的消息类型，包括获取、设置字段值，将消息序列化到一个输出流中，以及从一个输入流中解析消息。</p>
+
+<ul>
+<li>对 C++ 来说，编译器会为每个. proto 文件生成一个. h 文件和一个. cc 文件，.proto 文件中的每一个消息有一个对应的类。</li>
+<li>对 Java 来说，编译器为每一个消息类型生成了一个. java 文件，以及一个特殊的 Builder 类（该类是用来创建消息类接口的）。</li>
+<li>对 Python 来说，有点不太一样——Python 编译器为. proto 文件中的每个消息类型生成一个含有静态描述符的模块，，该模块与一个元类（metaclass）在运行时（runtime）被用来创建所需的 Python 数据访问类。</li>
+<li>对 go 来说，编译器会位每个消息类型生成了一个. pd.go 文件。</li>
+<li>对于 Ruby 来说，编译器会为每个消息类型生成了一个. rb 文件。</li>
+<li>javaNano 来说，编译器输出类似域 java 但是没有 Builder 类</li>
+<li>对于 Objective-C 来说，编译器会为每个消息类型生成了一个 pbobjc.h 文件和 pbobjcm 文件，.proto 文件中的每一个消息有一个对应的类。</li>
+<li>对于 C# 来说，编译器会为每个消息类型生成了一个. cs 文件，.proto 文件中的每一个消息有一个对应的类。</li>
+</ul>
+
+<p>你可以从如下的文档链接中获取每种语言更多 API(proto3 版本的内容很快就公布)。<a href="https://developers.google.com/protocol-buffers/docs/reference/overview?hl=zh-cn">API Reference</a></p>
+
+<h1 id="标量数值类型">标量数值类型</h1>
+
+<p>一个标量消息字段可以含有一个如下的类型——该表格展示了定义于. proto 文件中的类型，以及与之对应的、在自动生成的访问类中定义的类型：</p>
+
+<table>
+<thead>
+<tr>
+<th>.proto Type</th>
+<th align="center">Notes</th>
+<th align="right">C++ Type</th>
+<th>Java Type</th>
+<th>Python Type[2]</th>
+<th>Go Type</th>
+<th>Ruby Type</th>
+<th>C# Type</th>
+<th>PHP Type</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>double</td>
+<td align="center"></td>
+<td align="right">double</td>
+<td>double</td>
+<td>float</td>
+<td>float64</td>
+<td>Float</td>
+<td>double</td>
+<td>float</td>
+</tr>
+
+<tr>
+<td>float</td>
+<td align="center"></td>
+<td align="right">float</td>
+<td>float</td>
+<td>float</td>
+<td>float32</td>
+<td>Float</td>
+<td>float</td>
+<td>float</td>
+</tr>
+
+<tr>
+<td>int32</td>
+<td align="center">使用变长编码，对于负值的效率很低，如果你的域有可能有负值，请使用 sint64 替代</td>
+<td align="right">int32</td>
+<td>int</td>
+<td>int</td>
+<td>int32</td>
+<td>Fixnum 或者 Bignum（根据需要）</td>
+<td>int</td>
+<td>integer</td>
+</tr>
+
+<tr>
+<td>uint32</td>
+<td align="center">使用变长编码</td>
+<td align="right">uint32</td>
+<td>int</td>
+<td>int/long</td>
+<td>uint32</td>
+<td>Fixnum 或者 Bignum（根据需要）</td>
+<td>uint</td>
+<td>integer</td>
+</tr>
+
+<tr>
+<td>uint64</td>
+<td align="center">使用变长编码</td>
+<td align="right">uint64</td>
+<td>long</td>
+<td>int/long</td>
+<td>uint64</td>
+<td>Bignum</td>
+<td>ulong</td>
+<td>integer/string</td>
+</tr>
+
+<tr>
+<td>sint32</td>
+<td align="center">使用变长编码，这些编码在负值时比 int32 高效的多</td>
+<td align="right">int32</td>
+<td>int</td>
+<td>int</td>
+<td>int32</td>
+<td>Fixnum 或者 Bignum（根据需要）</td>
+<td>int</td>
+<td>integer</td>
+</tr>
+
+<tr>
+<td>sint64</td>
+<td align="center">使用变长编码，有符号的整型值。编码时比通常的 int64 高效。</td>
+<td align="right">int64</td>
+<td>long</td>
+<td>int/long</td>
+<td>int64</td>
+<td>Bignum</td>
+<td>long</td>
+<td>integer/string</td>
+</tr>
+
+<tr>
+<td>fixed32</td>
+<td align="center">总是 4 个字节，如果数值总是比总是比 228 大的话，这个类型会比 uint32 高效。</td>
+<td align="right">uint32</td>
+<td>int</td>
+<td>int</td>
+<td>uint32</td>
+<td>Fixnum 或者 Bignum（根据需要）</td>
+<td>uint</td>
+<td>integer</td>
+</tr>
+
+<tr>
+<td>fixed64</td>
+<td align="center">总是 8 个字节，如果数值总是比总是比 256 大的话，这个类型会比 uint64 高效。</td>
+<td align="right">uint64</td>
+<td>long</td>
+<td>int/long</td>
+<td>uint64</td>
+<td>Bignum</td>
+<td>ulong</td>
+<td>integer/string</td>
+</tr>
+
+<tr>
+<td>sfixed32</td>
+<td align="center">总是 4 个字节</td>
+<td align="right">int32</td>
+<td>int</td>
+<td>int</td>
+<td>int32</td>
+<td>Fixnum 或者 Bignum（根据需要）</td>
+<td>int</td>
+<td>integer</td>
+</tr>
+
+<tr>
+<td>sfixed64</td>
+<td align="center">总是 8 个字节</td>
+<td align="right">int64</td>
+<td>long</td>
+<td>int/long</td>
+<td>int64</td>
+<td>Bignum</td>
+<td>long</td>
+<td>integer/string</td>
+</tr>
+
+<tr>
+<td>bool</td>
+<td align="center"></td>
+<td align="right">bool</td>
+<td>boolean</td>
+<td>bool</td>
+<td>bool</td>
+<td>TrueClass/FalseClass</td>
+<td>bool</td>
+<td>boolean</td>
+</tr>
+
+<tr>
+<td>string</td>
+<td align="center">一个字符串必须是 UTF-8 编码或者 7-bit ASCII 编码的文本。</td>
+<td align="right">string</td>
+<td>String</td>
+<td>str/unicode</td>
+<td>string</td>
+<td>String (UTF-8)</td>
+<td>string</td>
+<td>string</td>
+</tr>
+
+<tr>
+<td>bytes</td>
+<td align="center">可能包含任意顺序的字节数据。</td>
+<td align="right">string</td>
+<td>ByteString</td>
+<td>str</td>
+<td>[]byte</td>
+<td>String (ASCII-8BIT)</td>
+<td>ByteString</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+
+<p>你可以在文章 <a href="https://developers.google.com/protocol-buffers/docs/encoding?hl=zh-cn">Protocol Buffer 编码</a>中，找到更多 “序列化消息时各种类型如何编码” 的信息。</p>
+
+<ol>
+<li>在 java 中，无符号 32 位和 64 位整型被表示成他们的整型对应形似，最高位被储存在标志位中。</li>
+<li>对于所有的情况，设定值会执行类型检查以确保此值是有效。</li>
+<li>64 位或者无符号 32 位整型在解码时被表示成为 ilong，但是在设置时可以使用 int 型值设定，在所有的情况下，值必须符合其设置其类型的要求。</li>
+<li>python 中 string 被表示成在解码时表示成 unicode。但是一个 ASCIIstring 可以被表示成 str 类型。</li>
+<li>Integer 在 64 位的机器上使用，string 在 32 位机器上使用</li>
+</ol>
+
+<h1 id="默认值">默认值</h1>
+
+<p>当一个消息被解析的时候，如果被编码的信息不包含一个特定的 singular 元素，被解析的对象锁对应的域被设置位一个默认值，对于不同类型指定如下：</p>
+
+<ul>
+<li>对于 strings，默认是一个空 string</li>
+<li>对于 bytes，默认是一个空的 bytes</li>
+<li>对于 bools，默认是 false</li>
+<li>对于数值类型，默认是 0</li>
+<li>对于枚举，默认是第一个定义的枚举值，必须为 0;</li>
+
+<li><p>对于消息类型（message），域没有被设置，确切的消息是根据语言确定的，详见 <a href="https://developers.google.com/protocol-buffers/docs/reference/overview?hl=zh-cn">generated code guide</a></p>
+
+<p>对于可重复域的默认值是空（通常情况下是对应语言中空列表）。</p>
+
+<p>注：对于标量消息域，一旦消息被解析，就无法判断域释放被设置为默认值（例如，例如 boolean 值是否被设置为 false）还是根本没有被设置。你应该在定义你的消息类型时非常注意。例如，比如你不应该定义 boolean 的默认值 false 作为任何行为的触发方式。也应该注意如果一个标量消息域被设置为标志位，这个值不应该被序列化传输。</p>
+
+<p>查看 <a href="https://developers.google.com/protocol-buffers/docs/reference/overview?hl=zh-cn">generated code guide</a> 选择你的语言的默认值的工作细节。</p></li>
+</ul>
+
+<h1 id="枚举">枚举</h1>
+
+<p>当需要定义一个消息类型的时候，可能想为一个字段指定某 “预定义值序列” 中的一个值。例如，假设要为每一个 SearchRequest 消息添加一个 corpus 字段，而 corpus 的值可能是 UNIVERSAL，WEB，IMAGES，LOCAL，NEWS，PRODUCTS 或 VIDEO 中的一个。 其实可以很容易地实现这一点：通过向消息定义中添加一个枚举（enum）并且为每个可能的值定义一个常量就可以了。</p>
+
+<p>在下面的例子中，在消息格式中添加了一个叫做 Corpus 的枚举类型——它含有所有可能的值 ——以及一个类型为 Corpus 的字段：</p>
+
+<pre><code class="language-protobuf">message SearchRequest {
+  string query = 1;
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+  enum Corpus {
+    UNIVERSAL = 0;
+    WEB = 1;
+    IMAGES = 2;
+    LOCAL = 3;
+    NEWS = 4;
+    PRODUCTS = 5;
+    VIDEO = 6;
+  }
+  Corpus corpus = 4;
+}
+</code></pre>
+
+<p>如你所见，Corpus 枚举的第一个常量映射为 0：每个枚举类型必须将其第一个类型映射为 0，这是因为：</p>
+
+<ul>
+<li>必须有有一个 0 值，我们可以用这个 0 值作为默认值。</li>
+
+<li><p>这个零值必须为第一个元素，为了兼容 proto2 语义，枚举类的第一个值总是默认值。</p>
+
+<p>你可以通过将不同的枚举常量指定位相同的值。如果这样做你需要将 allow_alias 设定位 true，否则编译器会在别名的地方产生一个错误信息。</p>
+
+<pre><code class="language-protobuf">enum EnumAllowingAlias {
+option allow_alias = true;
+UNKNOWN = 0;
+STARTED = 1;
+RUNNING = 1;
+}
+enum EnumNotAllowingAlias {
+UNKNOWN = 0;
+STARTED = 1;
+// RUNNING = 1;  // Uncommenting this line will cause a compile error inside Google and a warning message outside.
+}
+</code></pre></li>
+</ul>
+
+<p>枚举常量必须在 32 位整型值的范围内。因为 enum 值是使用可变编码方式的，对负数不够高效，因此不推荐在 enum 中使用负数。如上例所示，可以在 一个消息定义的内部或外部定义枚举——这些枚举可以在. proto 文件中的任何消息定义里重用。当然也可以在一个消息中声明一个枚举类型，而在另一个不同 的消息中使用它——采用 MessageType.EnumType 的语法格式。</p>
+
+<p>当对一个使用了枚举的. proto 文件运行 protocol buffer 编译器的时候，生成的代码中将有一个对应的 enum（对 Java 或 C++ 来说），或者一个特殊的 EnumDescriptor 类（对 Python 来说），它被用来在运行时生成的类中创建一系列的整型值符号常量（symbolic constants）。</p>
+
+<p>在反序列化的过程中，无法识别的枚举值会被保存在消息中，虽然这种表示方式需要依据所使用语言而定。在那些支持开放枚举类型超出指定范围之外的语言中（例如 C++ 和 Go），为识别的值会被表示成所支持的整型。在使用封闭枚举类型的语言中（Java），使用枚举中的一个类型来表示未识别的值，并且可以使用所支持整型来访问。在其他情况下，如果解析的消息被序列号，未识别的值将保持原样。</p>
+
+<p>关于如何在你的应用程序的消息中使用枚举的更多信息，请查看所选择的语言 <a href="http://code.google.com/intl/zh-CN/apis/protocolbuffers/docs/reference/overview.html%E3%80%82">generated code guide</a></p>
+
+<h1 id="使用其他消息类型">使用其他消息类型</h1>
+
+<p>你可以将其他消息类型用作字段类型。例如，假设在每一个 SearchResponse 消息中包含 Result 消息，此时可以在相同的. proto 文件中定义一个 Result 消息类型，然后在 SearchResponse 消息中指定一个 Result 类型的字段，如：</p>
+
+<pre><code class="language-protobuf">message SearchResponse {
+  repeated Result results = 1;
+}
+
+message Result {
+  string url = 1;
+  string title = 2;
+  repeated string snippets = 3;
+}
+</code></pre>
+
+<h2 id="导入定义">导入定义</h2>
+
+<p>在上面的例子中，Result 消息类型与 SearchResponse 是定义在同一文件中的。如果想要使用的消息类型已经在其他. proto 文件中已经定义过了呢？
+你可以通过导入（importing）其他. proto 文件中的定义来使用它们。要导入其他. proto 文件的定义，你需要在你的文件中添加一个导入声明，如：</p>
+
+<pre><code class="language-protobuf">import &quot;myproject/other_protos.proto&quot;;
+</code></pre>
+
+<p>默认情况下你只能使用直接导入的. proto 文件中的定义. 然而， 有时候你需要移动一个. proto 文件到一个新的位置， 可以不直接移动. proto 文件， 只需放入一个伪 .proto 文件在老的位置， 然后使用 import public 转向新的位置。import public 依赖性会通过任意导入包含 import public 声明的 proto 文件传递。例如：</p>
+
+<pre><code class="language-protobuf">// 这是新的proto
+// All definitions are moved here
+</code></pre>
+
+<pre><code class="language-protobuf">// 这是久的proto
+// 这是所有客户端正在导入的包
+import public &quot;new.proto&quot;;
+import &quot;other.proto&quot;;
+</code></pre>
+
+<pre><code class="language-protobuf">// 客户端proto
+import &quot;old.proto&quot;;
+// 现在你可以使用新久两种包的proto定义了。
+</code></pre>
+
+<p>通过在编译器命令行参数中使用<code>-I/--proto_path</code>protocal 编译器会在指定目录搜索要导入的文件。如果没有给出标志，编译器会搜索编译命令被调用的目录。通常你只要指定 proto_path 标志为你的工程根目录就好。并且指定好导入的正确名称就好。</p>
+
+<h2 id="使用-proto2-消息类型">使用 proto2 消息类型</h2>
+
+<p>在你的 proto3 消息中导入 proto2 的消息类型也是可以的，反之亦然，然后 proto2 枚举不可以直接在 proto3 的标识符中使用（如果仅仅在 proto2 消息中使用是可以的）。</p>
+
+<h2 id="嵌套类型">嵌套类型</h2>
+
+<p>你可以在其他消息类型中定义、使用消息类型，在下面的例子中，Result 消息就定义在 SearchResponse 消息内，如：</p>
+
+<pre><code class="language-protobuf">message SearchResponse {
+  message Result {
+    string url = 1;
+    string title = 2;
+    repeated string snippets = 3;
+  }
+  repeated Result results = 1;
+}
+</code></pre>
+
+<p>如果你想在它的父消息类型的外部重用这个消息类型，你需要以 Parent.Type 的形式使用它，如：</p>
+
+<pre><code class="language-protobuf">message SomeOtherMessage {
+  SearchResponse.Result result = 1;
+}
+</code></pre>
+
+<p>当然，你也可以将消息嵌套任意多层，如：</p>
+
+<pre><code class="language-protobuf">message Outer {                  // Level 0
+  message MiddleAA {  // Level 1
+    message Inner {   // Level 2
+      int64 ival = 1;
+      bool  booly = 2;
+    }
+  }
+  message MiddleBB {  // Level 1
+    message Inner {   // Level 2
+      int32 ival = 1;
+      bool  booly = 2;
+    }
+  }
+}
+</code></pre>
+
+<h2 id="更新一个消息类型">更新一个消息类型</h2>
+
+<p>如果一个已有的消息格式已无法满足新的需求——如，要在消息中添加一个额外的字段——但是同时旧版本写的代码仍然可用。不用担心！更新消息而不破坏已有代码是非常简单的。在更新时只要记住以下的规则即可。</p>
+
+<ul>
+<li>不要更改任何已有的字段的数值标识。</li>
+<li>如果你增加新的字段，使用旧格式的字段仍然可以被你新产生的代码所解析。你应该记住这些元素的默认值这样你的新代码就可以以适当的方式和旧代码产生的数据交互。相似的，通过新代码产生的消息也可以被旧代码解析：只不过新的字段会被忽视掉。注意，未被识别的字段会在反序列化的过程中丢弃掉，所以如果消息再被传递给新的代码，新的字段依然是不可用的（这和 proto2 中的行为是不同的，在 proto2 中未定义的域依然会随着消息被序列化）</li>
+<li>非 required 的字段可以移除——只要它们的标识号在新的消息类型中不再使用（更好的做法可能是重命名那个字段，例如在字段前添加 “OBSOLETE_” 前缀，那样的话，使用的. proto 文件的用户将来就不会无意中重新使用了那些不该使用的标识号）。</li>
+<li>int32, uint32, int64, uint64, 和 bool 是全部兼容的，这意味着可以将这些类型中的一个转换为另外一个，而不会破坏向前、 向后的兼容性。如果解析出来的数字与对应的类型不相符，那么结果就像在 C++ 中对它进行了强制类型转换一样（例如，如果把一个 64 位数字当作 int32 来 读取，那么它就会被截断为 32 位的数字）。</li>
+<li>sint32 和 sint64 是互相兼容的，但是它们与其他整数类型不兼容。</li>
+<li>string 和 bytes 是兼容的——只要 bytes 是有效的 UTF-8 编码。</li>
+<li>嵌套消息与 bytes 是兼容的——只要 bytes 包含该消息的一个编码过的版本。</li>
+<li>fixed32 与 sfixed32 是兼容的，fixed64 与 sfixed64 是兼容的。</li>
+<li>枚举类型与 int32，uint32，int64 和 uint64 相兼容（注意如果值不相兼容则会被截断），然而在客户端反序列化之后他们可能会有不同的处理方式，例如，未识别的 proto3 枚举类型会被保留在消息中，但是他的表示方式会依照语言而定。int 类型的字段总会保留他们的</li>
+</ul>
+
+<h1 id="any">Any</h1>
+
+<p>Any 类型消息允许你在没有指定他们的. proto 定义的情况下使用消息作为一个嵌套类型。一个 Any 类型包括一个可以被序列化 bytes 类型的任意消息，以及一个 URL 作为一个全局标识符和解析消息类型。为了使用 Any 类型，你需要导入<code>import google/protobuf/any.proto</code></p>
+
+<pre><code class="language-protobuf">import &quot;google/protobuf/any.proto&quot;;
+
+message ErrorStatus {
+  string message = 1;
+  repeated google.protobuf.Any details = 2;
+}
+</code></pre>
+
+<p>对于给定的消息类型的默认类型 URL 是<code>type.googleapis.com/packagename.messagename</code>。</p>
+
+<p>不同语言的实现会支持动态库以线程安全的方式去帮助封装或者解封装 Any 值。例如在 java 中，Any 类型会有特殊的<code>pack()</code>和<code>unpack()</code>访问器，在 C++ 中会有<code>PackFrom()</code>和<code>UnpackTo()</code>方法。</p>
+
+<pre><code class="language-protobuf">// Storing an arbitrary message type in Any.
+NetworkErrorDetails details = ...;
+ErrorStatus status;
+status.add_details()-&gt;PackFrom(details);
+
+// Reading an arbitrary message from Any.
+ErrorStatus status = ...;
+for (const Any&amp; detail : status.details()) {
+  if (detail.Is&lt;NetworkErrorDetails&gt;()) {
+    NetworkErrorDetails network_error;
+    detail.UnpackTo(&amp;network_error);
+    ... processing network_error ...
+  }
+}
+</code></pre>
+
+<p><strong>目前，用于 Any 类型的动态库仍在开发之中</strong>
+如果你已经很熟悉 <a href="https://developers.google.com/protocol-buffers/docs/proto?hl=zh-cn">proto2 语法</a>，使用 Any 替换<a href="https://developers.google.com/protocol-buffers/docs/proto?hl=zh-cn#extensions">拓展</a></p>
+
+<h1 id="oneof">Oneof</h1>
+
+<p>如果你的消息中有很多可选字段， 并且同时至多一个字段会被设置， 你可以加强这个行为，使用 oneof 特性节省内存.</p>
+
+<p>Oneof 字段就像可选字段， 除了它们会共享内存， 至多一个字段会被设置。 设置其中一个字段会清除其它字段。 你可以使用<code>case()</code>或者<code>WhichOneof()</code> 方法检查哪个 oneof 字段被设置， 看你使用什么语言了.</p>
+
+<h2 id="使用-oneof">使用 Oneof</h2>
+
+<p>为了在. proto 定义 Oneof 字段， 你需要在名字前面加上 oneof 关键字, 比如下面例子的 test_oneof:</p>
+
+<pre><code class="language-protobuf">message SampleMessage {
+  oneof test_oneof {
+    string name = 4;
+    SubMessage sub_message = 9;
+  }
+}
+</code></pre>
+
+<p>然后你可以增加 oneof 字段到 oneof 定义中. 你可以增加任意类型的字段, 但是不能使用 repeated 关键字.</p>
+
+<p>在产生的代码中, oneof 字段拥有同样的 getters 和 setters， 就像正常的可选字段一样. 也有一个特殊的方法来检查到底那个字段被设置. 你可以在相应的语言 <a href="https://developers.google.com/protocol-buffers/docs/reference/overview?hl=zh-cn">API 指南</a>中找到 oneof API 介绍.</p>
+
+<h2 id="oneof-特性">Oneof 特性</h2>
+
+<ul>
+<li><p>设置 oneof 会自动清楚其它 oneof 字段的值. 所以设置多次后，只有最后一次设置的字段有值.</p>
+
+<pre><code class="language-protobuf">SampleMessage message;
+message.set_name(&quot;name&quot;);
+CHECK(message.has_name());
+message.mutable_sub_message();   // Will clear name field.
+CHECK(!message.has_name());
+</code></pre></li>
+
+<li><p>如果解析器遇到同一个 oneof 中有多个成员，只有最会一个会被解析成消息。</p></li>
+
+<li><p>oneof 不支持<code>repeated</code>.</p></li>
+
+<li><p>反射 API 对 oneof 字段有效.</p></li>
+
+<li><p>如果使用 C++, 需确保代码不会导致内存泄漏. 下面的代码会崩溃， 因为<code>sub_message</code> 已经通过<code>set_name()</code>删除了</p>
+
+<pre><code class="language-protobuf">SampleMessage message;
+SubMessage* sub_message = message.mutable_sub_message();
+message.set_name(&quot;name&quot;);      // Will delete sub_message
+sub_message-&gt;set_...            // Crashes here
+</code></pre></li>
+
+<li><p>在 C++ 中，如果你使用<code>Swap()</code>两个 oneof 消息，每个消息，两个消息将拥有对方的值，例如在下面的例子中，<code>msg1</code>会拥有<code>sub_message</code>并且<code>msg2</code>会有<code>name</code>。</p>
+
+<pre><code class="language-protobuf">SampleMessage msg1;
+msg1.set_name(&quot;name&quot;);
+SampleMessage msg2;
+msg2.mutable_sub_message();
+msg1.swap(&amp;msg2);
+CHECK(msg1.has_sub_message());
+CHECK(msg2.has_name());
+</code></pre></li>
+</ul>
+
+<h2 id="向后兼容性问题">向后兼容性问题</h2>
+
+<p>当增加或者删除 oneof 字段时一定要小心. 如果检查 oneof 的值返回<code>None/NOT_SET</code>, 它意味着 oneof 字段没有被赋值或者在一个不同的版本中赋值了。 你不会知道是哪种情况，因为没有办法判断如果未识别的字段是一个 oneof 字段。</p>
+
+<p>Tage 重用问题：</p>
+
+<ul>
+<li>将字段移入或移除 oneof：在消息被序列号或者解析后，你也许会失去一些信息（有些字段也许会被清除）</li>
+<li>删除一个字段或者加入一个字段：在消息被序列号或者解析后，这也许会清除你现在设置的 oneof 字段</li>
+<li>分离或者融合 oneof：行为与移动常规字段相似。</li>
+</ul>
+
+<h1 id="map-映射">Map（映射）</h1>
+
+<p>如果你希望创建一个关联映射，protocol buffer 提供了一种快捷的语法：</p>
+
+<pre><code class="language-protobuf">map&lt;key_type, value_type&gt; map_field = N;
+</code></pre>
+
+<p>其中<code>key_type</code>可以是任意 Integer 或者 string 类型（所以，除了 floating 和 bytes 的任意标量类型都是可以的）<code>value_type</code>可以是任意类型。</p>
+
+<p>例如，如果你希望创建一个 project 的映射，每个<code>Projecct</code>使用一个 string 作为 key，你可以像下面这样定义：</p>
+
+<pre><code class="language-protobuf">map&lt;string, Project&gt; projects = 3;
+</code></pre>
+
+<ul>
+<li>Map 的字段可以是 repeated。</li>
+<li>序列化后的顺序和 map 迭代器的顺序是不确定的，所以你不要期望以固定顺序处理 Map</li>
+<li>当为. proto 文件产生生成文本格式的时候，map 会按照 key 的顺序排序，数值化的 key 会按照数值排序。</li>
+<li>从序列化中解析或者融合时，如果有重复的 key 则后一个 key 不会被使用，当从文本格式中解析 map 时，如果存在重复的 key。</li>
+</ul>
+
+<p>生成 map 的 API 现在对于所有 proto3 支持的语言都可用了，你可以从 <a href="https://developers.google.com/protocol-buffers/docs/reference/overview?hl=zh-cn">API 指南</a>找到更多信息。</p>
+
+<h2 id="向后兼容性问题-1">向后兼容性问题</h2>
+
+<p>map 语法序列化后等同于如下内容，因此即使是不支持 map 语法的 protocol buffer 实现也是可以处理你的数据的：</p>
+
+<pre><code class="language-protobuf">message MapFieldEntry {
+  key_type key = 1;
+  value_type value = 2;
+}
+
+repeated MapFieldEntry map_field = N;
+</code></pre>
+
+<h1 id="包">包</h1>
+
+<p>当然可以为. proto 文件新增一个可选的 package 声明符，用来防止不同的消息类型有命名冲突。如：</p>
+
+<pre><code class="language-protobuf">package foo.bar;
+message Open { ... }
+</code></pre>
+
+<p>在其他的消息格式定义中可以使用包名 + 消息名的方式来定义域的类型，如：</p>
+
+<pre><code class="language-protobuf">message Foo {
+  ...
+  required foo.bar.Open open = 1;
+  ...
+}
+</code></pre>
+
+<p>包的声明符会根据使用语言的不同影响生成的代码。</p>
+
+<ul>
+<li>对于 C++，产生的类会被包装在 C++ 的命名空间中，如上例中的<code>Open</code>会被封装在 <code>foo::bar</code>空间中； - 对于 Java，包声明符会变为 java 的一个包，除非在. proto 文件中提供了一个明确有<code>java_package</code>；</li>
+<li>对于 Python，这个包声明符是被忽略的，因为 Python 模块是按照其在文件系统中的位置进行组织的。</li>
+<li>对于 Go，包可以被用做 Go 包名称，除非你显式的提供一个<code>option go_package</code>在你的. proto 文件中。</li>
+<li>对于 Ruby，生成的类可以被包装在内置的 Ruby 名称空间中，转换成 Ruby 所需的大小写样式 （首字母大写；如果第一个符号不是一个字母，则使用 PB_前缀），例如<code>Open</code>会在<code>Foo::Bar</code>名称空间中。</li>
+<li>对于 javaNano 包会使用 Java 包，除非你在你的文件中显式的提供一个<code>option java_package</code>。</li>
+<li>对于 C# 包可以转换为<code>PascalCase</code>后作为名称空间，除非你在你的文件中显式的提供一个<code>option csharp_namespace</code>，例如，<code>Open</code>会在<code>Foo.Bar</code>名称空间中</li>
+</ul>
+
+<h2 id="包及名称的解析">包及名称的解析</h2>
+
+<p>Protocol buffer 语言中类型名称的解析与 C++ 是一致的：首先从最内部开始查找，依次向外进行，每个包会被看作是其父类包的内部类。当然对于 （<code>foo.bar.Baz</code>）这样以 “.” 分隔的意味着是从最外围开始的。</p>
+
+<p>ProtocolBuffer 编译器会解析. proto 文件中定义的所有类型名。 对于不同语言的代码生成器会知道如何来指向每个具体的类型，即使它们使用了不同的规则。</p>
+
+<h1 id="定义服务-service">定义服务 (Service)</h1>
+
+<p>如果想要将消息类型用在 RPC(远程方法调用) 系统中，可以在. proto 文件中定义一个 RPC 服务接口，protocol buffer 编译器将会根据所选择的不同语言生成服务接口代码及存根。如，想要定义一个 RPC 服务并具有一个方法，该方法能够接收 SearchRequest 并返回一个 SearchResponse，此时可以在. proto 文件中进行如下定义：</p>
+
+<pre><code class="language-protobuf">service SearchService {
+  rpc Search (SearchRequest) returns (SearchResponse);
+}
+</code></pre>
+
+<p>最直观的使用 protocol buffer 的 RPC 系统是 <a href="https://github.com/grpc/grpc-experiments">gRPC</a> 一个由谷歌开发的语言和平台中的开源的 PRC 系统，gRPC 在使用 protocl buffer 时非常有效，如果使用特殊的 protocol buffer 插件可以直接为您从. proto 文件中产生相关的 RPC 代码。</p>
+
+<p>如果你不想使用 gRPC，也可以使用 protocol buffer 用于自己的 RPC 实现，你可以从 <a href="https://developers.google.com/protocol-buffers/docs/proto?hl=zh-cn#services">proto2 语言指南中找到更多信息</a></p>
+
+<p>还有一些第三方开发的 PRC 实现使用 Protocol Buffer。参考<a href="https://github.com/google/protobuf/blob/master/docs/third_party.md">第三方插件 wiki</a> 查看这些实现的列表。</p>
+
+<h1 id="json-映射">JSON 映射</h1>
+
+<p>Proto3 支持 JSON 的编码规范，使他更容易在不同系统之间共享数据，在下表中逐个描述类型。</p>
+
+<p>如果 JSON 编码的数据丢失或者其本身就是<code>null</code>，这个数据会在解析成 protocol buffer 的时候被表示成默认值。如果一个字段在 protocol buffer 中表示为默认值，体会在转化成 JSON 的时候编码的时候忽略掉以节省空间。具体实现可以提供在 JSON 编码中可选的默认值。</p>
+
+<table>
+<thead>
+<tr>
+<th>proto3</th>
+<th>JSON</th>
+<th>JSON 示例</th>
+<th>注意</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>message</td>
+<td>object</td>
+<td>{“fBar”: v, “g”: null, …}</td>
+<td>产生 JSON 对象，消息字段名可以被映射成 lowerCamelCase 形式，并且成为 JSON 对象键，null 被接受并成为对应字段的默认值</td>
+</tr>
+
+<tr>
+<td>enum</td>
+<td>string</td>
+<td>“FOO_BAR”</td>
+<td>枚举值的名字在 proto 文件中被指定</td>
+</tr>
+
+<tr>
+<td>map</td>
+<td>object</td>
+<td>{“k”: v, …}</td>
+<td>所有的键都被转换成 string</td>
+</tr>
+
+<tr>
+<td>repeated V</td>
+<td>array</td>
+<td>[v, …]</td>
+<td>null 被视为空列表</td>
+</tr>
+
+<tr>
+<td>bool</td>
+<td>true, false</td>
+<td>true, false</td>
+<td></td>
+</tr>
+
+<tr>
+<td>string</td>
+<td>string</td>
+<td>“Hello World!”</td>
+<td></td>
+</tr>
+
+<tr>
+<td>bytes</td>
+<td>base64 string</td>
+<td>“YWJjMTIzIT8kKiYoKSctPUB+”</td>
+<td></td>
+</tr>
+
+<tr>
+<td>int32, fixed32, uint32</td>
+<td>number</td>
+<td>1, -10, 0</td>
+<td>JSON 值会是一个十进制数，数值型或者 string 类型都会接受</td>
+</tr>
+
+<tr>
+<td>int64, fixed64, uint64</td>
+<td>string</td>
+<td>“1”, “-10”</td>
+<td>JSON 值会是一个十进制数，数值型或者 string 类型都会接受</td>
+</tr>
+
+<tr>
+<td>float, double</td>
+<td>number</td>
+<td>1.1, -10.0, 0, “NaN”, “Infinity”</td>
+<td>JSON 值会是一个数字或者一个指定的字符串如”NaN”,”infinity” 或者”-Infinity”，数值型或者字符串都是可接受的，指数符号也可以接受</td>
+</tr>
+
+<tr>
+<td>Any</td>
+<td>object</td>
+<td>{“@type”: “url”, “f”: v, … }</td>
+<td>如果一个 Any 保留一个特上述的 JSON 映射，则它会转换成一个如下形式：<code>{&quot;@type&quot;: xxx, &quot;value&quot;: yyy}</code>否则，该值会被转换成一个 JSON 对象，<code>@type</code>字段会被插入所指定的确定的值</td>
+</tr>
+
+<tr>
+<td>Timestamp</td>
+<td>string</td>
+<td>“1972-01-01T10:00:20.021Z”</td>
+<td>使用 RFC 339，其中生成的输出将始终是 Z - 归一化啊的，并且使用 0，3，6 或者 9 位小数</td>
+</tr>
+
+<tr>
+<td>Duration</td>
+<td>string</td>
+<td>“1.000340012s”, “1s”</td>
+<td>生成的输出总是 0，3，6 或者 9 位小数，具体依赖于所需要的精度，接受所有可以转换为纳秒级的精度</td>
+</tr>
+
+<tr>
+<td>Struct</td>
+<td>object</td>
+<td>{…}</td>
+<td>任意的 JSON 对象，见 struct.proto</td>
+</tr>
+
+<tr>
+<td>Wrapper types</td>
+<td>various types</td>
+<td>2, “2”, “foo”, true, “true”, null, 0, …</td>
+<td>包装器在 JSON 中的表示方式类似于基本类型，但是允许 nulll，并且在转换的过程中保留 null</td>
+</tr>
+
+<tr>
+<td>FieldMask</td>
+<td>string</td>
+<td>“f.fooBar,h”</td>
+<td>见 fieldmask.proto</td>
+</tr>
+
+<tr>
+<td>ListValue</td>
+<td>array</td>
+<td>[foo, bar, …]</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Value</td>
+<td>value</td>
+<td></td>
+<td>任意 JSON 值</td>
+</tr>
+
+<tr>
+<td>NullValue</td>
+<td>null</td>
+<td></td>
+<td>JSON null</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id="选项">选项</h1>
+
+<p>在定义. proto 文件时能够标注一系列的 options。Options 并不改变整个文件声明的含义，但却能够影响特定环境下处理方式。完整的可用选项可以在 google/protobuf/descriptor.proto 找到。</p>
+
+<p>一些选项是文件级别的，意味着它可以作用于最外范围，不包含在任何消息内部、enum 或服务定义中。一些选项是消息级别的，意味着它可以用在消息定义的内部。当然有些选项可以作用在域、enum 类型、enum 值、服务类型及服务方法中。到目前为止，并没有一种有效的选项能作用于所有的类型。</p>
+
+<p>如下就是一些常用的选择：</p>
+
+<ul>
+<li><p><code>java_package</code> (文件选项) : 这个选项表明生成 java 类所在的包。如果在. proto 文件中没有明确的声明 java_package，就采用默认的包名。当然了，默认方式产生的 java 包名并不是最好的方式，按照应用名称倒序方式进行排序的。如果不需要产生 java 代码，则该选项将不起任何作用。如：</p>
+
+<pre><code class="language-protobuf">option java_package = &quot;com.example.foo&quot;;
+</code></pre></li>
+
+<li><p><code>java_outer_classname</code> (文件选项): 该选项表明想要生成 Java 类的名称。如果在. proto 文件中没有明确的 java_outer_classname 定义，生成的 class 名称将会根据. proto 文件的名称采用驼峰式的命名方式进行生成。如（foo_bar.proto 生成的 java 类名为 FooBar.java）, 如果不生成 java 代码，则该选项不起任何作用。如：</p>
+
+<pre><code class="language-protobuf">option java_outer_classname = &quot;Ponycopter&quot;;
+</code></pre></li>
+
+<li><p><code>optimize_for</code>(文件选项): 可以被设置为 SPEED, CODE_SIZE, 或者 LITE_RUNTIME。这些值将通过如下的方式影响 C++ 及 java 代码的生成：</p>
+
+<ul>
+<li><code>SPEED (default)</code>: protocol buffer 编译器将通过在消息类型上执行序列化、语法分析及其他通用的操作。这种代码是最优的。</li>
+<li><code>CODE_SIZE</code>: protocol buffer 编译器将会产生最少量的类，通过共享或基于反射的代码来实现序列化、语法分析及各种其它操作。采用该方式产生的代码将比 SPEED 要少得多， 但是操作要相对慢些。当然实现的类及其对外的 API 与 SPEED 模式都是一样的。这种方式经常用在一些包含大量的. proto 文件而且并不盲目追求速度的 应用中。</li>
+
+<li><p><code>LITE_RUNTIME</code>: protocol buffer 编译器依赖于运行时核心类库来生成代码（即采用 libprotobuf-lite 替代 libprotobuf）。这种核心类库由于忽略了一 些描述符及反射，要比全类库小得多。这种模式经常在移动手机平台应用多一些。编译器采用该模式产生的方法实现与 SPEED 模式不相上下，产生的类通过实现 MessageLite 接口，但它仅仅是 Messager 接口的一个子集。</p>
+
+<pre><code class="language-protobuf">option optimize_for = CODE_SIZE;
+</code></pre></li>
+</ul></li>
+
+<li><p><code>cc_enable_arenas</code>(文件选项): 对于 C++ 产生的代码启用 <a href="https://developers.google.com/protocol-buffers/docs/reference/arenas?hl=zh-cn">arena allocation</a></p></li>
+
+<li><p><code>objc_class_prefix</code>(文件选项): 设置 Objective-C 类的前缀，添加到所有 Objective-C 从此. proto 文件产生的类和枚举类型。没有默认值，所使用的前缀应该是苹果推荐的 3-5 个大写字符，注意 2 个字节的前缀是苹果所保留的。</p></li>
+
+<li><p><code>deprecated</code>(字段选项): 如果设置为<code>true</code>则表示该字段已经被废弃，并且不应该在新的代码中使用。在大多数语言中没有实际的意义。在 java 中，这回变成<code>@Deprecated</code>注释，在未来，其他语言的代码生成器也许会在字标识符中产生废弃注释，废弃注释会在编译器尝试使用该字段时发出警告。如果字段没有被使用你也不希望有新用户使用它，尝试使用保留语句替换字段声明。</p>
+
+<pre><code class="language-protobuf">int32 old_field = 6 [deprecated=true];
+</code></pre></li>
+</ul>
+
+<h2 id="自定义选项">自定义选项</h2>
+
+<p>ProtocolBuffers 允许自定义并使用选项。该功能应该属于一个高级特性，对于大部分人是用不到的。如果你的确希望创建自己的选项，请参看 <a href="https://developers.google.com/protocol-buffers/docs/proto?hl=zh-cn#customoptions">Proto2 Language Guide</a>。注意创建自定义选项使用了拓展，拓展只在 proto3 中可用。</p>
+
+<h1 id="生成访问类">生成访问类</h1>
+
+<p>可以通过定义好的. proto 文件来生成 Java,Python,C++, Ruby, JavaNano, Objective-C, 或者 C# 代码，需要基于. proto 文件运行 protocol buffer 编译器 protoc。如果你没有安装编译器，下载<a href="https://developers.google.com/protocol-buffers/docs/downloads?hl=zh-cn">安装包</a>并遵照 README 安装。对于 Go, 你还需要安装一个特殊的代码生成器插件。你可以通过 GitHub 上的 <a href="https://github.com/golang/protobuf/">protobuf 库</a>找到安装过程</p>
+
+<p>通过如下方式调用 protocol 编译器：</p>
+
+<pre><code class="language-protobuf">protoc --proto_path=IMPORT_PATH --cpp_out=DST_DIR --java_out=DST_DIR --python_out=DST_DIR --go_out=DST_DIR --ruby_out=DST_DIR --javanano_out=DST_DIR --objc_out=DST_DIR --csharp_out=DST_DIR path/to/file.proto
+</code></pre>
+
+<ul>
+<li><code>IMPORT_PATH</code>声明了一个. proto 文件所在的解析 import 具体目录。如果忽略该值，则使用当前目录。如果有多个目录则可以多次调用<code>--proto_path</code>，它们将会顺序的被访问并执行导入。<code>-I=IMPORT_PATH</code>是<code>--proto_path</code>的简化形式。</li>
+
+<li><p>当然也可以提供一个或多个输出路径：</p>
+
+<ul>
+<li><code>--cpp_out</code> 在目标目录 DST_DIR 中产生 C++ 代码，可以在 <a href="https://developers.google.com/protocol-buffers/docs/reference/cpp-generated?hl=zh-cn">C++ 代码生成参考</a>中查看更多。</li>
+<li><code>--java_out</code> 在目标目录 DST_DIR 中产生 Java 代码，可以在 <a href="https://developers.google.com/protocol-buffers/docs/reference/java-generated?hl=zh-cn">Java 代码生成参考</a>中查看更多。</li>
+<li><code>--python_out</code> 在目标目录 DST_DIR 中产生 Python 代码，可以在 <a href="https://developers.google.com/protocol-buffers/docs/reference/python-generated?hl=zh-cn">Python 代码生成参考</a>中查看更多。</li>
+<li><code>--go_out</code> 在目标目录 DST_DIR 中产生 Go 代码，可以在 <a href="https://developers.google.com/protocol-buffers/docs/reference/go-generated?hl=zh-cn">GO 代码生成参考</a>中查看更多。</li>
+<li><code>--ruby_out</code>在目标目录 DST_DIR 中产生 Go 代码，参考正在制作中。</li>
+<li><code>--javanano_out</code>在目标目录 DST_DIR 中生成 JavaNano，JavaNano 代码生成器有一系列的选项用于定制自定义生成器的输出：你可以通过生成器的 <a href="https://github.com/google/protobuf/tree/master/javanano">README</a> 查找更多信息，JavaNano 参考正在制作中。</li>
+<li><code>--objc_out</code>在目标目录 DST_DIR 中产生 Object 代码，可以在 <a href="https://developers.google.com/protocol-buffers/docs/reference/objective-c-generated?hl=zh-cn">Objective-C 代码生成参考</a>中查看更多。</li>
+<li><code>--csharp_out</code>在目标目录 DST_DIR 中产生 Object 代码，可以在 <a href="https://developers.google.com/protocol-buffers/docs/reference/csharp-generated?hl=zh-cn">C# 代码生成参考</a>中查看更多。</li>
+<li><code>--php_out</code>在目标目录 DST_DIR 中产生 Object 代码，可以在 <a href="https://developers.google.com/protocol-buffers/docs/reference/php-generated?hl=zh-cn">PHP 代码生成参考</a>中查看更多。</li>
+</ul></li>
+</ul>
+
+<p>作为一个方便的拓展，如果 DST_DIR 以. zip 或者. jar 结尾，编译器会将输出写到一个 ZIP 格式文件或者符合 JAR 标准的. jar 文件中。注意如果输出已经存在则会被覆盖，编译器还没有智能到可以追加文件。</p>
+
+<ul>
+<li>你必须提议一个或多个. proto 文件作为输入，多个. proto 文件可以只指定一次。虽然文件路径是相对于当前目录的，每个文件必须位于其 IMPORT_PATH 下，以便每个文件可以确定其规范的名称。</li>
+</ul>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/proto/">proto</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/11/go-module%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83v2%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC/" data-tooltip="Go Module如何发布v2及以上版本">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/11/golang-select-case%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6/" data-tooltip="golang select-case实现机制">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2019 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/11/go-module%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83v2%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC/" data-tooltip="Go Module如何发布v2及以上版本">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2019/11/golang-select-case%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6/" data-tooltip="golang select-case实现机制">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/11/go-module%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83v2%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC/">
+                <h3 class="media-heading">Go Module如何发布v2及以上版本</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.cyeam.com/go/2019/03/12/go-version">https://blog.cyeam.com/go/2019/03/12/go-version</a></p>
+</blockquote>
+
+<p>用上 go mod 之后，依赖包都是通过版本打 tag 的形式确定版本号。比如 <code>github.com/mnhkahn/gogogo v1.0.9</code>。每次都改动都是在累加低位的版本号，一直这么用也挺安逸的。突然有一天，我的一个底层包需要大改，导致和之前的版本彻底不兼容，这种情况下如何设置版本号，如何能让调用方成功接入？</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/11/protobuf3%E8%AF%AD%E8%A8%80%E6%8C%87%E5%8D%97/">
+                <h3 class="media-heading">Protobuf3语言指南</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码，原文地址 <a href="https://blog.csdn.net/u011518120/article/details/54604615">https://blog.csdn.net/u011518120/article/details/54604615</a>
+英文原文：[Language Guide (proto3)](<a href="https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#gen">https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#gen</a></p>
+</blockquote>
+
+<p>这个指南描述了如何使用 Protocol buffer 语言去描述你的 protocol buffer 数据， 包括 .proto 文件符号和如何从. proto 文件生成类。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/11/golang-select-case%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6/">
+                <h3 class="media-heading">golang select-case实现机制</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://hitzhangjie.github.io/jekyll/update/2018/05/19/golang-select-case%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6.html">https://hitzhangjie.github.io/jekyll/update/2018/05/19/golang-select-case%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6.html</a></p>
+</blockquote>
+
+<p>在介绍 select-case 实现机制之前，最好先了解下 chan 操作规则，明白 goroutine 何时阻塞，又在什么时机被唤醒，这对后续理解 select-case 实现有帮助。所以接下来先介绍 chan 操作规则，然后再介绍 select-case 的实现。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/11/%E4%BA%86%E8%A7%A3raft%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/">
+                <h3 class="media-heading">了解Raft共识算法</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>这篇文章总结了迭戈·奥加罗（Diego Ongaro）和约翰·奥斯特豪特（John Ousterhout）在论文<a href="https://www.usenix.org/system/files/conference/atc14/atc14-paper-ongaro.pdf">《寻找</a>可理解的共识算法》中提出的Raft共识算法。所有拉引语均来自该论文。</p>
+
+<p>在正常操作中，只有一个领导者，其他所有服务器都是跟随者。</p>
+
+<p>追随者是被动的：他们自己不发出请求，而只是响应领导者和候选人的请求。</p>
+
+<p>领导者处理所有客户请求（如果客户联系关注者，则关注者将其重定向到领导者）。</p>
+
+<p>第三种状态，候选人，用于选举新领导人。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/11/%E4%BD%BF%E7%94%A8go%E5%A4%84%E7%90%86%E6%AF%8F%E5%88%86%E9%92%9F%E7%99%BE%E4%B8%87%E8%AF%B7%E6%B1%82/">
+                <h3 class="media-heading">使用Go处理每分钟百万请求</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这篇文章在medium上很火，作者以实际案例来分析，讲得很好。</p>
+
+<p>我们经常听说使用Go的goroutine和channel很容易实现高并发，那是不是全部代码都放在goroutine中运行就可以实现高并发程序了呢？很显然并不是。</p>
+
+<p>这篇文章将教大家如何一步一步写出一个简单的， 高并发的Go程序。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/08/%E6%B5%85%E8%B0%88%E8%AE%A4%E8%AF%81%E7%9A%84%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2%E5%8F%8A%E6%96%B9%E5%90%91/">
+                <h3 class="media-heading">浅谈认证的发展历史及方向</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Aug 8, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在企业信息系统的建设过程中,认证是我们必须面临的问题,从用户的登录,PC端,移动端,智能设备的访问,到关键业务的强身份认证,多因子确认,从实现业务操作安全,到实现转账,系统间的通信,与外部系统的集成等等都少不聊认证的参与,而当今云计算容器化的崛起,认证方式也从最初的cookie,session等手段发展到了现在的多端登录,多因子强认证,多端扫码,api令牌,用户目录等多种方式,并且针对用户的认证方式和手段的创新从未停止过,也会一直不断发展.</p>
+
+<p>本文将与大家一起从认证的角度看看系统建设中的那些事.</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/07/%E6%8A%80%E6%9C%AF%E7%BB%8F%E7%90%86%E6%B1%82%E6%B1%82%E4%BD%A0%E5%88%AB%E5%86%8D%E4%B9%B1%E6%94%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E6%B1%A0%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%BA%86/">
+                <h3 class="media-heading">技术经理:求求你,别再乱改数据库连接池的大小了！</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>基本上来说，大部分项目都需要跟数据库做交互，那么，数据库连接池的大小设置成多大合适呢？
+一些开发老鸟可能还会告诉你：<strong>没关系，尽量设置的大些，比如设置成 200，这样数据库性能会高些，吞吐量也会大些！</strong>
+你也许会点头称是，真的是这样吗？看完这篇文章，也许会颠覆你的认知哦！</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/07/%E4%BD%BF%E7%94%A8spring-5%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84-%E7%AE%80%E6%B4%81%E7%89%88/">
+                <h3 class="media-heading">使用Spring 5实现响应式微服务架构-简洁版</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Jul 7, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>随着以 Dubbo、Spring Cloud 等框架为代表的分布式服务调用和治理工具的大行其道，以及以 Docker、Kubernetes 等容器技术的日渐成熟，微服务架构（Microservices Architecture）毫无疑问是近年来最热门的一种服务化架构模式。所谓微服务，就是一些具有足够小的粒度、能够相互协作且自治的服务体系。正因为每个微服务都比较简单，仅关注于完成一个业务功能，所以具备技术、业务和组织上的优势 <sup>[1]</sup>。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E8%BF%88%E5%90%91istio-13-%E8%87%AA%E5%AE%9A%E4%B9%89adapter%E4%BF%AE%E6%94%B9%E8%AF%B7%E6%B1%82%E5%A4%B4/">
+                <h3 class="media-heading">迈向istio-13 自定义adapter(修改请求头)</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在istio中mixer组件负责策略控制和遥测收集数据,是高度模块化和可扩展的组件.</p>
+
+<p>mixer处理不同基础设施后端的灵活性是通过适配器模型插件来实现的,每个插件都被成为<code>Adapter</code>,用户通过配置使用Adapter向mixer注册自身,并设置适配规则,绑定模板,mixer通过和每个插件进行grpc连接,对策略和遥测进行操作</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/networkpolicy%E4%BB%8B%E7%BB%8D/">
+                <h3 class="media-heading">NetworkPolicy介绍</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  May 5, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中的所有的pod在默认情况下,网络都是互通的,pod接收来自任何来源的流量.</p>
+
+<p>那么我们如何限制pod的网络通信,防止非法访问呢?</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         102 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2019\/11\/protobuf3%E8%AF%AD%E8%A8%80%E6%8C%87%E5%8D%97\/';
+          
+            this.page.identifier = '\/2019\/11\/protobuf3%E8%AF%AD%E8%A8%80%E6%8C%87%E5%8D%97\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

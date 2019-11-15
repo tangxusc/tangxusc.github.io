@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Raft on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/tags/raft/</link>
+    <description>Recent content in Raft on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 15 Nov 2019 09:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/tags/raft/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>了解Raft共识算法</title>
+      <link>https://tangxusc.github.io/2019/11/%E4%BA%86%E8%A7%A3raft%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Fri, 15 Nov 2019 09:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/11/%E4%BA%86%E8%A7%A3raft%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;这篇文章总结了迭戈·奥加罗（Diego Ongaro）和约翰·奥斯特豪特（John Ousterhout）在论文&lt;a href=&#34;https://www.usenix.org/system/files/conference/atc14/atc14-paper-ongaro.pdf&#34;&gt;《寻找&lt;/a&gt;可理解的共识算法》中提出的Raft共识算法。所有拉引语均来自该论文。&lt;/p&gt;
+
+&lt;p&gt;在正常操作中，只有一个领导者，其他所有服务器都是跟随者。&lt;/p&gt;
+
+&lt;p&gt;追随者是被动的：他们自己不发出请求，而只是响应领导者和候选人的请求。&lt;/p&gt;
+
+&lt;p&gt;领导者处理所有客户请求（如果客户联系关注者，则关注者将其重定向到领导者）。&lt;/p&gt;
+
+&lt;p&gt;第三种状态，候选人，用于选举新领导人。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

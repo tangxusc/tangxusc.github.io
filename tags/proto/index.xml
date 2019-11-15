@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Proto on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/tags/proto/</link>
+    <description>Recent content in Proto on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 15 Nov 2019 09:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/tags/proto/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Protobuf3语言指南</title>
+      <link>https://tangxusc.github.io/2019/11/protobuf3%E8%AF%AD%E8%A8%80%E6%8C%87%E5%8D%97/</link>
+      <pubDate>Fri, 15 Nov 2019 09:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/11/protobuf3%E8%AF%AD%E8%A8%80%E6%8C%87%E5%8D%97/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;本文由 &lt;a href=&#34;http://ksria.com/simpread/&#34;&gt;简悦 SimpRead&lt;/a&gt; 转码，原文地址 &lt;a href=&#34;https://blog.csdn.net/u011518120/article/details/54604615&#34;&gt;https://blog.csdn.net/u011518120/article/details/54604615&lt;/a&gt;
+英文原文：[Language Guide (proto3)](&lt;a href=&#34;https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#gen&#34;&gt;https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#gen&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这个指南描述了如何使用 Protocol buffer 语言去描述你的 protocol buffer 数据， 包括 .proto 文件符号和如何从. proto 文件生成类。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

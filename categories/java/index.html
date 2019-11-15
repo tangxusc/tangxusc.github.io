@@ -706,6 +706,118 @@
           <div class="media">
             
             <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/11/go-module%E5%A6%82%E4%BD%95%E5%8F%91%E5%B8%83v2%E5%8F%8A%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC/">
+                <h3 class="media-heading">Go Module如何发布v2及以上版本</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.cyeam.com/go/2019/03/12/go-version">https://blog.cyeam.com/go/2019/03/12/go-version</a></p>
+</blockquote>
+
+<p>用上 go mod 之后，依赖包都是通过版本打 tag 的形式确定版本号。比如 <code>github.com/mnhkahn/gogogo v1.0.9</code>。每次都改动都是在累加低位的版本号，一直这么用也挺安逸的。突然有一天，我的一个底层包需要大改，导致和之前的版本彻底不兼容，这种情况下如何设置版本号，如何能让调用方成功接入？</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/11/protobuf3%E8%AF%AD%E8%A8%80%E6%8C%87%E5%8D%97/">
+                <h3 class="media-heading">Protobuf3语言指南</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码，原文地址 <a href="https://blog.csdn.net/u011518120/article/details/54604615">https://blog.csdn.net/u011518120/article/details/54604615</a>
+英文原文：[Language Guide (proto3)](<a href="https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#gen">https://developers.google.com/protocol-buffers/docs/proto3?hl=zh-cn#gen</a></p>
+</blockquote>
+
+<p>这个指南描述了如何使用 Protocol buffer 语言去描述你的 protocol buffer 数据， 包括 .proto 文件符号和如何从. proto 文件生成类。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/11/golang-select-case%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6/">
+                <h3 class="media-heading">golang select-case实现机制</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://hitzhangjie.github.io/jekyll/update/2018/05/19/golang-select-case%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6.html">https://hitzhangjie.github.io/jekyll/update/2018/05/19/golang-select-case%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6.html</a></p>
+</blockquote>
+
+<p>在介绍 select-case 实现机制之前，最好先了解下 chan 操作规则，明白 goroutine 何时阻塞，又在什么时机被唤醒，这对后续理解 select-case 实现有帮助。所以接下来先介绍 chan 操作规则，然后再介绍 select-case 的实现。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/11/%E4%BA%86%E8%A7%A3raft%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/">
+                <h3 class="media-heading">了解Raft共识算法</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>这篇文章总结了迭戈·奥加罗（Diego Ongaro）和约翰·奥斯特豪特（John Ousterhout）在论文<a href="https://www.usenix.org/system/files/conference/atc14/atc14-paper-ongaro.pdf">《寻找</a>可理解的共识算法》中提出的Raft共识算法。所有拉引语均来自该论文。</p>
+
+<p>在正常操作中，只有一个领导者，其他所有服务器都是跟随者。</p>
+
+<p>追随者是被动的：他们自己不发出请求，而只是响应领导者和候选人的请求。</p>
+
+<p>领导者处理所有客户请求（如果客户联系关注者，则关注者将其重定向到领导者）。</p>
+
+<p>第三种状态，候选人，用于选举新领导人。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2019/11/%E4%BD%BF%E7%94%A8go%E5%A4%84%E7%90%86%E6%AF%8F%E5%88%86%E9%92%9F%E7%99%BE%E4%B8%87%E8%AF%B7%E6%B1%82/">
+                <h3 class="media-heading">使用Go处理每分钟百万请求</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Nov 11, 2019
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这篇文章在medium上很火，作者以实际案例来分析，讲得很好。</p>
+
+<p>我们经常听说使用Go的goroutine和channel很容易实现高并发，那是不是全部代码都放在goroutine中运行就可以实现高并发程序了呢？很显然并不是。</p>
+
+<p>这篇文章将教大家如何一步一步写出一个简单的， 高并发的Go程序。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
               <a class="link-unstyled" href="https://tangxusc.github.io/2019/08/%E6%B5%85%E8%B0%88%E8%AE%A4%E8%AF%81%E7%9A%84%E5%8F%91%E5%B1%95%E5%8E%86%E5%8F%B2%E5%8F%8A%E6%96%B9%E5%90%91/">
                 <h3 class="media-heading">浅谈认证的发展历史及方向</h3>
               </a>
@@ -796,97 +908,6 @@
             <hr>
           </div>
         
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BA%B2%E5%92%8C%E6%80%A7%E8%B0%83%E5%BA%A6/">
-                <h3 class="media-heading">亲和性调度</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  May 5, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中对pod的调度由调度控制器负责,在调度的时候有很大的随机性.</p>
-
-<p>但是我们很多时候需要容器更多的分散在不同的node上,有一些情况又需要尽量集中在一起,减少网络开销</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/local-persistent-volume-%E4%BB%8B%E7%BB%8D/">
-                <h3 class="media-heading">Local Persistent Volume 介绍</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  May 5, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>在kubernetes中,存储一直是一个较为头疼的问题,在面对持久化存储,我们可以选择各种文件系统,但是对于那些临时存储的文件,我们则需要一种本地存储的能力,在kubernetes1.14中为我们提供了一种本地存储<code>localPV</code>,本文将围绕此展开.</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E4%BB%8A%E6%97%A5%E5%BF%83%E6%83%85-%E4%B8%8A%E5%96%84%E8%8B%A5%E6%B0%B4/">
-                <h3 class="media-heading">今日心情-上善若水</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  May 5, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>一天又一天,每一天都那么一样又不那么一样.</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/code-generator%E4%BD%BF%E7%94%A8/">
-                <h3 class="media-heading">code-generator使用</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  May 5, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><p>client-go为我们提供了kubernetes原生资源的informer和clientset等等的访问,那么自定义资源如何操作呢? 本文将为你介绍..</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2019/05/%E7%90%86%E8%A7%A3kubernetes-tools/cache%E5%8C%85-7/">
-                <h3 class="media-heading">理解kubernetes tools/cache包-7</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  May 5, 2019
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>本文由 <a href="http://ksria.com/simpread/">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/weixin_39961559/article/details/81948541">https://blog.csdn.net/weixin_39961559/article/details/81948541</a></p>
-</blockquote>
-
-<p>本系列深入介绍了informer的原理,这是本系列第七节,也是最后一节</p></div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
       </div>
     </div>
     <div class="modal-footer">
@@ -894,7 +915,7 @@
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         97 posts found
+         102 posts found
       </p>
     </div>
   </div>
