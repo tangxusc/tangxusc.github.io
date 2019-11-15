@@ -1,6 +1,6 @@
 ---
 title: "Go Module如何发布v2及以上版本"
-date: 2019-11-20T09:15:59+08:00
+date: 2019-11-15T09:15:59+08:00
 draft: false
 categories:
 - golang
