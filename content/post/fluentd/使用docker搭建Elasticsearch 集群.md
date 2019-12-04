@@ -16,16 +16,18 @@ keywords:
 # 参数介绍
 
 Elasticsearch集群中的重要参数如下:
-* `path.data`  and `path.logs`
-* `cluster.name`
-* `node.name`
-* `bootstrap.memory_lock`
-* `network.host`
-* `discovery.zen.ping.unicast.hosts`
-* `discovery.zen.minimum_master_nodes`
-* `discovery.seed_hosts`
-* `cluster.initial_master_nodes`
-* `http.port ` and `transport.tcp.port`
+
+- `path.data`  and `path.logs`
+- `cluster.name`
+- `node.name`
+- `bootstrap.memory_lock`
+- `network.host`
+- `discovery.zen.ping.unicast.hosts`
+- `discovery.zen.minimum_master_nodes`
+- `discovery.seed_hosts`
+- `cluster.initial_master_nodes`
+- `http.port ` and `transport.tcp.port`
+
 
 ## path.data and path.logs
 
