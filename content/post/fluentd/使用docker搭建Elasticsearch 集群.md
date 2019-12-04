@@ -198,7 +198,9 @@ vm.max_map_count=262144
 ## 启动集群
 
 ```shell
-docker run -d --name es --net es -p 9200:9200 -p 9300:9300 -e "cluster.name=docker-cluster" --hostname "es1" -e "cluster.initial_master_nodes="es1"  elasticsearch:7.4.2
+docker network create es
+
+docker run -d --name es --net es -p 9200:9200 -p 9300:9300 -e "cluster.name=docker-cluster" --hostname "es1" -e "cluster.initial_master_nodes=es1"  elasticsearch:7.4.2
 
 docker run -d --name es2 --net es --link es:es1 -e "cluster.name=docker-cluster" --hostname "es2" -e "discovery.zen.ping.unicast.hosts=es1"  elasticsearch:7.4.2
 
