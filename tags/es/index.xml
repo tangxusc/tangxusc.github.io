@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Es on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/tags/es/</link>
+    <description>Recent content in Es on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 04 Dec 2019 14:15:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/tags/es/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>使用docker搭建Elasticsearch集群</title>
+      <link>https://tangxusc.github.io/2019/12/%E4%BD%BF%E7%94%A8docker%E6%90%AD%E5%BB%BAelasticsearch%E9%9B%86%E7%BE%A4/</link>
+      <pubDate>Wed, 04 Dec 2019 14:15:59 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2019/12/%E4%BD%BF%E7%94%A8docker%E6%90%AD%E5%BB%BAelasticsearch%E9%9B%86%E7%BE%A4/</guid>
+      <description>&lt;p&gt;本文将使用docker搭建两个节点的Elasticsearch集群,并使用kibana做数据展示.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
