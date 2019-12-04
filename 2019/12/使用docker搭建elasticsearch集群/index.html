@@ -418,7 +418,9 @@
 
 <h2 id="启动集群">启动集群</h2>
 
-<pre><code class="language-shell">docker run -d --name es --net es -p 9200:9200 -p 9300:9300 -e &quot;cluster.name=docker-cluster&quot; --hostname &quot;es1&quot; -e &quot;cluster.initial_master_nodes=&quot;es1&quot;  elasticsearch:7.4.2
+<pre><code class="language-shell">docker network create es
+
+docker run -d --name es --net es -p 9200:9200 -p 9300:9300 -e &quot;cluster.name=docker-cluster&quot; --hostname &quot;es1&quot; -e &quot;cluster.initial_master_nodes=es1&quot;  elasticsearch:7.4.2
 
 docker run -d --name es2 --net es --link es:es1 -e &quot;cluster.name=docker-cluster&quot; --hostname &quot;es2&quot; -e &quot;discovery.zen.ping.unicast.hosts=es1&quot;  elasticsearch:7.4.2
 
