@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+每个 eve 应用都暴露同一套 HTTP API：建会话、发消息、看事件流、取消、清空、压缩、重置。这一章讲清协议本身，以及怎么用 TypeScript 客户端而不是手搓 POST。
+">
+
+
+<meta property="og:description" content="
+每个 eve 应用都暴露同一套 HTTP API：建会话、发消息、看事件流、取消、清空、压缩、重置。这一章讲清协议本身，以及怎么用 TypeScript 客户端而不是手搓 POST。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 9 章 会话协议">
+<meta name="twitter:title" content="eve 中文教程 · 第 9 章 会话协议">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-09-sessions-and-streaming/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-09-sessions-and-streaming/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+每个 eve 应用都暴露同一套 HTTP API：建会话、发消息、看事件流、取消、清空、压缩、重置。这一章讲清协议本身，以及怎么用 TypeScript 客户端而不是手搓 POST。
+">
+<meta name="twitter:description" content="
+每个 eve 应用都暴露同一套 HTTP API：建会话、发消息、看事件流、取消、清空、压缩、重置。这一章讲清协议本身，以及怎么用 TypeScript 客户端而不是手搓 POST。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-22T09:09:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-22T09:09:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 9 章 会话协议</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-09-sessions-and-streaming/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 9 章 会话协议
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-22T09:09:00&#43;08:00">
+        
+  October 22, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>每个 eve 应用都暴露同一套 HTTP API：建会话、发消息、看事件流、取消、清空、压缩、重置。这一章讲清协议本身，以及怎么用 TypeScript 客户端而不是手搓 POST。</p>
+</blockquote>
+
+<h2 id="9-1-路由表">9.1 路由表</h2>
+
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>作用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/eve/v1/health</code></td>
+<td>存活检查，公开</td>
+</tr>
+
+<tr>
+<td><code>GET</code></td>
+<td><code>/eve/v1/info</code></td>
+<td>编译后 agent 的完整快照</td>
+</tr>
+
+<tr>
+<td><code>POST</code></td>
+<td><code>/eve/v1/session</code></td>
+<td>建会话（可带首条消息）</td>
+</tr>
+
+<tr>
+<td><code>POST</code></td>
+<td><code>/eve/v1/session/:id</code></td>
+<td>追问 / 回答审批</td>
+</tr>
+
+<tr>
+<td><code>POST</code></td>
+<td><code>/eve/v1/session/:id/cancel</code></td>
+<td>取消进行中的 turn</td>
+</tr>
+
+<tr>
+<td><code>POST</code></td>
+<td><code>/eve/v1/session/:id/clear</code></td>
+<td>清空模型消息历史</td>
+</tr>
+
+<tr>
+<td><code>POST</code></td>
+<td><code>/eve/v1/session/:id/compact</code></td>
+<td>压缩上下文</td>
+</tr>
+
+<tr>
+<td><code>POST</code></td>
+<td><code>/eve/v1/session/:id/reset</code></td>
+<td>终止会话</td>
+</tr>
+
+<tr>
+<td><code>GET</code></td>
+<td><code>/eve/v1/session/:id/stream</code></td>
+<td>NDJSON 事件流</td>
+</tr>
+</tbody>
+</table>
+
+<p>所有会话操作只用 <code>sessionId</code> 寻址，没有别的句柄。通道（Slack 线程等）有自己的 continuation token，但那不出通道边界。</p>
+
+<h2 id="9-2-建会话">9.2 建会话</h2>
+
+<p>只建不聊：</p>
+
+<pre><code class="language-bash">curl -X POST http://localhost:2000/eve/v1/session
+# {&quot;ok&quot;:true,&quot;sessionId&quot;:&quot;wrun_A&quot;,&quot;status&quot;:&quot;accepted&quot;}
+</code></pre>
+
+<p>建并说第一句：</p>
+
+<pre><code class="language-bash">curl -X POST http://localhost:2000/eve/v1/session \
+  -H 'content-type: application/json' \
+  -d '{&quot;message&quot;:&quot;payment-api 现在正常吗？&quot;}'
+</code></pre>
+
+<p>返回 <code>202</code> + <code>sessionId</code>（body 和 <code>x-eve-session-id</code> 头都有）。</p>
+
+<p><code>POST /eve/v1/session</code> 的请求体：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>message</code></td>
+<td><code>string \| UserContent</code></td>
+<td>第一条消息。不带则只建会话</td>
+</tr>
+
+<tr>
+<td><code>context</code></td>
+<td><code>string[]</code></td>
+<td>持久化到历史的用户角色上下文，后续轮次也能看到</td>
+</tr>
+
+<tr>
+<td><code>clientContext</code></td>
+<td><code>string \| string[] \| object</code></td>
+<td>只对本轮生效，不写历史；<strong>要求同时带 <code>message</code></strong></td>
+</tr>
+
+<tr>
+<td><code>outputSchema</code></td>
+<td>JSON Schema</td>
+<td>要求这一轮产出结构化结果；同样要求带 <code>message</code></td>
+</tr>
+
+<tr>
+<td><code>operationId</code></td>
+<td><code>string</code></td>
+<td>幂等键，同一 principal 重试拿到同一个会话；匿名不能用</td>
+</tr>
+
+<tr>
+<td><code>stubs</code></td>
+<td><code>ToolStub[]</code></td>
+<td>工具桩，固定给这个会话</td>
+</tr>
+</tbody>
+</table>
+
+<p>追问 <code>POST /eve/v1/session/:id</code> 的请求体接受 <code>message</code> 或 <code>inputResponses</code> <strong>二选一</strong>（回答人工输入时用后者），可附带 <code>context</code> / <code>clientContext</code> / <code>outputSchema</code> / <code>turnPolicy</code>。</p>
+
+<p>两个细节：</p>
+
+<ul>
+<li>只建会话时，<code>session.started</code> 不会立刻发，要等第一条消息。因为会话级初始化需要消息才能决定第一轮的上下文。</li>
+<li>立刻追问可能收到 <code>409 session_not_ready</code>，此时用有界退避重试。TypeScript 客户端会自己重试最多 20 秒。</li>
+</ul>
+
+<p>幂等创建（网络重试安全）：</p>
+
+<pre><code class="language-bash">curl -X POST http://localhost:2000/eve/v1/session \
+  -H &quot;Authorization: Bearer $TOKEN&quot; \
+  -H 'content-type: application/json' \
+  -d '{&quot;message&quot;:&quot;生成周报&quot;,&quot;operationId&quot;:&quot;weekly-2026-10-20&quot;}'
+</code></pre>
+
+<p>同一个 principal 用同一个 <code>operationId</code> 重试，拿到的是同一个会话，不会重复启动。匿名调用不能用 <code>operationId</code>。</p>
+
+<h2 id="9-3-事件流">9.3 事件流</h2>
+
+<p>一次完整交互里，四个参与者之间的消息是这样走的：</p>
+
+<pre><code class="language-mermaid">sequenceDiagram
+  participant C as 客户端
+  participant E as eve HTTP 通道
+  participant R as 会话 run
+  participant M as 模型
+
+  C-&gt;&gt;E: POST /eve/v1/session { message }
+  E--&gt;&gt;C: 202 + sessionId
+  E-&gt;&gt;R: 派发第一轮
+  R-&gt;&gt;M: step 0 模型调用
+  M--&gt;&gt;R: 文本增量 / 工具调用
+  R--&gt;&gt;C: NDJSON 事件流（message.appended 等）
+  R-&gt;&gt;R: 执行工具，提交 step
+  R-&gt;&gt;M: step 1 模型调用
+  M--&gt;&gt;R: 最终回复
+  R--&gt;&gt;C: turn.completed
+  R--&gt;&gt;C: session.waiting
+  C-&gt;&gt;E: POST /eve/v1/session/:id { message }
+</code></pre>
+
+<p>注意事件流是<strong>单向</strong>的：客户端不往流里写东西，追问和应答都走独立的 POST。流只负责把 run 里发生的事按顺序吐出来。</p>
+
+<pre><code class="language-bash">curl http://localhost:2000/eve/v1/session/wrun_A/stream
+</code></pre>
+
+<p>一行一个 JSON。核心事件：</p>
+
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>含义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>session.started</code></td>
+<td>会话建立</td>
+</tr>
+
+<tr>
+<td><code>turn.started</code></td>
+<td>新 turn 开始</td>
+</tr>
+
+<tr>
+<td><code>message.received</code></td>
+<td>输入到达（含纯文本和结构化 parts）</td>
+</tr>
+
+<tr>
+<td><code>step.started</code></td>
+<td>一次模型调用开始</td>
+</tr>
+
+<tr>
+<td><code>actions.requested</code></td>
+<td>模型请求了动作（含工具调用），在执行前就流出</td>
+</tr>
+
+<tr>
+<td><code>action.result</code></td>
+<td>工具返回</td>
+</tr>
+
+<tr>
+<td><code>message.appended</code> / <code>message.completed</code></td>
+<td>助手文本增量 / 定稿</td>
+</tr>
+
+<tr>
+<td><code>reasoning.appended</code> / <code>reasoning.completed</code></td>
+<td>推理增量 / 定稿</td>
+</tr>
+
+<tr>
+<td><code>input.requested</code></td>
+<td>停下来等人（审批或提问）</td>
+</tr>
+
+<tr>
+<td><code>approval.candidate</code></td>
+<td>有人提交了审批，服务端开始校验（配了 <code>response</code> 策略时才有）</td>
+</tr>
+
+<tr>
+<td><code>approval.settled</code></td>
+<td>审批落定：<code>approved</code> / <code>cancelled</code></td>
+</tr>
+
+<tr>
+<td><code>input.resolved</code></td>
+<td>人已应答，服务端已接受</td>
+</tr>
+
+<tr>
+<td><code>turn.waiting</code></td>
+<td>turn 停泊（<code>on: &quot;input&quot;</code> 或 <code>&quot;tasks&quot;</code>），<strong>没结束</strong></td>
+</tr>
+
+<tr>
+<td><code>turn.completed</code> / <code>turn.failed</code> / <code>turn.cancelled</code></td>
+<td>turn 的三种结局</td>
+</tr>
+
+<tr>
+<td><code>session.waiting</code></td>
+<td>会话空闲，可以接下一句</td>
+</tr>
+
+<tr>
+<td><code>task.started</code> / <code>task.settled</code></td>
+<td>任务（子代理等）开始 / 结束</td>
+</tr>
+
+<tr>
+<td><code>compaction.requested</code> / <code>compaction.completed</code></td>
+<td>压缩</td>
+</tr>
+
+<tr>
+<td><code>authorization.required</code> / <code>authorization.completed</code></td>
+<td>连接需要 OAuth</td>
+</tr>
+</tbody>
+</table>
+
+<p>完整表见<a href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">附录 B</a>。</p>
+
+<h3 id="事件信封">事件信封</h3>
+
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;message.completed&quot;,
+  &quot;data&quot;: {
+    &quot;message&quot;: &quot;payment-api 正常，p99 82ms。&quot;,
+    &quot;finishReason&quot;: &quot;stop&quot;,
+    &quot;sequence&quot;: 0,
+    &quot;stepIndex&quot;: 0,
+    &quot;turnId&quot;: &quot;turn_0&quot;
+  },
+  &quot;meta&quot;: { &quot;id&quot;: &quot;evt_01KYJBZA88B4M9XN3RTC5FDGHJ&quot;, &quot;at&quot;: &quot;2026-10-20T01:04:11.912Z&quot; }
+}
+</code></pre>
+
+<p><code>meta.id</code> 是 <code>evt_</code> 前缀的 ULID，写进持久流时生成一次，<strong>重连和回绕都返回同一个 id</strong>。所以它是落库去重的天然主键：</p>
+
+<pre><code class="language-sql">insert into agent_events (id, session_id, type, data, emitted_at)
+values ($1, $2, $3, $4, $5)
+on conflict (id) do nothing;
+</code></pre>
+
+<p>但它<strong>不覆盖重试</strong>：step 被打断重跑时，新一次尝试会发<strong>新的 id</strong>。所以「去重」和「幂等」是两件事，第 10 章讲。</p>
+
+<h3 id="增量-vs-定稿">增量 vs 定稿</h3>
+
+<p><code>message.appended</code> 只带<strong>新增</strong>的文本（<code>messageDelta</code>），要自己累加。<code>message.completed</code> 带该块的权威全文。重连时如果本地丢了累加状态，就等 <code>completed</code>。</p>
+
+<p>一个 turn 里 <code>message.completed</code> 可能出现多次（模型先说话、再调工具、再说结论）。区分「工具前的话」和「最终答复」看 <code>data.finishReason</code>。</p>
+
+<h2 id="9-4-用-typescript-客户端">9.4 用 TypeScript 客户端</h2>
+
+<p>别手搓 POST 和 NDJSON 循环。</p>
+
+<pre><code class="language-ts">import { Client } from &quot;eve/client&quot;;
+
+const client = new Client({ host: &quot;http://127.0.0.1:2000&quot; });
+
+// 先探活
+const health = await client.health();
+console.log(health.status, health.workflowId);
+
+// 建会话并等这一轮跑完
+const { response } = await client.sessions.create({
+  message: &quot;payment-api 现在正常吗？&quot;,
+});
+const turn = await response.result();
+
+if (turn.status === &quot;failed&quot;) throw new Error(&quot;这一轮失败了&quot;);
+if (turn.inputRequests.length &gt; 0) {
+  console.log(&quot;需要人处理：&quot;, turn.inputRequests.map((r) =&gt; r.prompt));
+}
+console.log(turn.message);
+for (const event of turn.events) {
+  if (event.type === &quot;action.result&quot;) console.log(event.data.result);
+}
+</code></pre>
+
+<p>需要鉴权时：</p>
+
+<pre><code class="language-ts">const client = new Client({
+  host: &quot;https://opsbot.example.com&quot;,
+  auth: { bearer: async () =&gt; await getAccessToken() },
+  redirect: &quot;manual&quot;,        // 别把 Authorization 转发到别的域
+});
+</code></pre>
+
+<p><code>Client</code> 的构造参数：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>host</code></td>
+<td><code>string</code></td>
+<td>是</td>
+<td>agent 的基址。query 参数会带到每个请求</td>
+</tr>
+
+<tr>
+<td><code>auth</code></td>
+<td><code>{ bearer }</code> / <code>{ basic: { username, password } }</code> / <code>{ vercelOidc: { token } }</code></td>
+<td>否</td>
+<td>每次请求前解析，token 刷新回调会被反复调用</td>
+</tr>
+
+<tr>
+<td><code>headers</code></td>
+<td><code>Record&lt;string, string&gt; \| () =&gt; …</code></td>
+<td>否</td>
+<td>每个请求都带的头；传函数可每次重新计算</td>
+</tr>
+
+<tr>
+<td><code>redirect</code></td>
+<td><code>&quot;follow&quot; \| &quot;manual&quot; \| &quot;error&quot;</code></td>
+<td>否</td>
+<td>带凭据的客户端用 <code>&quot;manual&quot;</code> 或 <code>&quot;error&quot;</code>，避免把 Authorization 转发到别的域</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>create()</code> / <code>send()</code> 的选项：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>message</code></td>
+<td><code>string \| UserContent</code></td>
+<td>本轮输入。<code>create()</code> 必填</td>
+</tr>
+
+<tr>
+<td><code>outputSchema</code></td>
+<td>Standard Schema / JSON Schema</td>
+<td>要求这一轮产出结构化结果，落到 <code>result.data</code></td>
+</tr>
+
+<tr>
+<td><code>turnPolicy</code></td>
+<td><code>&quot;steer&quot; \| &quot;queue&quot;</code></td>
+<td>turn 进行中收到新消息时怎么办，默认 <code>&quot;steer&quot;</code></td>
+</tr>
+
+<tr>
+<td><code>clientContext</code></td>
+<td><code>string \| string[] \| JsonObject</code></td>
+<td>只对本轮生效的页面上下文，不写历史</td>
+</tr>
+
+<tr>
+<td><code>stubs</code></td>
+<td><code>ToolStub[]</code></td>
+<td>工具桩，仅 <code>create()</code> 可传，固定给这个会话</td>
+</tr>
+
+<tr>
+<td><code>streamReconnectPolicy</code></td>
+<td><code>{ reconnect: boolean }</code></td>
+<td>自己管游标时关掉自动重连</td>
+</tr>
+
+<tr>
+<td><code>signal</code></td>
+<td><code>AbortSignal</code></td>
+<td>取消这次请求</td>
+</tr>
+
+<tr>
+<td><code>headers</code></td>
+<td><code>Record&lt;string, string&gt;</code></td>
+<td>只对这个请求生效，覆盖客户端级同名头</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>response.result()</code> 返回的 turn：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td><code>&quot;completed&quot; \| &quot;waiting&quot; \| &quot;failed&quot;</code></td>
+<td>这一轮怎么结束的。被取消的 turn 报 <code>&quot;waiting&quot;</code></td>
+</tr>
+
+<tr>
+<td><code>message</code></td>
+<td><code>string \| undefined</code></td>
+<td>最终助手文本；没有终态 <code>message.completed</code> 时为 <code>undefined</code></td>
+</tr>
+
+<tr>
+<td><code>data</code></td>
+<td><code>TOutput \| undefined</code></td>
+<td>请求了 <code>outputSchema</code> 时的结构化结果</td>
+</tr>
+
+<tr>
+<td><code>events</code></td>
+<td><code>MessageStreamEvent[]</code></td>
+<td>这一轮收到的全部事件</td>
+</tr>
+
+<tr>
+<td><code>inputRequests</code></td>
+<td><code>InputRequest[]</code></td>
+<td>边界处仍待处理的人工输入（更早的可能还开着）</td>
+</tr>
+
+<tr>
+<td><code>sessionId</code></td>
+<td><code>string</code></td>
+<td>本轮的会话 ID，总是有值</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>turnId</code> 不在返回值里——从 <code>turn.started</code> 事件里取，取消时要用它。要按工具调用断言，扫 <code>events</code> 里的 <code>actions.requested</code> / <code>action.result</code> 自己配对。</p>
+
+<p>流式消费。<code>create()</code> 返回 <code>{ session, response }</code>，<strong>要迭代的是 <code>response</code></strong>，不是 <code>session</code>：</p>
+
+<pre><code class="language-ts">const { session, response } = await client.sessions.create({
+  message: &quot;查一下错误率&quot;,
+});
+console.log(&quot;会话&quot;, session.id);
+
+for await (const event of response) {
+  switch (event.type) {
+    case &quot;message.appended&quot;:
+      process.stdout.write(event.data.messageDelta);
+      break;
+    case &quot;action.result&quot;:
+      console.log(&quot;\n[工具]&quot;, event.data.result.toolName);
+      break;
+    case &quot;turn.completed&quot;:
+      console.log(&quot;\n[done]&quot;);
+      break;
+  }
+}
+</code></pre>
+
+<p><code>session.stream()</code> 是另一件事：它按会话游标<strong>接上已有的流</strong>，用于重连或读历史，不会发起新的一轮：</p>
+
+<pre><code class="language-ts">// 读已记录的历史，不跟随
+for await (const event of session.stream({ follow: false })) {
+  console.log(event.type);
+}
+
+// 从第 120 个事件继续
+for await (const event of session.stream({ startIndex: 120 })) {
+  // ...
+}
+</code></pre>
+
+<p><code>response.result()</code> 等到本轮 settle，返回 <code>{ message, data, status, events, inputRequests, ... }</code>。<code>data</code> 是请求了 <code>outputSchema</code> 时的结构化结果，<code>message</code> 是普通文本回复。</p>
+
+<h2 id="9-5-追问-steer-还是-queue">9.5 追问：steer 还是 queue</h2>
+
+<p>默认 <code>turnPolicy: &quot;steer&quot;</code>。含义：</p>
+
+<ul>
+<li>助手<strong>还没开始输出</strong>时，打断正在进行的模型生成，把你的新消息并进<strong>同一个 turn</strong>，<code>turnId</code> 不变。</li>
+<li>正在执行的工具会<strong>安全跑完</strong>并提交结果，然后才应用你的修正。</li>
+<li>助手已经开始输出后，steering 等到下一个已提交的 workflow 边界生效，已经流出的文本保留。</li>
+</ul>
+
+<pre><code class="language-ts">await session.send(&quot;等一下，只看 payment-api&quot;, { turnPolicy: &quot;queue&quot; });
+</code></pre>
+
+<p><code>queue</code> 的含义是「等当前 turn 结束再处理」。注意：如果 turn 正在等人审批，来自<strong>该 turn 服务对象</strong>的消息即使 <code>queue</code> 也会 steering 并撤销审批——因为等人审批的 turn 不可能自己结束。</p>
+
+<p>多个 steering 消息按到达顺序保留，可能在下一个边界合并成一个输入。</p>
+
+<h2 id="9-6-回答审批和提问">9.6 回答审批和提问</h2>
+
+<pre><code class="language-bash">curl -X POST http://localhost:2000/eve/v1/session/wrun_A \
+  -H 'content-type: application/json' \
+  -d '{&quot;inputResponses&quot;:[{&quot;requestId&quot;:&quot;req_A&quot;,&quot;optionId&quot;:&quot;approve&quot;}]}'
+</code></pre>
+
+<ul>
+<li>一次请求只能带 <code>message</code> 或 <code>inputResponses</code> 之一。</li>
+<li><code>requestId</code> 来自 <code>input.requested</code> 事件。</li>
+<li>拒绝时带上理由：<code>{&quot;requestId&quot;:&quot;req_A&quot;,&quot;optionId&quot;:&quot;cancel&quot;,&quot;text&quot;:&quot;只批准三件套&quot;}</code>，模型会看到这段引用，并标明是拒绝人写的。</li>
+<li>纯文本追问如果匹配某个选项 ID、标签或序号，也会被当作回答（<code>approve</code> / <code>cancel</code> / <code>continue</code>）。</li>
+<li>有多个待答请求时，一条文本只回答<strong>第一个</strong>。要一次答多个，发多条或用结构化响应。</li>
+</ul>
+
+<p>客户端侧：提交不等于批准。要等 <code>approval.settled</code> 或 <code>input.resolved</code> 才算服务端接受。</p>
+
+<h2 id="9-7-取消-清空-压缩-重置">9.7 取消、清空、压缩、重置</h2>
+
+<pre><code class="language-bash"># 取消（异步，等流里的 turn.cancelled → session.waiting）
+curl -X POST http://localhost:2000/eve/v1/session/wrun_A/cancel \
+  -H 'content-type: application/json' -d '{&quot;turnId&quot;:&quot;turn_3&quot;}'
+
+curl -X POST http://localhost:2000/eve/v1/session/wrun_A/clear
+curl -X POST http://localhost:2000/eve/v1/session/wrun_A/compact
+curl -X POST http://localhost:2000/eve/v1/session/wrun_A/reset \
+  -H 'content-type: application/json' -d '{&quot;reason&quot;:&quot;换个话题&quot;}'
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>边界事件</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>cancel</td>
+<td><code>turn.cancelled</code> → <code>session.waiting</code></td>
+<td>不是失败。已流出的内容保留，未完成的助手输出丢弃</td>
+</tr>
+
+<tr>
+<td>clear</td>
+<td><code>context.cleared</code> → <code>session.waiting</code></td>
+<td>删模型消息历史，保留会话身份、状态、沙箱</td>
+</tr>
+
+<tr>
+<td>compact</td>
+<td><code>compaction.requested</code> → <code>compaction.completed</code> → <code>session.waiting</code></td>
+<td>摘要，不追加用户消息</td>
+</tr>
+
+<tr>
+<td>reset</td>
+<td>会话终结</td>
+<td>ID 作废，永远不会复用</td>
+</tr>
+</tbody>
+</table>
+
+<p>取消会连带取消所有工作中的任务（<code>task.settled</code> 带 <code>status: &quot;cancelled&quot;</code>）。带 <code>turnId</code> 可以防止迟到的取消请求误杀新的 turn。</p>
+
+<h2 id="9-8-重连与回绕">9.8 重连与回绕</h2>
+
+<pre><code class="language-bash"># 从第 120 个事件继续
+curl &quot;http://localhost:2000/eve/v1/session/wrun_A/stream?startIndex=120&quot;
+
+# 读最后 1 条（通常是 session.waiting）
+curl &quot;http://localhost:2000/eve/v1/session/wrun_A/stream?startIndex=-1&quot;
+
+# 只读到当前末尾，不跟随
+curl &quot;http://localhost:2000/eve/v1/session/wrun_A/stream?startIndex=0&amp;follow=false&quot;
+</code></pre>
+
+<ul>
+<li>非负 <code>startIndex</code> 是<strong>绝对事件计数</strong>。</li>
+<li>负数从末尾往前数。尾部相对读取不会自动重连，也不推进已存游标。</li>
+<li><code>follow=false</code> 在服务端就在持久末尾截断，适合「读历史再决定」的场景。它对 stranded 会话也能用。</li>
+<li>会话结束后，World 只按保留期留着它的流。超过保留期再读返回 <code>410</code>，<code>code: &quot;session_expired&quot;</code>。历史已经没了，TypeScript 客户端在第一个响应就失败，不会重试几十秒。</li>
+</ul>
+
+<h2 id="9-9-子代理的事件">9.9 子代理的事件</h2>
+
+<p>子代理有自己的会话流。父会话上会出现：</p>
+
+<ul>
+<li><code>task.started</code>（<code>kind: &quot;agent&quot;</code>）：调用返回收据</li>
+<li><code>agent.started</code>：子会话打开，带 <code>sessionId</code> 和 <code>streamPath</code></li>
+<li><code>task.settled</code>：子代理这一轮的回复作为 <code>output</code></li>
+</ul>
+
+<p>要跟子代理的详细过程，用 <code>agent.started</code> 拿 <code>streamPath</code> 再开一条流：</p>
+
+<pre><code class="language-ts">const started = events.find((e) =&gt; e.type === &quot;agent.started&quot;);
+const child = session.agent(started);
+for await (const e of child.stream()) { /* 子代理的 step / 工具事件 */ }
+</code></pre>
+
+<p>子代理的审批和提问会<strong>代理到父会话</strong>上，回答通过父会话直接路由给子代理，不会触发父级模型。</p>
+
+<h2 id="9-10-在进程内读会话">9.10 在进程内读会话</h2>
+
+<p>钩子、工具、定时任务里想读别的会话，不用走 HTTP：</p>
+
+<pre><code class="language-ts">import { sessions } from &quot;eve/server&quot;;
+
+for await (const event of sessions.attach(sessionId).stream({
+  startIndex: -2000,
+  follow: false,
+  signal: AbortSignal.timeout(5_000),
+})) {
+  await saveEvent(event.meta.id, event);
+}
+</code></pre>
+
+<p>注意：<code>sessions</code> 读任何 ID 都<strong>不做通道鉴权</strong>，传进来的 ID 必须先校验归属。</p>
+
+<h2 id="9-11-常见坑">9.11 常见坑</h2>
+
+<p><strong>坑：只看 <code>turn.completed</code> 就以为拿到了完整回复。</strong>
+一个 turn 里可能有多次 <code>message.completed</code>。最终答复要取最后一个 <code>finishReason: &quot;stop&quot;</code> 的块，或直接看 <code>turn.message</code>（客户端已处理）。</p>
+
+<p><strong>坑：重连后重复处理事件。</strong>
+按 <code>meta.id</code> 去重。不要用「内容相同」判断。</p>
+
+<p><strong>坑：把 <code>turn.waiting</code> 当成结束。</strong>
+它表示 turn 还开着，在等人或在等任务。收到它就断开连接会丢掉后续事件。</p>
+
+<p><strong>坑：<code>clear</code> 之后以为能重新触发动态指令。</strong>
+不会重跑指令定义或解析器。</p>
+
+<p><strong>坑：用 <code>reset</code> 想「重开一段对话」。</strong>
+<code>reset</code> 是终止，ID 作废。想在同一会话里换话题用 <code>clear</code>，想全新会话就新建。</p>
+
+<p><strong>坑：匿名调用带 <code>operationId</code>。</strong>
+不允许。幂等创建需要已认证的 principal。</p>
+
+<h2 id="9-12-练习">9.12 练习</h2>
+
+<ol>
+<li>用 <code>curl</code> 走完「建会话 → 看流 → 追问 → 取消」四步，记录每步的事件顺序。</li>
+<li>用 <code>Client</code> 写一个脚本，发一句话，打印所有工具调用名和耗时。</li>
+<li>故意在模型输出中途发一条 steering 消息，对比 <code>queue</code> 的行为差异。</li>
+<li>用 <code>follow=false</code> 读一个已完成会话的完整历史，统计事件类型分布。</li>
+</ol>
+
+<h2 id="延伸阅读">延伸阅读</h2>
+
+<ul>
+<li><a href="https://eve.dev/docs/concepts/sessions-runs-and-streaming">Sessions, Runs &amp; Streaming</a></li>
+<li><a href="https://eve.dev/docs/channels/eve">eve channel</a></li>
+<li><a href="https://eve.dev/docs/guides/client/overview">Client SDK</a></li>
+</ul>
+
+<hr />
+
+<p>上一章：<a href="https://tangxusc.github.io/2026/10/eve-08-state-and-memory/">08 状态与长期记忆</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-10-durability/">10 持久化执行</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-10-durability/" data-tooltip="eve 中文教程 · 第 10 章 持久化执行">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-08-state-and-memory/" data-tooltip="eve 中文教程 · 第 8 章 状态与长期记忆">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-10-durability/" data-tooltip="eve 中文教程 · 第 10 章 持久化执行">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-08-state-and-memory/" data-tooltip="eve 中文教程 · 第 8 章 状态与长期记忆">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 <code>eve init</code> 讲到上线。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
+                <h3 class="media-heading">eve 中文教程 · 附录 C 环境变量与密钥</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p><code>process.env</code> 只在<strong>应用运行时</strong>存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">
+                <h3 class="media-heading">eve 中文教程 · 附录 B 事件与 CLI</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">完整事件表、CLI 命令、HTTP 路由。写客户端、排查事件流、核对某个字段时对着这张表看。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">
+                <h3 class="media-heading">eve 中文教程 · 附录 A 术语与速查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">概念对照、目录速查、常见错误码。读不懂某个词、找不到某个文件、看到一个陌生状态码时先查这里。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/">
+                <h3 class="media-heading">eve 中文教程 · 第 18 章 进阶与上线检查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>这一章把散落在前面的进阶能力收在一起，然后给一份能逐条打勾的上线清单。清单比概念重要。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
+                <h3 class="media-heading">eve 中文教程 · 第 17 章 前端与部署</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-16-evals/">
+                <h3 class="media-heading">eve 中文教程 · 第 16 章 评测</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
+                <h3 class="media-heading">eve 中文教程 · 第 15 章 定时与钩子</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-14-channels/">
+                <h3 class="media-heading">eve 中文教程 · 第 14 章 通道</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-13-connections/">
+                <h3 class="media-heading">eve 中文教程 · 第 13 章 连接</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 <code>eve__search</code> 找到工具，用 <code>eve__tool</code> 调用，凭据由 eve 在应用侧注入。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         125 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-09-sessions-and-streaming\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-09-sessions-and-streaming\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

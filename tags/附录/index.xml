@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>附录 on 苏连云的博客</title>
+    <link>https://tangxusc.github.io/tags/%E9%99%84%E5%BD%95/</link>
+    <description>Recent content in 附录 on 苏连云的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 22 Oct 2026 09:21:00 +0800</lastBuildDate>
+    
+	<atom:link href="https://tangxusc.github.io/tags/%E9%99%84%E5%BD%95/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>eve 中文教程 · 附录 C 环境变量与密钥</title>
+      <link>https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/</link>
+      <pubDate>Thu, 22 Oct 2026 09:21:00 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;process.env&lt;/code&gt; 只在&lt;strong&gt;应用运行时&lt;/strong&gt;存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>eve 中文教程 · 附录 B 事件与 CLI</title>
+      <link>https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/</link>
+      <pubDate>Thu, 22 Oct 2026 09:20:00 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/</guid>
+      <description>完整事件表、CLI 命令、HTTP 路由。写客户端、排查事件流、核对某个字段时对着这张表看。</description>
+    </item>
+    
+    <item>
+      <title>eve 中文教程 · 附录 A 术语与速查</title>
+      <link>https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/</link>
+      <pubDate>Thu, 22 Oct 2026 09:19:00 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/</guid>
+      <description>概念对照、目录速查、常见错误码。读不懂某个词、找不到某个文件、看到一个陌生状态码时先查这里。</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+技能是按需加载的 Markdown 流程。平时只占一行描述，模型需要时才把全文拉进上下文。它不增加任何执行能力——只增加「怎么做」。
+">
+
+
+<meta property="og:description" content="
+技能是按需加载的 Markdown 流程。平时只占一行描述，模型需要时才把全文拉进上下文。它不增加任何执行能力——只增加「怎么做」。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 7 章 技能">
+<meta name="twitter:title" content="eve 中文教程 · 第 7 章 技能">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-07-skills/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-07-skills/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+技能是按需加载的 Markdown 流程。平时只占一行描述，模型需要时才把全文拉进上下文。它不增加任何执行能力——只增加「怎么做」。
+">
+<meta name="twitter:description" content="
+技能是按需加载的 Markdown 流程。平时只占一行描述，模型需要时才把全文拉进上下文。它不增加任何执行能力——只增加「怎么做」。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-22T09:07:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-22T09:07:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 7 章 技能</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-07-skills/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 7 章 技能
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-22T09:07:00&#43;08:00">
+        
+  October 22, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>技能是按需加载的 Markdown 流程。平时只占一行描述，模型需要时才把全文拉进上下文。它不增加任何执行能力——只增加「怎么做」。</p>
+</blockquote>
+
+<h2 id="7-1-为什么要有技能">7.1 为什么要有技能</h2>
+
+<p>把排障流程写进系统提示的后果：</p>
+
+<ul>
+<li>每一轮都付这份 token，哪怕用户只是在打招呼</li>
+<li>流程越长，模型越容易忽略中间的步骤</li>
+<li>改流程等于改系统提示，风险大、影响面广</li>
+</ul>
+
+<p>技能解决这三件事：描述常驻（几十字），正文按需（几千字），改动隔离。</p>
+
+<h2 id="7-2-最小技能">7.2 最小技能</h2>
+
+<pre><code class="language-md">&lt;!-- agent/skills/triage.md --&gt;
+先确认影响面，再定位原因，最后给动作建议。
+
+1. 用 query_metrics 看错误率和延迟，确认是全局还是单服务。
+2. 用 read_logs 看最近 15 分钟的错误行，按错误类型归类。
+3. 如果错误集中在某个下游依赖，查该依赖的状态页。
+4. 输出：结论一句话、证据三条、建议动作一条。
+</code></pre>
+
+<p>文件名就是技能名（<code>triage</code>）。没写 frontmatter 时，eve 取正文第一行非空、非代码块的行作为描述——这里会取到「先确认影响面……」，作为路由提示太弱。</p>
+
+<p>所以<strong>加描述</strong>：</p>
+
+<pre><code class="language-md">---
+description: 线上故障的初步分诊流程。当用户报告服务异常、错误率上升、延迟抖动时使用。
+---
+
+先确认影响面，再定位原因，最后给动作建议。
+……
+</code></pre>
+
+<p>描述要写成「什么时候该触发」，不是「这是什么」。对比：</p>
+
+<table>
+<thead>
+<tr>
+<th>差</th>
+<th>好</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>description: 排障手册</code></td>
+<td><code>description: 线上故障的初步分诊流程。当用户报告服务异常、错误率上升或延迟抖动时使用。</code></td>
+</tr>
+
+<tr>
+<td><code>description: SQL 相关</code></td>
+<td><code>description: 编写和优化只读分析查询。当用户要求统计、对比或导出数据时使用。</code></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="7-3-打包技能">7.3 打包技能</h2>
+
+<p>流程需要附带参考文件、脚本、模板时，用目录：</p>
+
+<pre><code class="language-text">agent/skills/incident-runbook/
+├── SKILL.md
+├── references/
+│   ├── escalation.md
+│   └── slo-definitions.md
+└── scripts/
+    └── collect_context.sh
+</code></pre>
+
+<pre><code class="language-md">&lt;!-- agent/skills/incident-runbook/SKILL.md --&gt;
+---
+description: 完整的线上事故处理手册。当确认是生产事故、需要按流程升级和记录时使用。
+---
+
+# 事故处理手册
+
+## 第一步：定级
+
+按 `references/slo-definitions.md` 判断 P0/P1/P2。
+
+## 第二步：收集上下文
+
+运行 `scripts/collect_context.sh &lt;service&gt;`，把输出贴进事故记录。
+
+## 第三步：升级
+
+按 `references/escalation.md` 的矩阵通知对应负责人。
+
+## 第四步：记录
+
+用下面的模板写时间线：
+
+- T+0 发现
+- T+? 定位
+- T+? 缓解
+- T+? 恢复
+</code></pre>
+
+<p>要点：</p>
+
+<ul>
+<li>打包技能的 <code>SKILL.md</code> <strong>必须</strong>有 <code>description</code> frontmatter（没有文件名 slug 可退）。</li>
+<li>技能文件在沙箱里挂到 <code>$HOME/.agents/skills/&lt;skill&gt;/</code>，<code>$HOME</code> 不可用时退回 <code>/workspace/skills/&lt;skill&gt;/</code>。</li>
+<li><code>SKILL.md</code> 里写 <code>references/checklist.md</code> 这样的相对路径，相对于该 <code>SKILL.md</code> 所在目录。</li>
+<li>模型用沙箱文件工具（<code>read_file</code>、<code>bash</code>）读这些附属文件。<strong>工具和钩子没有技能文件 API</strong>，你的代码需要同样的数据就从 <code>lib/</code> import。</li>
+</ul>
+
+<p>只有访问附属文件才需要沙箱。列出技能、加载指令都不需要沙箱——正文来自编译产物和会话状态。</p>
+
+<h2 id="7-4-加载机制">7.4 加载机制</h2>
+
+<ol>
+<li>eve 扫描 <code>agent/skills/</code>，把每个技能的名字和描述写进系统提示。</li>
+<li>模型判断相关（或用户直接点名），调用 <code>eve__skill({ name })</code>。</li>
+<li>技能的 Markdown 作为这次调用的结果进入当前 turn 的上下文。</li>
+</ol>
+
+<p>有技能的 agent 一定有 <code>eve__skill</code> 工具。加载会记一个 <code>load-skill</code> 动作，评测里可以用 <code>t.loadedSkill</code> 断言。</p>
+
+<pre><code class="language-mermaid">sequenceDiagram
+  participant S as 系统提示
+  participant M as 模型
+  participant R as 技能运行时
+  participant SB as 沙箱
+
+  S--&gt;&gt;M: 技能名 + 一句话描述（不含正文）
+  M-&gt;&gt;R: eve__skill({ name: &quot;incident-triage&quot; })
+  R--&gt;&gt;M: SKILL.md 全文（作为工具结果进入上下文）
+  Note over M: 之后的步骤按全文执行
+  M-&gt;&gt;SB: read_file(&quot;references/escalation.md&quot;)
+  SB--&gt;&gt;M: 附属文件内容
+</code></pre>
+
+<p>关键在第一步：常驻上下文的只有<strong>名字和描述</strong>，正文在真正需要时才进来。所以一个技能写 200 行，平时只花一行描述的钱。</p>
+
+<p><strong>加载技能只加指令，不加执行面。</strong> 工具在加载前后都可见。想要类型化的运行时行为，写工具。</p>
+
+<h2 id="7-5-deferred-连描述也不放进去">7.5 deferred：连描述也不放进去</h2>
+
+<p>技能很多时（比如装了二十个社区技能），描述本身就成了负担：</p>
+
+<pre><code class="language-md">---
+description: 填写和校验 PDF 表单。
+deferred: true
+---
+</code></pre>
+
+<p>deferred 技能不在上下文里出现名字，只在目录提示里说明「存在 deferred 技能，有这些命名空间」。模型用 <code>eve__search</code> 找，找到后用 <code>eve__skill</code> 加载。</p>
+
+<pre><code class="language-text">模型：eve__search({ query: &quot;pdf 表单&quot; })
+→ { results: [{ skill: &quot;pdf-forms&quot;, description: &quot;…&quot;, path: &quot;…/SKILL.md&quot; }], searched: 18, remaining: 0 }
+
+模型：eve__skill({ name: &quot;pdf-forms&quot; })
+→ 技能全文
+</code></pre>
+
+<h2 id="7-6-用-typescript-写技能">7.6 用 TypeScript 写技能</h2>
+
+<p>需要拼装内容、带类型、内联附属文件时：</p>
+
+<pre><code class="language-ts">// agent/skills/postmortem.ts
+import { defineSkill } from &quot;eve/skills&quot;;
+import { renderTemplate } from &quot;../lib/templates&quot;;
+
+export default defineSkill({
+  description: &quot;生成事故复盘文档。当事故已恢复、需要产出复盘时使用。&quot;,
+  markdown: renderTemplate(&quot;postmortem&quot;),
+  files: {
+    &quot;references/template.md&quot;: &quot;# 复盘模板\n\n## 时间线\n\n## 根因\n\n## 改进项\n&quot;,
+  },
+});
+</code></pre>
+
+<p><code>markdown</code> 会被写成 <code>SKILL.md</code>，<code>files</code> 的每个条目成为同目录的兄弟文件。</p>
+
+<p><code>defineSkill</code> 的字段：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>description</code></td>
+<td><code>string</code></td>
+<td>是</td>
+<td>告诉模型<strong>什么时候</strong>用这个技能。会被放进技能列表</td>
+</tr>
+
+<tr>
+<td><code>markdown</code></td>
+<td><code>string</code></td>
+<td>是</td>
+<td>技能正文，加载后作为指令返回给模型</td>
+</tr>
+
+<tr>
+<td><code>files</code></td>
+<td><code>Record&lt;string, string \| 文件内容&gt;</code></td>
+<td>否</td>
+<td>附属文件，挂到技能目录下（脚本、模板、参考数据）</td>
+</tr>
+
+<tr>
+<td><code>deferred</code></td>
+<td><code>boolean</code>，默认 <code>false</code></td>
+<td>否</td>
+<td>不进技能列表，模型用 <code>eve__search</code> + <code>eve__skill</code> 找到</td>
+</tr>
+
+<tr>
+<td><code>license</code></td>
+<td><code>string</code></td>
+<td>否</td>
+<td>元数据，展示用</td>
+</tr>
+
+<tr>
+<td><code>metadata</code></td>
+<td><code>Record&lt;string, string&gt;</code></td>
+<td>否</td>
+<td>自定义元数据，原样保留</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>description</code> 和 <code>markdown</code> 的写法要求不同：前者是给模型的「路由信号」，一句话说清触发条件；后者是给模型的「操作手册」，可以长。</p>
+
+<p>静态 <code>defineSkill</code> 在编译期求值，结果进清单；动态的才保留为运行时入口。</p>
+
+<p><strong>先用纯 Markdown，撞到限制再升级到 <code>defineSkill</code>。</strong> 大部分技能一辈子不需要 TypeScript。</p>
+
+<h2 id="7-7-动态技能-按调用者给不同的手册">7.7 动态技能：按调用者给不同的手册</h2>
+
+<pre><code class="language-ts">// agent/skills/team-playbook.ts
+import { defineDynamic, defineSkill } from &quot;eve/skills&quot;;
+
+const PLAYBOOKS: Record&lt;string, string&gt; = {
+  growth: &quot;按订单日期聚合收入，用美元报告，按套餐对比客户。&quot;,
+  finance: &quot;把订单收入与每日、客户汇总核对，标注为毛收入（数据集无退款）。&quot;,
+};
+
+export default defineDynamic({
+  events: {
+    &quot;session.started&quot;: async (_event, ctx) =&gt; {
+      const team = ctx.session.auth.current?.attributes.team;
+      const key = Array.isArray(team) ? team[0] : team;
+      const body = key ? PLAYBOOKS[key] : undefined;
+      if (!body) return null;                     // 没有团队 → 没有技能
+
+      return defineSkill({
+        description: `回答 ${key} 团队的分析问题时使用，包含该团队的固定口径。`,
+        markdown: `# ${key} 团队手册\n\n${body}`,
+      });
+    },
+  },
+});
+</code></pre>
+
+<p>三个关键点：</p>
+
+<ol>
+<li>团队来自 <code>ctx.session.auth.current.attributes</code>，即<strong>鉴权层盖章的声明</strong>，不是消息内容。所以一个租户没法通过改写消息借用别人的手册。</li>
+<li>解析器在 <code>session.started</code> 跑一次，结果对整个会话有效。改团队要开新会话。</li>
+<li>返回 <code>null</code> 表示不提供这个技能。</li>
+</ol>
+
+<h2 id="7-8-技能的作用域">7.8 技能的作用域</h2>
+
+<p>技能属于声明它的那个 agent：</p>
+
+<ul>
+<li>根 agent 的 <code>skills/</code> 对子代理不可见</li>
+<li>子代理的 <code>skills/</code> 对根 agent 不可见</li>
+<li>要共享，打成扩展包（extension）并在每个 agent 里挂载</li>
+</ul>
+
+<p>共享代码放 <code>lib/</code>，共享流程放扩展。</p>
+
+<h2 id="7-9-安装社区技能">7.9 安装社区技能</h2>
+
+<pre><code class="language-bash">eve registry search react --registry @skills
+eve add @skills/vercel-labs/agent-skills/vercel-react-best-practices
+</code></pre>
+
+<p><code>@skills</code> 指向 <a href="https://skills.sh">skills.sh</a>。这些是社区作者写的项目文件，<strong>装之前看源码，装之后看 diff</strong>。技能能往上下文里注入任意文本，包括误导性的指令。</p>
+
+<h2 id="7-10-技能-vs-工具-vs-子代理">7.10 技能 vs 工具 vs 子代理</h2>
+
+<table>
+<thead>
+<tr>
+<th>你需要</th>
+<th>用什么</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>让模型知道「怎么做一件事」</td>
+<td>技能</td>
+</tr>
+
+<tr>
+<td>让模型能「执行一件事」</td>
+<td>工具</td>
+</tr>
+
+<tr>
+<td>让模型「换个身份/工具面做一件事」</td>
+<td>子代理</td>
+</tr>
+
+<tr>
+<td>让模型「按调用者不同规则做事」</td>
+<td>动态技能</td>
+</tr>
+
+<tr>
+<td>让模型「读到一份大文件」</td>
+<td>工作区种子</td>
+</tr>
+</tbody>
+</table>
+
+<p>判断口诀：<strong>技能改变模型的想法，工具改变世界，子代理改变上下文。</strong></p>
+
+<h2 id="7-11-常见坑">7.11 常见坑</h2>
+
+<p><strong>坑：技能里写「运行 <code>python analyze.py</code>」，但沙箱是 <code>just-bash</code>。</strong>
+技能只是文本，它描述的动作需要真实工具支持。写流程前先确认工具和沙箱具备条件。</p>
+
+<p><strong>坑：打包技能没写 <code>description</code>。</strong>
+编译失败。目录形式的技能必须有描述。</p>
+
+<p><strong>坑：以为加载技能后模型就能调用新工具。</strong>
+不会。技能不增加工具。要让技能里提到的工具存在，先写工具。</p>
+
+<p><strong>坑：技能名带大写或空格。</strong>
+只允许 ASCII 字母、数字、下划线、短横线，字母或数字开头，≤ 64 字符。</p>
+
+<p><strong>坑：把密钥写进技能正文。</strong>
+技能正文进模型上下文，等于把密钥发给模型供应商。</p>
+
+<p><strong>坑：动态技能在 <code>turn.started</code> 里读消息内容判断团队。</strong>
+不要从消息里取身份。用 <code>auth.current.attributes</code>。</p>
+
+<h2 id="7-12-练习">7.12 练习</h2>
+
+<ol>
+<li>把第 2 章 <code>instructions.md</code> 里的排障流程挪进 <code>agent/skills/triage.md</code>，加一个明确的 description。</li>
+<li>做一个打包技能，带 <code>references/</code> 下的两个文件，让模型按需读。</li>
+<li>给技能加 <code>deferred: true</code>，用 <code>eve__search</code> 找它，观察上下文里少了什么。</li>
+<li>写一个按 <code>auth.current.attributes.team</code> 分发的动态技能，用 dev 环境的假鉴权验证路由。</li>
+</ol>
+
+<h2 id="延伸阅读">延伸阅读</h2>
+
+<ul>
+<li><a href="https://eve.dev/docs/skills">Skills</a></li>
+<li><a href="https://eve.dev/docs/guides/dynamic-capabilities">Dynamic Capabilities</a></li>
+<li><a href="https://eve.dev/docs/concepts/context-control">Context Control</a></li>
+</ul>
+
+<hr />
+
+<p>上一章：<a href="https://tangxusc.github.io/2026/10/eve-06-context-control/">06 上下文控制</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-08-state-and-memory/">08 状态与长期记忆</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-08-state-and-memory/" data-tooltip="eve 中文教程 · 第 8 章 状态与长期记忆">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-06-context-control/" data-tooltip="eve 中文教程 · 第 6 章 上下文控制">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-08-state-and-memory/" data-tooltip="eve 中文教程 · 第 8 章 状态与长期记忆">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-06-context-control/" data-tooltip="eve 中文教程 · 第 6 章 上下文控制">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 <code>eve init</code> 讲到上线。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
+                <h3 class="media-heading">eve 中文教程 · 附录 C 环境变量与密钥</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p><code>process.env</code> 只在<strong>应用运行时</strong>存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">
+                <h3 class="media-heading">eve 中文教程 · 附录 B 事件与 CLI</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">完整事件表、CLI 命令、HTTP 路由。写客户端、排查事件流、核对某个字段时对着这张表看。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">
+                <h3 class="media-heading">eve 中文教程 · 附录 A 术语与速查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">概念对照、目录速查、常见错误码。读不懂某个词、找不到某个文件、看到一个陌生状态码时先查这里。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/">
+                <h3 class="media-heading">eve 中文教程 · 第 18 章 进阶与上线检查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>这一章把散落在前面的进阶能力收在一起，然后给一份能逐条打勾的上线清单。清单比概念重要。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
+                <h3 class="media-heading">eve 中文教程 · 第 17 章 前端与部署</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-16-evals/">
+                <h3 class="media-heading">eve 中文教程 · 第 16 章 评测</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
+                <h3 class="media-heading">eve 中文教程 · 第 15 章 定时与钩子</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-14-channels/">
+                <h3 class="media-heading">eve 中文教程 · 第 14 章 通道</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-13-connections/">
+                <h3 class="media-heading">eve 中文教程 · 第 13 章 连接</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 <code>eve__search</code> 找到工具，用 <code>eve__tool</code> 调用，凭据由 eve 在应用侧注入。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         125 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-07-skills\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-07-skills\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

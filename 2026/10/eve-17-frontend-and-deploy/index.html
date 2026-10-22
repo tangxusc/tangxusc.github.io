@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。
+">
+
+
+<meta property="og:description" content="
+前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 17 章 前端与部署">
+<meta name="twitter:title" content="eve 中文教程 · 第 17 章 前端与部署">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。
+">
+<meta name="twitter:description" content="
+前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-22T09:17:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-22T09:17:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 17 章 前端与部署</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 17 章 前端与部署
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-22T09:17:00&#43;08:00">
+        
+  October 22, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。</p>
+</blockquote>
+
+<h2 id="17-1-三种交付形态">17.1 三种交付形态</h2>
+
+<table>
+<thead>
+<tr>
+<th>形态</th>
+<th>谁托管谁</th>
+<th>适合</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>框架集成（Next.js / Nuxt / SvelteKit / TanStack）</td>
+<td>前端应用托管 agent，同源路由</td>
+<td>已有 Web 应用，要一个聊天面板</td>
+</tr>
+
+<tr>
+<td>平级服务</td>
+<td>前端和 agent 各自独立部署，反向代理或平台路由</td>
+<td>多前端、多 agent、独立伸缩</td>
+</tr>
+
+<tr>
+<td>无前端</td>
+<td>只有 HTTP / Slack / 定时</td>
+<td>内部工具、后台任务</td>
+</tr>
+</tbody>
+</table>
+
+<p>框架集成的好处是<strong>同源</strong>：没有 CORS，不用配 URL 环境变量，浏览器 cookie 直接带上。</p>
+
+<p>部署后的组件关系（以框架集成为例）：</p>
+
+<pre><code class="language-mermaid">flowchart TB
+  B[&quot;浏览器&quot;] --&gt;|&quot;同源请求&quot;| N[&quot;Next.js 应用&lt;br/&gt;聊天 UI&quot;]
+  N --&gt;|&quot;/eve/v1/*&quot;| E[&quot;eve 服务&lt;br/&gt;Nitro&quot;]
+  E --&gt; W[(&quot;Workflow world&lt;br/&gt;Vercel / 本地目录 / Postgres&quot;)]
+  E --&gt; S[&quot;沙箱&lt;br/&gt;Vercel Sandbox / Docker&quot;]
+  E --&gt; M[&quot;模型&lt;br/&gt;AI Gateway / provider&quot;]
+  E --&gt; C[&quot;通道&lt;br/&gt;Slack · 定时任务&quot;]
+  C --&gt;|&quot;webhook&quot;| E
+</code></pre>
+
+<p>四个依赖各自独立：world 存执行状态，沙箱跑命令，模型是外部 API，通道是入站口。<strong>自托管要自己负责 world 和沙箱这两块</strong>，Vercel 上它们由平台提供。</p>
+
+<h2 id="17-2-用脚手架生成">17.2 用脚手架生成</h2>
+
+<pre><code class="language-bash">eve add channel/web
+</code></pre>
+
+<p>选 Next.js 或 TanStack Start，它会生成：</p>
+
+<pre><code class="language-text">next.config.ts
+app/page.tsx
+app/_components/agent-chat.tsx
+app/_components/agent-message.tsx
+</code></pre>
+
+<pre><code class="language-ts">// next.config.ts
+import type { NextConfig } from &quot;next&quot;;
+import { withEve } from &quot;eve/next&quot;;
+
+const nextConfig: NextConfig = {};
+
+export default withEve(nextConfig);
+</code></pre>
+
+<p><code>withEve</code> 在开发时启动 agent 进程并代理请求，部署时把 agent 作为独立服务贡献出去。</p>
+
+<h3 id="witheve-的几个选项"><code>withEve</code> 的几个选项</h3>
+
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>默认</th>
+<th>用途</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>eveRoot</code></td>
+<td>Next.js 应用根</td>
+<td>eve 项目根（可含一个 <code>agent/</code> 或一个 <code>agents/</code> workspace）</td>
+</tr>
+
+<tr>
+<td><code>agents</code></td>
+<td>workspace 自动推断</td>
+<td>挂到 <code>/eve/&lt;name&gt;/v1/*</code> 的具名 agent</td>
+</tr>
+
+<tr>
+<td><code>eveBuildCommand</code></td>
+<td>自动生成</td>
+<td>生成服务的构建命令</td>
+</tr>
+
+<tr>
+<td><code>servicePrefix</code></td>
+<td><code>/_eve_internal/eve</code></td>
+<td>内部路由命名空间</td>
+</tr>
+
+<tr>
+<td><code>devServerTimeoutMs</code></td>
+<td><code>180000</code></td>
+<td>等 dev server 就绪的上限，冷启动慢时调大</td>
+</tr>
+</tbody>
+</table>
+
+<p>前后端平级时：</p>
+
+<pre><code class="language-ts">// apps/web/next.config.ts
+export default withEve(nextConfig, { eveRoot: &quot;../..&quot; });
+</code></pre>
+
+<p><strong>保留生成的聊天组件。</strong> 它渲染了工具结果、错误、授权链接、审批按钮、问题表单。自己写一个只渲染文本的组件，第 11 章的审批就没法在 UI 上完成——turn 会一直挂着。</p>
+
+<h2 id="17-3-自己写-ui">17.3 自己写 UI</h2>
+
+<pre><code class="language-tsx">&quot;use client&quot;;
+
+import { useEveAgent } from &quot;eve/react&quot;;
+
+export function Chat() {
+  const agent = useEveAgent();
+  const busy = agent.status === &quot;submitted&quot; || agent.status === &quot;streaming&quot;;
+
+  return (
+    &lt;form
+      onSubmit={(e) =&gt; {
+        e.preventDefault();
+        const form = new FormData(e.currentTarget);
+        const text = String(form.get(&quot;message&quot;) ?? &quot;&quot;).trim();
+        if (text) void agent.send(text, busy ? { turnPolicy: &quot;steer&quot; } : undefined);
+      }}
+    &gt;
+      {agent.data.messages.map((m) =&gt; (
+        &lt;article key={m.id}&gt;
+          &lt;header&gt;{m.role}&lt;/header&gt;
+          {m.parts.map((p, i) =&gt;
+            p.type === &quot;text&quot; ? &lt;p key={p.id ?? i}&gt;{p.text}&lt;/p&gt; : null
+          )}
+        &lt;/article&gt;
+      ))}
+      &lt;input name=&quot;message&quot; disabled={agent.status === &quot;resuming&quot;} /&gt;
+      &lt;button type=&quot;submit&quot; disabled={agent.status === &quot;resuming&quot;}&gt;发送&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+</code></pre>
+
+<p><code>useEveAgent()</code> 的选项：</p>
+
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>类型</th>
+<th>默认</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>agent</code></td>
+<td><code>string</code></td>
+<td>无</td>
+<td>具名 agent，路由到 <code>/eve/&lt;name&gt;/v1/*</code>；不能和 <code>host</code> 同时用</td>
+</tr>
+
+<tr>
+<td><code>host</code></td>
+<td><code>string</code></td>
+<td><code>&quot;&quot;</code>（同源）</td>
+<td>基址或同源代理前缀</td>
+</tr>
+
+<tr>
+<td><code>auth</code></td>
+<td>同 <code>Client</code> 的 <code>auth</code></td>
+<td>无</td>
+<td>浏览器端的凭据解析（<code>bearer</code> / <code>basic</code> / <code>vercelOidc</code>）</td>
+</tr>
+
+<tr>
+<td><code>headers</code></td>
+<td><code>Record&lt;string, string&gt; \| 回调</code></td>
+<td>无</td>
+<td>每个请求都带的头</td>
+</tr>
+
+<tr>
+<td><code>session</code></td>
+<td><code>ClientSession</code></td>
+<td>无</td>
+<td>用已有会话句柄</td>
+</tr>
+
+<tr>
+<td><code>initialSession</code></td>
+<td><code>{ sessionId, streamIndex }</code></td>
+<td>无</td>
+<td>用保存的游标恢复</td>
+</tr>
+
+<tr>
+<td><code>initialEvents</code></td>
+<td><code>MessageStreamEvent[]</code></td>
+<td>无</td>
+<td>先渲染历史，必须是同一会话流的有序前缀</td>
+</tr>
+
+<tr>
+<td><code>resume</code></td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+<td>挂载后重放并跟随进行中的 turn，需要 <code>session</code> 或 <code>initialSession</code></td>
+</tr>
+
+<tr>
+<td><code>prewarm</code></td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+<td>只建会话不发起 turn</td>
+</tr>
+
+<tr>
+<td><code>reducer</code></td>
+<td><code>EveAgentReducer&lt;TData&gt;</code></td>
+<td>默认 reducer</td>
+<td>自定义投影</td>
+</tr>
+
+<tr>
+<td><code>optimistic</code></td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>提交时先本地显示用户消息</td>
+</tr>
+
+<tr>
+<td><code>followIdle</code></td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>会话空闲时是否继续挂着流；<code>false</code> 在空闲时关流，下次 <code>send</code> / <code>respond</code> / <code>resume</code> 从游标重开</td>
+</tr>
+
+<tr>
+<td><code>followSubagents</code></td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+<td>跟随每个子代理的会话到 <code>conversation.agents</code></td>
+</tr>
+
+<tr>
+<td><code>onError</code> / <code>onEvent</code> / <code>onFinish</code> / <code>onSessionChange</code> / <code>prepareSend</code></td>
+<td>回调</td>
+<td>无</td>
+<td>生命周期钩子</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>useEveAgent()</code> 返回的东西：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>用途</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>data</code></td>
+<td>选定的投影，默认是 <code>ConversationState</code>（含 <code>messages</code>、<code>inputs</code>）</td>
+</tr>
+
+<tr>
+<td><code>conversation</code></td>
+<td>规范会话状态，含子代理状态</td>
+</tr>
+
+<tr>
+<td><code>status</code></td>
+<td><code>ready</code> / <code>resuming</code> / <code>submitted</code> / <code>streaming</code> / <code>error</code></td>
+</tr>
+
+<tr>
+<td><code>error</code></td>
+<td>最近一次失败</td>
+</tr>
+
+<tr>
+<td><code>events</code></td>
+<td>原始事件流，要自己投影时用</td>
+</tr>
+
+<tr>
+<td><code>session</code></td>
+<td>可序列化游标（<code>sessionId</code>、<code>streamIndex</code>）</td>
+</tr>
+
+<tr>
+<td><code>prewarm</code></td>
+<td>只建会话不发起 turn</td>
+</tr>
+
+<tr>
+<td><code>send</code></td>
+<td>发消息，可带每轮选项</td>
+</tr>
+
+<tr>
+<td><code>respond</code></td>
+<td>回答待处理的人工输入</td>
+</tr>
+
+<tr>
+<td><code>resume</code></td>
+<td>接回已有会话并跟随进行中的 turn</td>
+</tr>
+
+<tr>
+<td><code>cancel</code></td>
+<td>取消当前 turn</td>
+</tr>
+
+<tr>
+<td><code>reset</code></td>
+<td>清本地状态，开新会话</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="刷新后接回">刷新后接回</h3>
+
+<p>把 <code>{ sessionId, streamIndex }</code> 存进 URL 或 localStorage，刷新后用 <code>resume</code> 接回去，进行中的 turn 也能继续跟：</p>
+
+<pre><code class="language-tsx">const agent = useEveAgent({
+  session: savedSession,        // 从存储里读
+  initialEvents: savedEvents,   // 可选：先渲染历史
+});
+</code></pre>
+
+<p>多个聊天线程时，每个线程存一份 <code>session</code> + 事件日志；切换线程要重挂组件（<code>key={chat.id}</code>），因为 <code>session</code>、<code>auth</code>、<code>reducer</code>、<code>followIdle</code> 这些只在 store 创建时读一次。</p>
+
+<p><strong>长期挂载的面板要关掉空闲跟随。</strong> 只要组件还挂着，流就一直重连，哪怕什么都没发生。像常驻侧边栏这种只在用户主动问话后才需要回复的界面，传 <code>followIdle: false</code>：会话进入空闲（没有 turn 在跑或停泊、没有任务在跑、没有待登录）时关流，下一次 <code>send</code> / <code>respond</code> / <code>resume</code> 从会话游标重开，中间到达的事件那时补上。prewarm 的会话在第一条消息之前不开流。反过来，如果定时任务、通道或另一个标签页可能在你空闲时给同一会话开新 turn，就别关。</p>
+
+<h3 id="流式">流式</h3>
+
+<p><code>useEveAgent</code> 默认已经把 <code>message.appended</code> 累加进 <code>data.messages</code>。要自己处理原始流，用 <code>events</code>：</p>
+
+<pre><code class="language-tsx">useEffect(() =&gt; {
+  for (const event of agent.events) {
+    if (event.type === &quot;action.result&quot;) console.log(event.data.result.toolName);
+  }
+}, [agent.events]);
+</code></pre>
+
+<h2 id="17-4-在-ui-里处理审批">17.4 在 UI 里处理审批</h2>
+
+<p>默认 reducer 把待处理请求记在 <code>data.inputs</code> 里，每条带 <code>requestId</code>、<code>kind</code>、<code>prompt</code>、<code>options</code>。<strong>不要自己过滤状态</strong>，用 <code>eve/react</code> 导出的 <code>openConversationInputs()</code>——它知道哪些请求已经 settle、哪些属于子代理：</p>
+
+<pre><code class="language-tsx">import { openConversationInputs } from &quot;eve/react&quot;;
+
+const pending = openConversationInputs(agent.data).map((input) =&gt; input.request);
+
+return pending.map((request) =&gt; (
+  &lt;fieldset key={request.requestId} disabled={agent.status === &quot;resuming&quot;}&gt;
+    &lt;legend&gt;
+      {request.kind === &quot;tool-approval&quot;
+        ? &quot;需要审批&quot;
+        : request.kind === &quot;question&quot;
+          ? &quot;需要回答&quot;
+          : &quot;额度提示&quot;}
+    &lt;/legend&gt;
+    &lt;p&gt;{request.prompt}&lt;/p&gt;
+    {request.options?.map((option) =&gt; (
+      &lt;button
+        key={option.id}
+        type=&quot;button&quot;
+        onClick={() =&gt; void agent.respond([{ requestId: request.requestId, optionId: option.id }])}
+      &gt;
+        {option.label}
+      &lt;/button&gt;
+    ))}
+  &lt;/fieldset&gt;
+));
+</code></pre>
+
+<p>要点：</p>
+
+<ul>
+<li>提交不等于完成。<code>respond()</code> 先把请求标成 <code>responded</code>，等 <code>approval.settled</code> 或 <code>input.resolved</code> 到达才算解决。</li>
+<li>一个 turn 可能有多个待答请求。全渲染出来，别只显示第一个。</li>
+<li><code>allowFreeform</code> 为真的问题要渲染文本输入，发 <code>{ requestId, text }</code>。</li>
+<li>被拒绝的审批会重新打开。</li>
+</ul>
+
+<h2 id="17-5-鉴权">17.5 鉴权</h2>
+
+<p>默认通道在生产环境返回 401。三种做法：</p>
+
+<p><strong>做法一：应用会话（推荐给已有 Web 应用）</strong></p>
+
+<pre><code class="language-ts">// agent/channels/eve.ts
+import { eveChannel } from &quot;eve/channels/eve&quot;;
+import { localDev, vercelOidc } from &quot;eve/channels/auth&quot;;
+import { verifyAppSession } from &quot;../lib/auth&quot;;
+
+export default eveChannel({
+  auth: [verifyAppSession, vercelOidc(), localDev()],
+});
+</code></pre>
+
+<p><code>verifyAppSession</code> 从 cookie 或 bearer 里验证你的应用会话，返回 <code>principalType: &quot;user&quot;</code> 的 principal。同源集成会自动带 cookie。</p>
+
+<p><code>eveChannel</code> 除 <code>auth</code> 外还有 <code>audience</code>、<code>uploadPolicy</code>、<code>fetchFile</code>、<code>cors</code>、<code>turnPolicy</code>、<code>onMessage</code>、<code>events</code>、<code>trustedForwarders</code>，字段表在第 14 章。</p>
+
+<p><strong>做法二：HTTP Basic（单用户内部工具）</strong></p>
+
+<p>见第 14 章。注意要配 <code>proxy.ts</code> 让浏览器弹原生登录框，并且必须走 HTTPS。</p>
+
+<pre><code class="language-ts">// proxy.ts
+import { routeAuth } from &quot;eve/channels/auth&quot;;
+import { NextResponse } from &quot;next/server&quot;;
+import { appAuth } from &quot;./agent/lib/auth&quot;;
+
+export async function proxy(request: Request) {
+  if (process.env.NODE_ENV === &quot;development&quot;) return NextResponse.next();
+  const result = await routeAuth(request, appAuth);
+  return result instanceof Response ? result : NextResponse.next();
+}
+
+export const config = { matcher: [&quot;/&quot;, &quot;/s/:path*&quot;] };
+</code></pre>
+
+<p><strong>做法三：匿名（只用于公开演示）</strong></p>
+
+<pre><code class="language-ts">import { none } from &quot;eve/channels/auth&quot;;
+
+export default eveChannel({ auth: [none()] });
+</code></pre>
+
+<p><code>none()</code> 是显式放行所有请求。<strong>处理私有或生产数据的 agent 绝不能用。</strong></p>
+
+<h2 id="17-6-部署到-vercel">17.6 部署到 Vercel</h2>
+
+<pre><code class="language-bash">npx vercel@latest link
+npx vercel@latest env add ANTHROPIC_API_KEY preview
+npx vercel@latest env add OPS_USERNAME preview
+npx vercel@latest env add OPS_PASSWORD preview
+npx vercel@latest deploy
+</code></pre>
+
+<p>或者用 eve 自己的命令：</p>
+
+<pre><code class="language-bash">eve link
+eve deploy
+</code></pre>
+
+<p>要点：</p>
+
+<ul>
+<li><strong>本地 <code>.env</code> 不会随部署上传。</strong> 每个环境（Preview / Production）都要单独配。</li>
+<li>如果你本地用的是 ChatGPT 订阅登录，部署要换成 AI Gateway 模型 + <code>AI_GATEWAY_API_KEY</code>。订阅凭据只在你笔记本上有效。</li>
+<li>部署在 Vercel 上时，沙箱自动用 Vercel Sandbox，workflow 自动用 Vercel Workflow，cron 自动变成 Vercel Cron Job。</li>
+<li>生产要发 <code>--prod</code>。</li>
+</ul>
+
+<p>部署后必须验证：</p>
+
+<pre><code class="language-bash"># 无凭据必须 401
+curl -i -X POST https://your-app.vercel.app/eve/v1/session
+
+# 健康检查（公开）
+curl https://your-app.vercel.app/eve/v1/health
+
+# 带凭据应该 202
+curl -i -X POST https://your-app.vercel.app/eve/v1/session \
+  -u &quot;$USER:$PASS&quot; -H 'content-type: application/json' \
+  -d '{&quot;message&quot;:&quot;hi&quot;}'
+</code></pre>
+
+<p>第一条如果返回 202，你的 agent 是公开的，任何人都在花你的钱。</p>
+
+<h2 id="17-7-自托管">17.7 自托管</h2>
+
+<p>目标：Node 服务 + 你自己的持久化 + 你自己的沙箱。</p>
+
+<h3 id="1-构建与启动">1. 构建与启动</h3>
+
+<pre><code class="language-bash">eve build
+PORT=3000 eve start --host 0.0.0.0
+</code></pre>
+
+<p>构建产物在 <code>.output/</code>（Nitro server）。<code>eve start</code> 服务这份产物，接受 <code>PORT</code> 或 <code>--port</code>。TLS、伸缩、重启、日志收集交给你的进程管理器或容器平台。</p>
+
+<h3 id="2-模型与鉴权">2. 模型与鉴权</h3>
+
+<ul>
+<li>非 Vercel 主机用 Gateway 字符串模型：设 <code>AI_GATEWAY_API_KEY</code>。</li>
+<li>直连 provider：装对应 AI SDK provider 包，在 <code>agent.ts</code> 里传模型对象，设它自己的 API key。</li>
+<li><strong>别把 <code>vercelOidc()</code> 当成唯一的生产鉴权</strong>——它只在 Vercel 环境有意义。用 Basic / JWT / OIDC / 自定义 verifier。</li>
+</ul>
+
+<h3 id="3-持久化-workflow-状态">3. 持久化 workflow 状态</h3>
+
+<p>默认的本地 world 把 run 状态写在 <code>.eve/.workflow-data</code>。两种做法：</p>
+
+<p><strong>把目录挂到持久卷</strong>（最简单）：</p>
+
+<pre><code class="language-text">/app/.eve/.workflow-data  →  持久卷
+</code></pre>
+
+<p><strong>换一个 world 包</strong>：</p>
+
+<pre><code class="language-ts">// agent/agent.ts
+export default defineAgent({
+  model: &quot;anthropic/claude-sonnet-5&quot;,
+  experimental: {
+    workflow: { world: &quot;@workflow/world-postgres&quot; },
+  },
+});
+</code></pre>
+
+<p>换 world 的完整步骤（建表、环境变量、自定义包）在 10.14。有一个部署时必须处理的点：Postgres world 自带的 worker 会把编排投递到 <code>POST /.well-known/workflow/v1/flow</code>，这个路由<strong>没有鉴权</strong>，要在网关层挡住。</p>
+
+<ul>
+<li>版本钉在 eve 自带的那一代 <code>@workflow/*</code> 上。<code>eve@0.81.1</code> 依赖 <code>@workflow/world@5.0.3</code>、<code>world-local@5.1.0</code>、<code>world-vercel@5.2.0</code>，<code>world-postgres</code> 当前最新 <code>5.0.5</code>。装 <code>latest</code> 可能拿到协议不兼容的版本，初始化时会被拒。官方文档里还写着 <code>5.0.0-beta.x</code>，那行已经过时，以包里的依赖为准。</li>
+<li>连接串等配置放<strong>环境变量</strong>，由 world 包自己读，不要写进 <code>agent.ts</code>。</li>
+<li>要在构建产物里保持 external，加到 <code>build.externalDependencies</code>。</li>
+</ul>
+
+<h3 id="4-沙箱">4. 沙箱</h3>
+
+<pre><code class="language-ts">// agent/sandbox/sandbox.ts
+import { defineSandbox } from &quot;eve/sandbox&quot;;
+import { DockerSandbox } from &quot;eve/sandbox/docker&quot;;
+
+export const environment = DockerSandbox.environment();
+
+export default defineSandbox(() =&gt; environment.open({ networkPolicy: &quot;deny-all&quot; }));
+</code></pre>
+
+<p>构建机要能构建镜像，运行时要能启动容器（挂 docker socket 或用远程 Docker）。</p>
+
+<h3 id="5-反向代理">5. 反向代理</h3>
+
+<ul>
+<li>请求体上限放开（附件内联 base64）。</li>
+<li><strong>关闭响应缓冲</strong>（NDJSON 要逐行下发）。</li>
+<li>超时给够（长 turn 可能跑几分钟）。</li>
+</ul>
+
+<h3 id="6-定时任务">6. 定时任务</h3>
+
+<p><code>eve start</code> 会启动 Nitro 的 scheduled task runner。如果你用自己的进程管理器只服务 HTTP、不启动 runner，cron 定义还在但不会触发。要么用 <code>eve start</code>，要么用外部调度器通过鉴权路由触发。</p>
+
+<h3 id="7-版本钉死">7. 版本钉死</h3>
+
+<p>非 Vercel Workflow 的世界，<strong>一个 eve 版本同时只能服务一个 world</strong>。升级后老会话全部 stranded（第 10 章）。所以：</p>
+
+<pre><code class="language-json">{ &quot;dependencies&quot;: { &quot;eve&quot;: &quot;0.81.1&quot; } }
+</code></pre>
+
+<p>不要用 <code>^</code>。升级是需要计划的操作。</p>
+
+<h2 id="17-8-环境变量清单">17.8 环境变量清单</h2>
+
+<p>先记住三条，细节见<a href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">附录 C</a>：<code>.env.local</code> 不会随部署上传；<code>eve build</code> 不读 <code>.env*</code>，编译期求值的定义要用构建机的环境；沙箱里没有 <code>process.env</code>。</p>
+
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>用途</th>
+<th>必填</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>AI_GATEWAY_API_KEY</code></td>
+<td>走 AI Gateway 的模型</td>
+<td>用 Gateway 时</td>
+</tr>
+
+<tr>
+<td><code>ANTHROPIC_API_KEY</code> / <code>OPENAI_API_KEY</code></td>
+<td>直连 provider</td>
+<td>直连时</td>
+</tr>
+
+<tr>
+<td><code>DEEPSEEK_API_KEY</code> / <code>DASHSCOPE_API_KEY</code> / <code>ZHIPU_API_KEY</code> 等</td>
+<td>直连国产 provider（第 2 章）</td>
+<td>用哪个填哪个</td>
+</tr>
+
+<tr>
+<td>业务工具自己的密钥</td>
+<td>日志 API、OPS API 等</td>
+<td>按需</td>
+</tr>
+
+<tr>
+<td>通道鉴权凭据</td>
+<td>Basic 用户名密码、应用会话密钥</td>
+<td>生产必填</td>
+</tr>
+
+<tr>
+<td><code>WORKFLOW_POSTGRES_URL</code>（没有则退回 <code>DATABASE_URL</code>）</td>
+<td>Postgres world 的连接串</td>
+<td>自托管时</td>
+</tr>
+</tbody>
+</table>
+
+<p>一个原则：<strong>所有密钥只在应用运行时</strong>。不要放进沙箱、不要放进技能正文、不要放进给模型的工具输出。</p>
+
+<h2 id="17-9-常见坑">17.9 常见坑</h2>
+
+<p><strong>坑：部署后 401，以为部署坏了。</strong>
+默认鉴权策略就是拒绝生产流量。配 <code>agent/channels/eve.ts</code>。</p>
+
+<p><strong>坑：部署后能用，但任何人扫到 URL 都能用。</strong>
+同上，反过来说：没有鉴权就是公开的。用无凭据 curl 验证。</p>
+
+<p><strong>坑：本地能跑，线上模型报错。</strong>
+本地 <code>.env</code> 没上传，或用了订阅登录。换成 Gateway/API key 并配到对应环境。</p>
+
+<p><strong>坑：自己写聊天 UI，审批按钮没有。</strong>
+turn 会一直挂着。保留生成的组件，或自己实现 <code>respond</code>。</p>
+
+<p><strong>坑：自托管 cron 不触发。</strong>
+托管方式没启动 Nitro 任务 runner。用 <code>eve start</code>。</p>
+
+<p><strong>坑：自托管升级后所有会话 409。</strong>
+stranded session。钉版本，升级前接受中断。</p>
+
+<p><strong>坑：反向代理缓冲了流式响应。</strong>
+前端看起来「一次性吐出全部」。关掉代理缓冲。</p>
+
+<p><strong>坑：<code>withEve</code> 的 <code>eveRoot</code> 写错。</strong>
+前后端平级时忘了 <code>eveRoot: &quot;../..&quot;</code>，dev 起来找不到 agent。</p>
+
+<h2 id="17-10-练习">17.10 练习</h2>
+
+<ol>
+<li><code>eve add channel/web</code> 生成 Next.js 前端，跑通一轮对话和一个审批。</li>
+<li>把 <code>{ sessionId, streamIndex }</code> 存进 URL，刷新后 <code>resume</code> 接回。</li>
+<li>用 HTTP Basic 保护部署，验证无凭据 401、有凭据 202。</li>
+<li>本地 <code>eve build &amp;&amp; eve start</code>，用 <code>curl</code> 验证 <code>/eve/v1/health</code> 和一次完整对话。</li>
+<li>用 Docker 做沙箱 + Postgres 做 world，跑一次自托管。</li>
+</ol>
+
+<h2 id="延伸阅读">延伸阅读</h2>
+
+<ul>
+<li><a href="https://eve.dev/docs/guides/frontend/overview">Frontend overview</a></li>
+<li><a href="https://eve.dev/docs/guides/frontend/nextjs">Next.js</a></li>
+<li><a href="https://eve.dev/docs/guides/auth-and-route-protection">Auth &amp; route protection</a></li>
+<li><a href="https://eve.dev/docs/guides/deployment/overview">Deployment overview</a></li>
+<li><a href="https://eve.dev/docs/guides/deployment/self-hosting">Self-hosting</a></li>
+</ul>
+
+<hr />
+
+<p>上一章：<a href="https://tangxusc.github.io/2026/10/eve-16-evals/">16 评测</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/">18 进阶与上线检查</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/" data-tooltip="eve 中文教程 · 第 18 章 进阶与上线检查">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-16-evals/" data-tooltip="eve 中文教程 · 第 16 章 评测">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/" data-tooltip="eve 中文教程 · 第 18 章 进阶与上线检查">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-16-evals/" data-tooltip="eve 中文教程 · 第 16 章 评测">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 <code>eve init</code> 讲到上线。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
+                <h3 class="media-heading">eve 中文教程 · 附录 C 环境变量与密钥</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p><code>process.env</code> 只在<strong>应用运行时</strong>存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">
+                <h3 class="media-heading">eve 中文教程 · 附录 B 事件与 CLI</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">完整事件表、CLI 命令、HTTP 路由。写客户端、排查事件流、核对某个字段时对着这张表看。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">
+                <h3 class="media-heading">eve 中文教程 · 附录 A 术语与速查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">概念对照、目录速查、常见错误码。读不懂某个词、找不到某个文件、看到一个陌生状态码时先查这里。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/">
+                <h3 class="media-heading">eve 中文教程 · 第 18 章 进阶与上线检查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>这一章把散落在前面的进阶能力收在一起，然后给一份能逐条打勾的上线清单。清单比概念重要。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
+                <h3 class="media-heading">eve 中文教程 · 第 17 章 前端与部署</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-16-evals/">
+                <h3 class="media-heading">eve 中文教程 · 第 16 章 评测</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
+                <h3 class="media-heading">eve 中文教程 · 第 15 章 定时与钩子</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-14-channels/">
+                <h3 class="media-heading">eve 中文教程 · 第 14 章 通道</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-13-connections/">
+                <h3 class="media-heading">eve 中文教程 · 第 13 章 连接</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 <code>eve__search</code> 找到工具，用 <code>eve__tool</code> 调用，凭据由 eve 在应用侧注入。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         125 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-17-frontend-and-deploy\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-17-frontend-and-deploy\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

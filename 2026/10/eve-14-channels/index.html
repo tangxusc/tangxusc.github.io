@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。
+">
+
+
+<meta property="og:description" content="
+通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 14 章 通道">
+<meta name="twitter:title" content="eve 中文教程 · 第 14 章 通道">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-14-channels/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-14-channels/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。
+">
+<meta name="twitter:description" content="
+通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-22T09:14:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-22T09:14:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 14 章 通道</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-14-channels/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 14 章 通道
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-22T09:14:00&#43;08:00">
+        
+  October 22, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。</p>
+</blockquote>
+
+<h2 id="14-1-通道解决两件事">14.1 通道解决两件事</h2>
+
+<ol>
+<li><strong>投递</strong>：平台消息进来，转成 turn；回复出去，转成平台格式。</li>
+<li><strong>身份</strong>：把平台用户映射成 eve 的 principal，让工具能按人/租户隔离。</li>
+</ol>
+
+<p>第二件比第一件重要。没有身份映射，所有「按用户」的逻辑都会退化成一个共享账号，记忆、审批、配额全部串号。</p>
+
+<h2 id="14-2-选哪个通道">14.2 选哪个通道</h2>
+
+<table>
+<thead>
+<tr>
+<th>你要的</th>
+<th>用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>网页聊天</td>
+<td>eve 通道 + <code>useEveAgent</code>（第 17 章）</td>
+</tr>
+
+<tr>
+<td>本地工具、SDK、<code>curl</code></td>
+<td>默认 eve HTTP 通道</td>
+</tr>
+
+<tr>
+<td>Slack 的 @、DM、按钮</td>
+<td><code>channel/slack</code></td>
+</tr>
+
+<tr>
+<td>Discord 斜杠命令、组件</td>
+<td><code>channel/discord</code></td>
+</tr>
+
+<tr>
+<td>Teams 消息 + Adaptive Cards</td>
+<td><code>channel/teams</code></td>
+</tr>
+
+<tr>
+<td>Telegram bot</td>
+<td><code>channel/telegram</code></td>
+</tr>
+
+<tr>
+<td>短信 / 电话转写</td>
+<td><code>channel/twilio</code>、<code>channel/linq</code></td>
+</tr>
+
+<tr>
+<td>GitHub issue / PR</td>
+<td><code>channel/github</code></td>
+</tr>
+
+<tr>
+<td>Linear issue 委派</td>
+<td><code>channel/linear</code></td>
+</tr>
+
+<tr>
+<td>MCP 客户端把 agent 当工具用</td>
+<td><code>channel/mcp</code></td>
+</tr>
+
+<tr>
+<td>内部 webhook、WebSocket</td>
+<td>自定义通道</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="14-3-默认-http-通道">14.3 默认 HTTP 通道</h2>
+
+<p><code>agent/channels/eve.ts</code> 配置 <code>/eve/v1</code> 整个表面。不写这个文件，框架用默认源：<code>[vercelOidc(), localDev(), placeholderAuth()]</code>。</p>
+
+<pre><code class="language-ts">// agent/channels/eve.ts
+import { eveChannel } from &quot;eve/channels/eve&quot;;
+import { localDev, vercelOidc } from &quot;eve/channels/auth&quot;;
+
+export default eveChannel({
+  auth: [vercelOidc(), localDev()],
+});
+</code></pre>
+
+<p><code>eveChannel</code> 的字段（只有 <code>auth</code> 必填）：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>默认</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>auth</code></td>
+<td><code>AuthFn \| AuthFn[]</code></td>
+<td>必填</td>
+<td>路由鉴权链，按顺序尝试</td>
+</tr>
+
+<tr>
+<td><code>audience</code></td>
+<td><code>ChannelAudience \| (input) =&gt; ChannelAudience</code></td>
+<td>按调用者推导</td>
+<td>追踪内容的可见性分类</td>
+</tr>
+
+<tr>
+<td><code>turnPolicy</code></td>
+<td><code>&quot;steer&quot; \| &quot;queue&quot;</code></td>
+<td><code>&quot;steer&quot;</code></td>
+<td>turn 进行中收到新消息怎么办</td>
+</tr>
+
+<tr>
+<td><code>uploadPolicy</code></td>
+<td><code>UploadPolicyInput \| &quot;disabled&quot;</code></td>
+<td>25 MB、所有类型</td>
+<td>入站附件的大小和类型</td>
+</tr>
+
+<tr>
+<td><code>fetchFile</code></td>
+<td><code>(url, ctx) =&gt; bytes \| { bytes, … } \| null</code></td>
+<td>无</td>
+<td>把 URL 形式的附件取回；返回 <code>null</code> 表示「不是我的，你去下载」</td>
+</tr>
+
+<tr>
+<td><code>cors</code></td>
+<td><code>boolean \| { origin, methods, … }</code></td>
+<td>不处理</td>
+<td>浏览器 CORS</td>
+</tr>
+
+<tr>
+<td><code>onMessage</code></td>
+<td><code>(ctx, message) =&gt; { auth, context?, title? }</code></td>
+<td>用路由鉴权结果</td>
+<td>派发前改写入站消息</td>
+</tr>
+
+<tr>
+<td><code>events</code></td>
+<td>事件处理器表</td>
+<td>无</td>
+<td>流事件钩子，参数是 <code>(event, channel, ctx)</code></td>
+</tr>
+
+<tr>
+<td><code>trustedForwarders</code></td>
+<td>谓词</td>
+<td>无</td>
+<td>允许哪些上游转发用户身份；不配就一律 403</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="鉴权链怎么走">鉴权链怎么走</h3>
+
+<p><code>auth</code> 收一个 <code>AuthFn</code> 或数组，按顺序尝试。每个条目三种结果：</p>
+
+<table>
+<thead>
+<tr>
+<th>返回</th>
+<th>结果</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>一个 <code>SessionAuthContext</code></td>
+<td>接受，停止遍历</td>
+</tr>
+
+<tr>
+<td><code>null</code> / <code>undefined</code></td>
+<td>跳过，试下一个</td>
+</tr>
+
+<tr>
+<td><strong>抛异常</strong></td>
+<td>用特定状态码拒绝（<code>UnauthenticatedError</code> → 401，<code>ForbiddenError</code> → 403）</td>
+</tr>
+</tbody>
+</table>
+
+<p>全部跳过 → 401，<code>WWW-Authenticate</code> 头会列出配置里声明过的方案（<code>httpBasic()</code> 声明 <code>Basic</code>，token 类声明 <code>Bearer</code>）。</p>
+
+<h3 id="helper-一览">helper 一览</h3>
+
+<table>
+<thead>
+<tr>
+<th>Helper</th>
+<th>作用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>localDev()</code></td>
+<td>只在 <code>eve dev</code> / <code>vercel dev</code> 进程里放行（看部署环境，不看请求头）</td>
+</tr>
+
+<tr>
+<td><code>vercelOidc()</code></td>
+<td>验证 Vercel OIDC bearer，本地 CLI 和同团队部署互调靠它</td>
+</tr>
+
+<tr>
+<td><code>none()</code></td>
+<td>显式接受匿名流量，<strong>只放最后一位</strong>，只用于公开演示</td>
+</tr>
+
+<tr>
+<td><code>httpBasic({ username, password }, { realm })</code></td>
+<td>共享用户名密码，最省事的内部工具方案</td>
+</tr>
+
+<tr>
+<td><code>jwtHmac(...)</code> / <code>jwtEcdsa(...)</code> / <code>oidc(...)</code></td>
+<td>自签 JWT / 非对称 JWT / 任意 OIDC issuer</td>
+</tr>
+
+<tr>
+<td><code>placeholderAuth()</code></td>
+<td>生产一律 401，脚手架占位</td>
+</tr>
+
+<tr>
+<td><code>verifyHttpBasic(header, { username, password })</code></td>
+<td>低层校验，返回 <code>{ ok, sessionAuth }</code></td>
+</tr>
+
+<tr>
+<td><code>withAuthChallenges(fn, challenges)</code></td>
+<td>给自定义 <code>AuthFn</code> 声明 401 的方案</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>localDev()</code> 和 <code>vercelOidc()</code> 都<strong>不</strong>放行生产环境的浏览器用户和外部客户端。面向公众的应用必须接自己的鉴权。</p>
+
+<p>鉴权函数是<strong>运行时</strong>入口：里面读 <code>process.env</code> 是安全的，值不会进编译产物，进程启动时从源码重新取。反过来说，别把密码写成模块顶层的常量——那是编译期求值。细节见<a href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">附录 C</a>。</p>
+
+<h3 id="一个可用的单用户方案">一个可用的单用户方案</h3>
+
+<pre><code class="language-ts">// agent/channels/eve.ts
+import { eveChannel } from &quot;eve/channels/eve&quot;;
+import { httpBasic, localDev, vercelOidc } from &quot;eve/channels/auth&quot;;
+
+const username = process.env.OPS_USERNAME;
+const password = process.env.OPS_PASSWORD;
+
+export default eveChannel({
+  auth: [
+    // 配置缺失就不挂这条，让请求落到后面的条目并最终 401
+    ...(username &amp;&amp; password
+      ? [httpBasic({ username, password }, { realm: &quot;opsbot&quot; })]
+      : []),
+    vercelOidc(),
+    localDev(),
+  ],
+});
+</code></pre>
+
+<p>需要自己控制校验细节（同源检查、注入 <code>attributes</code>）时，用低层组合：</p>
+
+<pre><code class="language-ts">// agent/lib/auth.ts
+import { verifyHttpBasic, withAuthChallenges } from &quot;eve/channels/auth&quot;;
+
+export const appAuth = withAuthChallenges(
+  (request: Request) =&gt; {
+    const username = process.env.OPS_USERNAME;
+    const password = process.env.OPS_PASSWORD;
+    if (!username || !password) return null;              // 配置缺失 → 关闭
+
+    // 浏览器发起的跨站请求一律拒绝
+    if (request.headers.has(&quot;origin&quot;) &amp;&amp;
+        request.headers.get(&quot;sec-fetch-site&quot;) !== &quot;same-origin&quot;) return null;
+
+    const result = verifyHttpBasic(request.headers.get(&quot;authorization&quot;), { username, password });
+    if (!result.ok) return null;
+
+    return {
+      ...result.sessionAuth,
+      attributes: { team: &quot;ops&quot; },
+      issuer: &quot;opsbot&quot;,
+    };
+  },
+  [{ scheme: &quot;Basic&quot;, parameters: { realm: &quot;opsbot&quot;, charset: &quot;UTF-8&quot; } }],
+);
+</code></pre>
+
+<p>要点：缺环境变量、缺凭据、凭据错误，全部 <strong>fail closed</strong>（返回 <code>null</code>，最终 401）。共享密码不提供每人独立身份，多人使用要换真的会话鉴权。</p>
+
+<h3 id="cors">CORS</h3>
+
+<p>默认不管 CORS。浏览器直连时才开：</p>
+
+<pre><code class="language-ts">export default eveChannel({
+  auth: [...],
+  cors: {
+    origin: &quot;https://app.example.com&quot;,
+    methods: [&quot;GET&quot;, &quot;POST&quot;],
+    allowedHeaders: [&quot;authorization&quot;, &quot;content-type&quot;],
+  },
+});
+</code></pre>
+
+<h3 id="上传">上传</h3>
+
+<pre><code class="language-ts">export default eveChannel({
+  auth: [...],
+  uploadPolicy: { maxBytes: 100 * 1024 * 1024 },
+  async fetchFile(url) {
+    if (!url.startsWith(&quot;https://uploads.example.com/&quot;)) return null;
+    const r = await fetch(url, {
+      headers: { authorization: `Bearer ${process.env.UPLOADS_TOKEN}` },
+    });
+    if (!r.ok) throw new Error(`上传取回失败 ${r.status}`);
+    return Buffer.from(await r.arrayBuffer());
+  },
+});
+</code></pre>
+
+<ul>
+<li>默认上限 25 MB、所有类型。超出返回 <code>413</code>，类型不允许返回 <code>415</code>。</li>
+<li>内联 base64 还受宿主请求体限制。Vercel Functions 是 4.5 MB，所以 base64 文件大约 3.3 MB 就到顶。</li>
+<li>大文件先传到自己的存储，把 URL 放进 file part，再用 <code>fetchFile</code> 在 workflow step 内取回——字节不经过请求体。</li>
+<li><code>uploadPolicy</code> 覆盖 eve 为这个通道 staged 的<strong>所有</strong>文件，包括它自己下载的 URL。</li>
+</ul>
+
+<p><code>uploadPolicy</code> 只有两个字段（可以只给一个，其余用默认值）：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>默认</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>maxBytes</code></td>
+<td><code>number</code></td>
+<td>25 MB</td>
+<td>解码后的大小上限。<code>0</code> 等于拒绝所有附件</td>
+</tr>
+
+<tr>
+<td><code>allowedMediaTypes</code></td>
+<td><code>string[] \| &quot;*&quot;</code></td>
+<td><code>&quot;*&quot;</code></td>
+<td>精确值或通配（<code>image/*</code>）。不在列表里返回 415</td>
+</tr>
+</tbody>
+</table>
+
+<p>整个值也可以直接给 <code>&quot;disabled&quot;</code>，拒绝一切附件。</p>
+
+<h3 id="请求级上下文">请求级上下文</h3>
+
+<pre><code class="language-ts">import { defaultEveAuth, eveChannel } from &quot;eve/channels/eve&quot;;
+
+export default eveChannel({
+  auth: [...],
+  onMessage(ctx, message) {
+    return {
+      auth: defaultEveAuth(ctx),
+      context: [`HTTP 调用者 ${ctx.eve.caller?.principalId ?? &quot;anonymous&quot;} 说：${message}`],
+    };
+  },
+  events: {
+    &quot;message.completed&quot;(eventData, _channel, ctx) {
+      console.log(&quot;回复完成&quot;, { sessionId: ctx.session.id });
+    },
+  },
+});
+</code></pre>
+
+<ul>
+<li><code>context</code> 字符串会变成<strong>持久的用户消息</strong>进历史。</li>
+<li>只想影响本轮、不写历史，返回 <code>clientContext</code>。它替换请求自带的 <code>clientContext</code>，进入这个 turn 的每次模型调用，但不进会话历史。</li>
+<li><code>ctx.eve.clientContext</code> 是客户端<strong>原样</strong>发来的那份，没发就是 <code>undefined</code>。用它来校验或纠正客户端状态：</li>
+</ul>
+
+<pre><code class="language-ts">async onMessage(ctx) {
+  const auth = defaultEveAuth(ctx);
+  const plan = await getVerifiedPlan(auth);           // 以服务端为准
+  return { auth, clientContext: [`用户的套餐是 ${plan}。`] };
+},
+</code></pre>
+
+<p><code>clientContext</code> 的形状和请求里的一样（<code>ClientContextValue</code>：字符串、字符串数组或 JSON 对象）。返回 <code>[]</code> 表示丢掉请求带来的上下文，不返回则保留。eve 给客户端提供的内容打 <code>Client context:</code> 标签，<code>onMessage</code> 返回的不打标签。<code>onMessage</code> 只对带消息的请求跑，纯输入应答沿用请求自己的上下文。
+- <code>onMessage</code> 必须返回 auth 结果。</p>
+
+<h3 id="audience">audience</h3>
+
+<p>通道创建会话时给一个可观测性分类，决定追踪能不能记录内容：</p>
+
+<table>
+<thead>
+<tr>
+<th>会话创建者</th>
+<th>默认 audience</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>匿名</td>
+<td><code>unknown</code></td>
+</tr>
+
+<tr>
+<td><code>user</code> / <code>service</code> / <code>runtime</code> principal</td>
+<td><code>private</code></td>
+</tr>
+
+<tr>
+<td>其它 principal 类型</td>
+<td><code>unknown</code></td>
+</tr>
+</tbody>
+</table>
+
+<p><code>audience</code> 不影响谁能访问（那是 <code>auth</code> 的事），只影响内容捕获。公开演示站可以设 <code>audience: &quot;public&quot;</code>。</p>
+
+<h2 id="14-4-slack">14.4 Slack</h2>
+
+<pre><code class="language-bash">eve add channel/slack
+</code></pre>
+
+<p>推荐走 Vercel Connect，它托管 bot token、请求验签、token 轮换和多工作区安装：</p>
+
+<pre><code class="language-ts">// agent/channels/slack.ts
+import { connectSlackCredentials } from &quot;@vercel/connect/eve&quot;;
+import { slackChannel } from &quot;eve/channels/slack&quot;;
+
+export default slackChannel({
+  credentials: connectSlackCredentials(&quot;slack/opsbot&quot;),
+});
+</code></pre>
+
+<p>不想用 Connect 就自己管凭据：在 Slack app 里加 <code>app_mentions:read</code>、<code>chat:write</code>（DM 还要 <code>im:history</code>，附件要 <code>files:read</code>，长回复转摘要要 <code>files:write</code>），把 Request URL 指向 <code>https://&lt;你的域名&gt;/eve/v1/slack</code>。</p>
+
+<p>Slack 通道自动处理：</p>
+
+<ul>
+<li><code>@mention</code>、DM、slash command、快捷方式、交互回调</li>
+<li>在线程里回复、打字指示器</li>
+<li><strong>把审批和提问渲染成按钮和下拉</strong></li>
+<li>任务卡片（子代理/长任务的进度）</li>
+<li>长回复自动转成 snippet</li>
+</ul>
+
+<p>文本型通道（Twilio、GitHub、Linear、Chat SDK 系）只能一次显示一个请求，答完再显示下一个；Slack 这类有按钮的通道会把所有待答请求都摆出来。</p>
+
+<h3 id="排查">排查</h3>
+
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>先查什么</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>@ 了没反应</td>
+<td>事件订阅没开 <code>app_mention</code>，或 Request URL 指错，或部署在 Deployment Protection 后面</td>
+</tr>
+
+<tr>
+<td>审批按钮点不动</td>
+<td>Interactivity 的 Request URL 没配</td>
+</tr>
+
+<tr>
+<td>DM 或线程回复不工作</td>
+<td>加 <code>message.im</code> + <code>im:history</code>，重装 app</td>
+</tr>
+
+<tr>
+<td>长回复发不出</td>
+<td>加 <code>files:write</code>，重装 app</td>
+</tr>
+
+<tr>
+<td>预览分支收不到</td>
+<td>分支域名要能绕过 Deployment Protection，或加 <code>x-vercel-protection-bypass</code></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="14-5-其它平台">14.5 其它平台</h2>
+
+<table>
+<thead>
+<tr>
+<th>通道</th>
+<th>命令</th>
+<th>备注</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Discord</td>
+<td><code>eve add channel/discord</code></td>
+<td>服务器/频道</td>
+</tr>
+
+<tr>
+<td>Telegram</td>
+<td><code>eve add channel/telegram</code></td>
+<td>bot</td>
+</tr>
+
+<tr>
+<td>Teams</td>
+<td><code>eve add channel/teams</code></td>
+<td>Adaptive Cards</td>
+</tr>
+
+<tr>
+<td>GitHub</td>
+<td><code>eve add channel/github</code></td>
+<td>issue/PR，可 checkout 代码</td>
+</tr>
+
+<tr>
+<td>Linear</td>
+<td><code>eve add channel/linear</code></td>
+<td>issue 委派、Agent Sessions</td>
+</tr>
+
+<tr>
+<td>Twilio</td>
+<td><code>eve add channel/twilio</code></td>
+<td>SMS/语音</td>
+</tr>
+
+<tr>
+<td>MCP</td>
+<td><code>eve add channel/mcp</code></td>
+<td>把 agent 的工具发布成 MCP server</td>
+</tr>
+
+<tr>
+<td>Web Chat</td>
+<td><code>eve add channel/web</code></td>
+<td>Next.js / TanStack Start 前端</td>
+</tr>
+</tbody>
+</table>
+
+<p>配置文件都在 <code>agent/channels/&lt;name&gt;.ts</code>，配置项按平台不同。共同点：都会把平台用户映射成 principal。</p>
+
+<h2 id="14-6-自定义通道">14.6 自定义通道</h2>
+
+<p>自定义通道要处理两个方向：平台消息进来（入站）、agent 回复出去（出站）。</p>
+
+<pre><code class="language-mermaid">flowchart TD
+  P[&quot;Slack / 内部系统&quot;] --&gt;|&quot;webhook&quot;| RT[&quot;路由&lt;br/&gt;POST /threads/:id/messages&quot;]
+  RT --&gt;|&quot;from(address).send()&quot;| SE[&quot;会话&quot;]
+  SE --&gt;|&quot;事件流&quot;| AD[&quot;通道适配器&quot;]
+  AD --&gt;|&quot;平台 API 回帖&quot;| P
+  RT -.-&gt;|&quot;resolveSession / attachSession&quot;| SE
+  SE -.-&gt;|&quot;to(channel, target)&quot;| O[&quot;其它通道&quot;]
+</code></pre>
+
+<p>入站用<strong>地址句柄</strong>（<code>from(address)</code>），因为它要跟随「谁现在拥有这个线程」；出站由事件流驱动，通道把事件翻译成平台格式。<code>attachSession</code> 只在你明确要钉住某个会话 ID 时用。</p>
+
+<p>平台不在列表里，或要接内部系统时，写 <code>defineChannel</code>。路由是数组，用 <code>GET</code> / <code>POST</code> / <code>WS</code> 构造：</p>
+
+<pre><code class="language-ts">// agent/channels/internal.ts
+import { defineChannel, GET, POST } from &quot;eve/channels&quot;;
+
+export default defineChannel({
+  routes: [
+    POST(&quot;/threads/:threadId/messages&quot;, async (request, { from, params }) =&gt; {
+      const body = await request.json();
+
+      if (body.message === &quot;/new&quot;) {
+        return Response.json(await from(params.threadId).reset({ reason: &quot;用户要求重开&quot; }));
+      }
+
+      const session = await from(params.threadId).send(body.message, {
+        auth: {
+          authenticator: &quot;internal&quot;,
+          principalId: body.userId,
+          principalType: &quot;user&quot;,
+        },
+      });
+      return Response.json({ sessionId: session.id });
+    }),
+
+    POST(&quot;/threads/:threadId/cancel&quot;, async (_request, { from, params }) =&gt;
+      Response.json(await from(params.threadId).cancel()),
+    ),
+
+    GET(&quot;/sessions/:sessionId/stream&quot;, async (_request, { attachSession, params }) =&gt; {
+      const stream = await attachSession(params.sessionId).getEventStream();
+      return new Response(stream, {
+        headers: { &quot;content-type&quot;: &quot;application/x-ndjson; charset=utf-8&quot; },
+      });
+    }),
+  ],
+
+  events: {
+    &quot;message.completed&quot;(event, _channel, ctx) {
+      console.log(ctx.session.id, event.message);
+    },
+  },
+});
+</code></pre>
+
+<p>注意：路由的 <code>path</code> 就是应用 URL，<strong>不会</strong>自动加通道名前缀。上面第一条回答的是 <code>POST /threads/:threadId/messages</code>，不是 <code>/internal/threads/...</code>。也不要占用 <code>/eve/v1/*</code>。</p>
+
+<p><code>defineChannel</code> 的字段：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>routes</code></td>
+<td><code>RouteDefinition[]</code></td>
+<td>是</td>
+<td>用 <code>GET</code> / <code>POST</code> / <code>WS</code> 构造的路由表</td>
+</tr>
+
+<tr>
+<td><code>state</code></td>
+<td>任意可序列化对象</td>
+<td>否</td>
+<td>通道自己的适配器状态，跨请求保留</td>
+</tr>
+
+<tr>
+<td><code>metadata</code></td>
+<td><code>(state) =&gt; object</code></td>
+<td>否</td>
+<td>把 state 投影成可观测元数据，只返回想暴露的字段</td>
+</tr>
+
+<tr>
+<td><code>context</code></td>
+<td><code>(state, session) =&gt; ctx</code></td>
+<td>否</td>
+<td>构造传给 <code>events</code> / <code>deliver</code> 的通道上下文</td>
+</tr>
+
+<tr>
+<td><code>events</code></td>
+<td>事件处理器表</td>
+<td>否</td>
+<td>流事件钩子，参数 <code>(event, channel, ctx)</code></td>
+</tr>
+
+<tr>
+<td><code>receive</code></td>
+<td><code>(input, ctx) =&gt; Session</code></td>
+<td>否</td>
+<td>跨通道投递的接收端实现</td>
+</tr>
+
+<tr>
+<td><code>deliver</code></td>
+<td><code>(payload, ctx) =&gt; StepInput</code></td>
+<td>否</td>
+<td>自定义投递逻辑（默认走事件流）</td>
+</tr>
+
+<tr>
+<td><code>turnPolicy</code></td>
+<td><code>&quot;steer&quot; \| &quot;queue&quot;</code></td>
+<td>否</td>
+<td>该通道消息的默认策略</td>
+</tr>
+
+<tr>
+<td><code>cors</code></td>
+<td><code>boolean \| options</code></td>
+<td>否</td>
+<td>该通道路由的 CORS</td>
+</tr>
+
+<tr>
+<td><code>audience</code></td>
+<td><code>(input) =&gt; ChannelAudience</code></td>
+<td>否</td>
+<td>会话受众分类</td>
+</tr>
+
+<tr>
+<td><code>fetchFile</code></td>
+<td>同 <code>eveChannel</code></td>
+<td>否</td>
+<td>取回 URL 形式的附件</td>
+</tr>
+
+<tr>
+<td><code>uploadPolicy</code></td>
+<td>同 <code>eveChannel</code></td>
+<td>否</td>
+<td>附件大小和类型</td>
+</tr>
+</tbody>
+</table>
+
+<p>路由处理器的第二个参数：</p>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>from</code></td>
+<td><code>(address) =&gt; 地址句柄</code></td>
+<td>按通道地址寻址，<code>send()</code> 才会建会话</td>
+</tr>
+
+<tr>
+<td><code>resolveSession</code></td>
+<td><code>(address) =&gt; Session \| null</code></td>
+<td>查当前持有该地址的会话快照</td>
+</tr>
+
+<tr>
+<td><code>attachSession</code></td>
+<td><code>(sessionId) =&gt; Session</code></td>
+<td>钉死一个会话 ID，不做 IO</td>
+</tr>
+
+<tr>
+<td><code>to</code></td>
+<td><code>(channel, target) =&gt; 句柄</code></td>
+<td>往别的通道投递</td>
+</tr>
+
+<tr>
+<td><code>params</code></td>
+<td><code>Record&lt;string, string&gt;</code></td>
+<td>路径参数（<code>:threadId</code> 等）</td>
+</tr>
+
+<tr>
+<td><code>waitUntil</code></td>
+<td><code>(p: Promise) =&gt; void</code></td>
+<td>延长请求寿命，做后台工作</td>
+</tr>
+
+<tr>
+<td><code>requestIp</code></td>
+<td><code>string \| null</code></td>
+<td>宿主机报告的最佳猜测 IP</td>
+</tr>
+
+<tr>
+<td><code>describe</code></td>
+<td><code>() =&gt; Promise&lt;AgentDescription&gt;</code></td>
+<td>agent 名称、描述、可在会话外跑的工具、技能清单</td>
+</tr>
+
+<tr>
+<td><code>listSkillFiles</code></td>
+<td><code>(skill) =&gt; Promise&lt;…&gt;</code></td>
+<td>列出一个技能的普通文件</td>
+</tr>
+
+<tr>
+<td><code>readSkill</code></td>
+<td><code>(skill, path?) =&gt; Promise&lt;Uint8Array&gt;</code></td>
+<td>读技能文件，默认 <code>SKILL.md</code>，单文件上限 512 KiB</td>
+</tr>
+
+<tr>
+<td><code>invokeTool</code></td>
+<td><code>(name, input, opts) =&gt; Promise&lt;…&gt;</code></td>
+<td>以指定身份在会话外跑一个工具</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="三种句柄-别混">三种句柄，别混</h3>
+
+<table>
+<thead>
+<tr>
+<th>句柄</th>
+<th>寻址方式</th>
+<th>会建会话吗</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>from(address)</code></td>
+<td>通道自己的地址（线程、频道…）</td>
+<td><strong>只有 <code>send()</code> 会</strong></td>
+</tr>
+
+<tr>
+<td><code>resolveSession(address)</code></td>
+<td>查当前拥有该地址的会话快照</td>
+<td>不会</td>
+</tr>
+
+<tr>
+<td><code>attachSession(sessionId)</code></td>
+<td>固定的会话 ID</td>
+<td>不会</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-ts">const source = from(threadId);
+await source.send(&quot;Hello&quot;, { auth });
+await source.respond(inputResponses, { auth });
+await source.cancel({ turnId });
+await source.compact();
+await source.clear();
+await source.reset({ reason: &quot;Start over&quot; });
+
+const current = await resolveSession(threadId);   // 当前持有者
+const fixed = attachSession(sessionId);           // 钉死一个 ID
+</code></pre>
+
+<p>地址句柄是<strong>动态</strong>的：每次调用都指向当前拥有该地址的会话。<code>attachSession</code> 是<strong>固定</strong>的：永远指向那一个 ID，不会跟随、不会重建。</p>
+
+<h3 id="地址竞争与-stranded">地址竞争与 stranded</h3>
+
+<ul>
+<li>冷启动时两个请求同时发到同一个地址：输的那个把消息<strong>转发</strong>给赢家，然后退出。不会出现两个进程同时服务一个线程。</li>
+<li>地址上的会话 stranded（被别的 eve 版本构建）时：<code>send()</code> 结束它并在同一地址开新会话；<code>respond()</code> 抛 <code>SessionStrandedError</code>（新会话没有那个请求可答）。</li>
+</ul>
+
+<h3 id="元数据">元数据</h3>
+
+<p>通道可以把适配器状态投影成 metadata，给 instrumentation、动态工具/技能/指令解析器读：</p>
+
+<pre><code class="language-ts">export default defineChannel({
+  state: {
+    topic: null as string | null,
+    internalCounter: 0,
+  },
+  metadata(state) {
+    return { topic: state.topic };       // 只暴露想暴露的
+  },
+  routes: [
+    POST(&quot;/start&quot;, async (req, { from }) =&gt; {
+      const body = await req.json();
+      await from(body.token).send(body.message, {
+        auth: null,
+        state: { topic: body.topic, internalCounter: 0 },
+      });
+      return new Response(&quot;ok&quot;);
+    }),
+  ],
+});
+</code></pre>
+
+<p><code>state</code> 里的字段不会自动暴露——<code>metadata(state)</code> 返回什么，解析器才能看到什么。</p>
+
+<h3 id="websocket">WebSocket</h3>
+
+<pre><code class="language-ts">import { defineChannel, WS } from &quot;eve/channels&quot;;
+
+export default defineChannel({
+  routes: [
+    WS(&quot;/voice/ws&quot;, async (_req, { from }) =&gt; ({
+      async message(_peer, message) {
+        await from(&quot;voice-demo&quot;).send(message.text(), { auth: null });
+      },
+    })),
+  ],
+});
+</code></pre>
+
+<p><code>WS()</code> 每个升级请求跑一次，返回生命周期钩子（<code>upgrade</code> / <code>open</code> / <code>message</code> / <code>close</code> / <code>error</code>）。参数和 HTTP 路由一样（<code>from</code>、<code>to</code>、<code>attachSession</code>、<code>params</code>、<code>waitUntil</code>、<code>requestIp</code>）。</p>
+
+<h3 id="跨通道投递">跨通道投递</h3>
+
+<pre><code class="language-ts">await to(slack, { channelId: &quot;C0123ABC&quot; }).send(&quot;日报已生成&quot;, { auth: appAuth });
+</code></pre>
+
+<p><code>to(channel, target)</code> 返回的句柄和路由里的 <code>from(address)</code> 契约一致。跨通道投递会<strong>新建会话</strong>（除非目标是已有对话，比如某个 Slack 线程）。</p>
+
+<h2 id="14-7-mcp-通道-把-agent-的工具发布出去">14.7 MCP 通道：把 agent 的工具发布出去</h2>
+
+<p>反过来，让别的 MCP 客户端把<strong>你的 agent</strong> 当工具用：</p>
+
+<pre><code class="language-ts">// agent/channels/mcp.ts
+import { localDev } from &quot;eve/channels/auth&quot;;
+import { mcpChannel } from &quot;eve/channels/mcp&quot;;
+
+export default mcpChannel({
+  auth: localDev(),
+  tools: true,
+});
+</code></pre>
+
+<p>三个开关：</p>
+
+<table>
+<thead>
+<tr>
+<th>开关</th>
+<th>默认</th>
+<th>作用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>agent</code></td>
+<td>开</td>
+<td>发布 <code>agent_start</code> / <code>agent_get</code> / <code>agent_update</code> / <code>agent_cancel</code> 四个会话工具</td>
+</tr>
+
+<tr>
+<td><code>tools</code></td>
+<td>关</td>
+<td>额外发布 agent 能在会话外直接跑的工具</td>
+</tr>
+
+<tr>
+<td><code>skills</code></td>
+<td>开</td>
+<td>发布技能</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>tools: true</code> 的边界要说清楚：框架工具、workflow / provider 工具、没有 <code>execute</code> 的工具、动态解析器和子代理加的工具<strong>都不发布</strong>。三个开关全关会抛错（什么都发布不了）。</p>
+
+<p>每个 <code>tools/call</code> 用路由认证的调用者身份执行，<strong>不经过模型</strong>。除非加入 tool session，每次调用是独立会话：</p>
+
+<ul>
+<li><code>defineState</code> 从初始值开始，改动不保留；</li>
+<li>调用打开的沙箱在结束时删除；</li>
+<li>调用可以并行，丢响应后的重试会真的再跑一次。</li>
+</ul>
+
+<p>这意味着<strong>能调这些工具的调用者可以绕过 agent 的指令直接操作</strong>。开 <code>tools: true</code> 之前先看一遍会暴露什么。</p>
+
+<h2 id="14-8-通道-vs-连接">14.8 通道 vs 连接</h2>
+
+<p>容易混：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>通道</th>
+<th>连接</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>方向</td>
+<td>用户 → agent</td>
+<td>agent → 服务</td>
+</tr>
+
+<tr>
+<td>例子</td>
+<td>Slack、HTTP、Telegram</td>
+<td>Linear MCP、CRM OpenAPI</td>
+</tr>
+
+<tr>
+<td>模型感知</td>
+<td>不感知，通道在模型之外</td>
+<td>感知，工具出现在目录里</td>
+</tr>
+</tbody>
+</table>
+
+<p>一个 agent 可以同时有多个通道和多个连接，互不影响。</p>
+
+<h2 id="14-9-常见坑">14.9 常见坑</h2>
+
+<p><strong>坑：上线后发现谁都能访问。</strong>
+脚手架带 <code>placeholderAuth()</code>，它在生产返回 401。但如果你删掉了 <code>channels/eve.ts</code> 或改成了 <code>localDev()</code>，生产就裸奔了。上线前用无凭据的 <code>curl</code> 打一次 <code>POST /eve/v1/session</code>，必须 401。</p>
+
+<p><strong>坑：Slack 里 @ 了但没反应。</strong>
+事件订阅没开 <code>app_mention</code>，或 Request URL 指错，或部署在 Deployment Protection 后面而 Slack 过不去。</p>
+
+<p><strong>坑：Slack 里审批按钮点不动。</strong>
+Interactivity 的 Request URL 没配。审批按钮走的是交互回调。</p>
+
+<p><strong>坑：把 bot token 写进代码。</strong>
+走环境变量或 Vercel Connect。</p>
+
+<p><strong>坑：自定义通道里 <code>from(address)</code> 用错地址粒度。</strong>
+地址粒度决定「什么算同一段对话」。Slack 用线程级，Discord 用频道级，选错会让不同人的对话串在一起。</p>
+
+<p><strong>坑：用 <code>attachSession</code> 处理平台消息。</strong>
+它是固定 ID 句柄，不会跟随地址变化。平台消息应该用 <code>from(address)</code>。</p>
+
+<p><strong>坑：以为通道鉴权能保护工具。</strong>
+通道鉴权只决定「谁能发消息」。工具级权限要用 <code>approval</code> 和工具内的 <code>ctx.session.auth</code> 判断。</p>
+
+<p><strong>坑：<code>metadata(state)</code> 返回整个 state。</strong>
+内部计数器、临时字段都会泄漏给解析器。只返回需要暴露的字段。</p>
+
+<h2 id="14-10-练习">14.10 练习</h2>
+
+<ol>
+<li>用 HTTP Basic 给 opsbot 加鉴权，用 <code>curl</code> 验证无凭据 401、有凭据 200。</li>
+<li>接 Slack，在频道里 @ 它，走一遍审批按钮。</li>
+<li>写一个自定义通道，暴露 <code>POST /threads/:id/messages</code> 和 <code>GET /sessions/:id/stream</code>，把 <code>userId</code> 映射成 principal。</li>
+<li>给自定义通道加 <code>metadata(state)</code>，在动态指令里读 <code>ctx.channel.metadata.topic</code>。</li>
+<li>用 <code>to(...)</code> 从定时任务往 Slack 频道发一条消息。</li>
+</ol>
+
+<h2 id="延伸阅读">延伸阅读</h2>
+
+<ul>
+<li><a href="https://eve.dev/docs/channels/overview">Channels overview</a></li>
+<li><a href="https://eve.dev/docs/channels/eve">eve channel</a></li>
+<li><a href="https://eve.dev/docs/channels/slack">Slack</a></li>
+<li><a href="https://eve.dev/docs/channels/custom">Custom channels</a></li>
+<li><a href="https://eve.dev/docs/guides/auth-and-route-protection">Auth &amp; route protection</a></li>
+</ul>
+
+<hr />
+
+<p>上一章：<a href="https://tangxusc.github.io/2026/10/eve-13-connections/">13 连接</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">15 定时与钩子</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/" data-tooltip="eve 中文教程 · 第 15 章 定时与钩子">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-13-connections/" data-tooltip="eve 中文教程 · 第 13 章 连接">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/" data-tooltip="eve 中文教程 · 第 15 章 定时与钩子">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-13-connections/" data-tooltip="eve 中文教程 · 第 13 章 连接">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 <code>eve init</code> 讲到上线。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
+                <h3 class="media-heading">eve 中文教程 · 附录 C 环境变量与密钥</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p><code>process.env</code> 只在<strong>应用运行时</strong>存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">
+                <h3 class="media-heading">eve 中文教程 · 附录 B 事件与 CLI</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">完整事件表、CLI 命令、HTTP 路由。写客户端、排查事件流、核对某个字段时对着这张表看。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">
+                <h3 class="media-heading">eve 中文教程 · 附录 A 术语与速查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">概念对照、目录速查、常见错误码。读不懂某个词、找不到某个文件、看到一个陌生状态码时先查这里。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/">
+                <h3 class="media-heading">eve 中文教程 · 第 18 章 进阶与上线检查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>这一章把散落在前面的进阶能力收在一起，然后给一份能逐条打勾的上线清单。清单比概念重要。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
+                <h3 class="media-heading">eve 中文教程 · 第 17 章 前端与部署</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-16-evals/">
+                <h3 class="media-heading">eve 中文教程 · 第 16 章 评测</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
+                <h3 class="media-heading">eve 中文教程 · 第 15 章 定时与钩子</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-14-channels/">
+                <h3 class="media-heading">eve 中文教程 · 第 14 章 通道</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-13-connections/">
+                <h3 class="media-heading">eve 中文教程 · 第 13 章 连接</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 <code>eve__search</code> 找到工具，用 <code>eve__tool</code> 调用，凭据由 eve 在应用侧注入。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         125 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-14-channels\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-14-channels\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

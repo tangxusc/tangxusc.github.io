@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。
+">
+
+
+<meta property="og:description" content="
+评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 16 章 评测">
+<meta name="twitter:title" content="eve 中文教程 · 第 16 章 评测">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-16-evals/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-16-evals/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。
+">
+<meta name="twitter:description" content="
+评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-22T09:16:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-22T09:16:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 16 章 评测</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-16-evals/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 16 章 评测
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-22T09:16:00&#43;08:00">
+        
+  October 22, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。</p>
+</blockquote>
+
+<h2 id="16-1-为什么必须有评测">16.1 为什么必须有评测</h2>
+
+<p>改一句提示词，可能让某个场景从「正确」变成「看起来正确但漏了关键步骤」。这种退化靠手测发现不了，靠眼睛看也看不出来——因为你只会测你想到的那几个场景。</p>
+
+<p>评测解决三件事：</p>
+
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>评测怎么解</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>改了提示词，不知道有没有退化</td>
+<td>固定用例 + 固定断言，跑一遍就知道</td>
+</tr>
+
+<tr>
+<td>工具重构后行为变了</td>
+<td>断言工具调用和顺序，而不是只看文字</td>
+</tr>
+
+<tr>
+<td>多个人改同一个 agent</td>
+<td>提交前跑 <code>--strict</code>，退化挡住合入</td>
+</tr>
+</tbody>
+</table>
+
+<p>eve 的评测不是单元测试：它启动真实 agent（或指向一个已部署的），用 TypeScript 客户端驱动会话，然后对事件流断言。所以它能抓到「模型根本没调那个工具」这种纯函数测试抓不到的问题。</p>
+
+<h2 id="16-2-最小评测">16.2 最小评测</h2>
+
+<pre><code class="language-text">opsbot/
+├── agent/
+├── evals/
+│   ├── evals.config.ts
+│   └── smoke.eval.ts
+└── package.json
+</code></pre>
+
+<pre><code class="language-ts">// evals/evals.config.ts
+import { defineEvalConfig } from &quot;eve/evals&quot;;
+
+export default defineEvalConfig({});
+</code></pre>
+
+<pre><code class="language-ts">// evals/smoke.eval.ts
+import { defineEval } from &quot;eve/evals&quot;;
+import { includes } from &quot;eve/evals/expect&quot;;
+
+export default defineEval({
+  description: &quot;基本链路：能回话，能调对工具。&quot;,
+  async test(t) {
+    const turn = await t.send(&quot;payment-api 现在正常吗？&quot;);
+    t.succeeded();
+    t.calledTool(&quot;get_service_status&quot;);
+    t.check(turn.message, includes(&quot;正常&quot;));
+  },
+});
+</code></pre>
+
+<p><code>defineEval</code> 的字段：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>test</code></td>
+<td><code>(t) =&gt; void \| Promise&lt;void&gt;</code></td>
+<td>是</td>
+<td>驱动 + 断言的全部脚本</td>
+</tr>
+
+<tr>
+<td><code>description</code></td>
+<td><code>string</code></td>
+<td>否</td>
+<td>报告里显示的名字</td>
+</tr>
+
+<tr>
+<td><code>tags</code></td>
+<td><code>string[]</code></td>
+<td>否</td>
+<td><code>--tag</code> / <code>--exclude-tag</code> 过滤用</td>
+</tr>
+
+<tr>
+<td><code>timeoutMs</code></td>
+<td><code>number</code></td>
+<td>否</td>
+<td>单个 eval 的超时，覆盖配置默认值</td>
+</tr>
+
+<tr>
+<td><code>judge</code></td>
+<td><code>{ model }</code></td>
+<td>否</td>
+<td>这个 eval 的评分模型，覆盖配置</td>
+</tr>
+
+<tr>
+<td><code>reporters</code></td>
+<td><code>EvalReporter[]</code></td>
+<td>否</td>
+<td>只给这个 eval 的报告器</td>
+</tr>
+
+<tr>
+<td><code>metadata</code></td>
+<td><code>Record&lt;string, unknown&gt;</code></td>
+<td>否</td>
+<td>自定义元数据，报告器可见</td>
+</tr>
+</tbody>
+</table>
+
+<p>id 由文件路径推导（<code>evals/weather.eval.ts</code> → <code>weather</code>），写 <code>id</code> 或 <code>name</code> 会抛错。</p>
+
+<p><code>evals/</code> 目录<strong>必须</strong>有一个 <code>evals.config.ts</code>，空对象也行。</p>
+
+<pre><code class="language-bash">eve eval               # 跑全部
+eve eval smoke         # 跑一个，或某个目录下的全部
+eve eval --url https://opsbot.example.com   # 打已部署的
+eve eval --list        # 只列出发现的 eval，不跑
+eve eval --json        # 机器可读输出
+</code></pre>
+
+<p>退出码：</p>
+
+<table>
+<thead>
+<tr>
+<th>码</th>
+<th>含义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>所有未跳过的 eval 通过 gate（<code>--strict</code> 下还要通过 soft 阈值）</td>
+</tr>
+
+<tr>
+<td><code>1</code></td>
+<td>有 eval 失败：gate 失败、执行错误、或 <code>--strict</code> 下的阈值未达</td>
+</tr>
+
+<tr>
+<td><code>2</code></td>
+<td>配置错误</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>t.skip(reason)</code> 的 eval 记为跳过，不计入通过或失败，也不改退出码。</p>
+
+<p>一轮评测的完整路径：</p>
+
+<pre><code class="language-mermaid">flowchart TD
+  A[&quot;eve eval&quot;] --&gt; B[&quot;启动本地服务&lt;br/&gt;或连 --url&quot;]
+  B --&gt; C[&quot;setup() 建共享资源&quot;]
+  C --&gt; D[&quot;按并发度跑 eval（默认 8）&quot;]
+  D --&gt; E[&quot;test(t)：驱动会话 + 记断言&quot;]
+  E --&gt; F{&quot;gate 全过?&quot;}
+  F --&gt;|&quot;否&quot;| G[&quot;failed&quot;]
+  F --&gt;|&quot;是&quot;| H{&quot;soft 达阈值?&quot;}
+  H --&gt;|&quot;否&quot;| I[&quot;scored&lt;br/&gt;--strict 才算失败&quot;]
+  H --&gt;|&quot;是&quot;| J[&quot;passed&quot;]
+  G --&gt; K[&quot;报告器 + .eve/evals 产物&quot;]
+  I --&gt; K
+  J --&gt; K
+  K --&gt; L[&quot;teardown()&quot;]
+</code></pre>
+
+<p><code>scored</code> 是这套设计的关键：soft 断言（judge、score、similarity）默认只记录不拦截，让「质量波动」和「功能坏了」分开。CI 里加 <code>--strict</code> 才把质量也变成门槛。</p>
+
+<h2 id="16-3-t-既是驱动也是断言">16.3 <code>t</code> 既是驱动也是断言</h2>
+
+<p><code>test(t)</code> 里的 <code>t</code> 同时干两件事：驱动 agent、记录断言。没有 <code>input</code> / <code>checks</code> / <code>scores</code> 字段，你写普通控制流。</p>
+
+<h3 id="驱动">驱动</h3>
+
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>作用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>t.send(message)</code></td>
+<td>建会话并发出第一条消息，等这一轮 settle，返回 turn</td>
+</tr>
+
+<tr>
+<td><code>t.session(options?)</code></td>
+<td>只建会话，不发消息</td>
+</tr>
+
+<tr>
+<td><code>turn.session.send(message)</code></td>
+<td>在同一会话里追问</td>
+</tr>
+
+<tr>
+<td><code>session.respond(responses)</code></td>
+<td>回答待处理的人工输入</td>
+</tr>
+
+<tr>
+<td><code>session.requireInputRequest(filter?)</code></td>
+<td>断言恰好有一个待处理请求，并返回它</td>
+</tr>
+
+<tr>
+<td><code>session.sendFile(text, path, mediaType?)</code></td>
+<td>带附件</td>
+</tr>
+
+<tr>
+<td><code>session.cancel()</code></td>
+<td>取消当前 turn</td>
+</tr>
+
+<tr>
+<td><code>session.compact()</code></td>
+<td>压缩</td>
+</tr>
+</tbody>
+</table>
+
+<p>turn 上能读：<code>.message</code>、<code>.data</code>（结构化输出）、<code>.events</code>、<code>.inputRequests</code>、<code>.toolCalls</code>、<code>.sessionId</code>、<code>.status</code>、<code>.expectOk()</code>。</p>
+
+<h3 id="断言">断言</h3>
+
+<p>三种面，各自对应一种判断：</p>
+
+<table>
+<thead>
+<tr>
+<th>面</th>
+<th>写法</th>
+<th>适合</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>作用域方法</td>
+<td><code>t.succeeded()</code>、<code>t.calledTool(...)</code></td>
+<td>整体行为</td>
+</tr>
+
+<tr>
+<td>值断言</td>
+<td><code>t.check(value, includes(&quot;x&quot;))</code></td>
+<td>某段文本、解析后的 JSON</td>
+</tr>
+
+<tr>
+<td>打分</td>
+<td><code>t.score(0.82).label(&quot;faithfulness&quot;)</code></td>
+<td>自己算的指标</td>
+</tr>
+
+<tr>
+<td>模型评分</td>
+<td><code>t.judge(&quot;引用了来源&quot;)</code></td>
+<td>模糊质量</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="常用的作用域方法">常用的作用域方法</h3>
+
+<table>
+<thead>
+<tr>
+<th>断言</th>
+<th>检查什么</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>t.succeeded()</code></td>
+<td>运行没失败，也没停在未答的人工输入上</td>
+</tr>
+
+<tr>
+<td><code>t.parked()</code></td>
+<td>干净地停在人工输入上</td>
+</tr>
+
+<tr>
+<td><code>t.messageIncludes(x)</code></td>
+<td>助手文本包含子串或匹配正则</td>
+</tr>
+
+<tr>
+<td><code>t.calledTool(name, opts?)</code></td>
+<td>某个工具调用完成（可查 <code>input</code>、<code>output</code>、<code>status</code>、<code>count</code>）</td>
+</tr>
+
+<tr>
+<td><code>t.notCalledTool(name)</code></td>
+<td>从没请求过某个工具</td>
+</tr>
+
+<tr>
+<td><code>t.toolOrder([...])</code></td>
+<td>工具请求的顺序</td>
+</tr>
+
+<tr>
+<td><code>t.usedNoTools()</code></td>
+<td>完全没调工具（技能加载不算）</td>
+</tr>
+
+<tr>
+<td><code>t.maxToolCalls(n)</code></td>
+<td>工具调用次数上限</td>
+</tr>
+
+<tr>
+<td><code>t.noFailedActions()</code></td>
+<td>没有工具/子代理/技能失败</td>
+</tr>
+
+<tr>
+<td><code>t.calledSubagent(name)</code></td>
+<td>发生过子代理委派</td>
+</tr>
+
+<tr>
+<td><code>t.loadedSkill(name)</code></td>
+<td>加载过某个技能</td>
+</tr>
+
+<tr>
+<td><code>t.event(type, opts?)</code></td>
+<td>出现过某类事件</td>
+</tr>
+
+<tr>
+<td><code>t.eventOrder([...])</code></td>
+<td>事件组的顺序</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="值断言">值断言</h3>
+
+<pre><code class="language-ts">import { includes, equals, matches, satisfies, similarity } from &quot;eve/evals/expect&quot;;
+
+t.check(turn.message, includes(/正常/));
+t.check(parsed, equals({ service: &quot;payment-api&quot;, status: &quot;healthy&quot; }));
+t.check(parsed, matches(StatusSchema));
+t.check(turn.message, similarity(&quot;payment-api 正常，p99 82ms&quot;));
+t.check(latencyMs, satisfies((v) =&gt; v &lt; 1000, &quot;延迟低于 1 秒&quot;));
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>构造器</th>
+<th>判定</th>
+<th>默认严重度</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>includes</code></td>
+<td>子串 / 正则</td>
+<td>gate</td>
+</tr>
+
+<tr>
+<td><code>equals</code></td>
+<td>深相等</td>
+<td>gate</td>
+</tr>
+
+<tr>
+<td><code>matches</code></td>
+<td>Standard Schema（Zod 等）</td>
+<td>gate</td>
+</tr>
+
+<tr>
+<td><code>similarity</code></td>
+<td>归一化编辑距离，1 = 相同</td>
+<td>soft</td>
+</tr>
+
+<tr>
+<td><code>satisfies</code></td>
+<td>自定义布尔谓词</td>
+<td>gate</td>
+</tr>
+</tbody>
+</table>
+
+<p>选最便宜的那个。精确匹配太严、judge 太重时，<code>similarity</code> 是中间档。</p>
+
+<h3 id="断言推理过程">断言推理过程</h3>
+
+<p>provider 暴露推理内容时，每个完成的推理块会成为一个 <code>reasoning.completed</code> 事件。可以断言文本，也可以拼起来交给 judge：</p>
+
+<pre><code class="language-ts">turn.event(&quot;reasoning.completed&quot;, {
+  data: { reasoning: /checks? the units/i },
+});
+
+const reasoning = turn.events
+  .filter((event) =&gt; event.type === &quot;reasoning.completed&quot;)
+  .map((event) =&gt; event.data.reasoning)
+  .join(&quot;\n\n&quot;);
+
+t.judge(&quot;推理在给结论之前核对了假设。&quot;, { on: reasoning }).atLeast(0.8);
+</code></pre>
+
+<p>不暴露推理的 provider 根本不发这个事件：<code>turn.event</code> 那道 gate 直接失败，judge 评的是空字符串。provider 藏起来的推理无法评。默认的 judge 输入和 <code>session.transcript</code> 都不含推理，所以上面要显式传 <code>on</code>。</p>
+
+<h2 id="16-4-gate-与-soft">16.4 gate 与 soft</h2>
+
+<p>每个断言返回可链式的手柄，严重度挂在断言上：</p>
+
+<ul>
+<li><strong>gate（硬）</strong>：失败即 eval 失败，<code>eve eval</code> 非零退出。作用域方法、<code>includes</code>、<code>equals</code>、<code>matches</code> 默认是 gate。</li>
+<li><strong>soft（软）</strong>：只记录数据，进报告。低于阈值时 eval 标记为 <code>scored</code>（可见但不致命，除非加 <code>--strict</code>）。<code>similarity</code>、所有 <code>t.judge(...)</code>、所有 <code>t.score(...)</code> 默认是 soft。</li>
+</ul>
+
+<pre><code class="language-ts">t.succeeded();                                  // gate
+t.calledTool(&quot;get_weather&quot;).soft();             // 只记指标
+t.judge(&quot;引用了来源&quot;);                           // soft，无阈值
+t.judge(&quot;回答与参考一致&quot;, { on: {...} }).atLeast(0.7);  // soft，--strict 下按 0.7 卡
+t.score(brevity).label(&quot;brevity&quot;).gate(0.9);    // 硬卡 0.9
+</code></pre>
+
+<p><code>await t.require(value, assertion)</code> 用于「必须过，否则后面的脚本没法继续」的检查。它记 gate 并在失败时停止脚本。</p>
+
+<p><code>t.skip(reason)</code> 放在最前面，表示这个目标不支持该能力，主动跳过。</p>
+
+<h2 id="16-5-多轮与人工输入">16.5 多轮与人工输入</h2>
+
+<pre><code class="language-ts">export default defineEval({
+  async test(t) {
+    const first = await t.send(&quot;先记一下：payment-api 的负责人是张三。&quot;);
+
+    const second = await first.session.send(&quot;payment-api 谁负责？&quot;);
+    await t.require(second.sessionId, equals(first.sessionId));
+    second.messageIncludes(&quot;张三&quot;);
+    t.succeeded();
+  },
+});
+</code></pre>
+
+<p>审批场景：</p>
+
+<pre><code class="language-ts">export default defineEval({
+  async test(t) {
+    const turn = await t.send(&quot;把 payment-api 重启一下&quot;);
+
+    const request = turn.session.requireInputRequest({ toolName: &quot;restart_service&quot; });
+    const after = await turn.session.respond([
+      { requestId: request.requestId, optionId: &quot;approve&quot; },
+    ]);
+
+    after.calledTool(&quot;restart_service&quot;);
+    t.succeeded();
+  },
+});
+</code></pre>
+
+<p><code>requireInputRequest(filter?)</code> 要求<strong>恰好一个</strong>待处理请求，返回它。filter 可以按工具名、输入、prompt、选项 id 匹配。</p>
+
+<p><code>respondAll(&quot;approve&quot;)</code> 一次批准所有待处理请求。</p>
+
+<h2 id="16-6-工具桩">16.6 工具桩</h2>
+
+<p>不想让评测真的调外部服务，用 <code>stubs</code>：</p>
+
+<pre><code class="language-ts">export default defineEval({
+  async test(t) {
+    const session = await t.session({
+      stubs: [
+        {
+          id: &quot;status&quot;,
+          tool: &quot;get_service_status&quot;,
+          outcomes: [
+            { response: { service: &quot;payment-api&quot;, status: &quot;degraded&quot;, instances: 3 } },
+            { response: { service: &quot;payment-api&quot;, status: &quot;healthy&quot;, instances: 3 } },
+          ],
+        },
+        {
+          id: &quot;restart&quot;,
+          tool: &quot;restart_service&quot;,
+          match: { service: { const: &quot;payment-api&quot; } },
+          outcome: { response: { restarted: true } },
+        },
+      ],
+    });
+
+    const first = await session.send(&quot;payment-api 现在怎么样？&quot;);
+    first.expectOk();
+    first.calledTool(&quot;get_service_status&quot;, { count: 1 });
+    first.messageIncludes(&quot;降级&quot;);
+
+    const second = await session.send(&quot;重启它，然后再查一次&quot;);
+    second.toolOrder([&quot;restart_service&quot;, &quot;get_service_status&quot;]);
+    second.messageIncludes(&quot;正常&quot;);
+  },
+});
+</code></pre>
+
+<ul>
+<li><code>outcomes</code> 是序列，第 N 次调用用第 N 个；单次用 <code>outcome</code>。</li>
+<li><code>match</code> 按输入匹配，只有匹配的调用才消费这个桩。</li>
+<li>未被使用的桩会产生警告，但不失败。</li>
+<li>同样的 <code>stubs</code> 也能传给 <code>client.sessions.create({ stubs })</code>。</li>
+</ul>
+
+<p>一个桩的字段：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>string</code></td>
+<td>是</td>
+<td>桩的标识，报告里用</td>
+</tr>
+
+<tr>
+<td><code>tool</code></td>
+<td><code>string</code></td>
+<td>是</td>
+<td>工具名。子代理的工具写成 <code>researcher/list_tasks</code></td>
+</tr>
+
+<tr>
+<td><code>match</code></td>
+<td><code>Record&lt;string, JSON Schema \| boolean&gt;</code></td>
+<td>否</td>
+<td>每个具名输入都要存在并满足 schema</td>
+</tr>
+
+<tr>
+<td><code>outcome</code></td>
+<td><code>{ response } \| { throw: { message, name? } }</code></td>
+<td>二选一</td>
+<td>单次返回或抛错</td>
+</tr>
+
+<tr>
+<td><code>outcomes</code></td>
+<td>上面形状的数组（至少一个）</td>
+<td>二选一</td>
+<td>按调用顺序消费</td>
+</tr>
+</tbody>
+</table>
+
+<p>工具桩只替换<strong>工具返回值</strong>，不替换模型。所以要测「模型在拿到这个数据后会怎么做」，用它；要测「模型能不能正确生成 SQL」，得用真工具或 mock 模型。</p>
+
+<h2 id="16-7-确定性模型">16.7 确定性模型</h2>
+
+<p>不想让评测依赖真实模型（慢、贵、不稳定）时，把 agent 的模型换成 <code>mockModel</code>：</p>
+
+<pre><code class="language-ts">// agent/agent.ts（专用 fixture agent）
+import { defineAgent } from &quot;eve&quot;;
+import { mockModel } from &quot;eve/evals&quot;;
+
+export default defineAgent({
+  model: mockModel(&quot;固定回复&quot;),
+});
+</code></pre>
+
+<p>按对话内容回复：</p>
+
+<pre><code class="language-ts">model: mockModel(({ lastUserMessage, userMessageCount }) =&gt;
+  `第 ${userMessageCount} 轮：${lastUserMessage}`
+),
+</code></pre>
+
+<p>构造确定的工具循环：</p>
+
+<pre><code class="language-ts">model: mockModel({
+  modelId: &quot;ops-script&quot;,
+  provider: &quot;fixtures&quot;,
+  respond: ({ toolResults }) =&gt;
+    toolResults.length === 0
+      ? { toolCalls: [{ name: &quot;get_service_status&quot;, input: { service: &quot;payment-api&quot; } }] }
+      : `状态：${JSON.stringify(toolResults[0]?.output)}`,
+}),
+</code></pre>
+
+<p><code>mockModel</code> 编译时按 100 万 token 上下文窗口处理，所以压缩不会干扰。要在小窗口下测压缩，显式设 <code>modelContextWindowTokens</code>。</p>
+
+<p>它是 agent 定义的一部分，所以只适合专用 fixture agent，别把生产 agent 的模型改成 mock。</p>
+
+<h2 id="16-8-数据集扇出">16.8 数据集扇出</h2>
+
+<p>一个文件跑多组输入：默认导出数组。</p>
+
+<pre><code class="language-ts">// evals/triage/dataset.eval.ts
+import { defineEval } from &quot;eve/evals&quot;;
+import { includes } from &quot;eve/evals/expect&quot;;
+import cases from &quot;./cases.json&quot;;
+
+export default cases.map((c) =&gt;
+  defineEval({
+    description: `分诊：${c.name}`,
+    async test(t) {
+      const turn = await t.send(c.input);
+      t.succeeded();
+      t.check(turn.message, includes(c.expect));
+    },
+  })
+);
+</code></pre>
+
+<p>固定数据放 <code>evals/data/</code>，共享辅助函数放同级的非 <code>.eval.ts</code> 文件（任何不以 <code>.eval.ts</code> 结尾的文件都不会被当成评测）。</p>
+
+<h2 id="16-9-judge-的细节">16.9 judge 的细节</h2>
+
+<pre><code class="language-ts">t.judge(&quot;回答引用了日志证据，而不是猜测&quot;);
+</code></pre>
+
+<p>默认评分的是<strong>最近一次 settle 的 turn</strong> 的助手消息，输入是 <code>{ input, output }</code>（提示 + 回复）。</p>
+
+<p>三种评分器：</p>
+
+<table>
+<thead>
+<tr>
+<th>问法</th>
+<th>分数</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>字符串 / <code>boolean</code></td>
+<td>模型给出的「为真概率」，0–1</td>
+</tr>
+
+<tr>
+<td><code>score</code>（rubric）</td>
+<td>返回的档位 / 最高档位</td>
+</tr>
+
+<tr>
+<td><code>choice</code></td>
+<td>选中项等于 <code>expected</code> 得 1，否则 0</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-ts">t.judge({
+  type: &quot;score&quot;,
+  instructions: &quot;评估回复的清晰度。&quot;,
+  criteria: [&quot;不清楚&quot;, &quot;基本清楚&quot;, &quot;清晰简洁&quot;],
+})
+  .label(&quot;clarity&quot;)
+  .atLeast(0.75);
+</code></pre>
+
+<p>要评整段多轮对话：</p>
+
+<pre><code class="language-ts">t.judge(&quot;助手记住了用户偏好的词&quot;, { on: first.session.transcript }).atLeast(0.8);
+</code></pre>
+
+<p>judge 用配置里的评分模型，<strong>不是</strong>被测 agent 的模型：</p>
+
+<pre><code class="language-ts">// evals/evals.config.ts
+export default defineEvalConfig({
+  judge: { model: &quot;typesafe-ai/jev&quot; },
+});
+</code></pre>
+
+<p>judge 默认是 soft（可以用 <code>.gate()</code> 提升为硬性 gate）。常见做法是 <code>.atLeast(0.7)</code> 加 CI 里的 <code>--strict</code>。</p>
+
+<h2 id="16-10-运行-产物与-ci">16.10 运行、产物与 CI</h2>
+
+<pre><code class="language-bash">eve eval                       # 本地起服务跑全部
+eve eval --strict              # soft 低于阈值也算失败
+eve eval --url https://...     # 打已部署环境
+eve eval --tag fast            # 只跑带某个 tag 的
+eve eval --exclude-tag slow    # 跳过带某个 tag 的
+eve eval --max-concurrency 4   # 并发（默认 8）
+eve eval --junit .eve/junit.xml
+eve eval weather               # 只跑某个目录
+</code></pre>
+
+<p>每次运行会在 <code>.eve/evals/&lt;timestamp&gt;/</code> 下留产物：<code>summary.json</code>、<code>results.jsonl</code>，以及每个 eval 的断言结果、事件流和 <code>t.log</code> 输出。控制台输出是精简的，失败时去看产物。</p>
+
+<p>CI 里的最小配置：</p>
+
+<pre><code class="language-yaml">- run: npm ci
+- run: npx eve eval --strict --junit .eve/junit.xml
+  env:
+    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+</code></pre>
+
+<p>建议的基线：</p>
+
+<ul>
+<li>每个关键工具至少一个「调对了」的用例</li>
+<li>每个关键拒绝场景一个「没调」的用例（比如问候不该查数据库）</li>
+<li>每个审批场景一个「停下来等」的用例</li>
+<li>一个多轮记忆用例</li>
+<li>数据集扇出覆盖分类/分诊类逻辑</li>
+</ul>
+
+<p>不要一上来写五十个。<strong>先有三个能跑的 smoke，比有五十个写不完的强。</strong></p>
+
+<h2 id="16-11-配置与报告器">16.11 配置与报告器</h2>
+
+<pre><code class="language-ts">// evals/evals.config.ts
+export default defineEvalConfig({
+  judge: { model: &quot;typesafe-ai/jev&quot; },
+  maxConcurrency: 4,
+  timeoutMs: 120_000,
+  async setup() {
+    const db = await startTestDatabase();
+    return { db };
+  },
+  async teardown(ctx) {
+    await ctx?.db.close();
+  },
+});
+</code></pre>
+
+<p><code>defineEvalConfig</code> 的字段：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>默认</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>judge</code></td>
+<td><code>{ model }</code></td>
+<td><code>typesafe-ai/jev</code></td>
+<td><code>t.judge</code> 的默认评分模型</td>
+</tr>
+
+<tr>
+<td><code>reporters</code></td>
+<td><code>EvalReporter[]</code></td>
+<td>控制台</td>
+<td>整轮运行的报告器</td>
+</tr>
+
+<tr>
+<td><code>maxConcurrency</code></td>
+<td><code>number</code></td>
+<td><code>8</code></td>
+<td>并发执行的 eval 数</td>
+</tr>
+
+<tr>
+<td><code>timeoutMs</code></td>
+<td><code>number</code></td>
+<td>单 eval 默认</td>
+<td>单个 eval 的超时</td>
+</tr>
+
+<tr>
+<td><code>setup</code></td>
+<td><code>() =&gt; context \| Promise&lt;context&gt;</code></td>
+<td>无</td>
+<td>服务启动前跑一次，返回值进 <code>t.context</code></td>
+</tr>
+
+<tr>
+<td><code>teardown</code></td>
+<td><code>(context) =&gt; void \| Promise&lt;void&gt;</code></td>
+<td>无</td>
+<td>服务关闭后跑，失败也会跑</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>setup</code> 在本地服务启动<strong>之前</strong>跑一次，<code>teardown</code> 在服务关闭后跑（包括失败情况）。并发评测共享这些资源，改数据的用例要自己隔离。</p>
+
+<p>要在 eval 文件里用 <code>t.context</code> 的类型：</p>
+
+<pre><code class="language-ts">import type config from &quot;./evals.config.js&quot;;
+
+export default defineEval&lt;typeof config&gt;({
+  async test(t) {
+    await t.context.db.query(&quot;SELECT 1&quot;);
+  },
+});
+</code></pre>
+
+<p>报告器：</p>
+
+<pre><code class="language-ts">import { defineEvalConfig } from &quot;eve/evals&quot;;
+import { Braintrust } from &quot;eve/evals/reporters&quot;;
+
+export default defineEvalConfig({
+  reporters: [Braintrust({ projectName: &quot;opsbot&quot; })],
+});
+</code></pre>
+
+<p>配置里的报告器观察整轮运行，所以一个 <code>Braintrust()</code> 放在这里就够了，不用每个 eval 加一遍。</p>
+
+<h2 id="16-12-常见坑">16.12 常见坑</h2>
+
+<p><strong>坑：<code>evals/</code> 下没有 <code>evals.config.ts</code>。</strong>
+评测跑不起来。空对象也要有。</p>
+
+<p><strong>坑：断言 <code>eve__tool</code> 或 <code>eve__skill</code>。</strong>
+通过目录工具发的调用，报告的是<strong>被调用条目</strong>的名字（<code>linear__list_issues</code>）或技能加载。断言要写条目名。</p>
+
+<p><strong>坑：<code>t.calledTool</code> 和 <code>t.usedNoTools</code> 同时用。</strong>
+互斥。选一个。</p>
+
+<p><strong>坑：<code>t.succeeded()</code> 就以为覆盖了质量。</strong>
+它只检查「没失败、没卡住」。内容正确性要另外断言。</p>
+
+<p><strong>坑：judge 没有阈值，以为它会让评测失败。</strong>
+judge 默认 soft 且无阈值，记录但不判定。要卡就 <code>.atLeast()</code> 并跑 <code>--strict</code>。</p>
+
+<p><strong>坑：mock 模型用在生产 agent 上。</strong>
+<code>mockModel</code> 是 fixture 专用。生产 agent 的模型改成 mock 就永远返回固定文本。</p>
+
+<p><strong>坑：工具桩匹配写得太宽。</strong>
+<code>match</code> 不写会按顺序消费所有调用，容易在第二次调用时拿到意外结果。按输入收窄。</p>
+
+<p><strong>坑：改了提示词只跑本地 smoke。</strong>
+CI 里要跑 <code>--strict</code>，否则 soft 退化永远不拦。</p>
+
+<h2 id="16-13-练习">16.13 练习</h2>
+
+<ol>
+<li>写三个 smoke：正常回答、调对工具、问候时不调工具。</li>
+<li>加一个审批用例，用 <code>requireInputRequest</code> + <code>respond</code> 走完流程。</li>
+<li>用 <code>stubs</code> 让一个用例完全不依赖外部服务，验证工具顺序。</li>
+<li>配一个 judge 断言 + <code>--strict</code>，故意让它失败，确认 CI 会红。</li>
+<li>用数据集扇出把五个分诊用例跑成一个文件。</li>
+</ol>
+
+<h2 id="延伸阅读">延伸阅读</h2>
+
+<ul>
+<li><a href="https://eve.dev/docs/evals/overview">Evals overview</a></li>
+<li><a href="https://eve.dev/docs/evals/cases">Cases</a></li>
+<li><a href="https://eve.dev/docs/evals/assertions">Assertions</a></li>
+<li><a href="https://eve.dev/docs/evals/tool-stubs">Tool Stubs</a></li>
+<li><a href="https://eve.dev/docs/evals/judge">Judge</a></li>
+</ul>
+
+<hr />
+
+<p>上一章：<a href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">15 定时与钩子</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">17 前端与部署</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/" data-tooltip="eve 中文教程 · 第 17 章 前端与部署">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/" data-tooltip="eve 中文教程 · 第 15 章 定时与钩子">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/" data-tooltip="eve 中文教程 · 第 17 章 前端与部署">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/" data-tooltip="eve 中文教程 · 第 15 章 定时与钩子">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 <code>eve init</code> 讲到上线。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
+                <h3 class="media-heading">eve 中文教程 · 附录 C 环境变量与密钥</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p><code>process.env</code> 只在<strong>应用运行时</strong>存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">
+                <h3 class="media-heading">eve 中文教程 · 附录 B 事件与 CLI</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">完整事件表、CLI 命令、HTTP 路由。写客户端、排查事件流、核对某个字段时对着这张表看。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">
+                <h3 class="media-heading">eve 中文教程 · 附录 A 术语与速查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">概念对照、目录速查、常见错误码。读不懂某个词、找不到某个文件、看到一个陌生状态码时先查这里。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/">
+                <h3 class="media-heading">eve 中文教程 · 第 18 章 进阶与上线检查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>这一章把散落在前面的进阶能力收在一起，然后给一份能逐条打勾的上线清单。清单比概念重要。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
+                <h3 class="media-heading">eve 中文教程 · 第 17 章 前端与部署</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-16-evals/">
+                <h3 class="media-heading">eve 中文教程 · 第 16 章 评测</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
+                <h3 class="media-heading">eve 中文教程 · 第 15 章 定时与钩子</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-14-channels/">
+                <h3 class="media-heading">eve 中文教程 · 第 14 章 通道</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-13-connections/">
+                <h3 class="media-heading">eve 中文教程 · 第 13 章 连接</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 <code>eve__search</code> 找到工具，用 <code>eve__tool</code> 调用，凭据由 eve 在应用侧注入。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         125 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-16-evals\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-16-evals\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

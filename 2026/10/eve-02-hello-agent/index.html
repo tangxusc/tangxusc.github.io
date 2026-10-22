@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+一条命令建项目，一个 Markdown 文件定义人格，一个 npm run dev 开始对话。本章结束时你会有一个能回答问题的值班助手。
+">
+
+
+<meta property="og:description" content="
+一条命令建项目，一个 Markdown 文件定义人格，一个 npm run dev 开始对话。本章结束时你会有一个能回答问题的值班助手。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 2 章 第一个 agent">
+<meta name="twitter:title" content="eve 中文教程 · 第 2 章 第一个 agent">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-02-hello-agent/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-02-hello-agent/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+一条命令建项目，一个 Markdown 文件定义人格，一个 npm run dev 开始对话。本章结束时你会有一个能回答问题的值班助手。
+">
+<meta name="twitter:description" content="
+一条命令建项目，一个 Markdown 文件定义人格，一个 npm run dev 开始对话。本章结束时你会有一个能回答问题的值班助手。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-22T09:02:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-22T09:02:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 2 章 第一个 agent</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-02-hello-agent/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 2 章 第一个 agent
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-22T09:02:00&#43;08:00">
+        
+  October 22, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>一条命令建项目，一个 Markdown 文件定义人格，一个 <code>npm run dev</code> 开始对话。本章结束时你会有一个能回答问题的值班助手。</p>
+</blockquote>
+
+<h2 id="2-1-前置条件">2.1 前置条件</h2>
+
+<ul>
+<li>Node.js 24 或更新（<code>node -v</code> 确认）</li>
+<li>npm（Node 自带）</li>
+<li>一个模型凭据：AI Gateway、OpenAI / Anthropic API key，或本地 Ollama</li>
+</ul>
+
+<p>Node 版本是硬要求，<code>package.json</code> 里的 <code>engines</code> 会检查。用 22 会在启动时报错。</p>
+
+<h2 id="2-2-建项目">2.2 建项目</h2>
+
+<pre><code class="language-bash">npx eve@latest init opsbot
+cd opsbot
+</code></pre>
+
+<p>这条命令做五件事：写脚手架、装依赖（<code>eve</code>、<code>ai</code>、<code>zod</code>）、初始化 Git、写好内置 HTTP 通道 <code>agent/channels/eve.ts</code>、打开终端 UI 让你登录模型。</p>
+
+<p>不想进交互界面（CI、脚本里）加 <code>-n</code>：</p>
+
+<pre><code class="language-bash">npx eve@latest init opsbot --non-interactive --model anthropic/claude-sonnet-5 --reasoning high
+</code></pre>
+
+<p>给已有项目加 agent，在项目根目录跑：</p>
+
+<pre><code class="language-bash">npx eve@latest init .
+</code></pre>
+
+<p>它只补 <code>agent/</code> 和缺的依赖，不动你已有的文件。注意：目录里已经有 <code>agent/</code> 时会拒绝，这是保护。</p>
+
+<h2 id="2-3-先看看它生成了什么">2.3 先看看它生成了什么</h2>
+
+<pre><code class="language-text">opsbot/
+├── agent/
+│   ├── agent.ts           # 模型配置（可选，不写就用默认模型）
+│   ├── instructions.md    # 系统提示词
+│   └── channels/
+│       └── eve.ts         # 内置 HTTP API 的鉴权配置
+├── package.json
+└── tsconfig.json
+</code></pre>
+
+<p><code>agent.ts</code> 长这样：</p>
+
+<pre><code class="language-ts">// agent/agent.ts
+import { defineAgent } from &quot;eve&quot;;
+
+export default defineAgent({
+  model: &quot;anthropic/claude-sonnet-5&quot;,
+});
+</code></pre>
+
+<p><code>defineAgent</code> 的字段（全部可选，除了 <code>model</code>）：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>model</code></td>
+<td>模型 ID 字符串、provider 模型对象，或 <code>defineDynamic(...)</code></td>
+<td>每轮用的模型。字符串形式走 AI Gateway</td>
+</tr>
+
+<tr>
+<td><code>description</code></td>
+<td><code>string</code></td>
+<td>给人看的说明。<strong>子代理必填</strong>，根 agent 可选</td>
+</tr>
+
+<tr>
+<td><code>reasoning</code></td>
+<td><code>&quot;low&quot; \| &quot;medium&quot; \| &quot;high&quot; \| …</code></td>
+<td>推理强度，具体档位取决于模型</td>
+</tr>
+
+<tr>
+<td><code>compaction</code></td>
+<td><code>{ thresholdPercent?, model?, modelContextWindowTokens? }</code></td>
+<td>压缩策略，默认窗口用到 90% 时触发</td>
+</tr>
+
+<tr>
+<td><code>limits</code></td>
+<td><code>{ sessionTimeoutMs?, maxInputTokensPerSession?, maxOutputTokensPerSession?, maxTokenCostUsdPerSession? }</code></td>
+<td>运行时预算，见第 6 章</td>
+</tr>
+
+<tr>
+<td><code>defaultTools</code></td>
+<td><code>boolean</code>，默认 <code>true</code></td>
+<td>是否加 eve 的可选默认工具（<code>bash</code>、<code>read_file</code> 等）</td>
+</tr>
+
+<tr>
+<td><code>tool</code></td>
+<td><code>true \| &quot;deferred&quot; \| false</code>，默认 <code>true</code></td>
+<td>这个 agent 作为子代理时怎么暴露给父模型</td>
+</tr>
+
+<tr>
+<td><code>modelContextWindowTokens</code></td>
+<td><code>number</code></td>
+<td>覆盖模型上下文窗口，用于未收录的模型</td>
+</tr>
+
+<tr>
+<td><code>modelOptions</code></td>
+<td>provider 选项对象</td>
+<td>原样传给 AI SDK 的 provider</td>
+</tr>
+
+<tr>
+<td><code>build</code></td>
+<td><code>{ externalDependencies?: string[] }</code></td>
+<td>打包控制，让敏感包保持 external</td>
+</tr>
+
+<tr>
+<td><code>experimental</code></td>
+<td><code>{ workflow?: … }</code></td>
+<td>实验特性，见第 10、18 章</td>
+</tr>
+</tbody>
+</table>
+
+<p>子字段的含义在第 6 章（压缩、预算）和第 10 章（workflow）展开。</p>
+
+<p><code>modelContextWindowTokens</code> 和 <code>modelOptions</code> 只和<strong>静态</strong>模型一起用。<code>model</code> 换成 <code>defineDynamic(...)</code> 时这两个字段的类型是 <code>never</code>，窗口和 provider 选项要跟着每次选择一起返回。</p>
+
+<h3 id="接国产模型-deepseek-qwen-glm-kimi">接国产模型（DeepSeek、Qwen、GLM、Kimi）</h3>
+
+<p><code>model</code> 收两种东西：<strong>Gateway 模型 ID 字符串</strong>，或<strong>一个 AI SDK 的 <code>LanguageModel</code> 对象</strong>。国产模型两条路都能走。</p>
+
+<p><strong>路线一：Gateway 字符串。</strong> Gateway 目录里有对应条目时最省事：</p>
+
+<pre><code class="language-ts">export default defineAgent({
+  model: &quot;deepseek/deepseek-chat&quot;,
+});
+</code></pre>
+
+<p>需要 <code>AI_GATEWAY_API_KEY</code>，请求经 Gateway 转发。国内网络到 Gateway 可能不稳，长 turn 更容易断——这是很多人最后改成直连的原因。</p>
+
+<p><strong>路线二：直连厂商。</strong> 官方有 AI SDK provider 包时用它：</p>
+
+<pre><code class="language-bash">npm install @ai-sdk/deepseek
+</code></pre>
+
+<pre><code class="language-ts">// agent/agent.ts
+import { defineAgent } from &quot;eve&quot;;
+import { createDeepSeek } from &quot;@ai-sdk/deepseek&quot;;
+
+const deepseek = createDeepSeek({ apiKey: process.env.DEEPSEEK_API_KEY! });
+
+export default defineAgent({
+  model: deepseek(&quot;deepseek-v4-pro&quot;),
+  modelContextWindowTokens: 128_000,   // 直连模型不在 Gateway 目录里，必须手填
+});
+</code></pre>
+
+<p>包里也导出了一个配好的默认实例 <code>deepSeek</code>（注意大写 S），读 <code>DEEPSEEK_API_KEY</code>：</p>
+
+<pre><code class="language-ts">import { deepSeek } from &quot;@ai-sdk/deepseek&quot;;
+model: deepSeek(&quot;deepseek-v4-flash&quot;);
+</code></pre>
+
+<p><strong>路线三：OpenAI 兼容端点。</strong> 只提供 <code>/v1/chat/completions</code> 兼容接口的厂商（通义、GLM、Kimi、豆包、混元）用 <code>@ai-sdk/openai-compatible</code>：</p>
+
+<pre><code class="language-bash">npm install @ai-sdk/openai-compatible
+</code></pre>
+
+<pre><code class="language-ts">import { defineAgent } from &quot;eve&quot;;
+import { createOpenAICompatible } from &quot;@ai-sdk/openai-compatible&quot;;
+
+const qwen = createOpenAICompatible({
+  name: &quot;qwen&quot;,
+  baseURL: &quot;https://dashscope.aliyuncs.com/compatible-mode/v1&quot;,
+  apiKey: process.env.DASHSCOPE_API_KEY!,
+  includeUsage: true,          // 流式响应里带上 usage，否则预算算不出来
+});
+
+export default defineAgent({
+  model: qwen(&quot;qwen-plus&quot;),
+  modelContextWindowTokens: 128_000,
+});
+</code></pre>
+
+<p>常见厂商的对照：</p>
+
+<table>
+<thead>
+<tr>
+<th>厂商</th>
+<th>包</th>
+<th><code>baseURL</code></th>
+<th>环境变量</th>
+<th>模型 ID 示例</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>DeepSeek</td>
+<td><code>@ai-sdk/deepseek</code></td>
+<td>内置</td>
+<td><code>DEEPSEEK_API_KEY</code></td>
+<td><code>deepseek-v4-pro</code>、<code>deepseek-v4-flash</code></td>
+</tr>
+
+<tr>
+<td>通义千问</td>
+<td><code>@ai-sdk/openai-compatible</code></td>
+<td><code>https://dashscope.aliyuncs.com/compatible-mode/v1</code></td>
+<td><code>DASHSCOPE_API_KEY</code></td>
+<td><code>qwen-plus</code>、<code>qwen-max</code></td>
+</tr>
+
+<tr>
+<td>智谱 GLM</td>
+<td>同上</td>
+<td><code>https://open.bigmodel.cn/api/paas/v4</code></td>
+<td><code>ZHIPU_API_KEY</code></td>
+<td><code>glm-5.2</code>（以控制台为准）</td>
+</tr>
+
+<tr>
+<td>Kimi</td>
+<td>同上</td>
+<td><code>https://api.moonshot.cn/v1</code></td>
+<td><code>MOONSHOT_API_KEY</code></td>
+<td><code>kimi-k2</code>（以控制台为准）</td>
+</tr>
+
+<tr>
+<td>豆包</td>
+<td>同上</td>
+<td><code>https://ark.cn-beijing.volces.com/api/v3</code></td>
+<td><code>ARK_API_KEY</code></td>
+<td>以控制台为准</td>
+</tr>
+
+<tr>
+<td>混元</td>
+<td>同上</td>
+<td><code>https://api.hunyuan.cloud.tencent.com/v1</code></td>
+<td><code>HUNYUAN_API_KEY</code></td>
+<td><code>hunyuan-turbos-latest</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>模型 ID 会随版本变，上表只是常见别名，接之前先去控制台确认一次。</p>
+
+<p>两条路的请求和密钥走向不同：</p>
+
+<pre><code class="language-mermaid">flowchart LR
+  A[&quot;agent.ts&quot;] --&gt;|&quot;字符串 + AI_GATEWAY_API_KEY&quot;| G[&quot;AI Gateway&quot;]
+  G --&gt; P[&quot;DeepSeek / Qwen / GLM …&quot;]
+  A --&gt;|&quot;provider 对象 + 厂商自己的 key&quot;| P
+</code></pre>
+
+<p>走 Gateway 时，厂商密钥由 Gateway 管；直连时，厂商密钥只在你的应用里。后者少一跳，也少一个外部依赖。</p>
+
+<p>四条必须知道的差异：</p>
+
+<ol>
+<li><strong><code>modelContextWindowTokens</code> 要手填。</strong> 字符串模型 eve 从 Gateway 目录查窗口；直连的查不到，不填会让压缩阈值按错误的基准算（第 6 章）。按厂商文档的上下文长度填。</li>
+<li><strong>动态选择在 session / turn 上只能返回字符串。</strong> <code>LanguageModel</code> 对象不可序列化，过不了停泊，只能从 <code>step.started</code> 返回（第 18 章）。</li>
+<li><strong>工具调用是硬门槛。</strong> eve 的一切都靠 function calling。DeepSeek 的 <code>deepseek-v4-pro</code> / <code>deepseek-v4-flash</code> 支持；推理特化的模型或预览版可能不稳，接完先用第 16 章的 smoke 评测跑一遍。</li>
+<li><strong><code>reasoning</code> 的档位未必认得。</strong> 国产模型大多没有 <code>&quot;low&quot;</code> / <code>&quot;high&quot;</code> 这套映射，厂商特有参数走 <code>modelOptions.providerOptions</code>，键是 provider 名：</li>
+</ol>
+
+<pre><code class="language-ts">export default defineAgent({
+  model: deepseek(&quot;deepseek-v4-pro&quot;),
+  modelContextWindowTokens: 128_000,
+  modelOptions: {
+    providerOptions: {
+      deepseek: {
+        thinking: { type: &quot;disabled&quot; },   // 关掉思维链
+        // reasoningEffort: &quot;high&quot;,        // 或者保留思维链，只调强度
+      },
+    },
+  },
+});
+</code></pre>
+
+<p><code>createOpenAICompatible</code> 的 <code>name</code> 就是这里的键（上面例子是 <code>qwen</code>）。OpenAI 兼容端点还有两个开关值得留意：<code>includeUsage: true</code> 让流式响应带上 usage（不然 <code>limits</code> 的 token 预算没法统计），<code>supportsStructuredOutputs: true</code> 在厂商支持时启用严格 JSON schema。</p>
+
+<p>密钥一律走环境变量，部署前在目标环境配好（第 17 章）。注意 <code>eve dev</code> 会自动读 <code>.env.local</code>，但 <code>eve build</code> 不读——哪些命令读、编译期为什么会把值定死、沙箱里为什么读不到，全在<a href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">附录 C</a>。</p>
+
+<h3 id="接本地模型-ollama-lm-studio-vllm">接本地模型（Ollama、LM Studio、vLLM）</h3>
+
+<p>在自己机器上跑模型调试时，把 AI SDK 的 OpenAI 兼容 provider 指向本地服务即可。任何实现了 OpenAI Chat Completions 的服务都能用：</p>
+
+<pre><code class="language-bash">npm install @ai-sdk/openai-compatible
+ollama pull gpt-oss:20b
+OLLAMA_CONTEXT_LENGTH=64000 ollama serve
+</code></pre>
+
+<pre><code class="language-ts">// agent/agent.ts
+import { createOpenAICompatible } from &quot;@ai-sdk/openai-compatible&quot;;
+import { defineAgent } from &quot;eve&quot;;
+
+const ollama = createOpenAICompatible({
+  name: &quot;ollama&quot;,
+  baseURL: &quot;http://localhost:11434/v1&quot;,
+  includeUsage: true,          // 流式响应里带上 token 用量
+});
+
+export default defineAgent({
+  model: ollama(&quot;gpt-oss:20b&quot;),
+  modelContextWindowTokens: 64_000,
+});
+</code></pre>
+
+<p>四条与云端不同的注意点：</p>
+
+<ol>
+<li><strong>上下文窗口按服务实际分配的填，不是模型的理论上限。</strong> AI Gateway 没有本地模型的元数据，<code>modelContextWindowTokens</code> 是压缩阈值的唯一依据。Ollama 默认只给 4K，agent 场景至少要 64K，用 <code>OLLAMA_CONTEXT_LENGTH</code> 调。</li>
+<li><strong>必须有原生工具调用能力。</strong> eve 几乎每一轮都要调工具。<code>gpt-oss:20b</code>、<code>qwen3</code>、<code>gemma4</code> 是 Ollama 上比较可靠的起点。</li>
+<li><strong><code>includeUsage: true</code> 才统计得到 token。</strong> 本地模型不报成本，所以 <code>maxTokenCostUsdPerSession</code> 对它们不起作用，只能用 token 上限。</li>
+<li><strong>部署环境连不到你机器上的服务。</strong> 上线必须换成 Gateway 或托管 provider。</li>
+</ol>
+
+<h3 id="会话亲和-只对-ai-gateway-生效">会话亲和（只对 AI Gateway 生效）</h3>
+
+<p>Gateway 会用会话 ID 做<strong>会话亲和</strong>：同一会话的请求优先打到上次服务它的那个 provider，好让那边命中 prompt 缓存。它可能把你的 <code>order</code> 顺序挤开。要严格按 <code>order</code> 走就关掉：</p>
+
+<pre><code class="language-ts">export default defineAgent({
+  model: &quot;anthropic/claude-opus-5.5&quot;,
+  modelOptions: {
+    providerOptions: {
+      gateway: { order: [&quot;bedrock&quot;, &quot;anthropic&quot;], sessionAffinity: false },
+    },
+  },
+});
+</code></pre>
+
+<p>直连 provider 的调用拿不到这个选项。会话 ID 超过 256 字符时 Gateway 会先做哈希；自己写的 <code>gateway.sessionId</code> 会被逐字记录，别往里塞个人信息。</p>
+
+<p><code>channels/eve.ts</code> 是生产环境的占位鉴权：</p>
+
+<pre><code class="language-ts">// agent/channels/eve.ts
+import { eveChannel } from &quot;eve/channels/eve&quot;;
+import { localDev, placeholderAuth, vercelOidc } from &quot;eve/channels/auth&quot;;
+
+export default eveChannel({
+  auth: [vercelOidc(), localDev(), placeholderAuth()],
+});
+</code></pre>
+
+<p>这三条是<strong>顺序</strong>执行的，第一个返回非 <code>null</code> 的生效：</p>
+
+<ul>
+<li><code>vercelOidc()</code>：认 Vercel 签发的 OIDC token（本地 CLI 访问已部署的 agent 靠它）</li>
+<li><code>localDev()</code>：只在 <code>eve dev</code> / <code>vercel dev</code> 进程里放行，生产环境什么都不认</li>
+<li><code>placeholderAuth()</code>：占位，生产环境一律 401</li>
+</ul>
+
+<p><code>eveChannel</code> 还有 <code>audience</code>、<code>uploadPolicy</code>、<code>fetchFile</code>、<code>cors</code>、<code>turnPolicy</code>、<code>onMessage</code>、<code>events</code>、<code>trustedForwarders</code> 这些字段，完整的表和默认值在第 14 章。</p>
+
+<p>所以开发环境能用，不是 <code>placeholderAuth()</code> 的功劳——是 <code>localDev()</code>。上线前必须把 <code>placeholderAuth()</code> 换成真的鉴权，否则生产流量全被拒（好的一面）或你为了图省事换成 <code>none()</code>（坏的一面，等于公开）。第 14 章讲怎么换。</p>
+
+<h2 id="2-4-写人格">2.4 写人格</h2>
+
+<p><code>instructions.md</code> 是每轮都会发给模型的系统提示。它应该只放<strong>稳定的身份和规则</strong>，不是流程手册。</p>
+
+<p>替换成下面这份：</p>
+
+<pre><code class="language-md">&lt;!-- agent/instructions.md --&gt;
+你是「值班助手」，服务一个做在线支付的后端团队。
+
+## 你的职责
+
+- 回答关于服务状态、错误日志、部署历史的问题。
+- 排查故障时先给结论，再给证据，最后给建议动作。
+- 拿不准就说不确定，并说明需要什么信息才能确定。
+
+## 硬性规则
+
+- 不要编造日志内容、指标数值或时间戳。没查到就说没查到。
+- 任何会改变生产状态的操作（重启、回滚、改配置）都必须先说明影响范围，
+  并等待人工确认。你不能自己决定执行。
+- 回答用中文。代码、日志、命令保持原文。
+- 涉及金额时保留两位小数并注明币种。
+
+## 输出风格
+
+先一句话结论，然后最多三条证据，最后一行是建议的下一步。
+不要写「希望对你有帮助」这类客套话。
+</code></pre>
+
+<p>三个要点：</p>
+
+<ol>
+<li><strong>写规则，不写流程。</strong> 「重启前要确认」是规则；「第一步查 A，第二步查 B」是流程，属于技能（第 7 章）。</li>
+<li><strong>写否定约束。</strong> 模型最容易犯的错是编造，明确写「不要编造」比写「要准确」有效。</li>
+<li><strong>别写太长。</strong> 这段文字每轮都发，一千字就是每轮一千字的成本。超过两百行就该拆技能了。</li>
+</ol>
+
+<h2 id="2-5-跑起来">2.5 跑起来</h2>
+
+<pre><code class="language-bash">npm run dev
+</code></pre>
+
+<p>终端 UI 打开。先问一个不需要工具、靠常识就能答的问题：</p>
+
+<pre><code class="language-text">支付接口的 p99 延迟突然从 80ms 涨到 900ms，一般先查什么？
+</code></pre>
+
+<p>你会得到一个有结构、有优先级的回答——它遵循了人格设定，但完全没碰你的系统。这是对的：现在它只有一个提示词，没有任何工具。</p>
+
+<p>试试故意违反规则：</p>
+
+<pre><code class="language-text">帮我把 payment-api 重启一下。
+</code></pre>
+
+<p>它应该拒绝自己执行，转而说明需要人工确认。如果它假装执行了，说明你的提示词约束不够硬——回到 2.4 加强「硬性规则」。</p>
+
+<h2 id="2-6-改一句看效果">2.6 改一句看效果</h2>
+
+<p>编辑 <code>agent/instructions.md</code>，把「回答用中文」改成「回答用英文」，保存。<strong>不用重启</strong>，dev server 会热加载。再问一句，回答变成英文了。</p>
+
+<p>这个即时反馈循环是后面所有章节的工作方式：改文件 → 发消息 → 看行为。</p>
+
+<h2 id="2-7-看看框架眼里的你">2.7 看看框架眼里的你</h2>
+
+<pre><code class="language-bash">npx eve info
+</code></pre>
+
+<p>输出是编译后的 agent 快照：发现了哪些工具、技能、通道、定时任务，哪些默认值被覆盖了，有没有诊断警告。养成习惯，改完目录结构先跑一次。</p>
+
+<p>同类命令：</p>
+
+<pre><code class="language-bash">npx eve set model anthropic/claude-opus-5.5 --reasoning high   # 改模型
+npx eve logs list                                             # 本地诊断日志
+npx eve traces list                                           # 本地 trace
+</code></pre>
+
+<h2 id="2-8-直接用-http-说话">2.8 直接用 HTTP 说话</h2>
+
+<p>dev server 起在 <code>http://localhost:2000</code>。不通过 TUI 也能聊：</p>
+
+<pre><code class="language-bash"># 建会话并发第一条消息
+curl -X POST http://localhost:2000/eve/v1/session \
+  -H 'content-type: application/json' \
+  -d '{&quot;message&quot;:&quot;现在有哪些服务在报警？&quot;}'
+# {&quot;ok&quot;:true,&quot;sessionId&quot;:&quot;wrun_A&quot;,&quot;status&quot;:&quot;accepted&quot;}
+
+# 看事件流（NDJSON，一行一个事件）
+curl http://localhost:2000/eve/v1/session/wrun_A/stream
+
+# 追问
+curl -X POST http://localhost:2000/eve/v1/session/wrun_A \
+  -H 'content-type: application/json' \
+  -d '{&quot;message&quot;:&quot;按严重程度排序&quot;}'
+</code></pre>
+
+<p><code>sessionId</code> 是唯一入口，后续所有消息、取消、清空都带着它。第 9 章把这条协议讲全。</p>
+
+<h2 id="2-9-常见坑">2.9 常见坑</h2>
+
+<p><strong>坑：<code>eve init</code> 之后 <code>npm run dev</code> 报模型鉴权失败。</strong>
+脚手架没有配置凭据。在 TUI 里输入 <code>/model</code> 走登录流程，或把 <code>OPENAI_API_KEY</code> / <code>ANTHROPIC_API_KEY</code> 写进 <code>.env</code>。用 Vercel AI Gateway 的模型还需要 <code>AI_GATEWAY_API_KEY</code>。</p>
+
+<p><strong>坑：改了 <code>agent.ts</code> 没生效。</strong>
+模型、<code>build.externalDependencies</code> 这类配置在启动时读取，改完要重启 dev server。<code>instructions.md</code> 和工具文件是热加载的，两者不一样。</p>
+
+<p><strong>坑：在 <code>agent/</code> 里放业务代码。</strong>
+<code>agent/lib/</code> 只放 agent 自己用的辅助代码，它不会被复制进沙箱。前端代码、数据库迁移、普通后端接口都放 <code>agent/</code> 外面。</p>
+
+<p><strong>坑：以为 <code>instructions.md</code> 能当流程文档用。</strong>
+写两百行排障步骤进去，结果是每轮都付这份 token，而且模型经常忽略中间的条目。长流程放技能。</p>
+
+<h2 id="2-10-练习">2.10 练习</h2>
+
+<ol>
+<li>把 <code>instructions.md</code> 改成你自己领域的助手（客服、代码审查、数据分析都行），写三条硬性规则。</li>
+<li>故意让它做一件越界的事，确认它拒绝，并记录是哪条规则起了作用。</li>
+<li>用 <code>curl</code> 建一个会话，发两条消息，观察 <code>stream</code> 里出现了哪些事件类型（不用看懂，先有印象）。</li>
+</ol>
+
+<h2 id="延伸阅读">延伸阅读</h2>
+
+<ul>
+<li><a href="https://eve.dev/docs/getting-started">Getting Started</a></li>
+<li><a href="https://eve.dev/docs/instructions">Instructions</a></li>
+<li><a href="https://eve.dev/docs/reference/cli">CLI Reference</a></li>
+</ul>
+
+<hr />
+
+<p>上一章：<a href="https://tangxusc.github.io/2026/10/eve-01-what-is-eve/">01 认识 eve</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-03-project-anatomy/">03 agent 目录解剖</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-03-project-anatomy/" data-tooltip="eve 中文教程 · 第 3 章 agent 目录解剖">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-01-what-is-eve/" data-tooltip="eve 中文教程 · 第 1 章 认识 eve">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-03-project-anatomy/" data-tooltip="eve 中文教程 · 第 3 章 agent 目录解剖">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-01-what-is-eve/" data-tooltip="eve 中文教程 · 第 1 章 认识 eve">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 <code>eve init</code> 讲到上线。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
+                <h3 class="media-heading">eve 中文教程 · 附录 C 环境变量与密钥</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p><code>process.env</code> 只在<strong>应用运行时</strong>存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">
+                <h3 class="media-heading">eve 中文教程 · 附录 B 事件与 CLI</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">完整事件表、CLI 命令、HTTP 路由。写客户端、排查事件流、核对某个字段时对着这张表看。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">
+                <h3 class="media-heading">eve 中文教程 · 附录 A 术语与速查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">概念对照、目录速查、常见错误码。读不懂某个词、找不到某个文件、看到一个陌生状态码时先查这里。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/">
+                <h3 class="media-heading">eve 中文教程 · 第 18 章 进阶与上线检查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>这一章把散落在前面的进阶能力收在一起，然后给一份能逐条打勾的上线清单。清单比概念重要。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
+                <h3 class="media-heading">eve 中文教程 · 第 17 章 前端与部署</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-16-evals/">
+                <h3 class="media-heading">eve 中文教程 · 第 16 章 评测</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
+                <h3 class="media-heading">eve 中文教程 · 第 15 章 定时与钩子</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-14-channels/">
+                <h3 class="media-heading">eve 中文教程 · 第 14 章 通道</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-13-connections/">
+                <h3 class="media-heading">eve 中文教程 · 第 13 章 连接</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 <code>eve__search</code> 找到工具，用 <code>eve__tool</code> 调用，凭据由 eve 在应用侧注入。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         125 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-02-hello-agent\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-02-hello-agent\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

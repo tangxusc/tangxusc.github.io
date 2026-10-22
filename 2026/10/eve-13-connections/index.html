@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 eve__search 找到工具，用 eve__tool 调用，凭据由 eve 在应用侧注入。
+">
+
+
+<meta property="og:description" content="
+连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 eve__search 找到工具，用 eve__tool 调用，凭据由 eve 在应用侧注入。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 13 章 连接">
+<meta name="twitter:title" content="eve 中文教程 · 第 13 章 连接">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-13-connections/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-13-connections/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 eve__search 找到工具，用 eve__tool 调用，凭据由 eve 在应用侧注入。
+">
+<meta name="twitter:description" content="
+连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 eve__search 找到工具，用 eve__tool 调用，凭据由 eve 在应用侧注入。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-22T09:13:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-22T09:13:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 13 章 连接</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-13-connections/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 13 章 连接
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-22T09:13:00&#43;08:00">
+        
+  October 22, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 <code>eve__search</code> 找到工具，用 <code>eve__tool</code> 调用，凭据由 eve 在应用侧注入。</p>
+</blockquote>
+
+<h2 id="13-1-为什么不直接写工具">13.1 为什么不直接写工具</h2>
+
+<p>接一个外部服务，自己写 <code>defineTool</code> 也能做。但有三件事要重复劳动：</p>
+
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>自己写工具</th>
+<th>用连接</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>工具 schema</td>
+<td>每个接口手写一遍</td>
+<td>服务端（MCP）或 OpenAPI 文档提供</td>
+</tr>
+
+<tr>
+<td>凭据注入</td>
+<td>每个工具自己读环境变量</td>
+<td>连接统一管，模型看不到</td>
+</tr>
+
+<tr>
+<td>工具发现</td>
+<td>全部塞进工具列表</td>
+<td>按需搜索，不占常驻上下文</td>
+</tr>
+
+<tr>
+<td>工具增删</td>
+<td>改代码重新部署</td>
+<td>服务端加工具，客户端自动看到</td>
+</tr>
+</tbody>
+</table>
+
+<p>连接适合「服务已经有一套接口，你想把整片能力开放给模型」。如果只是三五个固定操作，自己写工具更可控。</p>
+
+<p><strong>连接不是通道。</strong> 通道是用户找 agent（入站），连接是 agent 找服务（出站）。一个 agent 可以同时有多个通道和多个连接，互不影响。</p>
+
+<h2 id="13-2-两种连接怎么选">13.2 两种连接怎么选</h2>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>MCP</th>
+<th>OpenAPI</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>工具从哪来</td>
+<td>服务端动态发布</td>
+<td>文档里的每个 operation</td>
+</tr>
+
+<tr>
+<td>schema 谁维护</td>
+<td>服务端</td>
+<td>文档作者</td>
+</tr>
+
+<tr>
+<td>适合</td>
+<td>服务已有 MCP server；工具集会变</td>
+<td>服务有 OpenAPI 3.x / Swagger 2.0</td>
+</tr>
+
+<tr>
+<td>典型</td>
+<td>Linear、GitHub、内部 MCP 网关</td>
+<td>内部 REST API、SaaS 开放平台</td>
+</tr>
+</tbody>
+</table>
+
+<p>判断很简单：<strong>有 MCP server 就用 MCP；只有 HTTP 文档就用 OpenAPI；两个都有，看哪个语义更全。</strong></p>
+
+<h2 id="13-3-连接在模型眼里长什么样">13.3 连接在模型眼里长什么样</h2>
+
+<h3 id="不在工具列表里">不在工具列表里</h3>
+
+<p>连接的工具<strong>不占</strong>模型的常驻工具列表。模型通过三个目录工具访问：</p>
+
+<pre><code class="language-text">eve__search({ query: &quot;linear&quot; })            → 该连接的工具列表
+eve__search({ query: &quot;create_issue&quot; })      → 按名字匹配
+eve__search({ query: &quot;linear__&quot; })          → 只看这个命名空间
+eve__tool({ name: &quot;linear__create_issue&quot;, input: {...} })
+</code></pre>
+
+<p>为什么这么设计：一个 Linear 连接可能有 40 个工具，全塞进列表就是每轮 40 份 schema。按需搜索只在真的要用时付费。</p>
+
+<p>一次连接调用穿过四个边界：</p>
+
+<pre><code class="language-mermaid">sequenceDiagram
+  participant M as 模型
+  participant E as eve 运行时
+  participant C as 连接
+  participant S as 外部服务
+  participant U as 用户 / 客户端
+
+  M-&gt;&gt;E: eve__search(&quot;linear&quot;)
+  E--&gt;&gt;M: 工具目录（名字 + 描述）
+  M-&gt;&gt;E: eve__tool({ name: &quot;linear__create_issue&quot; })
+  E-&gt;&gt;C: 解析凭据（app 或 user）
+  alt 没有可用凭据
+    C--&gt;&gt;E: ConnectionAuthorizationRequiredError
+    E--&gt;&gt;U: authorization.required
+    Note over E: turn 停泊，等 OAuth 回调
+  else 有凭据
+    C-&gt;&gt;S: HTTP + Authorization
+    S--&gt;&gt;C: 响应
+    C--&gt;&gt;E: 结构化结果
+    E--&gt;&gt;M: action.result
+  end
+</code></pre>
+
+<p>凭据只在第 3 步注入，模型的输入里<strong>只有业务参数</strong>。这也是为什么连接工具的 schema 里永远看不到 token 字段。</p>
+
+<h3 id="命名">命名</h3>
+
+<p>文件名就是连接名。<code>agent/connections/linear.ts</code> 注册为 <code>linear</code>，它的工具对模型显示为 <code>linear__list_issues</code>。</p>
+
+<p><strong>连接名会占住整个 <code>&lt;name&gt;__</code> 前缀。</strong> 有 <code>linear</code> 连接，就不能再有叫 <code>linear__foo</code> 的工具、子代理或别的连接，编译期报冲突。</p>
+
+<h3 id="description-决定模型能不能找到">description 决定模型能不能找到</h3>
+
+<p>连接的 <code>description</code> 和连接名一起列在上下文里，是模型决定「搜哪个连接」的主要信号。写清这个连接能做什么，而不是写「Linear 连接」：</p>
+
+<pre><code class="language-ts">description: &quot;Linear 工作区：issue、项目、周期、评论。支持按负责人、状态、标签筛选。&quot;
+</code></pre>
+
+<h3 id="搜索的行为">搜索的行为</h3>
+
+<ul>
+<li><code>eve__search</code> <strong>从不</strong>主动要求登录。OAuth 服务如果匿名列不出工具，它只返回一条以连接名命名的结果（如 <code>linear</code>），模型要显式用 <code>eve__tool({ name: &quot;linear&quot; })</code> 触发登录。</li>
+<li>工具加载超过 <strong>10 秒</strong>的连接会出现在 <code>unavailable</code> 里，其它连接的结果照常返回。</li>
+<li>通过 <code>eve__tool</code> 发起的调用，事件和审批里显示的是<strong>被调用条目</strong>的名字（<code>linear__list_issues</code>），不是 <code>eve__tool</code>。</li>
+</ul>
+
+<h2 id="13-4-mcp-连接">13.4 MCP 连接</h2>
+
+<pre><code class="language-ts">// agent/connections/linear.ts
+import { defineMcpClientConnection } from &quot;eve/connections&quot;;
+
+export default defineMcpClientConnection({
+  url: &quot;https://mcp.linear.app/mcp&quot;,
+  description: &quot;Linear 工作区：issue、项目、周期、评论。&quot;,
+  auth: {
+    credentialOwner: &quot;app&quot;,
+    getToken: async () =&gt; ({ token: process.env.LINEAR_API_TOKEN! }),
+  },
+  tools: { allow: [&quot;search_issues&quot;, &quot;get_issue&quot;] },
+});
+</code></pre>
+
+<p><code>url</code> 必须支持 <strong>Streamable HTTP</strong> 或 <strong>SSE</strong>。老的 stdio server 要先包一层 HTTP 网关。</p>
+
+<p><code>defineMcpClientConnection</code> 的字段：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>url</code></td>
+<td><code>string</code></td>
+<td>是</td>
+<td>MCP 端点，Streamable HTTP 或 SSE</td>
+</tr>
+
+<tr>
+<td><code>description</code></td>
+<td><code>string</code></td>
+<td>是</td>
+<td>目录里的路由信号，模型靠它决定搜哪个连接</td>
+</tr>
+
+<tr>
+<td><code>auth</code></td>
+<td><code>{ credentialOwner, getToken }</code> / <code>connect(...)</code> / <code>defineInteractiveAuthorization(...)</code></td>
+<td>否</td>
+<td>出站凭据；与 <code>headers</code> 至少给一个（公开服务可都不给）</td>
+</tr>
+
+<tr>
+<td><code>headers</code></td>
+<td><code>Record&lt;string, string&gt; \| 回调</code></td>
+<td>否</td>
+<td>非 Bearer 方案（API key 头等），可与 <code>auth</code> 并用</td>
+</tr>
+
+<tr>
+<td><code>tools</code></td>
+<td><code>{ allow: string[] }</code> 或 <code>{ block: string[] }</code></td>
+<td>否</td>
+<td>工具过滤，<strong>二选一</strong></td>
+</tr>
+
+<tr>
+<td><code>approval</code></td>
+<td><code>ApprovalPolicy \| { request, response?, prompt? }</code></td>
+<td>否</td>
+<td>连接级审批</td>
+</tr>
+
+<tr>
+<td><code>protocolVersionDiscovery</code></td>
+<td><code>boolean</code>，默认 <code>true</code></td>
+<td>否</td>
+<td>是否先走 <code>server/discover</code></td>
+</tr>
+
+<tr>
+<td><code>toolCall</code></td>
+<td><code>{ providedArguments }</code></td>
+<td>否</td>
+<td>应用侧注入的参数，模型看不到</td>
+</tr>
+
+<tr>
+<td><code>instanceKey</code></td>
+<td><code>string</code></td>
+<td>动态认证连接必填</td>
+<td>稳定、非密钥的实例标识</td>
+</tr>
+
+<tr>
+<td><code>forwardPrincipal</code></td>
+<td><code>boolean</code>，默认 <code>false</code></td>
+<td>否</td>
+<td>把用户身份转发给对端（对端是 eve 的 <code>mcpChannel</code> 时有用）</td>
+</tr>
+
+<tr>
+<td><code>experimental_events</code></td>
+<td><code>{ onEvent, onGap?, onTerminated? }</code></td>
+<td>否</td>
+<td>订阅服务端事件（实验），见本节末尾</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="协议发现">协议发现</h3>
+
+<p>eve 默认走 <code>server/discover</code> 发现协议版本。服务器只支持老的 <code>initialize</code> 握手时：</p>
+
+<pre><code class="language-ts">protocolVersionDiscovery: false,
+</code></pre>
+
+<p>关掉之后客户端跳过 discover，从 <code>initialize</code> 开始，提议 <code>2025-11-25</code> 并协商一个支持的版本。这个设置对动态解析器返回的连接同样生效。</p>
+
+<h3 id="工具过滤">工具过滤</h3>
+
+<pre><code class="language-ts">tools: { allow: [&quot;search_issues&quot;, &quot;get_issue&quot;] },
+</code></pre>
+
+<p><code>allow</code> 和 <code>block</code> <strong>只能选一个</strong>。优先用 <code>allow</code>——白名单比黑名单可靠，尤其是服务端有写工具时。</p>
+
+<h3 id="应用侧参数">应用侧参数</h3>
+
+<p>有些 server 要求每次调用都带应用自己的参数（比如 agent profile）。用 <code>toolCall.providedArguments</code>：</p>
+
+<pre><code class="language-ts">export default defineMcpClientConnection({
+  url: &quot;https://store.example.com/api/ucp/mcp&quot;,
+  description: &quot;商店目录、购物车、结算、订单。&quot;,
+  toolCall: {
+    providedArguments: {
+      meta: ({ session }) =&gt; ({
+        &quot;ucp-agent&quot;: {
+          profile: `https://agent.example.com/.well-known/ucp?session=${encodeURIComponent(session.id)}`,
+        },
+      }),
+    },
+  },
+});
+</code></pre>
+
+<ul>
+<li>这些键会从模型可见的 schema 里<strong>移除</strong>，在调用前注入。模型改不了。</li>
+<li>值可以是 JSON、Promise 或回调；回调拿到会话上下文、远端裸 <code>toolName</code>、以及一个重放稳定的 <code>callId</code>（远端需要幂等键时用它）。</li>
+<li>审批策略只看模型写的输入，看不到注入的值。</li>
+</ul>
+
+<h3 id="结果大小">结果大小</h3>
+
+<p>MCP 工具返回服务端的 <code>structuredContent</code>；没有就返回文本（工具声明了 output schema 时按 JSON 解析）。图片、音频、资源以文件形式交给模型，<code>isError: true</code> 的调用直接失败。</p>
+
+<p><strong>MCP 连接没有 <code>toModelOutput</code>。</strong> 结果太大只能从源头解决：</p>
+
+<ol>
+<li>优先用服务端提供的搜索 / 摘要工具；</li>
+<li>让服务端返回一个句柄，再分页取小块；</li>
+<li>控制不了服务端时，用自己写的工具替换那一个 operation，把完整数据存到外部，只把需要的字段投影给模型；同时用 <code>tools.block</code> 把原 MCP 工具挡掉，避免模型看到两个重复工具。</li>
+</ol>
+
+<h3 id="凭据刷新">凭据刷新</h3>
+
+<p><code>getToken</code> 不是「连上时取一次」。eve 在<strong>每个 MCP HTTP 请求之前</strong>解析凭据，包括已经建好客户端之后的请求：</p>
+
+<ul>
+<li>缓存 token 的 <code>expiresAt</code> 已过 → 再调一次 <code>getToken</code>。</li>
+<li>服务端回 <code>401</code> → 驱逐缓存的 token（并调用 provider 的 <code>evict</code> 钩子），再取一次，重试该请求<strong>一次</strong>；还不行才走登录流程。</li>
+<li>服务端回 <code>403</code> → 是权限问题，<strong>不刷新、不重试</strong>，直接把错误交给模型。</li>
+</ul>
+
+<p>驱逐只清 eve 缓存的 access token，并调用你自己的 <code>evict</code>。要不要留 refresh grant 做静默续期，是 provider 自己的决定。缺 grant、替换来的 token 又被拒，仍然走正常授权流程。</p>
+
+<h3 id="订阅服务端事件-实验">订阅服务端事件（实验）</h3>
+
+<p>MCP 连接可以盯住服务端的事件，事件到了就跑你的代码。上游订阅由 Vercel Connect 持有，转发给 agent，eve 执行回调。</p>
+
+<p>前提三条，缺一条都不行：</p>
+
+<ul>
+<li>连接是<strong>静态</strong>声明的，且 <code>auth</code> 是静态的 <code>connect()</code> provider。动态连接和 auth 解析器不支持。</li>
+<li><code>@vercel/connect@2.5.2</code> 或更新。</li>
+<li>服务端支持 Streamable HTTP 上的事件。</li>
+</ul>
+
+<pre><code class="language-ts">// agent/connections/bird.ts
+import { connect } from &quot;@vercel/connect/eve&quot;;
+import { defineMcpClientConnection } from &quot;eve/connections&quot;;
+
+export default defineMcpClientConnection({
+  url: &quot;https://mcp.bird.com/&quot;,
+  description: &quot;Bird：邮件、短信、联系人。可以盯一个邮箱的新邮件。&quot;,
+  auth: connect(&quot;bird/bird&quot;),
+  experimental_events: {
+    async onEvent({ event, origin, auth, attachSession }) {
+      if (event.name !== &quot;email_mailbox.message_received&quot;) return;
+      await attachSession(origin.sessionId).send(
+        [
+          &quot;你盯的那个邮箱来了一封新邮件：&quot;,
+          JSON.stringify(event.data),
+          &quot;如果是 bug 报告，查一下发件人之前的线程，起草一封回复说明我们已知什么、接下来做什么，发之前先问我。&quot;,
+        ].join(&quot;\n\n&quot;),
+        { auth, turnPolicy: &quot;queue&quot; },
+      );
+    },
+  },
+});
+</code></pre>
+
+<p><code>onEvent</code> 必填。定义它<strong>不等于</strong>订阅：订阅是模型在运行时发起的，它用 <code>eve__search</code> 找到三个动作：</p>
+
+<table>
+<thead>
+<tr>
+<th>动作</th>
+<th>输入</th>
+<th>结果</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>events_subscribe_&lt;hash&gt;</code></td>
+<td><code>{ arguments, ttlMs }</code></td>
+<td><code>{ id, status, expiresAt, … }</code></td>
+</tr>
+
+<tr>
+<td><code>events_get_subscription</code></td>
+<td><code>{ id }</code></td>
+<td>订阅，结束后为 unknown</td>
+</tr>
+
+<tr>
+<td><code>events_unsubscribe</code></td>
+<td><code>{ id }</code></td>
+<td><code>{ id, status: &quot;stopping&quot; }</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>服务端提供几个事件，就有几个 subscribe 动作，描述里写着事件名。<code>ttlMs</code> 必填：<code>120000</code>（2 分钟）到 <code>31536000000</code>（365 天）之间的整数，或者 <code>null</code> 表示一直盯到手动停。</p>
+
+<p>回调的语义要记牢：</p>
+
+<ul>
+<li>回调<strong>在任何会话之外</strong>运行，身份是当初订阅的那个用户（<code>auth</code>）。不调 <code>attachSession(sessionId).send(...)</code> 就什么都不会进会话，而 <code>attachSession</code> 从不新建会话。</li>
+<li>每次投递都是一个独立的 durable workflow，所以回调可能并发、乱序、重复执行。副作用用 <code>deliveryId</code> 去重（当 <code>Idempotency-Key</code> 用）。</li>
+<li>订阅比创建它的会话活得久。结束条件只有三个：手动停、<code>expiresAt</code> 到期、上游订阅终止。</li>
+<li>同一个事件、同样的参数、同一个会话再订阅一次，返回已有的订阅；别的会话订同一个事件会拿到自己的一份。</li>
+<li><code>tools.allow</code> / <code>tools.block</code> 对这三个动作同样生效。用了 allow 列表就得把 <code>events_subscribe_&lt;hash&gt;</code> 的准确名字抄进去。<code>toolCall.providedArguments</code> 对事件动作不适用。</li>
+</ul>
+
+<p>漏事件和订阅终止各有回调：</p>
+
+<pre><code class="language-ts">experimental_events: {
+  async onEvent({ event }) { /* … */ },
+  async onGap({ origin, auth, attachSession }) {
+    await attachSession(origin.sessionId).send(&quot;有事件漏了，重新检查一下邮箱。&quot;, { auth });
+  },
+  async onTerminated({ origin, auth, error, attachSession }) {
+    await attachSession(origin.sessionId).send(`盯邮箱的任务结束了：${error.message}`, { auth });
+  },
+},
+</code></pre>
+
+<p>接收端是 eve 挂的 <code>POST /eve/v1/hooks/:connectionName</code>（跟着配置的 agent 前缀或 public 前缀）。它只接受 Connect 的投递令牌，也只接受仍然活着的订阅的投递，订阅结束后回 <code>410</code>。回调的身份永远来自保存下来的订阅，不来自事件载荷。</p>
+
+<h3 id="排查">排查</h3>
+
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>先查什么</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>principal_required</code></td>
+<td>用户作用域的 <code>connect(&quot;...&quot;)</code> 没有认证用户。改通道鉴权，或换成 app 作用域</td>
+</tr>
+
+<tr>
+<td>模型找不到远端工具</td>
+<td>改 <code>description</code>，再检查 <code>tools.allow</code> / <code>tools.block</code></td>
+</tr>
+
+<tr>
+<td>本地 OAuth 正常，部署后失败</td>
+<td>Connect 连接器是否挂到了部署的项目，<code>connect(&quot;...&quot;)</code> 里的 UID 是否对</td>
+</tr>
+
+<tr>
+<td>服务端拒绝请求</td>
+<td>MCP URL、transport、auth scheme、必需 header、<code>providedArguments</code></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="13-5-openapi-连接">13.5 OpenAPI 连接</h2>
+
+<pre><code class="language-ts">// agent/connections/crm.ts
+import { defineOpenAPIConnection } from &quot;eve/connections&quot;;
+
+export default defineOpenAPIConnection({
+  spec: &quot;https://api.example.com/openapi.json&quot;,
+  baseUrl: &quot;https://api.example.com&quot;,
+  description: &quot;CRM 的客户、联系人、商机。&quot;,
+  auth: {
+    credentialOwner: &quot;app&quot;,
+    getToken: async () =&gt; ({ token: process.env.CRM_TOKEN! }),
+  },
+  operations: { allow: [&quot;listAccounts&quot;, &quot;getAccount&quot;] },
+});
+</code></pre>
+
+<p><code>defineOpenAPIConnection</code> 的字段：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>spec</code></td>
+<td><code>string \| object</code></td>
+<td>是</td>
+<td>HTTPS URL 或内联已解析的文档</td>
+</tr>
+
+<tr>
+<td><code>description</code></td>
+<td><code>string</code></td>
+<td>是</td>
+<td>目录里的路由信号</td>
+</tr>
+
+<tr>
+<td><code>baseUrl</code></td>
+<td><code>string</code></td>
+<td>否</td>
+<td>覆盖文档里的 <code>servers</code> / <code>host</code></td>
+</tr>
+
+<tr>
+<td><code>auth</code></td>
+<td>同 MCP</td>
+<td>否</td>
+<td>出站凭据</td>
+</tr>
+
+<tr>
+<td><code>headers</code></td>
+<td><code>Record&lt;string, string&gt; \| 回调</code></td>
+<td>否</td>
+<td>非 Bearer 方案</td>
+</tr>
+
+<tr>
+<td><code>operations</code></td>
+<td><code>{ allow: string[] }</code> 或 <code>{ block: string[] }</code></td>
+<td>否</td>
+<td>按 <code>operationId</code> 过滤，<strong>二选一</strong></td>
+</tr>
+
+<tr>
+<td><code>approval</code></td>
+<td>同 MCP</td>
+<td>否</td>
+<td>连接级审批</td>
+</tr>
+
+<tr>
+<td><code>toolCall</code></td>
+<td><code>{ providedArguments }</code></td>
+<td>否</td>
+<td>应用侧注入的参数</td>
+</tr>
+
+<tr>
+<td><code>instanceKey</code></td>
+<td><code>string</code></td>
+<td>动态认证连接必填</td>
+<td>稳定、非密钥的实例标识</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="spec-从哪来">spec 从哪来</h3>
+
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>什么时候用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>URL（运行时抓取）</td>
+<td>服务方维护契约、经常更新</td>
+</tr>
+
+<tr>
+<td>内联已解析对象</td>
+<td>私有 API、需要钉版本、手写的小契约</td>
+</tr>
+</tbody>
+</table>
+
+<p>URL 必须是 <code>https</code>（本地开发允许 loopback 的 <code>http</code>），重定向后会重新校验。</p>
+
+<h3 id="baseurl-的解析顺序">baseUrl 的解析顺序</h3>
+
+<p>不传 <code>baseUrl</code> 时：</p>
+
+<ul>
+<li>OpenAPI 3.x：第一个可用的 <code>servers</code> 条目</li>
+<li>Swagger 2.0：<code>schemes</code> + <code>host</code> + <code>basePath</code></li>
+</ul>
+
+<p>要钉环境就显式传。解析出来的地址也必须是 <code>https</code>（loopback 除外），因为调用会带凭据。</p>
+
+<h3 id="工具命名">工具命名</h3>
+
+<p>每个 operation 一个工具，名字取 <code>operationId</code>，报告为 <code>&lt;connection&gt;__&lt;operationId&gt;</code>，比如 <code>crm__listAccounts</code>。没有 <code>operationId</code> 时，eve 用 <code>&lt;method&gt;_&lt;清洗过的路径&gt;</code> 生成确定性名字——过滤时要用这个名字。</p>
+
+<h3 id="参数">参数</h3>
+
+<p>path、query、header、cookie 参数都会变成工具的顶层输入。<code>in: &quot;path&quot;</code> 的值会被替换进 <code>{name}</code> 占位符。所以 spec 里必须声明对应的 path 参数，否则调用拼不出 URL。</p>
+
+<p>path 参数的值不能正好是 <code>.</code> 或 <code>..</code>。eve 在 URL 解析之前就拒掉，否则规范化会悄悄改掉目标路由。这个检查也覆盖 <code>toolCall.providedArguments</code> 注入的值。其它值（包括带斜杠的）在替换时照常做 URL 编码。</p>
+
+<h3 id="返回值">返回值</h3>
+
+<p>统一是 <code>{ status, statusText, body }</code>。模型自己判断 <code>status</code>，eve 不会因为 4xx 就抛错——这一点和 MCP 的 <code>isError</code> 不同。</p>
+
+<h3 id="注解清理">注解清理</h3>
+
+<p><code>default</code> / <code>example</code> 和声明的类型冲突时会被丢掉（比如布尔字段写 <code>default: &quot;false&quot;</code>），避免错误示例误导模型。eve 不做类型转换。</p>
+
+<h2 id="13-6-凭据-app-还是-user">13.6 凭据：app 还是 user</h2>
+
+<p>这个选择决定「谁来授权」。</p>
+
+<table>
+<thead>
+<tr>
+<th><code>credentialOwner</code></th>
+<th>用在什么时候</th>
+<th>前提</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>&quot;app&quot;</code></td>
+<td>agent 用一份共享的服务 / 机器人凭据</td>
+<td>无</td>
+</tr>
+
+<tr>
+<td><code>&quot;user&quot;</code></td>
+<td>每个终端用户授权自己的第三方账号</td>
+<td>会话必须有 <code>principalType: &quot;user&quot;</code></td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-ts">// app 作用域：所有人共用一份 token
+auth: { credentialOwner: &quot;app&quot;, getToken: async () =&gt; ({ token: process.env.X! }) }
+</code></pre>
+
+<pre><code class="language-ts">// user 作用域：每人一份
+auth: {
+  credentialOwner: &quot;user&quot;,
+  getToken: async () =&gt; ({ token: await getUserToken(ctx.session.auth.current) }),
+}
+</code></pre>
+
+<p><code>auth</code> 对象的字段：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>credentialOwner</code></td>
+<td><code>&quot;app&quot; \| &quot;user&quot;</code></td>
+<td>否，默认 <code>&quot;app&quot;</code></td>
+<td>凭据归 agent 还是终端用户</td>
+</tr>
+
+<tr>
+<td><code>getToken</code></td>
+<td><code>(ctx) =&gt; TokenResult \| Promise&lt;TokenResult&gt;</code></td>
+<td>是</td>
+<td>每次调用前取凭据</td>
+</tr>
+
+<tr>
+<td><code>startAuthorization</code></td>
+<td><code>(ctx) =&gt; { challenge, resume }</code></td>
+<td>交互式 OAuth 时必填</td>
+<td>生成授权链接</td>
+</tr>
+
+<tr>
+<td><code>completeAuthorization</code></td>
+<td><code>(ctx) =&gt; TokenResult</code></td>
+<td>交互式 OAuth 时必填</td>
+<td>用回调换 token</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>getToken</code> 在<strong>运行时</strong>执行，所以里面读 <code>process.env</code> 是安全的，值也不会进编译产物。反过来说，把 token 写成 <code>agent/connections/*.ts</code> 顶层的字面量，就会跟着连接定义一起被编译进去。环境变量本身的规则见<a href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">附录 C</a>。</p>
+
+<p><code>TokenResult</code> 只有三个字段：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>token</code></td>
+<td><code>string</code></td>
+<td>作为 <code>Authorization: Bearer &lt;token&gt;</code> 发送</td>
+</tr>
+
+<tr>
+<td><code>expiresAt</code></td>
+<td><code>number</code></td>
+<td>毫秒时间戳，建议值；运行时可能据此提前刷新</td>
+</tr>
+
+<tr>
+<td><code>providerSubject</code></td>
+<td><code>string</code></td>
+<td>该凭据代表的服务账号标识，只在本 provider 内可比较</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="为什么定时任务会-principal-required">为什么定时任务会 <code>principal_required</code></h3>
+
+<p><code>credentialOwner: &quot;user&quot;</code> 的含义不是「稍后随便找个人授权」，而是「把凭据绑定到<strong>当前会话已经认证的那个用户</strong>」。</p>
+
+<p>定时任务用应用身份（<code>runtime</code>）跑，<code>localDev()</code> 是合成身份，同项目运行时 token 也不是用户。这些会话没有终端用户，所以：</p>
+
+<ul>
+<li>用户作用域的连接<strong>直接失败</strong>，<code>reason: &quot;principal_required&quot;</code>；</li>
+<li><strong>不会</strong>启动 OAuth 流程。</li>
+</ul>
+
+<p>两种解法：让入口通道认证真实用户，或把这个连接改成 app 作用域。</p>
+
+<h2 id="13-7-交互式-oauth">13.7 交互式 OAuth</h2>
+
+<h3 id="vercel-connect">Vercel Connect</h3>
+
+<pre><code class="language-bash">npm install @vercel/connect
+vercel link
+vercel connect create linear --name opsbot-linear
+vercel connect attach &lt;connector-uid&gt; --yes
+vercel env pull
+</code></pre>
+
+<pre><code class="language-ts">import { connect } from &quot;@vercel/connect/eve&quot;;
+
+export default defineMcpClientConnection({
+  url: &quot;https://mcp.linear.app/mcp&quot;,
+  description: &quot;Linear 工作区。&quot;,
+  auth: connect(&quot;linear/opsbot-linear&quot;),   // 用户作用域，默认
+});
+</code></pre>
+
+<p>流程：</p>
+
+<pre><code class="language-text">模型调工具
+  → getToken 发现没有 token，抛 ConnectionAuthorizationRequiredError
+  → eve 发 authorization.required，turn 停泊
+  → 用户在浏览器完成授权，回调完成
+  → 那次调用自己续跑，直接拿 token 重试，不再多一次模型调用
+</code></pre>
+
+<p><code>eve@0.81</code> 起，被登录拦下的调用<strong>留在自己的 step 里等</strong>，回调到了自己跑完，结果以该调用的 <code>action.result</code> 返回。这比「重新问模型一次」少一次模型调用。</p>
+
+<p><code>authorization.required</code> 和 <code>authorization.completed</code> 都带 <code>grant</code> 和连接 principal 的身份；<code>failed</code> 的 <code>authorization.completed</code> 带 <code>retryable</code>。没有 <code>retryable</code> 的失败（老版本 eve 发的）按可重试处理。</p>
+
+<p>不想要交互、让服务以 agent 身份操作：</p>
+
+<pre><code class="language-ts">auth: connect({ connector: &quot;linear/opsbot-linear&quot;, principalType: &quot;app&quot; }),
+</code></pre>
+
+<p>app 作用域是<strong>非交互</strong>的。连接器没装好就直接失败，让运维去修。</p>
+
+<h3 id="什么时候才会弹登录">什么时候才会弹登录</h3>
+
+<table>
+<thead>
+<tr>
+<th>服务端行为</th>
+<th>eve 的反应</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>匿名请求就 401（Linear、GitHub、Notion 这类）</td>
+<td><code>eve__search</code> 只返回一条以连接名命名的结果；模型显式调它时才登录</td>
+</tr>
+
+<tr>
+<td>匿名能列工具</td>
+<td>搜索正常返回工具；调用被 401 或带 <code>WWW-Authenticate</code> 的错误时登录</td>
+</tr>
+</tbody>
+</table>
+
+<p>登录会挂住 turn，直到用户完成、取消 turn、或发了别的消息（steering 会取消登录，<code>authorization.completed</code> 报 <code>declined</code>）。</p>
+
+<p>带 <code>retryable: false</code> 的失败（用户明确拒绝）会让这个 turn <strong>不再重复发起同一个登录</strong>：同一 turn 里后续需要同一份授权的调用直接拿到那个失败，下一个 turn 才会重新问。</p>
+
+<h3 id="自建-oauth">自建 OAuth</h3>
+
+<p>不用 Vercel Connect 时，用 <code>defineInteractiveAuthorization</code> 自己实现三个回调。整条流程是这样：</p>
+
+<pre><code class="language-mermaid">sequenceDiagram
+  participant M as 模型
+  participant E as eve
+  participant U as 用户浏览器
+  participant I as IdP
+  participant S as 你的存储
+
+  M-&gt;&gt;E: 调用连接工具
+  E-&gt;&gt;E: getToken({ principal, connection })
+  alt 已有可用 token
+    E-&gt;&gt;E: 带 token 调外部服务
+    E--&gt;&gt;M: action.result
+  else 没有 token
+    E-&gt;&gt;E: 抛 ConnectionAuthorizationRequiredError
+    E-&gt;&gt;E: startAuthorization 在 durable step 里跑，拿到 callbackUrl
+    Note over E: challenge 发给用户，resume（如 PKCE verifier）写进检查点
+    E--&gt;&gt;U: authorization.required（url / userCode）
+    Note over E: turn 停泊，不占算力
+    U-&gt;&gt;I: 打开授权页并同意
+    I--&gt;&gt;U: 302 重定向到 callbackUrl?code=...
+    U-&gt;&gt;E: GET callbackUrl（浏览器带回 code 和 state）
+    E-&gt;&gt;E: 恢复 run，调 completeAuthorization
+    E-&gt;&gt;I: 用 code + verifier 换 token
+    I--&gt;&gt;E: access_token
+    E-&gt;&gt;S: 存 token（你自己负责）
+    E-&gt;&gt;E: 重试那次工具调用
+    E--&gt;&gt;M: action.result
+  end
+</code></pre>
+
+<p>关键是中间那段停泊：<code>startAuthorization</code> 返回的 <code>resume</code> 会跟着检查点一起落盘，所以哪怕进程在用户授权期间重启，<code>completeAuthorization</code> 仍能拿到同一个 PKCE verifier。</p>
+
+<p><code>defineInteractiveAuthorization</code> 的字段：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>getToken</code></td>
+<td><code>({ principal, connection }) =&gt; Promise&lt;TokenResult&gt;</code></td>
+<td>是</td>
+<td>每次工具调用前跑。没有 token 就抛 <code>ConnectionAuthorizationRequiredError</code></td>
+</tr>
+
+<tr>
+<td><code>startAuthorization</code></td>
+<td><code>({ principal, connection, callbackUrl }) =&gt; Promise&lt;{ challenge, resume? }&gt;</code></td>
+<td>交互式必填</td>
+<td>生成授权链接；<code>challenge</code> 给人看，<code>resume</code> 跨停泊保存</td>
+</tr>
+
+<tr>
+<td><code>completeAuthorization</code></td>
+<td><code>({ principal, connection, callbackUrl, resume?, callback }) =&gt; Promise&lt;TokenResult&gt;</code></td>
+<td>交互式必填</td>
+<td>用回调参数换 token</td>
+</tr>
+
+<tr>
+<td><code>displayName</code></td>
+<td><code>string</code></td>
+<td>否</td>
+<td>登录 UI 里显示的服务名，例如 <code>&quot;Salesforce&quot;</code></td>
+</tr>
+
+<tr>
+<td><code>evict</code></td>
+<td><code>({ principal, connection }) =&gt; void \| Promise&lt;void&gt;</code></td>
+<td>否</td>
+<td>下游 401 后清掉<strong>你自己那层</strong> token 缓存</td>
+</tr>
+
+<tr>
+<td><code>principalType</code></td>
+<td><code>&quot;user&quot;</code></td>
+<td>固定</td>
+<td>交互式 OAuth 只支持用户作用域，函数签名已经替你省略</td>
+</tr>
+</tbody>
+</table>
+
+<p>三个回调拿到的参数：</p>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>出现在</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>principal</code></td>
+<td><code>{ type: &quot;user&quot;, id, issuer?, attributes? }</code></td>
+<td>三个回调</td>
+<td>框架从会话解析出的身份，<code>issuer + id</code> 是缓存键</td>
+</tr>
+
+<tr>
+<td><code>connection</code></td>
+<td><code>{ url }</code></td>
+<td>三个回调</td>
+<td>连接声明的 MCP 地址</td>
+</tr>
+
+<tr>
+<td><code>callbackUrl</code></td>
+<td><code>string</code></td>
+<td>start / complete</td>
+<td>框架生成的回调地址，交给 IdP 当 <code>redirect_uri</code></td>
+</tr>
+
+<tr>
+<td><code>resume</code></td>
+<td>你声明的类型</td>
+<td>complete</td>
+<td><code>startAuthorization</code> 返回的那个值，跨停泊保留</td>
+</tr>
+
+<tr>
+<td><code>callback</code></td>
+<td><code>{ params, method, body? }</code></td>
+<td>complete</td>
+<td>只有回调参数和 body，<strong>没有请求头</strong>——cookie 和 <code>Authorization</code> 不跨 step</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>startAuthorization</code> 返回的 <code>challenge</code>：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>url</code></td>
+<td><code>string</code></td>
+<td>用户要打开的授权地址；设备码流程里是验证地址</td>
+</tr>
+
+<tr>
+<td><code>userCode</code></td>
+<td><code>string</code></td>
+<td>设备码流程里和 <code>url</code> 一起显示的短码</td>
+</tr>
+
+<tr>
+<td><code>expiresAt</code></td>
+<td>ISO 字符串</td>
+<td>授权窗口过期时间，会和配置的超时取较小值</td>
+</tr>
+
+<tr>
+<td><code>instructions</code></td>
+<td><code>string</code></td>
+<td>没有 <code>url</code> 时（CIBA、推送审批）给人看的说明</td>
+</tr>
+
+<tr>
+<td><code>displayName</code></td>
+<td><code>string</code></td>
+<td>这次登录显示的服务名；<code>auth.displayName</code> 优先于它</td>
+</tr>
+</tbody>
+</table>
+
+<p>两个错误的分工：</p>
+
+<table>
+<thead>
+<tr>
+<th>错误</th>
+<th>什么时候抛</th>
+<th>效果</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>ConnectionAuthorizationRequiredError(name)</code></td>
+<td><code>getToken</code> 找不到可用凭据</td>
+<td>发 <code>authorization.required</code>；交互式会停泊等回调，非交互式不停泊</td>
+</tr>
+
+<tr>
+<td><code>ConnectionAuthorizationFailedError(name, { reason, retryable })</code></td>
+<td>授权失败或被拒绝</td>
+<td><code>reason</code> 会出现在 <code>authorization.completed</code> 和模型看到的错误里；<code>retryable: false</code> 表示别再弹</td>
+</tr>
+</tbody>
+</table>
+
+<p>完整实现：</p>
+
+<pre><code class="language-ts">import {
+  ConnectionAuthorizationFailedError,
+  ConnectionAuthorizationRequiredError,
+  defineInteractiveAuthorization,
+  defineMcpClientConnection,
+} from &quot;eve/connections&quot;;
+
+type Resume = { verifier: string; redirectUri: string };
+
+export default defineMcpClientConnection({
+  url: &quot;https://mcp.linear.app/mcp&quot;,
+  description: &quot;Linear 工作区。&quot;,
+  auth: defineInteractiveAuthorization&lt;Resume&gt;({
+    displayName: &quot;Linear&quot;,
+
+    // 每次工具调用前都会跑：有 token 就放行，没有就要求授权
+    getToken: async ({ principal }) =&gt; {
+      const stored = await loadStoredToken(principal);
+      if (stored === undefined) {
+        throw new ConnectionAuthorizationRequiredError(&quot;linear&quot;);
+      }
+      return stored;                    // { token, expiresAt?, providerSubject? }
+    },
+
+    // 框架生成 callbackUrl 后调用：challenge 给人看，resume 跨停泊保存
+    startAuthorization: async ({ callbackUrl }) =&gt; {
+      const verifier = makePkceVerifier();
+      return {
+        challenge: {
+          url: buildAuthorizeUrl({ callbackUrl, verifier }),
+          instructions: &quot;在浏览器里完成 Linear 授权后回到这里。&quot;,
+        },
+        resume: { verifier, redirectUri: callbackUrl },
+      };
+    },
+
+    // 用户从 IdP 回来后调用：换 token 并落库
+    completeAuthorization: async ({ principal, resume, callback }) =&gt; {
+      if (callback.params.error) {
+        throw new ConnectionAuthorizationFailedError(&quot;linear&quot;, {
+          reason: callback.params.error,
+          retryable: false,             // 用户明确拒绝，别再弹
+        });
+      }
+      const result = await exchangeCode({
+        code: callback.params.code!,
+        verifier: resume!.verifier,
+        redirectUri: resume!.redirectUri,
+      });
+      await saveStoredToken(principal, result);
+      return result;
+    },
+
+    // 下游 401 之后，清掉你自己那一层缓存，下次 getToken 才会真刷新
+    evict: async ({ principal }) =&gt; {
+      await dropCachedToken(principal);
+    },
+  }),
+});
+</code></pre>
+
+<p>四条必须记住的约束：</p>
+
+<ol>
+<li><strong>eve 不替你存 token。</strong> <code>completeAuthorization</code> 返回的 token 只在当前 workflow step 内复用。要持久化就自己存、自己读；读不到就再走一次授权。</li>
+<li><strong><code>startAuthorization</code> 和 <code>completeAuthorization</code> 必须成对出现</strong>，只给一个会报定义错误。</li>
+<li><strong><code>principalType</code> 固定是 <code>&quot;user&quot;</code>。</strong> app 作用域没有「人」可以打开浏览器，所以交互式流程不支持它。</li>
+<li><strong><code>resume</code> 必须 JSON 可序列化。</strong> 它要跟着检查点过夜，塞 <code>Date</code>、<code>Map</code>、class 实例都会在恢复时丢信息。</li>
+</ol>
+
+<h2 id="13-8-审批">13.8 审批</h2>
+
+<h3 id="整个连接都审批">整个连接都审批</h3>
+
+<pre><code class="language-ts">import { once } from &quot;eve/tools/approval&quot;;
+
+export default defineMcpClientConnection({
+  url: &quot;…&quot;,
+  description: &quot;…&quot;,
+  auth: { /* … */ },
+  approval: once(),
+});
+</code></pre>
+
+<p><code>never()</code> / <code>once()</code> / <code>always()</code> / <code>auto()</code> 的语义和工具一样（第 11 章）。</p>
+
+<h3 id="按工具名或输入审批">按工具名或输入审批</h3>
+
+<p>一刀切 <code>always()</code> 会在无害的读操作上也弹确认：</p>
+
+<pre><code class="language-ts">const DELETE_TOOLS = [&quot;delete_draft&quot;, &quot;delete_thread&quot;];
+const PUBLISH_TOOLS = [&quot;create_draft&quot;, &quot;edit_draft&quot;];
+
+const publishesNow = (input: unknown): boolean =&gt; {
+  const body = (input as { requestBody?: { publish_at?: unknown } })?.requestBody;
+  return typeof body?.publish_at === &quot;string&quot; &amp;&amp; body.publish_at.length &gt; 0;
+};
+
+export default defineMcpClientConnection({
+  url: &quot;https://mcp.example.com/mcp&quot;,
+  description: &quot;社交媒体发布：草稿、定时、管理。&quot;,
+  auth: { credentialOwner: &quot;app&quot;, getToken: async () =&gt; ({ token: process.env.SOCIAL_KEY! }) },
+  approval: ({ toolName, toolInput }) =&gt; {
+    if (DELETE_TOOLS.some((t) =&gt; toolName.includes(t))) return &quot;user-approval&quot;;
+    if (PUBLISH_TOOLS.some((t) =&gt; toolName.includes(t))) {
+      return publishesNow(toolInput) ? &quot;user-approval&quot; : &quot;not-applicable&quot;;
+    }
+    return &quot;not-applicable&quot;;
+  },
+});
+</code></pre>
+
+<p>两个连接特有的细节：</p>
+
+<ol>
+<li><strong><code>toolName</code> 带前缀</strong>（<code>social__delete_draft</code>），用 <code>.includes()</code> 或 <code>.endsWith()</code>，不要用 <code>===</code>。</li>
+<li><strong><code>toolInput</code> 是原始未校验的输入</strong>，类型 <code>Record&lt;string, unknown&gt; | undefined</code>。schema 由远端定义，你不能假设结构，要防御式读取。</li>
+</ol>
+
+<h3 id="按服务端注解审批">按服务端注解审批</h3>
+
+<pre><code class="language-ts">approval: ({ toolAnnotations }) =&gt;
+  toolAnnotations?.readOnlyHint === true ? &quot;not-applicable&quot; : &quot;user-approval&quot;,
+</code></pre>
+
+<p><code>toolAnnotations</code> 来自服务端声明的 <code>readOnlyHint</code> / <code>destructiveHint</code>。<strong>它是提示不是保证</strong>，只在你信任那个服务端时用。</p>
+
+<h3 id="和审批人策略一起用">和审批人策略一起用</h3>
+
+<p>连接也支持 <code>{ request, response, prompt }</code> 的对象形态：</p>
+
+<pre><code class="language-ts">approval: {
+  request: always(),
+  prompt: ({ toolName, toolInput }) =&gt; `执行 ${toolName}：${JSON.stringify(toolInput)}`,
+  response: ({ response }) =&gt;
+    response.principal.attributes.roles?.includes(&quot;oncall&quot;)
+      ? { status: &quot;allowed&quot; }
+      : { status: &quot;rejected&quot;, reason: &quot;只有 on-call 可以批准。&quot; },
+},
+</code></pre>
+
+<h2 id="13-9-按调用者给不同连接">13.9 按调用者给不同连接</h2>
+
+<pre><code class="language-ts">// agent/connections/accounts.ts
+import { defineDynamic, defineMcpClientConnection } from &quot;eve/connections&quot;;
+import { listAccounts } from &quot;../lib/accounts&quot;;
+
+export default defineDynamic({
+  events: {
+    &quot;session.started&quot;: async (_event, ctx) =&gt; {
+      const accounts = await listAccounts(ctx.session.auth.current);
+      return Object.fromEntries(
+        accounts.map((a) =&gt; [
+          a.slug,
+          defineMcpClientConnection({
+            url: a.mcpUrl,
+            description: a.description,
+            instanceKey: a.id,       // 稳定、非密钥的账号标识
+            auth: a.auth,
+          }),
+        ]),
+      );
+    },
+  },
+});
+</code></pre>
+
+<ul>
+<li>返回单个定义时连接名来自文件名；返回 map 时每个 key 就是连接名。</li>
+<li>需要认证的条目<strong>必须</strong>设 <code>instanceKey</code>。审批恢复时靠它确认「还是同一个目标」——缺失或改变会让重放失败。</li>
+<li>解析器要幂等：审批恢复可能再跑一次。</li>
+</ul>
+
+<h2 id="13-10-完整例子-三个连接-三种凭据">13.10 完整例子：三个连接，三种凭据</h2>
+
+<pre><code class="language-text">agent/connections/
+├── linear.ts      # 用户 OAuth（每人一份）
+├── crm.ts         # app token（共享）
+└── accounts.ts    # 动态：按租户返回不同的 MCP
+</code></pre>
+
+<pre><code class="language-ts">// linear.ts —— 用户自己的 Linear
+import { connect } from &quot;@vercel/connect/eve&quot;;
+import { defineMcpClientConnection } from &quot;eve/connections&quot;;
+
+export default defineMcpClientConnection({
+  url: &quot;https://mcp.linear.app/mcp&quot;,
+  description: &quot;Linear：查询和创建 issue。&quot;,
+  auth: connect(&quot;linear/opsbot-linear&quot;),
+  tools: { allow: [&quot;search_issues&quot;, &quot;get_issue&quot;, &quot;create_issue&quot;] },
+  approval: ({ toolName }) =&gt;
+    toolName.endsWith(&quot;create_issue&quot;) ? &quot;user-approval&quot; : &quot;not-applicable&quot;,
+});
+</code></pre>
+
+<pre><code class="language-ts">// crm.ts —— 公司共用的 CRM
+import { defineOpenAPIConnection } from &quot;eve/connections&quot;;
+
+export default defineOpenAPIConnection({
+  spec: &quot;https://crm.example.com/openapi.json&quot;,
+  baseUrl: &quot;https://crm.example.com&quot;,
+  description: &quot;CRM：客户、联系人、商机。只读。&quot;,
+  auth: {
+    credentialOwner: &quot;app&quot;,
+    getToken: async () =&gt; ({ token: process.env.CRM_TOKEN! }),
+  },
+  operations: { allow: [&quot;listAccounts&quot;, &quot;getAccount&quot;, &quot;listOpportunities&quot;] },
+});
+</code></pre>
+
+<pre><code class="language-ts">// accounts.ts —— 每个租户自己的数据仓库 MCP
+import { defineDynamic, defineMcpClientConnection } from &quot;eve/connections&quot;;
+import { getAccountToken, listAccounts } from &quot;../lib/accounts&quot;;
+
+export default defineDynamic({
+  events: {
+    &quot;session.started&quot;: async (_event, ctx) =&gt; {
+      const tenant = ctx.session.auth.current?.attributes.tenantId;
+      if (typeof tenant !== &quot;string&quot;) return null;      // 没有租户就没有这些连接
+
+      const accounts = await listAccounts(tenant);
+      return Object.fromEntries(
+        accounts.map((account) =&gt; [
+          account.slug,                                  // 成为连接名：acme__run_query
+          defineMcpClientConnection({
+            url: account.mcpUrl,
+            description: `${account.name}（${account.region}）的数据仓库：查表、跑只读查询。`,
+            instanceKey: account.id,                     // 稳定、非密钥
+            auth: {
+              credentialOwner: &quot;app&quot;,
+              getToken: async () =&gt; ({ token: await getAccountToken(account.id) }),
+            },
+            tools: { allow: [&quot;list_tables&quot;, &quot;run_query&quot;] },
+          }),
+        ]),
+      );
+    },
+  },
+});
+</code></pre>
+
+<p>第三个用的是 13.9 的动态机制，这里是完整版本。它和前两个有四处不同，都是动态连接特有的：</p>
+
+<ol>
+<li><strong>连接名来自 map 的 key</strong>（<code>account.slug</code>），不是文件名。所以工具名是 <code>acme__run_query</code> 这种，审批策略里要用 <code>endsWith</code>。</li>
+<li><strong>没有租户就返回 <code>null</code></strong>。这个会话看不到任何租户连接，而不是拿到一个空 URL 的连接。</li>
+<li><strong><code>instanceKey</code> 必须稳定</strong>。审批恢复时 eve 用它确认「目标没换过」；换了就拒绝重放，而不是把请求发到另一个账号。</li>
+<li><strong>解析器要幂等</strong>。审批恢复可能再跑一次 <code>session.started</code>，<code>listAccounts</code> 不能有副作用。</li>
+</ol>
+
+<p>三个连接的分工：</p>
+
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>凭据</th>
+<th>谁能用</th>
+<th>约束</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>linear.ts</code></td>
+<td>用户 OAuth，每人一份</td>
+<td>每个用户自己的 Linear</td>
+<td>创建 issue 要审批</td>
+</tr>
+
+<tr>
+<td><code>crm.ts</code></td>
+<td>app token，一份共享</td>
+<td>所有会话</td>
+<td>只读操作白名单</td>
+</tr>
+
+<tr>
+<td><code>accounts.ts</code></td>
+<td>每个租户自己的 token</td>
+<td>该租户的会话</td>
+<td>工具白名单 + <code>instanceKey</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>同样是「查数据」，三种凭据的边界完全不同：<code>linear</code> 看到的是<strong>这个人</strong>的 issue，<code>crm</code> 看到的是<strong>公司</strong>的客户，<code>accounts</code> 看到的是<strong>这个租户</strong>的数据仓库。</p>
+
+<h2 id="13-11-常见坑">13.11 常见坑</h2>
+
+<p><strong>坑：模型说「我没有 Linear 工具」。</strong>
+连接工具不进工具列表。指令里写一句「需要 Linear 数据时先用 <code>eve__search</code> 查 <code>linear__</code>」。</p>
+
+<p><strong>坑：<code>tools.allow</code> 和 <code>tools.block</code> 同时写。</strong>
+只能选一个。</p>
+
+<p><strong>坑：<code>credentialOwner: &quot;user&quot;</code> 但通道是匿名的。</strong>
+报 <code>principal_required</code>。先让通道认证出 <code>principalType: &quot;user&quot;</code>。</p>
+
+<p><strong>坑：定时任务用用户作用域连接。</strong>
+定时任务没有终端用户，必然失败。改 app 作用域，或让任务通过用户认证的通道派发。</p>
+
+<p><strong>坑：<code>instanceKey</code> 用了 token 或 URL。</strong>
+必须是稳定、非密钥的标识。用账号 ID 或租户 ID。</p>
+
+<p><strong>坑：审批策略里用 <code>toolName === &quot;delete_issue&quot;</code>。</strong>
+连接工具名带前缀。用 <code>endsWith</code>。</p>
+
+<p><strong>坑：以为 MCP 结果能用 <code>toModelOutput</code> 收窄。</strong>
+MCP 连接没有这个能力。从服务端解决，或换自己写的工具。</p>
+
+<p><strong>坑：信任 <code>readOnlyHint</code> 就放开所有读操作。</strong>
+注解是服务端自己声明的。对不可信服务端不能当安全保证。</p>
+
+<p><strong>坑：自建 OAuth 以为 eve 会存 token。</strong>
+不会。<code>completeAuthorization</code> 里自己存，<code>getToken</code> 里自己读。</p>
+
+<h2 id="13-12-练习">13.12 练习</h2>
+
+<ol>
+<li>接一个公开 MCP server（本地跑一个也行），用 <code>eve__search</code> 找到工具并调用。</li>
+<li>用 <code>tools.allow</code> 只暴露两个只读工具，确认其它工具搜不到。</li>
+<li>写一个按 <code>readOnlyHint</code> 分流审批的策略，观察读操作不弹确认、写操作弹。</li>
+<li>用 <code>defineDynamic</code> 按租户返回不同的 MCP 连接，验证 <code>instanceKey</code> 的作用。</li>
+<li>把一个 OpenAPI 服务接进来，用 <code>operations.allow</code> 收窄到三个只读接口。</li>
+</ol>
+
+<h2 id="延伸阅读">延伸阅读</h2>
+
+<ul>
+<li><a href="https://eve.dev/docs/connections">Connections</a></li>
+<li><a href="https://eve.dev/docs/connections/mcp">MCP Connections</a></li>
+<li><a href="https://eve.dev/docs/connections/openapi">OpenAPI Connections</a></li>
+<li><a href="https://eve.dev/docs/concepts/security-model">Security Model</a></li>
+</ul>
+
+<hr />
+
+<p>上一章：<a href="https://tangxusc.github.io/2026/10/eve-12-subagents/">12 子代理</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-14-channels/">14 通道</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-14-channels/" data-tooltip="eve 中文教程 · 第 14 章 通道">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-12-subagents/" data-tooltip="eve 中文教程 · 第 12 章 子代理">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-14-channels/" data-tooltip="eve 中文教程 · 第 14 章 通道">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-12-subagents/" data-tooltip="eve 中文教程 · 第 12 章 子代理">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 <code>eve init</code> 讲到上线。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
+                <h3 class="media-heading">eve 中文教程 · 附录 C 环境变量与密钥</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p><code>process.env</code> 只在<strong>应用运行时</strong>存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">
+                <h3 class="media-heading">eve 中文教程 · 附录 B 事件与 CLI</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">完整事件表、CLI 命令、HTTP 路由。写客户端、排查事件流、核对某个字段时对着这张表看。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">
+                <h3 class="media-heading">eve 中文教程 · 附录 A 术语与速查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">概念对照、目录速查、常见错误码。读不懂某个词、找不到某个文件、看到一个陌生状态码时先查这里。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/">
+                <h3 class="media-heading">eve 中文教程 · 第 18 章 进阶与上线检查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>这一章把散落在前面的进阶能力收在一起，然后给一份能逐条打勾的上线清单。清单比概念重要。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
+                <h3 class="media-heading">eve 中文教程 · 第 17 章 前端与部署</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-16-evals/">
+                <h3 class="media-heading">eve 中文教程 · 第 16 章 评测</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
+                <h3 class="media-heading">eve 中文教程 · 第 15 章 定时与钩子</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-14-channels/">
+                <h3 class="media-heading">eve 中文教程 · 第 14 章 通道</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-13-connections/">
+                <h3 class="media-heading">eve 中文教程 · 第 13 章 连接</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 <code>eve__search</code> 找到工具，用 <code>eve__tool</code> 调用，凭据由 eve 在应用侧注入。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         125 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-13-connections\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-13-connections\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

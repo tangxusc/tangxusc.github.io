@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+每个 agent 有且只有一个沙箱，根目录是 /workspace。模型能在这里跑命令、读写文件，但看不到你的任何密钥。这一章讲怎么配置它、怎么用它、以及什么情况下它并不安全。
+">
+
+
+<meta property="og:description" content="
+每个 agent 有且只有一个沙箱，根目录是 /workspace。模型能在这里跑命令、读写文件，但看不到你的任何密钥。这一章讲怎么配置它、怎么用它、以及什么情况下它并不安全。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 5 章 沙箱">
+<meta name="twitter:title" content="eve 中文教程 · 第 5 章 沙箱">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-05-sandbox/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-05-sandbox/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+每个 agent 有且只有一个沙箱，根目录是 /workspace。模型能在这里跑命令、读写文件，但看不到你的任何密钥。这一章讲怎么配置它、怎么用它、以及什么情况下它并不安全。
+">
+<meta name="twitter:description" content="
+每个 agent 有且只有一个沙箱，根目录是 /workspace。模型能在这里跑命令、读写文件，但看不到你的任何密钥。这一章讲怎么配置它、怎么用它、以及什么情况下它并不安全。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-22T09:05:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-22T09:05:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 5 章 沙箱</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-05-sandbox/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 5 章 沙箱
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-22T09:05:00&#43;08:00">
+        
+  October 22, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>每个 agent 有且只有一个沙箱，根目录是 <code>/workspace</code>。模型能在这里跑命令、读写文件，但看不到你的任何密钥。这一章讲怎么配置它、怎么用它、以及什么情况下它并不安全。</p>
+</blockquote>
+
+<h2 id="5-1-沙箱是什么">5.1 沙箱是什么</h2>
+
+<p>一个隔离的文件系统 + 进程环境：</p>
+
+<ul>
+<li><code>bash</code> 工具在里面执行 shell</li>
+<li><code>read_file</code> / <code>write_file</code> 读写里面的文件</li>
+<li>你自己的工具通过 <code>ctx.getSandbox()</code> 拿句柄操作它</li>
+</ul>
+
+<p>没有手写 <code>sandbox.ts</code> 时，eve 自动挑一个可用后端。开发机上通常是 <code>just-bash</code>（纯 JS，秒级启动，但<strong>没有真正的进程隔离</strong>）。</p>
+
+<h2 id="5-2-三个使用层次">5.2 三个使用层次</h2>
+
+<h3 id="层次一-什么都不做-让内置工具用">层次一：什么都不做，让内置工具用</h3>
+
+<p>模型自己决定 <code>bash</code>、<code>read_file</code>、<code>write_file</code>。你只需要把参考文件放进去：</p>
+
+<pre><code class="language-text">agent/sandbox/
+└── workspace/
+    ├── runbook.md          → /workspace/runbook.md
+    └── config/service.yaml → /workspace/config/service.yaml
+</code></pre>
+
+<p>顶层条目会自动告知模型「这里有这些文件」，模型需要时自己 <code>read_file</code>。</p>
+
+<h3 id="层次二-在工具里用">层次二：在工具里用</h3>
+
+<pre><code class="language-ts">// agent/tools/analyze_trace.ts
+import { defineTool } from &quot;eve/tools&quot;;
+import { z } from &quot;zod&quot;;
+
+export default defineTool({
+  description: &quot;分析一条分布式 trace 的关键路径，返回耗时最长的三个 span。&quot;,
+  inputSchema: z.object({
+    traceId: z.string().regex(/^[0-9a-f]{32}$/),
+  }),
+  async execute({ traceId }, ctx) {
+    const sandbox = await ctx.getSandbox();
+
+    // 1. 应用侧取数据（带密钥），只把数据写进沙箱
+    const trace = await fetchTrace(traceId);
+    await sandbox.writeTextFile({
+      path: `traces/${traceId}.json`,
+      content: JSON.stringify(trace),
+    });
+
+    // 2. 沙箱里跑脚本
+    const result = await sandbox.run({
+      command: `python3 /workspace/scripts/critical_path.py traces/${traceId}.json`,
+    });
+    if (result.exitCode !== 0) {
+      throw new Error(`分析失败（退出码 ${result.exitCode}）：${result.stderr}`);
+    }
+    return JSON.parse(result.stdout);
+  },
+});
+</code></pre>
+
+<p><strong>这是推荐的结构</strong>：取数在应用侧，计算在沙箱侧。按这个结构写，数据库密码不会进入沙箱。</p>
+
+<p><code>sandbox.run()</code> 返回 <code>{ exitCode, stdout, stderr }</code>。<strong>非零退出码不会抛异常</strong>，必须自己检查。</p>
+
+<p><code>sandbox</code> 上的方法（相对路径都相对 <code>/workspace</code>）：</p>
+
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>参数</th>
+<th>返回 / 说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>run</code></td>
+<td><code>{ command, workingDirectory?, env?, abortSignal? }</code></td>
+<td><code>{ exitCode, stdout, stderr }</code>，不抛错</td>
+</tr>
+
+<tr>
+<td><code>spawn</code></td>
+<td>同上</td>
+<td>长驻进程句柄：<code>pid?</code> / <code>stdout</code> / <code>stderr</code> / <code>wait()</code> / <code>kill()</code></td>
+</tr>
+
+<tr>
+<td><code>writeTextFile</code></td>
+<td><code>{ path, content, abortSignal? }</code></td>
+<td>自动建父目录、覆盖已有文件</td>
+</tr>
+
+<tr>
+<td><code>writeBinaryFile</code></td>
+<td><code>{ path, content: Uint8Array, abortSignal? }</code></td>
+<td>同上，二进制</td>
+</tr>
+
+<tr>
+<td><code>readTextFile</code></td>
+<td><code>{ path, encoding?, startLine?, endLine?, abortSignal? }</code></td>
+<td><code>string \| null</code>，<strong>文件不存在返回 <code>null</code> 不抛错</strong></td>
+</tr>
+
+<tr>
+<td><code>readBinaryFile</code></td>
+<td><code>{ path, abortSignal? }</code></td>
+<td><code>Uint8Array \| null</code></td>
+</tr>
+
+<tr>
+<td><code>removePath</code></td>
+<td><code>{ path, force?, recursive?, abortSignal? }</code></td>
+<td>删文件或目录</td>
+</tr>
+
+<tr>
+<td><code>resolvePath</code></td>
+<td><code>(path: string)</code></td>
+<td>相对路径 → 绝对路径，不做 IO</td>
+</tr>
+
+<tr>
+<td><code>stop</code></td>
+<td>—</td>
+<td>停算力，保留持久状态；下次回调会重新打开</td>
+</tr>
+
+<tr>
+<td><code>delete</code></td>
+<td><code>{ reason? }</code></td>
+<td>连持久状态一起永久删除</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-ts">await sandbox.writeTextFile({ path, content });
+const text = await sandbox.readTextFile({ path });      // 可能是 null
+const bytes = await sandbox.readBinaryFile({ path });
+const abs = sandbox.resolvePath(&quot;traces&quot;);              // /workspace/traces
+const proc = await sandbox.spawn({ command, env: { DEBUG: &quot;1&quot; } });
+await sandbox.removePath({ path: &quot;tmp&quot;, recursive: true });
+await sandbox.stop();
+await sandbox.delete();
+</code></pre>
+
+<p><code>readTextFile</code> 的 <code>startLine</code> / <code>endLine</code> 是 <strong>1 基、闭区间</strong>；<code>endLine</code> 超过文件末尾会读到 EOF，不报错。读大日志用它们分页，别一次读整个文件。</p>
+
+<h3 id="层次三-定义自己的环境">层次三：定义自己的环境</h3>
+
+<pre><code class="language-ts">// agent/sandbox/sandbox.ts
+import { DefaultSandbox, defineSandbox } from &quot;eve/sandbox&quot;;
+
+export const environment = DefaultSandbox.environment({
+  prepare: async (sandbox) =&gt; {
+    const r = await sandbox.run({
+      command: &quot;sudo apt-get update &amp;&amp; sudo apt-get install -y jq python3-venv&quot;,
+    });
+    if (r.exitCode !== 0) throw new Error(r.stderr);
+  },
+});
+
+export default defineSandbox(() =&gt; environment.open());
+</code></pre>
+
+<p><code>prepare</code> 只在<strong>构建可复用环境</strong>时跑一次，不是每个会话都跑。之后每个会话从这份快照/镜像/模板启动。</p>
+
+<p><code>environment</code> 这个命名导出是必需的——<code>eve build</code> 在会话存在之前就要准备环境输入。</p>
+
+<p>各后端的 <code>environment(...)</code> 选项大同小异，以 Docker 为例：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>默认</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>image</code></td>
+<td><code>string</code></td>
+<td>eve 的沙箱镜像</td>
+<td>基础容器镜像</td>
+</tr>
+
+<tr>
+<td><code>env</code></td>
+<td><code>Record&lt;string, string&gt;</code></td>
+<td>无</td>
+<td>烘进模板和运行容器的环境变量</td>
+</tr>
+
+<tr>
+<td><code>pullPolicy</code></td>
+<td><code>&quot;if-not-present&quot; \| &quot;always&quot; \| &quot;never&quot;</code></td>
+<td><code>&quot;if-not-present&quot;</code></td>
+<td>镜像拉取策略</td>
+</tr>
+
+<tr>
+<td><code>prepare</code></td>
+<td><code>(sandbox) =&gt; void \| Promise&lt;void&gt;</code></td>
+<td>无</td>
+<td>幂等初始化，结果烘进准备好的镜像</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>environment.open(options)</code> 的选项在打开<strong>活容器</strong>时生效：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>默认</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>networkPolicy</code></td>
+<td><code>&quot;allow-all&quot; \| &quot;deny-all&quot; \| { allow: {…} }</code></td>
+<td><code>&quot;allow-all&quot;</code></td>
+<td>出站策略。allow-list 和按域名注入 header 只有 Vercel Sandbox 支持；Docker 只认两个粗粒度值</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>DefaultSandbox</code> 的选项按环境选中的后端解释；它至少接受 <code>prepare</code>，其余字段透传给具体后端。</p>
+
+<h2 id="5-3-选哪个后端">5.3 选哪个后端</h2>
+
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>隔离强度</th>
+<th>启动成本</th>
+<th>能跑原生进程</th>
+<th>适用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>just-bash</code></td>
+<td>无（纯 JS 虚拟 FS）</td>
+<td>毫秒</td>
+<td>否</td>
+<td>只想让模型读写文本、跑简单 shell</td>
+</tr>
+
+<tr>
+<td><code>Docker</code></td>
+<td>容器级</td>
+<td>秒</td>
+<td>是</td>
+<td>本地开发、自托管</td>
+</tr>
+
+<tr>
+<td><code>microsandbox</code></td>
+<td>轻量 VM</td>
+<td>秒</td>
+<td>是</td>
+<td>本地要更强隔离</td>
+</tr>
+
+<tr>
+<td><code>Vercel Sandbox</code></td>
+<td>托管 VM</td>
+<td>秒</td>
+<td>是</td>
+<td>部署在 Vercel</td>
+</tr>
+
+<tr>
+<td><code>DefaultSandbox</code></td>
+<td>自动选</td>
+<td>—</td>
+<td>取决于选中者</td>
+<td>不想操心时</td>
+</tr>
+</tbody>
+</table>
+
+<p>明确写死 Docker：</p>
+
+<pre><code class="language-ts">// agent/sandbox/sandbox.ts
+import { defineSandbox } from &quot;eve/sandbox&quot;;
+import { DockerSandbox } from &quot;eve/sandbox/docker&quot;;
+
+export const environment = DockerSandbox.environment(); // 默认镜像
+// 或 DockerSandbox.image(&quot;ghcr.io/acme/agent@sha256:...&quot;)
+// 或 DockerSandbox.dockerfile() 用同目录的 Dockerfile
+
+export default defineSandbox(() =&gt; environment.open({ networkPolicy: &quot;deny-all&quot; }));
+</code></pre>
+
+<p><strong>这是最容易踩的坑</strong>：<code>just-bash</code> 跑不了 Python，也装不了包。你在笔记本上装了 Python 不会让沙箱里有 Python。要让模型跑 Python，必须上 Docker / microsandbox / Vercel Sandbox。</p>
+
+<p>用 Docker 前先确认守护进程可用：</p>
+
+<pre><code class="language-bash">docker info
+</code></pre>
+
+<h3 id="vercel-sandbox-额外提供两样东西">Vercel Sandbox 额外提供两样东西</h3>
+
+<p><strong>活沙箱名字。</strong> <code>environment.open()</code> 和 <code>ctx.getSandbox(environment)</code> 返回的会话有一个只读 <code>name</code>，在 stop/resume 之间保持不变。用它给 Vercel 的 git-credential-broker 授权，把凭据限定在这一个沙箱上：</p>
+
+<pre><code class="language-ts">const sandbox = await ctx.getSandbox(environment);
+const sandboxName = sandbox.name;
+</code></pre>
+
+<p><strong>Drive 挂载。</strong> Drive 是独立于沙箱的持久存储，沙箱停了文件还在。先创建或取回 Drive，再通过 <code>mounts</code> 挂到绝对路径：</p>
+
+<pre><code class="language-ts">import { defineSandbox } from &quot;eve/sandbox&quot;;
+import { Drive, VercelSandbox } from &quot;eve/sandbox/vercel&quot;;
+
+const REGION = &quot;iad1&quot;;
+
+export const environment = VercelSandbox.environment({ region: REGION });
+
+export default defineSandbox(async () =&gt; {
+  const drive = await Drive.getOrCreate({ name: &quot;agent-workspace&quot;, region: REGION });
+  return environment.open({ mounts: { &quot;/data&quot;: drive } });
+});
+</code></pre>
+
+<ul>
+<li>这是读写挂载。别挂到 eve 管理的 <code>/workspace</code> 上。</li>
+<li>环境和 Drive 用同一个 region，否则快照和沙箱不在同一处。</li>
+<li>一个 Drive 同时只能有一个读写挂载。eve 每个会话一个沙箱，所以固定名字只适合「同一时刻只有一个会话在用」。会话可能重叠时，按 owner 或租户派生一个稳定的 Drive 名。</li>
+<li>要给多个沙箱共享某个时间点的视图，挂 <code>drive.snapshot()</code>（只读）。没写过任何文件的空 Drive 不能挂快照。</li>
+<li>每个沙箱最多四个互不重叠的绝对挂载路径。</li>
+</ul>
+
+<h2 id="5-4-装依赖的正确姿势">5.4 装依赖的正确姿势</h2>
+
+<p>沙箱默认镜像里有 Python，但没有 matplotlib。要装就在 <code>prepare</code> 里装进虚拟环境：</p>
+
+<pre><code class="language-ts">export const environment = DefaultSandbox.environment({
+  prepare: async (sandbox) =&gt; {
+    const commands = [
+      &quot;sudo apt-get update &amp;&amp; sudo apt-get install -y python3 python3-venv&quot;,
+      &quot;python3 -m venv /workspace/.venv&quot;,
+      &quot;/workspace/.venv/bin/python -m pip install matplotlib==3.10.8&quot;,
+      &quot;/workspace/.venv/bin/python -c \&quot;import matplotlib.pyplot; print('ok')\&quot;&quot;,
+    ];
+    for (const command of commands) {
+      const r = await sandbox.run({ command });
+      if (r.exitCode !== 0) {
+        throw new Error(`准备失败（${r.exitCode}）：${r.stderr || r.stdout}`);
+      }
+    }
+  },
+});
+</code></pre>
+
+<p>三个细节：</p>
+
+<ol>
+<li>安装和执行用<strong>同一个</strong> Python 环境（<code>/workspace/.venv/bin/python</code>），别用系统 Python 装、虚拟环境里跑。</li>
+<li><code>prepare</code> 需要网络访问软件源。如果你配了 <code>deny-all</code> 网络策略，准备阶段会失败。</li>
+<li>每条命令都检查 <code>exitCode</code>。装包失败静默通过，后面会得到莫名其妙的「模块不存在」。</li>
+</ol>
+
+<p>验证装好了：</p>
+
+<pre><code class="language-text">在沙箱里运行 /workspace/.venv/bin/python -c &quot;import matplotlib; print(matplotlib.__version__)&quot;
+</code></pre>
+
+<h2 id="5-5-网络策略">5.5 网络策略</h2>
+
+<pre><code class="language-ts">export default defineSandbox(() =&gt; environment.open({ networkPolicy: &quot;deny-all&quot; }));
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>&quot;allow-all&quot;</code></td>
+<td>沙箱可以访问任意网络</td>
+</tr>
+
+<tr>
+<td><code>&quot;deny-all&quot;</code></td>
+<td>不能出网</td>
+</tr>
+
+<tr>
+<td>域名白名单</td>
+<td>仅 Vercel Sandbox 支持</td>
+</tr>
+</tbody>
+</table>
+
+<p>也可以在运行时改（需要传环境句柄，因为通用句柄不暴露 provider 特有方法）：</p>
+
+<pre><code class="language-ts">import { environment } from &quot;../sandbox&quot;;
+
+const sandbox = await ctx.getSandbox(environment);
+await sandbox.setNetworkPolicy(&quot;deny-all&quot;);
+</code></pre>
+
+<p>注意 <code>just-bash</code> 没有 <code>setNetworkPolicy()</code>——它本来就不隔离网络，因为它没有真正的网络栈。</p>
+
+<p><strong>默认建议：<code>deny-all</code>。</strong> 模型能任意发 HTTP 请求意味着它能外传数据。需要联网的步骤（装包、调公开 API）在 <code>prepare</code> 里做，或给具体域名开白名单。</p>
+
+<h2 id="5-6-生命周期">5.6 生命周期</h2>
+
+<pre><code class="language-text">会话创建 → 首次 ctx.getSandbox() → 从环境模板启动沙箱
+    ↓
+turn 之间保持（文件系统保留）
+    ↓
+sandbox.stop()  → 停算力，状态保留，下次访问恢复
+sandbox.delete() → 状态清空，下次重新从模板启动
+    ↓
+会话终结 → provider 的 onSessionEnd() 释放资源
+</code></pre>
+
+<p>要点：</p>
+
+<ul>
+<li>沙箱是<strong>会话级</strong>的，不是 turn 级的。同一个会话的多轮对话看到同一个 <code>/workspace</code>。</li>
+<li>不同会话之间不共享。想跨会话复用算力要自定义 provider（不建议，除非你清楚隔离边界）。</li>
+<li>修改沙箱定义（代码、Dockerfile、环境选项、workspace 文件）会产生<strong>新的环境代次</strong>。已有会话保留旧状态，新会话用新的。</li>
+</ul>
+
+<p>在钩子里主动释放算力：</p>
+
+<pre><code class="language-ts">// agent/hooks/stop-after-turn.ts
+import { defineHook } from &quot;eve/hooks&quot;;
+
+export default defineHook({
+  events: {
+    async &quot;turn.completed&quot;(_event, ctx) {
+      const sandbox = await ctx.getSandbox();
+      await sandbox.stop();     // 停算力，文件还在
+    },
+  },
+});
+</code></pre>
+
+<p>适合「一轮用完就长时间空闲」的场景，省沙箱费用。</p>
+
+<h2 id="5-7-文件进出沙箱">5.7 文件进出沙箱</h2>
+
+<h3 id="进-workspace-种子">进：workspace 种子</h3>
+
+<pre><code class="language-text">agent/sandbox/workspace/schema.sql  →  /workspace/schema.sql
+</code></pre>
+
+<p>eve 在准备新环境代次时复制这些文件。<strong>已运行会话的状态不会被后来的种子覆盖</strong>——想生效要开新会话。</p>
+
+<h3 id="进-用户上传和工具产物">进：用户上传和工具产物</h3>
+
+<p>用户消息里的文件、工具用 <code>toolOutputPart.file</code> 返回的文件，都会落到 <code>/workspace/.eve/attachments/&lt;hash&gt;/</code>，历史里只留引用。</p>
+
+<p>模型看到的标签长这样：</p>
+
+<pre><code class="language-text">Attached file /workspace/.eve/attachments/9f2c/report.pdf (application/pdf)
+</code></pre>
+
+<p>字节会不会真的传给模型，取决于类型：</p>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>会不会传字节</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>PNG / JPEG / GIF / WebP，≤ 3 MiB，单边 ≤ 8000px</td>
+<td>会</td>
+</tr>
+
+<tr>
+<td>PDF，≤ 20 MiB</td>
+<td>会</td>
+</tr>
+
+<tr>
+<td>CSV、HEIC、音频、视频等</td>
+<td>不会，只给路径</td>
+</tr>
+</tbody>
+</table>
+
+<p>所以让模型处理 CSV 时，它会用 <code>read_file</code> 或 <code>bash</code> 去读，而不是「看见」内容。音频要转写就自己加工具。</p>
+
+<h3 id="出-把结果拿出来">出：把结果拿出来</h3>
+
+<p>沙箱路径<strong>不是</strong>下载链接，也不是你笔记本上的文件。要拿到产物，在工具里读成字节：</p>
+
+<pre><code class="language-ts">const png = await sandbox.readBinaryFile({ path: &quot;chart.png&quot; });
+return { pngBase64: Buffer.from(png).toString(&quot;base64&quot;) };
+</code></pre>
+
+<p>然后用 <code>toModelOutput</code> 只给模型一句描述，把字节留给客户端：</p>
+
+<pre><code class="language-ts">toModelOutput({ chart }) {
+  return { type: &quot;text&quot;, value: `已生成 ${chart}，PNG 在工具结果里供客户端保存。` };
+},
+</code></pre>
+
+<p>大文件不要走工具结果（会随会话事件一起持久化）。上传到对象存储，返回带鉴权的下载 URL。</p>
+
+<h2 id="5-8-子代理的沙箱">5.8 子代理的沙箱</h2>
+
+<p>两种子代理，两种行为：</p>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>沙箱</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>内置 <code>agent</code> 工具创建的根副本</td>
+<td><strong>复用父级沙箱</strong>，文件写入立即可见</td>
+</tr>
+
+<tr>
+<td>声明式子代理（<code>agent/subagents/&lt;name&gt;/</code>）</td>
+<td><strong>自己的沙箱</strong>，除非显式声明共享</td>
+</tr>
+</tbody>
+</table>
+
+<p>要共享父级沙箱：</p>
+
+<pre><code class="language-ts">// agent/subagents/reviewer/sandbox.ts
+import { defineParentSandbox } from &quot;eve/sandbox&quot;;
+
+export default defineParentSandbox();
+</code></pre>
+
+<p>共享之后，这个子代理不能再声明自己的 workspace 或技能文件。</p>
+
+<h2 id="5-9-安全边界-什么在沙箱里-什么不在">5.9 安全边界：什么在沙箱里，什么不在</h2>
+
+<table>
+<thead>
+<tr>
+<th>东西</th>
+<th>在沙箱里？</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>process.env</code></td>
+<td>否</td>
+</tr>
+
+<tr>
+<td>你的 API key、数据库连接串</td>
+<td>否</td>
+</tr>
+
+<tr>
+<td><code>agent/lib/</code> 的代码</td>
+<td>否</td>
+</tr>
+
+<tr>
+<td>技能文件</td>
+<td>是，只读挂载在 <code>$HOME/.agents/skills/</code></td>
+</tr>
+
+<tr>
+<td>workspace 种子</td>
+<td>是，可写 <code>/workspace</code></td>
+</tr>
+
+<tr>
+<td>模型写的脚本、下载的数据</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+
+<p>内置环境在每次 <code>run()</code> 和 <code>spawn()</code> 时注入 <code>AI_AGENT=eve</code>，让 <code>vercel</code> 这类 CLI 跳过交互提示。</p>
+
+<p>沙箱里<strong>没有</strong> <code>process.env</code>。<code>environment({ env })</code> 会把变量烘进模板、所有会话共享；<code>run({ env })</code> 只对单次调用生效，但沙箱进程仍然读得到。两种都不该放密钥——只要值进了沙箱，就当成模型能看到。详见<a href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">附录 C</a>。</p>
+
+<p>如果沙箱里的进程需要访问需要鉴权的服务，用凭据代理（credential brokering），不要把 token 写进沙箱文件。原则：<strong>凭据只在应用侧，沙箱只拿结果</strong>。</p>
+
+<pre><code class="language-mermaid">flowchart TB
+  subgraph APP[&quot;应用运行时（可信）&quot;]
+    ENV[&quot;process.env&lt;br/&gt;API key · 数据库连接串&quot;]
+    TOOL[&quot;工具 execute&quot;]
+    BROKER[&quot;凭据代理&lt;br/&gt;换取短期 token&quot;]
+  end
+  subgraph SB[&quot;沙箱（模型可控）&quot;]
+    CMD[&quot;命令 / 脚本&quot;]
+    FS[&quot;/workspace 文件&quot;]
+  end
+  EXT[&quot;需要鉴权的外部服务&quot;]
+
+  ENV --&gt; TOOL
+  TOOL --&gt;|&quot;写入最小数据&quot;| FS
+  CMD --&gt;|&quot;读输入&quot;| FS
+  CMD --&gt;|&quot;请求代理&quot;| BROKER
+  BROKER --&gt;|&quot;带凭据转发&quot;| EXT
+  EXT --&gt;|&quot;结果&quot;| BROKER
+  BROKER --&gt;|&quot;只回结果&quot;| CMD
+  CMD -.-&gt;|&quot;没有密钥，直接调用会被拒&quot;| EXT
+</code></pre>
+
+<p>三条线要分清：<strong>实线是允许的数据流</strong>，<strong>虚线是被边界挡住的路</strong>。模型能改的是沙箱里的命令和文件，改不了 <code>process.env</code>，也拿不到连接凭据。</p>
+
+<h2 id="5-10-自定义-provider">5.10 自定义 provider</h2>
+
+<p>需要接自己的容器平台时：</p>
+
+<pre><code class="language-ts">import type { SandboxSession } from &quot;eve/sandbox&quot;;
+import { defineSandboxProvider } from &quot;eve/sandbox/provider&quot;;
+
+export const AcmeSandbox = defineSandboxProvider&lt;
+  { image: string; prepare?: (s: SandboxSession) =&gt; Promise&lt;void&gt; },
+  { networkPolicy?: &quot;allow-all&quot; | &quot;deny-all&quot; },
+  { templateId: string },
+  { remoteId: string; version: 1 },
+  SandboxSession
+&gt;({
+  name: &quot;acme&quot;,
+  environment(options) {
+    // 下面四个是你自己写的适配层，官方示例里同样省略了实现
+    const client = createAcmeClient(options);
+    const adapt = (tmp: AcmeTemporary) =&gt; toSandboxSession(tmp);
+    const createHandle = (remote: AcmeRemote) =&gt; toSandboxSession(remote);
+    const sessionIdentity = (id: string, artifact: { templateId: string }, live: unknown) =&gt;
+      `${id}:${artifact.templateId}:${JSON.stringify(live ?? {})}`;
+
+    return {
+      async prepare(ctx) {
+        const tmp = await client.createTemporary({
+          files: await ctx.files.list(),
+          resources: ctx.resources,
+        });
+        await options.prepare?.(adapt(tmp));
+        return { templateId: (await tmp.capture()).id };
+      },
+      async start(ctx, liveOptions, artifact) {
+        const remote = await client.open({
+          identity: sessionIdentity(ctx.session.id, artifact, liveOptions),
+          networkPolicy: liveOptions?.networkPolicy,
+          templateId: artifact.templateId,
+        });
+        return { handle: createHandle(remote), state: { remoteId: remote.id, version: 1 } };
+      },
+      async resume(_ctx, artifact, state) {
+        return createHandle(
+          await client.resume({ id: state.remoteId, templateId: artifact.templateId }),
+        );
+      },
+      async onSessionEnd(_ctx, _artifact, state, { reason }) {
+        await client.delete({ id: state.remoteId, reason });
+      },
+    };
+  },
+});
+</code></pre>
+
+<p>契约要点：</p>
+
+<ul>
+<li><code>prepare()</code> 返回可 JSON 序列化的 artifact。</li>
+<li><code>start()</code> 每个持久沙箱会话调一次，返回句柄 + 最小可序列化状态。</li>
+<li>进程重启只调 <code>resume()</code>，必须能接回已有原生资源；接不回来就失败，不要重建（重建会丢副作用）。</li>
+<li><code>onSessionEnd()</code> 做幂等清理，不要依赖活句柄。</li>
+</ul>
+
+<h2 id="5-11-常见坑">5.11 常见坑</h2>
+
+<p><strong>坑：以为有 Python，结果 <code>python3: not found</code>。</strong>
+你用的是 <code>just-bash</code>。换 Docker 或 Vercel Sandbox。</p>
+
+<p><strong>坑：<code>prepare</code> 里 <code>sudo apt-get</code> 失败，但没报错。</strong>
+没检查 <code>exitCode</code>。每条命令都要检查。</p>
+
+<p><strong>坑：改了 workspace 种子，老会话看不到。</strong>
+种子只在新环境代次生效。开新会话。</p>
+
+<p><strong>坑：<code>sandbox.run()</code> 失败但代码继续跑。</strong>
+它不抛异常。必须判断 <code>exitCode !== 0</code>。</p>
+
+<p><strong>坑：把数据库密码写进沙箱脚本。</strong>
+模型能 <code>read_file</code> 那个脚本。取数在应用侧做。</p>
+
+<p><strong>坑：<code>deny-all</code> 之后 <code>prepare</code> 装不了包。</strong>
+准备阶段需要出网。要么保持 <code>allow-all</code> 准备完再收紧，要么用白名单。</p>
+
+<p><strong>坑：图表 PNG 超过 1 MiB 塞进工具结果。</strong>
+工具结果随会话事件持久化，会拖慢一切。控制在 1 MiB 内，或改走对象存储。</p>
+
+<p><strong>坑：以为沙箱是安全边界，其实用 <code>just-bash</code>。</strong>
+它没有进程隔离。真正跑不可信代码必须上容器或 VM。</p>
+
+<h2 id="5-12-练习">5.12 练习</h2>
+
+<ol>
+<li>在 <code>agent/sandbox/workspace/</code> 放一个 <code>runbook.md</code>，让模型读它并总结要点。</li>
+<li>用 Docker 起一个沙箱，在 <code>prepare</code> 里装 <code>jq</code>，然后让模型用 <code>bash</code> 调 <code>jq</code> 处理 JSON。</li>
+<li>写一个工具，用沙箱里的 Python 算一组数的分位数，返回结果并把中间文件路径也返回。</li>
+<li>把网络策略改成 <code>deny-all</code>，观察哪些操作会失败，写下你的取舍。</li>
+</ol>
+
+<h2 id="延伸阅读">延伸阅读</h2>
+
+<ul>
+<li><a href="https://eve.dev/docs/sandbox">Sandbox</a></li>
+<li><a href="https://eve.dev/docs/sandbox/docker">Docker Sandbox</a></li>
+<li><a href="https://eve.dev/docs/concepts/security-model">Security Model</a></li>
+</ul>
+
+<hr />
+
+<p>上一章：<a href="https://tangxusc.github.io/2026/10/eve-04-tools/">04 工具</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-06-context-control/">06 上下文控制</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-06-context-control/" data-tooltip="eve 中文教程 · 第 6 章 上下文控制">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-04-tools/" data-tooltip="eve 中文教程 · 第 4 章 工具">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-06-context-control/" data-tooltip="eve 中文教程 · 第 6 章 上下文控制">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-04-tools/" data-tooltip="eve 中文教程 · 第 4 章 工具">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 <code>eve init</code> 讲到上线。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
+                <h3 class="media-heading">eve 中文教程 · 附录 C 环境变量与密钥</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p><code>process.env</code> 只在<strong>应用运行时</strong>存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">
+                <h3 class="media-heading">eve 中文教程 · 附录 B 事件与 CLI</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">完整事件表、CLI 命令、HTTP 路由。写客户端、排查事件流、核对某个字段时对着这张表看。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">
+                <h3 class="media-heading">eve 中文教程 · 附录 A 术语与速查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">概念对照、目录速查、常见错误码。读不懂某个词、找不到某个文件、看到一个陌生状态码时先查这里。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/">
+                <h3 class="media-heading">eve 中文教程 · 第 18 章 进阶与上线检查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>这一章把散落在前面的进阶能力收在一起，然后给一份能逐条打勾的上线清单。清单比概念重要。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
+                <h3 class="media-heading">eve 中文教程 · 第 17 章 前端与部署</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-16-evals/">
+                <h3 class="media-heading">eve 中文教程 · 第 16 章 评测</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
+                <h3 class="media-heading">eve 中文教程 · 第 15 章 定时与钩子</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-14-channels/">
+                <h3 class="media-heading">eve 中文教程 · 第 14 章 通道</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-13-connections/">
+                <h3 class="media-heading">eve 中文教程 · 第 13 章 连接</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 <code>eve__search</code> 找到工具，用 <code>eve__tool</code> 调用，凭据由 eve 在应用侧注入。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         125 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-05-sandbox\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-05-sandbox\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

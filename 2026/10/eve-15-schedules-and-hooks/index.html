@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。
+">
+
+
+<meta property="og:description" content="
+定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 15 章 定时与钩子">
+<meta name="twitter:title" content="eve 中文教程 · 第 15 章 定时与钩子">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。
+">
+<meta name="twitter:description" content="
+定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-22T09:15:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-22T09:15:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 15 章 定时与钩子</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 15 章 定时与钩子
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-22T09:15:00&#43;08:00">
+        
+  October 22, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。</p>
+</blockquote>
+
+<h2 id="15-1-定时任务和普通会话哪里不同">15.1 定时任务和普通会话哪里不同</h2>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>普通会话</th>
+<th>定时任务</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>触发</td>
+<td>用户消息</td>
+<td>cron</td>
+</tr>
+
+<tr>
+<td>通道</td>
+<td>有</td>
+<td><strong>没有</strong>（handler 形式可以自己指定目标）</td>
+</tr>
+
+<tr>
+<td>能否向人提问</td>
+<td>能</td>
+<td>markdown 形式<strong>不能</strong></td>
+</tr>
+
+<tr>
+<td>每次触发</td>
+<td>续接同一会话</td>
+<td><strong>新会话</strong></td>
+</tr>
+
+<tr>
+<td>输出</td>
+<td>回到通道</td>
+<td>markdown 丢弃；handler 发到指定通道</td>
+</tr>
+</tbody>
+</table>
+
+<p>最后两条是设计意图：没人看着的任务不该无限期挂着等人回答，也不该复用上一次的对话状态。</p>
+
+<h2 id="15-2-两种形式">15.2 两种形式</h2>
+
+<p>文件放 <code>agent/schedules/</code>，名字从路径推导（<code>agent/schedules/daily/digest.ts</code> → <code>daily/digest</code>）。</p>
+
+<h3 id="markdown-发完就不管">markdown：发完就不管</h3>
+
+<pre><code class="language-md">&lt;!-- agent/schedules/cleanup.md --&gt;
+---
+cron: &quot;0 0 * * 0&quot;
+---
+
+清理超过 90 天的会话归档，输出清理条数。
+</code></pre>
+
+<p>或 TypeScript：</p>
+
+<pre><code class="language-ts">// agent/schedules/heartbeat.ts
+import { defineSchedule } from &quot;eve/schedules&quot;;
+
+export default defineSchedule({
+  cron: &quot;*/5 * * * *&quot;,
+  markdown: &quot;拉取未关闭的 P1 事故，把摘要 POST 到指标端点。&quot;,
+});
+</code></pre>
+
+<p>特点：</p>
+
+<ul>
+<li><strong>没有通道</strong>，不能向人请求输入。</li>
+<li>调到需要审批的工具时，会话<strong>直接失败</strong>，不会挂起等待。</li>
+<li>输出被丢弃，但 agent 仍然可以调工具、写库、打日志。</li>
+<li>每次触发都是<strong>新会话</strong>。</li>
+</ul>
+
+<h3 id="handler-自己决定发到哪">handler：自己决定发到哪</h3>
+
+<pre><code class="language-ts">// agent/schedules/critical-alerts.ts
+import { defineSchedule } from &quot;eve/schedules&quot;;
+import slack from &quot;../channels/slack&quot;;
+
+export default defineSchedule({
+  cron: &quot;*/10 * * * *&quot;,
+  async run({ to, waitUntil, appAuth }) {
+    waitUntil(
+      to(slack, { channelId: &quot;C0123ABC&quot; }).send(
+        &quot;汇总最近 10 分钟新增的 P1 告警，按服务分组。&quot;,
+        { auth: appAuth },
+      ),
+    );
+  },
+});
+</code></pre>
+
+<p><code>defineSchedule</code> 只有三个字段，<code>cron</code> 必填，<code>markdown</code> 和 <code>run</code> <strong>必须且只能给一个</strong>：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>cron</code></td>
+<td><code>string</code></td>
+<td>标准 5 段表达式，分钟粒度，Vercel 上按 UTC</td>
+</tr>
+
+<tr>
+<td><code>markdown</code></td>
+<td><code>string</code></td>
+<td>发给 agent 的提示词。跑完丢弃输出，没有通道</td>
+</tr>
+
+<tr>
+<td><code>run</code></td>
+<td><code>({ to, waitUntil, appAuth }) =&gt; void \| Promise&lt;void&gt;</code></td>
+<td>完整处理器，自己决定发到哪</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>run</code> 拿到三个东西：</p>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>to(channel, target)</code></td>
+<td>选一个通道目标，然后 <code>.send()</code></td>
+</tr>
+
+<tr>
+<td><code>waitUntil(promise)</code></td>
+<td>把任务寿命延长到 promise settle，<strong>必须包住 send</strong></td>
+</tr>
+
+<tr>
+<td><code>appAuth</code></td>
+<td>应用身份 principal：<code>{ authenticator: &quot;app&quot;, principalId: &quot;eve:app&quot;, principalType: &quot;runtime&quot; }</code></td>
+</tr>
+</tbody>
+</table>
+
+<p><code>to(channel, target).send(message, options)</code> 的 options：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>必填</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>auth</code></td>
+<td><code>SessionAuthContext \| null</code></td>
+<td>是</td>
+<td>这次投递以谁的身份跑。自动化传 <code>appAuth</code></td>
+</tr>
+
+<tr>
+<td><code>context</code></td>
+<td><code>string[]</code></td>
+<td>否</td>
+<td>作为用户消息持久化到目标会话历史</td>
+</tr>
+
+<tr>
+<td><code>initiatorAuth</code></td>
+<td><code>SessionAuthContext \| null</code></td>
+<td>否</td>
+<td>新会话的创建者身份，默认同 <code>auth</code></td>
+</tr>
+
+<tr>
+<td><code>outputSchema</code></td>
+<td>JSON Schema</td>
+<td>否</td>
+<td>要求目标这一轮产出结构化结果</td>
+</tr>
+
+<tr>
+<td><code>title</code></td>
+<td><code>string</code></td>
+<td>否</td>
+<td>新建会话的标题</td>
+</tr>
+
+<tr>
+<td><code>turnPolicy</code></td>
+<td><code>&quot;steer&quot; \| &quot;queue&quot;</code></td>
+<td>否</td>
+<td>目标会话正忙时的策略</td>
+</tr>
+
+<tr>
+<td><code>state</code></td>
+<td>通道自己的 state</td>
+<td>通道声明了 <code>state</code> 时必填</td>
+<td>适配器初始状态</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>auth</code> 是<strong>必填</strong>的，而且允许显式传 <code>null</code>（匿名）。漏掉它不会编译通过，这是有意的：投递必须明确「以谁的身份」。</p>
+
+<h3 id="为什么必须-waituntil">为什么必须 <code>waitUntil</code></h3>
+
+<p>cron 任务的执行窗口是有限的。<code>send()</code> 只是把消息投递给另一个会话，真正跑起来是在那之后。不包 <code>waitUntil</code>，任务可能在 <code>send</code> 完成前就结束，停泊的会话和在途的取数都没 settle 完。</p>
+
+<pre><code class="language-ts">// 对
+waitUntil(to(slack, target).send(msg, { auth: appAuth }));
+
+// 错：任务可能提前结束
+await to(slack, target).send(msg, { auth: appAuth });
+</code></pre>
+
+<h3 id="识别应用身份">识别应用身份</h3>
+
+<pre><code class="language-ts">import { isScheduleAuth } from &quot;eve/schedules&quot;;
+
+if (isScheduleAuth(ctx.session.auth.current)) {
+  // 这是 agent 自己在干活，不是用户在操作
+}
+</code></pre>
+
+<p>它判断的是 <strong>principal 身份</strong>，不是「这轮怎么来的」。handler 用用户身份发送时返回 <code>false</code>；任何代码把 <code>appAuth</code> 传下去，返回 <code>true</code>。</p>
+
+<p>用途：让自动化跳过审批，但人来调时仍然要批（第 11 章）。</p>
+
+<h2 id="15-3-cron-的细节">15.3 cron 的细节</h2>
+
+<p>标准 5 段：<code>分 时 日 月 周</code>，分钟粒度。</p>
+
+<p><strong>Vercel 按 UTC 计算。</strong> <code>&quot;0 9 * * 1-5&quot;</code> 是 UTC 09:00，北京时间 17:00。要北京时间早上 9 点，写 <code>&quot;0 1 * * 1-5&quot;</code>。</p>
+
+<p><code>eve dev</code> <strong>不会</strong>按 cron 触发。要手动触发：</p>
+
+<pre><code class="language-bash">curl -X POST http://localhost:2000/eve/v1/dev/schedules/heartbeat
+# {&quot;scheduleId&quot;:&quot;heartbeat&quot;,&quot;sessionIds&quot;:[&quot;...&quot;]}
+</code></pre>
+
+<ul>
+<li>嵌套名字要 URL 编码斜杠（<code>daily/digest</code> → <code>daily%2Fdigest</code>）。</li>
+<li>未知 id 返回 404 并列出可用 id。</li>
+<li>这个路由只在 dev 存在，生产构建不挂载，也不需要鉴权（dev server 只监听本地）。</li>
+<li>它跑的是和生产 cron 完全相同的派发路径，返回启动的 session id，可以接着订阅每个会话的流。</li>
+</ul>
+
+<h2 id="15-4-部署后的定时任务">15.4 部署后的定时任务</h2>
+
+<table>
+<thead>
+<tr>
+<th>环境</th>
+<th>行为</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Vercel</td>
+<td>每个 schedule 变成 Vercel Cron Job，写进 Build Output 配置</td>
+</tr>
+
+<tr>
+<td><code>eve build &amp;&amp; eve start</code></td>
+<td>注册为 Nitro scheduled task，由 Nitro 的 runner 触发</td>
+</tr>
+
+<tr>
+<td>自定义托管</td>
+<td><strong>可能不触发</strong>。只服务 HTTP、不启动 Nitro 任务 runner 的平台不会跑 cron</td>
+</tr>
+</tbody>
+</table>
+
+<p>第三种情况很隐蔽：定义编译成功了，<code>eve info</code> 里也有，但就是不执行。要么用 <code>eve start</code>，要么用你自己的调度器通过鉴权路由/通道投递触发。</p>
+
+<pre><code class="language-mermaid">flowchart TD
+  CR[&quot;cron 到点&quot;] --&gt; H{&quot;谁在跑这个进程&quot;}
+  H --&gt;|&quot;Vercel&quot;| VC[&quot;Vercel Cron Job&quot;]
+  H --&gt;|&quot;eve start&quot;| NT[&quot;Nitro task runner&quot;]
+  H --&gt;|&quot;只服务 HTTP&quot;| NO[&quot;不会触发&quot;]
+  VC --&gt; RUN[&quot;run({ to, waitUntil, appAuth })&quot;]
+  NT --&gt; RUN
+  RUN --&gt; SESS[&quot;新建会话（或投递到已有线程）&quot;]
+  SESS --&gt; EV[&quot;事件流&quot;]
+  EV --&gt; HK[&quot;钩子（在事件持久化之后）&quot;]
+  EV --&gt; CH[&quot;通道回复 / 丢弃&quot;]
+</code></pre>
+
+<p><code>NO</code> 这条分支是部署时的常见事故：容器平台把 <code>.output</code> 当普通 Node 服务跑，Nitro 的定时任务模块根本没启动。</p>
+
+<p>在 Vercel 上确认：<strong>Settings → Cron Jobs</strong> 看发现，<strong>Observability → Cron Jobs</strong> 看执行历史，<strong>Logs</strong> 看单次运行。</p>
+
+<h2 id="15-5-会话连续性">15.5 会话连续性</h2>
+
+<p><strong>每次触发都是新会话</strong>，除非 handler 发到一个已有对话（比如某个 Slack 线程）。</p>
+
+<p>需要跨触发保留的数据，存外部存储或 memory 槽，<strong>不要</strong>指望会话状态：</p>
+
+<pre><code class="language-ts">// 错：上次运行的状态下次读不到
+incident.update(...);   // 新会话，全新 state
+
+// 对：写外部存储
+await db.set(&quot;digest:last-run&quot;, new Date().toISOString());
+</code></pre>
+
+<h3 id="让用户自己定义定时任务">让用户自己定义定时任务</h3>
+
+<p><code>agent/schedules/</code> 里的文件是编译期发现的，用户没法在运行时加一个。要做「每个租户自己配日报时间」，用一个每分钟醒一次的静态任务当派发器：CRUD 工具写你自己的表，handler 原子地领走到期的行，再用 <code>to(...)</code> 或 <code>receive(...)</code> 起一个普通会话。要点是存储层提供<strong>原子租约</strong>，不是某种固定表结构。完整写法见官方 <a href="https://eve.dev/docs/patterns/dynamic-scheduling">Dynamic Scheduling</a>。</p>
+
+<p><code>eve@0.80</code> 起，定时任务拉起的会话也能用动态定时工具和 schedule client 管理定时任务（含条件更新、关掉未来几次），集合作用域鉴权和工具审批照常生效。</p>
+
+<h2 id="15-6-钩子-订阅事件流">15.6 钩子：订阅事件流</h2>
+
+<pre><code class="language-ts">// agent/hooks/audit.ts
+import { defineHook } from &quot;eve/hooks&quot;;
+
+export default defineHook({
+  events: {
+    async &quot;session.started&quot;(_event, ctx) {
+      console.info(&quot;会话开始&quot;, { sessionId: ctx.session.id });
+    },
+    async &quot;message.completed&quot;(event) {
+      console.info(&quot;模型说完一段&quot;, { length: event.data.message?.length ?? 0 });
+    },
+  },
+});
+</code></pre>
+
+<p>名字来自路径：<code>agent/hooks/audit.ts</code> → <code>audit</code>，<code>agent/hooks/auth/load-profile.ts</code> → <code>auth/load-profile</code>。</p>
+
+<p><code>defineHook</code> 只有一个字段：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>events</code></td>
+<td><code>Record&lt;事件类型 \| &quot;*&quot;, (event, ctx) =&gt; void \| Promise&lt;void&gt;&gt;</code></td>
+<td>要订阅的事件和处理器</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>events</code> 的 key 是事件类型，<code>&quot;*&quot;</code> 匹配所有事件。可订阅的类型是框架显式列出的那一组（<code>action.result</code>、<code>turn.*</code>、<code>session.*</code>、<code>input.*</code>、<code>approval.*</code>、<code>task.*</code>、<code>agent.started</code> 等），新协议事件不会自动变成钩子事件。</p>
+
+<p><strong>钩子只能观察，不能往上下文里注入内容。</strong> 要注入内容用 <code>defineDynamic</code> + <code>defineInstructions</code>（第 6 章）。</p>
+
+<h3 id="钩子能拿到什么">钩子能拿到什么</h3>
+
+<pre><code class="language-ts">interface HookContext extends SessionContext {
+  readonly agent: { readonly name: string; readonly nodeId?: string };
+  readonly channel: { readonly kind?: string; readonly continuationToken?: string };
+  cancel(): void;
+}
+</code></pre>
+
+<p>加上 <code>SessionContext</code> 的全部能力：<code>ctx.session</code>、<code>ctx.getSandbox()</code>、<code>ctx.getToken()</code> 等。</p>
+
+<p>所以钩子可以在 turn 结束后释放沙箱算力：</p>
+
+<pre><code class="language-ts">export default defineHook({
+  events: {
+    async &quot;turn.completed&quot;(_event, ctx) {
+      const sandbox = await ctx.getSandbox();
+      await sandbox.stop();      // 停算力，文件还在
+    },
+  },
+});
+</code></pre>
+
+<h3 id="三种用途">三种用途</h3>
+
+<table>
+<thead>
+<tr>
+<th>用途</th>
+<th>典型事件</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>审计 / 合规</td>
+<td><code>action.result</code>、<code>turn.completed</code></td>
+</tr>
+
+<tr>
+<td>指标 / 告警</td>
+<td><code>turn.failed</code>、<code>step.failed</code>、<code>session.limit</code> 相关事件</td>
+</tr>
+
+<tr>
+<td>数据落库 / 分析</td>
+<td><code>&quot;*&quot;</code> 全量</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="15-7-把事件落到自己的库">15.7 把事件落到自己的库</h2>
+
+<p>每个事件都有 <code>meta.id</code>（ULID，写入时生成一次），是天然主键：</p>
+
+<pre><code class="language-ts">// agent/hooks/persist.ts
+import { defineHook } from &quot;eve/hooks&quot;;
+
+export default defineHook({
+  events: {
+    async &quot;*&quot;(event, ctx) {
+      await db.query(
+        `insert into agent_events (id, session_id, type, data, emitted_at)
+         values ($1, $2, $3, $4, $5)
+         on conflict (id) do nothing`,
+        [
+          event.meta.id,
+          ctx.session.id,
+          event.type,
+          &quot;data&quot; in event ? event.data : null,
+          event.meta.at,
+        ],
+      );
+    },
+  },
+});
+</code></pre>
+
+<p><strong><code>meta.id</code> 保证什么、不保证什么</strong>，这张表要记住：</p>
+
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>会不会重复</th>
+<th>靠什么处理</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>重连、回绕、重放已完成的会话</td>
+<td>会，但 id 相同</td>
+<td><code>on conflict (id) do nothing</code></td>
+</tr>
+
+<tr>
+<td>step 被打断后重跑</td>
+<td>会，且 <strong>id 不同</strong></td>
+<td>只能靠业务幂等键</td>
+</tr>
+</tbody>
+</table>
+
+<p>所以：</p>
+
+<ul>
+<li>需要「每个 turn/step 只发生一次」的副作用（扣款、发邮件、建工单），用 <code>event.data</code> 里的坐标（<code>turnId</code>、<code>stepIndex</code>、<code>sequence</code>）做键。重试会恢复同样的坐标，闸门才有效。</li>
+<li>需要「存内容」的表，<strong>不要</strong>用这些坐标做键。重试会重新调用模型，同一个坐标可能对应不同的文本，<code>on conflict</code> 会留下被放弃的那次、丢掉完成的那次。</li>
+</ul>
+
+<p>一句话：<strong>钩子是 at-least-once，没有任何键能折叠一次重试。</strong></p>
+
+<h2 id="15-8-执行顺序">15.8 执行顺序</h2>
+
+<p>事件发布时，拥有这个会话的 step 按顺序做四件事：</p>
+
+<ol>
+<li>通道处理器（可能改写适配器状态）</li>
+<li>写入持久流（打上 <code>meta</code> 信封）</li>
+<li>钩子（先具体类型的处理器，再 <code>&quot;*&quot;</code>）</li>
+<li>模型准备（仅模型生命周期事件；动态解析器在这里更新上下文）</li>
+</ol>
+
+<p>钩子<strong>总在事件持久化之后</strong>跑。所以钩子抛异常不会污染流。</p>
+
+<h2 id="15-9-钩子抛异常会怎样">15.9 钩子抛异常会怎样</h2>
+
+<ul>
+<li>eve 记录日志（钩子名、订阅、事件类型、事件 ID、会话 ID）</li>
+<li>继续跑剩下的订阅者</li>
+<li>当前 turn、子代理通知、会话<strong>继续</strong></li>
+<li><strong>不重试</strong></li>
+</ul>
+
+<p>抛异常不会否决 turn。要中止 turn 必须显式调 <code>ctx.cancel()</code>：</p>
+
+<pre><code class="language-ts">// agent/hooks/require-credentials.ts
+import { defineHook } from &quot;eve/hooks&quot;;
+import { loadWorkspaceCredentials } from &quot;../lib/credentials&quot;;
+
+export default defineHook({
+  events: {
+    async &quot;turn.started&quot;(_event, ctx) {
+      try {
+        await loadWorkspaceCredentials(ctx.session.auth.current);
+      } catch (error) {
+        console.warn(&quot;取消 turn：凭据不可用&quot;, { error, sessionId: ctx.session.id });
+        ctx.cancel();
+      }
+    },
+  },
+});
+</code></pre>
+
+<p><code>ctx.cancel()</code> 返回 <code>void</code>，不要 <code>await</code>。调用后 turn 以 <code>turn.cancelled</code> → <code>session.waiting</code> 结束，<strong>不产生失败事件</strong>。</p>
+
+<p>它在这些事件上无效（会被忽略并记警告）：<code>turn.completed</code>、<code>turn.failed</code>、<code>session.completed</code>、<code>turn.waiting</code>、<code>task.started</code>、<code>agent.started</code> 等。</p>
+
+<h2 id="15-10-只对某个通道生效">15.10 只对某个通道生效</h2>
+
+<p><code>agent/hooks/</code> 下的钩子观察<strong>所有</strong>通道的事件。需要平台特定逻辑时，用通道自己的 <code>events</code>：</p>
+
+<pre><code class="language-ts">// agent/channels/github.ts
+export default githubChannel({
+  events: {
+    async &quot;turn.completed&quot;(event, channel, ctx) {
+      console.info(&quot;GitHub turn 完成&quot;, {
+        repository: channel.repository.fullName,
+        sessionId: ctx.session.id,
+        turnId: event.turnId,
+      });
+    },
+  },
+});
+</code></pre>
+
+<p>这样平台相关副作用不依赖「先判断 <code>channel.kind</code> 再早退」这种容易写错的守卫。内置通道上，手写的处理器会<strong>替换</strong>该通道对同一事件的默认处理器——覆盖前先看文档，别把回复投递、错误提示这类关键逻辑盖掉。</p>
+
+<h2 id="15-11-从事件里取类型化的工具结果">15.11 从事件里取类型化的工具结果</h2>
+
+<pre><code class="language-ts">import { defineHook } from &quot;eve/hooks&quot;;
+import { toolResultFrom } from &quot;eve/tools&quot;;
+import readLogs from &quot;../tools/read_logs&quot;;
+import linear from &quot;../connections/linear&quot;;
+
+export default defineHook({
+  events: {
+    &quot;action.result&quot;(event) {
+      const logs = toolResultFrom(event.data.result, readLogs);
+      if (logs) console.log(logs.output.lines.length);   // 类型化
+
+      const linearResult = toolResultFrom(event.data.result, linear);
+      if (linearResult) console.log(linearResult.connectionToolName);
+    },
+  },
+});
+</code></pre>
+
+<p>结果不匹配或 <code>isError</code> 为真时返回 <code>undefined</code>。它按<strong>工具定义</strong>匹配，所以挂载的扩展工具（<code>crm__search</code>）也能认出来。</p>
+
+<h2 id="15-12-子代理的钩子">15.12 子代理的钩子</h2>
+
+<p>子代理可以有自己的 <code>agent/hooks/</code>：</p>
+
+<ul>
+<li>子代理的钩子<strong>只在子代理作用域触发</strong>。</li>
+<li>父级的钩子<strong>不会</strong>因子代理的 turn 而触发。</li>
+<li>子代理钩子只看到自己的上下文。</li>
+</ul>
+
+<p>但交互事件（<code>input.requested</code>、<code>authorization.required</code>）会<strong>代理到父流</strong>上，父级钩子能在父级的 session/agent/channel 上下文里观察它们。事件里保留子代理的 turn 坐标，所以 <code>event.data.turnId</code> 可能不等于 <code>ctx.session.turn.id</code>。</p>
+
+<h2 id="15-13-完整例子-审计-日报">15.13 完整例子：审计 + 日报</h2>
+
+<pre><code class="language-ts">// agent/hooks/audit.ts
+import { defineHook } from &quot;eve/hooks&quot;;
+import { toolResultFrom } from &quot;eve/tools&quot;;
+import restartService from &quot;../tools/restart_service&quot;;
+
+export default defineHook({
+  events: {
+    async &quot;action.result&quot;(event, ctx) {
+      const restart = toolResultFrom(event.data.result, restartService);
+      if (!restart) return;
+
+      await db.audit.insert({
+        at: event.meta.at,
+        sessionId: ctx.session.id,
+        turnId: event.data.turnId,
+        service: restart.output.service,
+        actor: ctx.session.auth.current?.principalId ?? &quot;unknown&quot;,
+      });
+    },
+  },
+});
+</code></pre>
+
+<pre><code class="language-ts">// agent/schedules/daily-digest.ts
+import { defineSchedule } from &quot;eve/schedules&quot;;
+import slack from &quot;../channels/slack&quot;;
+
+export default defineSchedule({
+  cron: &quot;0 1 * * 1-5&quot;,        // UTC 01:00 = 北京 09:00
+  async run({ to, waitUntil, appAuth }) {
+    waitUntil(
+      to(slack, { channelId: &quot;C_OPS&quot; }).send(
+        [
+          &quot;生成昨天的运维日报，包含：&quot;,
+          &quot;1. 新增和关闭的事故数，按级别分组&quot;,
+          &quot;2. 重启操作次数和涉及的服务&quot;,
+          &quot;3. 错误预算消耗最快的三个服务&quot;,
+          &quot;如果没有异常，调用 no_reply 不要发消息。&quot;,
+        ].join(&quot;\n&quot;),
+        { auth: appAuth },
+      ),
+    );
+  },
+});
+</code></pre>
+
+<p>配 <code>no_reply</code> 工具（<code>eve add tool/no_reply</code>）可以让 agent 在「没什么可报」时主动静默，而不是发一条「今天一切正常」。</p>
+
+<h2 id="15-14-常见坑">15.14 常见坑</h2>
+
+<p><strong>坑：handler 里忘了 <code>waitUntil</code>。</strong>
+cron 任务可能在 <code>send</code> 完成前就结束，停泊的会话和在途的取数都没 settle 完。</p>
+
+<p><strong>坑：cron 时区搞错。</strong>
+Vercel 用 UTC。写完在日历上换算一遍。</p>
+
+<p><strong>坑：markdown 定时任务调用了要审批的工具。</strong>
+直接失败，不挂起。改用 handler 发到有人的通道。</p>
+
+<p><strong>坑：指望定时任务记住上次的状态。</strong>
+每次都是新会话。状态放外部存储。</p>
+
+<p><strong>坑：钩子里抛异常想阻止 turn。</strong>
+不会阻止。用 <code>ctx.cancel()</code>。</p>
+
+<p><strong>坑：用 <code>meta.id</code> 做「只发一次邮件」的闸门。</strong>
+重试会发新 id。用 <code>turnId + stepIndex + sequence</code>。</p>
+
+<p><strong>坑：自定义托管平台上 cron 不触发。</strong>
+平台没启动 Nitro 任务 runner。用 <code>eve start</code> 或外部调度器。</p>
+
+<p><strong>坑：钩子里读会话流，读不到刚发生的事件。</strong>
+当前 step 的事件可能还在缓冲。晚点再读。</p>
+
+<p><strong>坑：在根钩子里按 <code>channel.kind</code> 写平台逻辑。</strong>
+容易漏判断。平台相关的逻辑放通道的 <code>events</code>。</p>
+
+<h2 id="15-15-练习">15.15 练习</h2>
+
+<ol>
+<li>写一个 markdown 定时任务，用 dev 路由手动触发，看它跑起来。</li>
+<li>改成 handler 形式发到 Slack，加 <code>waitUntil</code>。</li>
+<li>写一个 <code>&quot;*&quot;</code> 钩子把所有事件落到一张表，按 <code>meta.id</code> 去重。</li>
+<li>写一个 <code>turn.started</code> 钩子，凭据缺失时 <code>ctx.cancel()</code>，观察事件流里的 <code>turn.cancelled</code>。</li>
+<li>写一个子代理自己的钩子，确认父级钩子不会因它触发。</li>
+</ol>
+
+<h2 id="延伸阅读">延伸阅读</h2>
+
+<ul>
+<li><a href="https://eve.dev/docs/schedules">Schedules</a></li>
+<li><a href="https://eve.dev/docs/guides/hooks">Hooks</a></li>
+<li><a href="https://eve.dev/docs/concepts/sessions-runs-and-streaming">Sessions, Runs &amp; Streaming</a></li>
+<li><a href="https://eve.dev/docs/patterns/dynamic-scheduling">Dynamic Scheduling</a></li>
+</ul>
+
+<hr />
+
+<p>上一章：<a href="https://tangxusc.github.io/2026/10/eve-14-channels/">14 通道</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-16-evals/">16 评测</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-16-evals/" data-tooltip="eve 中文教程 · 第 16 章 评测">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-14-channels/" data-tooltip="eve 中文教程 · 第 14 章 通道">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-16-evals/" data-tooltip="eve 中文教程 · 第 16 章 评测">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-14-channels/" data-tooltip="eve 中文教程 · 第 14 章 通道">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 <code>eve init</code> 讲到上线。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
+                <h3 class="media-heading">eve 中文教程 · 附录 C 环境变量与密钥</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p><code>process.env</code> 只在<strong>应用运行时</strong>存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">
+                <h3 class="media-heading">eve 中文教程 · 附录 B 事件与 CLI</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">完整事件表、CLI 命令、HTTP 路由。写客户端、排查事件流、核对某个字段时对着这张表看。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">
+                <h3 class="media-heading">eve 中文教程 · 附录 A 术语与速查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">概念对照、目录速查、常见错误码。读不懂某个词、找不到某个文件、看到一个陌生状态码时先查这里。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/">
+                <h3 class="media-heading">eve 中文教程 · 第 18 章 进阶与上线检查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>这一章把散落在前面的进阶能力收在一起，然后给一份能逐条打勾的上线清单。清单比概念重要。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
+                <h3 class="media-heading">eve 中文教程 · 第 17 章 前端与部署</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-16-evals/">
+                <h3 class="media-heading">eve 中文教程 · 第 16 章 评测</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
+                <h3 class="media-heading">eve 中文教程 · 第 15 章 定时与钩子</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-14-channels/">
+                <h3 class="media-heading">eve 中文教程 · 第 14 章 通道</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-13-connections/">
+                <h3 class="media-heading">eve 中文教程 · 第 13 章 连接</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 <code>eve__search</code> 找到工具，用 <code>eve__tool</code> 调用，凭据由 eve 在应用侧注入。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         125 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-15-schedules-and-hooks\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-15-schedules-and-hooks\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

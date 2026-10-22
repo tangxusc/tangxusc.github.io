@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+process.env 只在应用运行时存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。
+">
+
+
+<meta property="og:description" content="
+process.env 只在应用运行时存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 附录 C 环境变量与密钥">
+<meta name="twitter:title" content="eve 中文教程 · 附录 C 环境变量与密钥">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+process.env 只在应用运行时存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。
+">
+<meta name="twitter:description" content="
+process.env 只在应用运行时存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-22T09:21:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-22T09:21:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+      <meta property="article:tag" content="附录">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 附录 C 环境变量与密钥</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 附录 C 环境变量与密钥
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-22T09:21:00&#43;08:00">
+        
+  October 22, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p><code>process.env</code> 只在<strong>应用运行时</strong>存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。</p>
+</blockquote>
+
+<h2 id="c-1-四个位置">C.1 四个位置</h2>
+
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>有 <code>process.env</code> 吗</th>
+<th>谁在读</th>
+<th>里面该放什么</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>编译期（<code>eve build</code> 的进程）</td>
+<td>有，但那是<strong>构建机</strong>的环境</td>
+<td>静态定义模块的求值</td>
+<td>被烘进编译产物的值</td>
+</tr>
+
+<tr>
+<td>应用运行时（Node / Vercel Function）</td>
+<td>有</td>
+<td>工具、连接、钩子、通道、动态解析器</td>
+<td>API key、数据库串、上游地址</td>
+</tr>
+
+<tr>
+<td>沙箱</td>
+<td><strong>没有</strong></td>
+<td>模型跑的命令</td>
+<td>什么都不该放</td>
+</tr>
+
+<tr>
+<td>浏览器</td>
+<td><strong>没有</strong></td>
+<td>React 组件</td>
+<td>只有 <code>NEXT_PUBLIC_*</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>前两行是同一个变量名在两个进程里的两种答案，第三行干脆没有，第四行连 <code>process</code> 对象都不存在。教程里反复出现的「密钥只在应用运行时」，说的就是第一行和第三行不能混。</p>
+
+<h2 id="c-2-env-文件什么时候被读">C.2 <code>.env</code> 文件什么时候被读</h2>
+
+<p>eve 自己实现了 env 文件加载，不走 dotenv。读取顺序是 <code>.env</code> → <code>.env.development</code> → <code>.env.local</code> → <code>.env.development.local</code>，<strong>后者覆盖前者</strong>，所以优先级最高的是 <code>.env.development.local</code>，最低的是 <code>.env</code>。</p>
+
+<p>解析用 Node 的 <code>util.parseEnv</code>，所以：<strong>不做 <code>${VAR}</code> 展开</strong>，带引号的值会去引号，<code>#</code> 开头是注释。要拼接就自己拼。</p>
+
+<p>哪些命令会读：</p>
+
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>读 <code>.env*</code></th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>eve dev</code></td>
+<td>是</td>
+<td>每次重新编译时重读</td>
+</tr>
+
+<tr>
+<td><code>eve start</code></td>
+<td>是</td>
+<td>起生产服务前读一次</td>
+</tr>
+
+<tr>
+<td><code>eve eval</code></td>
+<td>是</td>
+<td>跑评测前读</td>
+</tr>
+
+<tr>
+<td><code>eve invoke</code></td>
+<td>是</td>
+<td>一次性调用前读</td>
+</tr>
+
+<tr>
+<td><code>eve build</code></td>
+<td><strong>否</strong></td>
+<td>只用 shell 里已经 export 的变量</td>
+</tr>
+
+<tr>
+<td><code>eve info</code></td>
+<td><strong>否</strong></td>
+<td>同上</td>
+</tr>
+
+<tr>
+<td><code>eve deploy</code></td>
+<td>不适用</td>
+<td>在 Vercel 构建，用项目环境变量</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>eve build</code> 不读 <code>.env*</code> 是<strong>设计如此</strong>，也是最容易被忽略的一条：本地 <code>eve dev</code> 一切正常，<code>eve build</code> 却报某个变量缺失，就是因为构建进程没拿到它。</p>
+
+<p>还有一个反直觉的地方：<strong><code>eve start</code> 用的是同一个加载器，不分环境</strong>。它会读 <code>.env.development.local</code>，也就是说你为开发写在那里的值，自托管的生产进程照样会读到并覆盖 <code>.env.local</code>。自托管时要么别用 <code>.env.development*</code>，要么把变量交给容器/进程管理器注入。</p>
+
+<p>改完 <code>.env.local</code> 后最稳的做法是重启 <code>eve dev</code>。eve 只在下一次重新编译时重读这些文件，光改文件不一定触发重编译。</p>
+
+<h2 id="c-3-编译期求值-最容易踩的坑">C.3 编译期求值：最容易踩的坑</h2>
+
+<p>eve 在编译时就会<strong>执行</strong>你写的定义模块，用来校验和归一化。所以模块顶层的代码会在构建机上跑一遍。官方把模块分成三类：</p>
+
+<table>
+<thead>
+<tr>
+<th>生命周期</th>
+<th>哪些定义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>只编译</td>
+<td>静态 instructions、静态技能、prompt 形式的 TS 定时任务、静态的 Gateway / 默认 agent 配置、provider 托管搜索、被完全覆盖的通道</td>
+</tr>
+
+<tr>
+<td>编译 + 运行时</td>
+<td>动态 instructions / 技能 / 工具 / 模型 / 子代理、可执行工具、生效中的通道、连接、钩子、memory、handler 形式的定时任务、直连 provider 模型、独立沙箱、远程子代理</td>
+</tr>
+
+<tr>
+<td>只在运行时</td>
+<td>instrumentation、扩展挂载的初始化</td>
+</tr>
+</tbody>
+</table>
+
+<p>「只编译」意味着<strong>运行时不 import 它</strong>。静态 <code>instructions.ts</code> 求值出来的内容会写进编译清单，部署后改环境变量不会改变它。</p>
+
+<p>三个具体反例：</p>
+
+<pre><code class="language-ts">// 反例 1：静态指令在编译期读 env
+// agent/instructions.ts（没有 defineDynamic 就是静态的）
+import { defineInstructions } from &quot;eve/instructions&quot;;
+
+export default defineInstructions({
+  content: `当前环境是 ${process.env.DEPLOY_ENV}。`,   // 编译期求值，随产物固定
+});
+</code></pre>
+
+<pre><code class="language-ts">// 反例 2：Gateway 模型字符串在编译期读 env
+import { defineAgent } from &quot;eve&quot;;
+
+export default defineAgent({
+  model: process.env.PRIMARY_MODEL!,   // 静态 Gateway 配置，编译期求值
+});
+</code></pre>
+
+<pre><code class="language-ts">// 反例 3：模块顶层做校验
+const key = z.string().min(1).parse(process.env.OPS_TOKEN);  // 构建机上没这个变量 → eve build 直接失败
+</code></pre>
+
+<p>正确做法只有两条：</p>
+
+<ol>
+<li><strong>把读取推迟到函数里</strong>——工具 <code>execute</code>、连接 <code>getToken</code>、钩子 handler、<code>defineDynamic</code> 的解析器、通道的 <code>auth</code> 函数。这些都在运行时执行。</li>
+<li>如果确实要编译期求值（比如静态指令里写死一段文案），就接受「值属于构建产物」，并且把变量配到<strong>构建环境</strong>，不只是运行环境。</li>
+</ol>
+
+<h2 id="c-4-集中校验">C.4 集中校验</h2>
+
+<p>散落各处的 <code>process.env.X!</code> 有两个问题：类型是 <code>string | undefined</code>，以及拼错名字不会报错。用一个模块收口：</p>
+
+<pre><code class="language-ts">// agent/lib/env.ts
+import { z } from &quot;zod&quot;;
+
+const schema = z.object({
+  OPS_API: z.string().url(),
+  LOG_TOKEN: z.string().min(1),
+  LOG_API: z.string().url(),
+  REDIS_URL: z.string().url().optional(),
+});
+
+let cached: z.infer&lt;typeof schema&gt; | undefined;
+
+/** 在工具、连接、钩子的函数体里调用，不要在模块顶层调用。 */
+export function env() {
+  cached ??= schema.parse(process.env);
+  return cached;
+}
+</code></pre>
+
+<ul>
+<li>用函数而不是导出常量：常量在模块顶层求值，会被编译期执行；函数只在真正调用时读。</li>
+<li>缓存是安全的：一个进程生命周期内 env 不会变。</li>
+<li>报错信息里会带上变量名，比 <code>undefined is not a string</code> 好查得多。</li>
+</ul>
+
+<p>需要「缺失就关闭某个能力」而不是启动失败时，在函数里返回 <code>null</code> 并记一条日志，别回退到默认值——那正是 ch14 里 <code>fail closed</code> 的做法。</p>
+
+<h2 id="c-5-沙箱里没有-process-env">C.5 沙箱里没有 <code>process.env</code></h2>
+
+<p>这是安全模型的核心，不是配置项。</p>
+
+<ul>
+<li>内置的 <code>bash</code>、<code>read_file</code>、<code>write_file</code> 都跑在<strong>应用运行时</strong>，只是把操作代理进沙箱。所以它们能读 env，沙箱里的命令不能。</li>
+<li>eve 唯一主动注入的是 <code>AI_AGENT=eve</code>，让 <code>vercel</code> 这类 CLI 跳过交互提示。provider 自己还会设 <code>HOME</code>、<code>PATH</code> 这类基础变量，那是运行环境，不是你的配置。</li>
+<li><code>environment({ env })</code> 把变量<strong>烘进模板/镜像</strong>，这个环境的所有会话共享。放密钥等于给每个会话发一份。</li>
+<li><code>run({ env })</code> / <code>spawn({ env })</code> 只对这一次调用生效，但变量仍然出现在沙箱进程里——Docker、microsandbox、Vercel Sandbox 上模型都能从进程环境读到它。<strong>单次注入不等于安全</strong>。</li>
+<li>沙箱里需要访问带鉴权的服务时，用凭据代理：密钥留在应用侧，由平台在防火墙上注入请求头，沙箱只看到响应。</li>
+</ul>
+
+<p>判断标准很简单：<strong>只要一个值写进沙箱，就当成模型能看到。</strong></p>
+
+<h2 id="c-6-连接与通道的密钥">C.6 连接与通道的密钥</h2>
+
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>密钥在哪读</th>
+<th>会不会进编译产物</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>连接的 <code>auth.getToken()</code></td>
+<td>运行时，每次请求前</td>
+<td>不会</td>
+</tr>
+
+<tr>
+<td>连接的 <code>headers</code> 回调</td>
+<td>运行时</td>
+<td>不会</td>
+</tr>
+
+<tr>
+<td>通道的 <code>auth</code> 函数</td>
+<td>运行时，boot 时从源码重新取</td>
+<td>不会（官方明确：route-auth 密钥不进编译产物）</td>
+</tr>
+
+<tr>
+<td><code>agent.ts</code> 里的字面量</td>
+<td>编译期</td>
+<td><strong>会</strong></td>
+</tr>
+
+<tr>
+<td>技能正文、工具 <code>description</code></td>
+<td>编译期</td>
+<td><strong>会</strong>，而且会发给模型供应商</td>
+</tr>
+</tbody>
+</table>
+
+<p>连接 token 还有两个性质值得记住：<strong>每个 step 缓存</strong>，以及<strong>从不序列化进持久状态</strong>。所以它不会出现在检查点、事件流或 <code>eve info</code> 里。</p>
+
+<p>反面例子是把 token 塞进 <code>toolCall.providedArguments</code> 的字面量——那个值虽然对模型隐藏，但会写进编译后的连接定义。</p>
+
+<h2 id="c-7-部署时的三套环境">C.7 部署时的三套环境</h2>
+
+<p><strong>Vercel。</strong> Preview 和 Production 是两套独立的变量。<code>.env.local</code> 不会随部署上传，<code>eve link</code> 只是把 AI Gateway 凭据拉到本地 <code>.env.local</code> 给你开发用。上线前逐个环境配。</p>
+
+<p><strong>自托管。</strong> <code>eve start</code> 会读 <code>.env*</code>，所以「文件放项目根 + 进程管理器启动」是可行的；也可以完全靠容器/系统注入，文件不存在就跳过。两条都行，别混着用——出问题时不知道值是哪来的。</p>
+
+<p><strong>构建机与运行机分离时。</strong> 编译期求值的那些定义（C.3）在构建机上就要拿到变量。CI 里常见的失败是「运行环境配好了，构建步骤没配」。</p>
+
+<h2 id="c-8-会泄漏密钥的六个地方">C.8 会泄漏密钥的六个地方</h2>
+
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>怎么漏</th>
+<th>怎么防</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>日志与 trace</td>
+<td><code>console.log(process.env)</code>、把整个 config 打进日志</td>
+<td>只打字段名和长度；生产关掉 <code>EVE_TRACES_CONTENT</code></td>
+</tr>
+
+<tr>
+<td>工具返回值</td>
+<td>把上游错误体原样返回，里面带 token</td>
+<td>错误信息只保留状态码和业务原因</td>
+</tr>
+
+<tr>
+<td>错误信息</td>
+<td>连接串带密码，抛错时整条打出来</td>
+<td>在 <code>lib/env.ts</code> 里就做脱敏</td>
+</tr>
+
+<tr>
+<td><code>clientContext</code></td>
+<td>它是客户端发来的、会进模型上下文</td>
+<td>永远不要在里面放密钥；它也不是可信输入</td>
+</tr>
+
+<tr>
+<td>技能 / 指令正文</td>
+<td>正文进模型上下文</td>
+<td>密钥不进 markdown，只进 env</td>
+</tr>
+
+<tr>
+<td>沙箱 env</td>
+<td>见 C.5</td>
+<td>不放</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="c-9-排查表">C.9 排查表</h2>
+
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>原因</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>本地 <code>eve dev</code> 正常，<code>eve build</code> 报变量缺失</td>
+<td><code>eve build</code> 不读 <code>.env*</code>，变量要 export 到构建进程</td>
+</tr>
+
+<tr>
+<td>改了 <code>.env.local</code> 没生效</td>
+<td>没重启 dev server，或该模块是「只编译」的，值已经写进清单</td>
+</tr>
+
+<tr>
+<td>部署后模型调用 401</td>
+<td>目标环境没配模型 key，或配到了另一个环境（Preview vs Production）</td>
+</tr>
+
+<tr>
+<td>沙箱里 <code>echo $OPS_TOKEN</code> 是空的</td>
+<td>设计如此，沙箱没有应用 env</td>
+</tr>
+
+<tr>
+<td>浏览器里 <code>process is not defined</code></td>
+<td>客户端代码读了 <code>process.env</code>；只有 <code>NEXT_PUBLIC_*</code> 会进浏览器包</td>
+</tr>
+
+<tr>
+<td><code>eve info</code> 显示的能力和线上不一致</td>
+<td><code>eve info</code> 是本地编译结果，不读 <code>.env*</code>，也不代表线上环境</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="c-10-框架自己读的变量">C.10 框架自己读的变量</h2>
+
+<p>这些是 eve 或它依赖的包会读的，别用同样的名字存自己的东西，尤其别占用 <code>EVE_</code> 前缀。</p>
+
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>谁读</th>
+<th>作用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>AI_AGENT</code></td>
+<td>eve</td>
+<td>沙箱命令里自动设为 <code>eve</code>；可覆盖</td>
+</tr>
+
+<tr>
+<td><code>EVE_TELEMETRY_DISABLED</code></td>
+<td>CLI</td>
+<td>关掉 CLI 遥测（单次命令）</td>
+</tr>
+
+<tr>
+<td><code>EVE_TRACES_CONTENT</code></td>
+<td>本地 trace</td>
+<td><code>off</code> 时不记录 prompt、工具参数与结果</td>
+</tr>
+
+<tr>
+<td><code>EVE_TRACES</code></td>
+<td>本地 trace</td>
+<td><code>off</code> 关掉本地 trace 存储</td>
+</tr>
+
+<tr>
+<td><code>EVE_TRACES_MAX_AGE_MS</code> / <code>EVE_TRACES_MAX_TOTAL_BYTES</code> / <code>EVE_TRACES_RETAIN_COUNT</code></td>
+<td>本地 trace</td>
+<td>保留上限，默认 7 天 / 512 MiB / 20 条，各接受 <code>off</code></td>
+</tr>
+
+<tr>
+<td><code>EVE_PUBLIC_ROUTE_PREFIX</code></td>
+<td>eve</td>
+<td>把 agent 路由挂到自定义前缀下</td>
+</tr>
+
+<tr>
+<td><code>EVE_NEXT_PRODUCTION_ORIGIN</code></td>
+<td><code>eve/next</code></td>
+<td>非 Vercel 生产环境下 eve 服务的地址</td>
+</tr>
+
+<tr>
+<td><code>EVE_MEMORY_BLOB_STORE_ID</code> / <code>EVE_MEMORY_BLOB_WEBHOOK_PUBLIC_KEY</code></td>
+<td><code>fileMemory</code></td>
+<td><code>eve add memory/file</code> 配好的 Blob 存储</td>
+</tr>
+
+<tr>
+<td><code>WORKFLOW_LOCAL_DATA_DIR</code></td>
+<td>本地 world</td>
+<td>workflow 数据目录，默认 <code>.eve/.workflow-data</code></td>
+</tr>
+
+<tr>
+<td><code>WORKFLOW_LOCAL_RECOVER_ACTIVE_RUNS</code></td>
+<td>本地 world</td>
+<td>启动时是否恢复活跃 run</td>
+</tr>
+
+<tr>
+<td><code>WORKFLOW_POSTGRES_URL</code></td>
+<td><code>world-postgres</code></td>
+<td>连接串；没有时退回 <code>DATABASE_URL</code></td>
+</tr>
+
+<tr>
+<td><code>EVE_MODEL_CONNECTION</code> / <code>EVE_MODEL_TEAM</code> / <code>EVE_MODEL_TEAM_NAME</code> / <code>EVE_MODEL_KEY_SOURCE</code></td>
+<td>dev server</td>
+<td>TUI 登录后自动注入，不用你写进 <code>.env</code></td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<p>返回：<a href="https://tangxusc.github.io/2026/10/eve-tutorial/">教程目录</a> · 附录 A：<a href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">术语与速查</a> · 附录 B：<a href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">事件与 CLI</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E9%99%84%E5%BD%95/">附录</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-tutorial/" data-tooltip="eve 中文教程 · 总目录">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/" data-tooltip="eve 中文教程 · 附录 B 事件与 CLI">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-tutorial/" data-tooltip="eve 中文教程 · 总目录">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/" data-tooltip="eve 中文教程 · 附录 B 事件与 CLI">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 <code>eve init</code> 讲到上线。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
+                <h3 class="media-heading">eve 中文教程 · 附录 C 环境变量与密钥</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p><code>process.env</code> 只在<strong>应用运行时</strong>存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">
+                <h3 class="media-heading">eve 中文教程 · 附录 B 事件与 CLI</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">完整事件表、CLI 命令、HTTP 路由。写客户端、排查事件流、核对某个字段时对着这张表看。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">
+                <h3 class="media-heading">eve 中文教程 · 附录 A 术语与速查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather">概念对照、目录速查、常见错误码。读不懂某个词、找不到某个文件、看到一个陌生状态码时先查这里。</div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/">
+                <h3 class="media-heading">eve 中文教程 · 第 18 章 进阶与上线检查</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>这一章把散落在前面的进阶能力收在一起，然后给一份能逐条打勾的上线清单。清单比概念重要。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
+                <h3 class="media-heading">eve 中文教程 · 第 17 章 前端与部署</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-16-evals/">
+                <h3 class="media-heading">eve 中文教程 · 第 16 章 评测</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
+                <h3 class="media-heading">eve 中文教程 · 第 15 章 定时与钩子</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-14-channels/">
+                <h3 class="media-heading">eve 中文教程 · 第 14 章 通道</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-13-connections/">
+                <h3 class="media-heading">eve 中文教程 · 第 13 章 连接</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 <code>eve__search</code> 找到工具，用 <code>eve__tool</code> 调用，凭据由 eve 在应用侧注入。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         125 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-appendix-c-env-and-secrets\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-appendix-c-env-and-secrets\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
