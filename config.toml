@@ -189,6 +189,10 @@ publishDir="."
   # [[params.customJS]]
   #   src = "js/myscript.js"
 
+  # Mermaid 流程图渲染（教程里的 ```mermaid 代码块）
+  [[params.customJS]]
+    src = "js/mermaid-init.js"
+
   # Sharing options
   # Comment and uncomment to enable or disable sharing options
   # If you wanna add a sharing option, read user documentation :
