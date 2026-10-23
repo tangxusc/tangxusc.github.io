@@ -6,7 +6,7 @@
     <description>Recent content in eve on 苏连云的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 22 Oct 2026 10:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 23 Oct 2026 09:30:00 +0800</lastBuildDate>
     
 	<atom:link href="https://tangxusc.github.io/tags/eve/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,10 +14,131 @@
     <item>
       <title>eve 中文教程 · 总目录</title>
       <link>https://tangxusc.github.io/2026/10/eve-tutorial/</link>
-      <pubDate>Thu, 22 Oct 2026 10:00:00 +0800</pubDate>
+      <pubDate>Fri, 23 Oct 2026 09:30:00 +0800</pubDate>
       
       <guid>https://tangxusc.github.io/2026/10/eve-tutorial/</guid>
-      <description>&lt;p&gt;这套教程是 &lt;a href=&#34;https://eve.dev&#34;&gt;eve&lt;/a&gt; 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 &lt;code&gt;eve init&lt;/code&gt; 讲到上线。&lt;/p&gt;</description>
+      <description>&lt;p&gt;这套教程是 &lt;a href=&#34;https://eve.dev&#34;&gt;eve&lt;/a&gt; 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 &lt;code&gt;eve init&lt;/code&gt; 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复</title>
+      <link>https://tangxusc.github.io/2026/10/eve-29-world/</link>
+      <pubDate>Fri, 23 Oct 2026 09:10:00 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2026/10/eve-29-world/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>eve 中文教程 · 第 28 章 鉴权、身份与协议</title>
+      <link>https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/</link>
+      <pubDate>Fri, 23 Oct 2026 09:09:00 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一句话结论：&lt;code&gt;auth&lt;/code&gt; 不是中间件，是一个按顺序试的函数数组。全部返回空才 401，抛错则按错误里带的 Response 拒绝。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套</title>
+      <link>https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/</link>
+      <pubDate>Fri, 23 Oct 2026 09:08:00 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一句话结论：&lt;code&gt;defineChannel&lt;/code&gt; 把「路由表 + adapter + 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码</title>
+      <link>https://tangxusc.github.io/2026/10/eve-26-eve-channel/</link>
+      <pubDate>Fri, 23 Oct 2026 09:07:00 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2026/10/eve-26-eve-channel/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一句话结论：&lt;code&gt;eveChannel()&lt;/code&gt; 返回的不是一个 handler，是一张 23 条路由的表加一层统一的鉴权包装。其中 12 条给调用方用，11 条是内部回调和兼容路径。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环</title>
+      <link>https://tangxusc.github.io/2026/10/eve-25-harness/</link>
+      <pubDate>Fri, 23 Oct 2026 09:06:00 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2026/10/eve-25-harness/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step</title>
+      <link>https://tangxusc.github.io/2026/10/eve-24-workflow/</link>
+      <pubDate>Fri, 23 Oct 2026 09:05:00 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2026/10/eve-24-workflow/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一句话结论：step 不是「函数调用」，是「检查点边界」。step 内的代码在崩溃恢复时会重跑，step 之间的不会。这是 eve 里唯一必须记住的语义。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent</title>
+      <link>https://tangxusc.github.io/2026/10/eve-23-runtime/</link>
+      <pubDate>Fri, 23 Oct 2026 09:04:00 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2026/10/eve-23-runtime/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物</title>
+      <link>https://tangxusc.github.io/2026/10/eve-22-compiler/</link>
+      <pubDate>Fri, 23 Oct 2026 09:03:00 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2026/10/eve-22-compiler/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 &lt;code&gt;shadowed&lt;/code&gt;。你的 &lt;code&gt;tools/bash.ts&lt;/code&gt; 能覆盖框架默认工具，靠的就是这张优先级表。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest</title>
+      <link>https://tangxusc.github.io/2026/10/eve-21-discover/</link>
+      <pubDate>Fri, 23 Oct 2026 09:02:00 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2026/10/eve-21-discover/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一句话结论：文件名不是「约定」，是一张精确的分类表加一组正则。文件没被识别，九成是撞了表里的某一条——而且失败方式是静默的。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>eve 中文教程 · 第 20 章 CLI 启动链路</title>
+      <link>https://tangxusc.github.io/2026/10/eve-20-cli-internals/</link>
+      <pubDate>Fri, 23 Oct 2026 09:01:00 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2026/10/eve-20-cli-internals/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一句话结论：&lt;code&gt;eve&lt;/code&gt; 不是薄封装。它在进 commander 之前先检查 Node 版本、按需重编译自己；&lt;code&gt;eve dev&lt;/code&gt; 会 fork 一个 detached 子进程跑服务器，然后用 IPC 而不是信号管理这个子进程的生死。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>eve 中文教程 · 第 19 章 怎么读 eve 的源码</title>
+      <link>https://tangxusc.github.io/2026/10/eve-19-reading-the-source/</link>
+      <pubDate>Fri, 23 Oct 2026 09:00:00 +0800</pubDate>
+      
+      <guid>https://tangxusc.github.io/2026/10/eve-19-reading-the-source/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;一句话结论：eve 的代码按「执行时机」分层，不按功能分层。找代码先问「这段什么时候跑」，比按目录翻快十倍。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
     </item>
     
     <item>

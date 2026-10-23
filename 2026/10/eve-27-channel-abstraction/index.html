@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+一句话结论：defineChannel 把「路由表 &#43; adapter &#43; 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。
+">
+
+
+<meta property="og:description" content="
+一句话结论：defineChannel 把「路由表 &#43; adapter &#43; 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套">
+<meta name="twitter:title" content="eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+一句话结论：defineChannel 把「路由表 &#43; adapter &#43; 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。
+">
+<meta name="twitter:description" content="
+一句话结论：defineChannel 把「路由表 &#43; adapter &#43; 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-23T09:08:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-23T09:08:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+      <meta property="article:tag" content="源码解析">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-23T09:08:00&#43;08:00">
+        
+  October 23, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>一句话结论：<code>defineChannel</code> 把「路由表 + adapter + 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。</p>
+</blockquote>
+
+<h2 id="一个纠结">一个纠结</h2>
+
+<p>公司内部有个工单系统，需要在创建工单时通知 agent。你可以在现有的 HTTP 通道里加一条路由，也可以写一个新的自定义通道。</p>
+
+<p>加路由最省事，但工单系统需要自己的鉴权、自己的会话映射、自己的回复格式。全塞进 eve 通道会让那个文件越来越难读。</p>
+
+<p>写新通道听起来重，但 eve 的通道抽象只有一个函数 <code>defineChannel</code>。问题变成：从零写一个通道，到底要写多少东西？</p>
+
+<p>这一章回答这个问题，然后拿 Slack 做对照——它是 eve 里最完整的平台通道实现，1529 行。看完你会知道哪些复杂度是 eve 要求的，哪些是平台协议带来的。</p>
+
+<h2 id="27-1-definechannel-只做三件事">27.1 defineChannel 只做三件事</h2>
+
+<pre><code class="language-ts">// packages/eve/src/public/definitions/channel.ts:296
+export function defineChannel&lt;TState = undefined, TCtx = void, ...&gt;(
+  definition: ChannelDefinition&lt;TState, TCtx, TReceiveTarget, TMetadata&gt;,
+): Channel&lt;TState, TReceiveTarget, TMetadata&gt; {
+  // 两个产物：adapter 是事件处理器集合，cors 是规范化后的配置
+  const adapter = buildAdapter(definition);
+  const cors = normalizeChannelCors(definition.cors);
+
+  const compiled: CompiledChannel&lt;TState, TReceiveTarget, TMetadata&gt; = {
+    __kind: CHANNEL_SENTINEL,   // 运行时判断「这个对象是不是通道」
+    routes: definition.routes,
+    adapter,
+    cors,
+    receive: definition.receive,
+    turnPolicy: definition.turnPolicy,
+  };
+
+  return compiled;
+}
+</code></pre>
+
+<p>三件事：把事件处理器打包成 adapter、归一化 CORS、贴上 <code>__kind</code> 哨兵。</p>
+
+<p><code>__kind: CHANNEL_SENTINEL</code> 是运行时识别用的。<code>isCompiledChannel()</code> 检查这个字段，用来区分「用户写的通道」和「框架内部的 fetch-only 通道」。后者没有这个哨兵，不能作为 <code>ctx.to()</code> 的目标。</p>
+
+<p>返回对象里的 <code>receive</code> 和 <code>turnPolicy</code> 是给跨通道投递用的（27.4）。</p>
+
+<p>注意 <code>routes</code> 是原样透传的——<code>defineChannel</code> 不解析、不排序、不校验。路由的顺序和内容完全由你决定，冲突要等编译期才检查。</p>
+
+<h2 id="27-2-路由-handler-的十一个参数">27.2 路由 handler 的十一个参数</h2>
+
+<p>每个 handler 签名是 <code>(request, args) =&gt; Response</code>。<code>args</code> 里有十一个东西：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>作用</th>
+<th>有 I/O 吗</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>params</code></td>
+<td>路径参数</td>
+<td>否</td>
+</tr>
+
+<tr>
+<td><code>requestIp</code></td>
+<td>客户端 IP</td>
+<td>否</td>
+</tr>
+
+<tr>
+<td><code>waitUntil</code></td>
+<td>让后台任务活过响应</td>
+<td>否</td>
+</tr>
+
+<tr>
+<td><code>from</code></td>
+<td>绑定通道本地地址到操作</td>
+<td>是（首次调用时）</td>
+</tr>
+
+<tr>
+<td><code>resolveSession</code></td>
+<td>快照当前拥有某地址的会话</td>
+<td>是</td>
+</tr>
+
+<tr>
+<td><code>attachSession</code></td>
+<td>绑定固定 session id，不做 I/O</td>
+<td>否</td>
+</tr>
+
+<tr>
+<td><code>to</code></td>
+<td>选另一个通道的投递目标</td>
+<td>否</td>
+</tr>
+
+<tr>
+<td><code>describe()</code></td>
+<td>读编译产物，描述 agent</td>
+<td>是（读 manifest）</td>
+</tr>
+
+<tr>
+<td><code>listSkillFiles()</code> / <code>readSkill()</code></td>
+<td>读技能文件</td>
+<td>是</td>
+</tr>
+
+<tr>
+<td><code>invokeTool()</code></td>
+<td>在会话外跑一个工具</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>attachSession</code> 和 <code>resolveSession</code> 的区别值得记：</p>
+
+<pre><code class="language-ts">// attachSession: 你已经有 session id，直接拿句柄
+const session = attachSession(sessionId);
+
+// resolveSession: 你只有通道本地地址（比如 Slack 频道 id），问它现在归哪个会话
+const session = await resolveSession({ channel: &quot;slack&quot;, address: channelId });
+</code></pre>
+
+<p><code>attachSession</code> 不做 I/O，所以可以在 handler 里随便调。<code>resolveSession</code> 要查存储，是异步的。</p>
+
+<p><code>invokeTool</code> 是给「在对话之外跑工具」用的——比如工单系统的 webhook 直接触发一个查询工具，不建会话。这也是 <code>describe()</code> 里 <code>tools</code> 字段的用途：先告诉调用方有哪些工具能这么跑。</p>
+
+<h2 id="27-3-adapter-跨-step-的持久状态">27.3 adapter：跨 step 的持久状态</h2>
+
+<p><code>ChannelAdapter</code> 的契约是这样的：</p>
+
+<pre><code class="language-ts">export type ChannelAdapter&lt;TCtx extends ChannelAdapterContext&lt;any&gt; = ChannelAdapterContext&gt; = {
+  readonly kind: string;
+  // state 每个 step 边界做一次 JSON 快照：只能放可序列化的东西
+  readonly state?: Record&lt;string, unknown&gt;;
+  // 把 agent 的输出投影成输入；返回 void 表示用默认投影
+  deliver?(payload: DeliverPayload, ctx: TCtx): StepInput | void | Promise&lt;StepInput | void&gt;;
+  createAdapterContext?(base: ChannelAdapterContext&lt;StateOf&lt;TCtx&gt;&gt;): TCtx;
+  readonly fetchFile?: FetchFileFunction;
+  readonly uploadPolicy?: UploadPolicy;
+  readonly instrumentation?: {
+    readonly metadata?: ChannelInstrumentationMetadataProjector;
+    readonly audience?: ChannelAudienceProjector;
+  };
+} &amp; ChannelEventHandlers&lt;TCtx&gt;;   // 事件处理器：键是事件类型
+</code></pre>
+
+<p>三个要点：</p>
+
+<p><strong>一、<code>state</code> 在每个 step 边界自动 JSON 快照。</strong></p>
+
+<p>注释写得很直接：</p>
+
+<blockquote>
+<p>Mutable adapter state. Auto-serialized at step boundaries via JSON snapshot. The adapter reads and writes this directly.</p>
+</blockquote>
+
+<p>所以 adapter state 里放的东西必须能过 JSON。放 <code>Map</code>、<code>Date</code>、类实例，恢复时会丢或变形。</p>
+
+<p><strong>二、<code>deliver</code> 可以改写 harness 看到的输入。</strong></p>
+
+<pre><code class="language-ts">// 三种返回：StepInput 表示自己投影、void 表示走默认、Promise 支持异步
+deliver?(payload: DeliverPayload, ctx: TCtx): StepInput | void | Promise&lt;StepInput | void&gt;;
+</code></pre>
+
+<p>返回 <code>StepInput</code> 就覆盖，返回 <code>void</code> 就用默认投影（<code>defaultDeliverResult</code>）。Slack 用这个钩子把「@ 了机器人」的消息去掉 @ 前缀，把附件转成 <code>FilePart</code>。</p>
+
+<p><strong>三、事件处理器抛错会被吞掉。</strong></p>
+
+<pre><code class="language-ts">export async function callAdapterEventHandler(
+  adapter: ChannelAdapter,
+  event: UnstampedMessageStreamEvent,
+  ctx: ChannelAdapterContext,
+): Promise&lt;UnstampedMessageStreamEvent&gt; {
+  // 需要等待时把 continuation token 挂进事件，适配器才能续跑
+  const eventForHandler = withWaitingContinuationToken(event, ctx);
+  const handler = adapter[event.type] as ((data, ctx) =&gt; void | Promise&lt;void&gt;) | undefined;
+
+  if (handler !== undefined) {
+    try {
+      await handler(&quot;data&quot; in eventForHandler ? eventForHandler.data : undefined, ctx);
+    } catch (error) {
+      // 适配器抛错只记日志：事件流不能因为某个平台出错就中断
+      log.error(&quot;adapter event handler threw — event swallowed&quot;, {
+        adapterKind: getAdapterKind(adapter),
+        eventType: event.type,
+        error,
+      });
+    }
+  }
+
+  return withWaitingContinuationToken(eventForHandler, ctx);
+}
+</code></pre>
+
+<p>吞掉的理由：事件处理器是副作用（发 Slack 消息、更新状态），它失败不应该让事件流写入失败。否则一个 Slack API 超时会让整个会话的检查点写不进去。</p>
+
+<p>代价是：<strong>适配器的错误只能从日志里找</strong>，不会出现在 API 响应里。<code>log.error</code> 的命名空间是 <code>channel.adapter</code>，<code>EVE_LOG_LEVEL=debug</code> 能看到。</p>
+
+<p><code>withWaitingContinuationToken</code> 那两行也值得注意：<code>session.waiting</code> 事件在交给处理器之前会补上 <code>continuationToken</code>，返回时再补一次。因为处理器可能把它改掉。</p>
+
+<h2 id="27-4-跨通道投递">27.4 跨通道投递</h2>
+
+<p><code>ctx.to()</code> 让一个通道往另一个通道发消息：</p>
+
+<pre><code class="language-ts">// 跨通道投递的类型：目标地址由通道自己声明，调用方传错会在编译期报错
+export type CrossChannelToFn = &lt;TChannel extends ChannelReference&lt;unknown&gt;&gt;(
+  channel: TChannel,
+  target: InferReceiveTarget&lt;TChannel&gt;,   // 平台地址，由通道自己定义
+) =&gt; CrossChannelTargetHandle;
+
+export interface CrossChannelTargetHandle {
+  send(message: string | UserContent, options: CrossChannelSendOptions): Promise&lt;Session&gt;;
+}
+</code></pre>
+
+<p>用法是「选通道 + 选目标 + 发消息」：</p>
+
+<pre><code class="language-ts">// 在 HTTP 通道的某个路由里，把结果推到 Slack
+const slack = to(slackChannel, { channelId: &quot;C0123&quot; });
+// 跨通道投递要显式给 auth：这里的调用者不是终端用户
+await slack.send(&quot;巡检完成，3 个实例异常&quot;, { auth: null });
+</code></pre>
+
+<p><code>InferReceiveTarget</code> 从通道定义的 <code>receive</code> 签名里推出目标类型，所以传错字段会在编译期报错。</p>
+
+<p><code>toCrossChannelTargets</code> 会把 agent 的所有通道投影成可投递目标，并且<strong>过滤掉没有 <code>definition</code> 的通道</strong>：</p>
+
+<pre><code class="language-ts">export function toCrossChannelTargets(
+  channels: readonly ResolvedChannelDefinition[],
+): readonly CrossChannelTarget[] {
+  return channels.flatMap((channel) =&gt;
+    // 没有 definition 的通道（框架内部通道）不暴露给 to()
+    channel.definition === undefined ? [] : [{ ... }],
+  );
+}
+</code></pre>
+
+<p>框架内部的 fetch-only 通道（比如连接回调）不能被 <code>to()</code> 选中。只有用 <code>defineChannel</code> 写的通道才有 <code>definition</code>。</p>
+
+<p>这个功能的实际用途：定时任务在 Slack 里发日报（第 15 章），或者子代理把结果推到另一个通道。没有它，跨通道只能靠外部系统转发。</p>
+
+<h2 id="27-5-slack-的-1529-行怎么组织">27.5 Slack 的 1529 行怎么组织</h2>
+
+<p><code>public/channels/slack/</code> 目录下：</p>
+
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>行数</th>
+<th>职责</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>slackChannel.ts</code></td>
+<td>1529</td>
+<td>主文件：定义、路由、事件分发</td>
+</tr>
+
+<tr>
+<td><code>api.ts</code></td>
+<td>771</td>
+<td>Slack Web API 封装</td>
+</tr>
+
+<tr>
+<td><code>interactions.ts</code></td>
+<td>776</td>
+<td>按钮、菜单、模态框的交互处理</td>
+</tr>
+
+<tr>
+<td><code>transport.ts</code></td>
+<td>187</td>
+<td>HTTP 传输与重试</td>
+</tr>
+
+<tr>
+<td><code>verify.ts</code></td>
+<td>52</td>
+<td>请求签名校验</td>
+</tr>
+</tbody>
+</table>
+
+<p>主文件里的函数按调用顺序：</p>
+
+<table>
+<thead>
+<tr>
+<th>行</th>
+<th>函数</th>
+<th>职责</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>831</td>
+<td><code>slackChannel()</code></td>
+<td>定义通道：路由、adapter、事件处理器</td>
+</tr>
+
+<tr>
+<td>1420</td>
+<td><code>verifyInbound()</code></td>
+<td>校验 Slack 签名和时间戳</td>
+</tr>
+
+<tr>
+<td>1066</td>
+<td><code>handleEventPost()</code></td>
+<td>处理 Events API 的 POST</td>
+</tr>
+
+<tr>
+<td>1210</td>
+<td><code>dispatchSlackMessage()</code></td>
+<td>把 Slack 消息转成 turn</td>
+</tr>
+
+<tr>
+<td>1437</td>
+<td><code>deliverSlackMessage()</code></td>
+<td>把 agent 回复转成 Slack 消息</td>
+</tr>
+
+<tr>
+<td>968</td>
+<td><code>receiveOnSlack()</code></td>
+<td>主动投递入口（对应 <code>receive</code>）</td>
+</tr>
+</tbody>
+</table>
+
+<p>一次消息的路径：</p>
+
+<pre><code class="language-text">Slack → POST /slack/events
+  → verifyInbound()          签名不对就 401
+  → handleEventPost()        区分 event_callback / url_verification
+  → dispatchSlackMessage()   解析 @、线程、附件，转成 payload
+  → session.send()           进入 eve 的会话层
+  → ...（模型、工具）
+  → deliverSlackMessage()    回复写回 Slack
+</code></pre>
+
+<p><code>verify.ts</code> 只有 52 行，但它不自己算签名——真正的校验在 vendored 的 <code>@chat-adapter/slack/webhook</code> 里。这一层做两件事：检查配置齐全（<code>signingSecret</code> 或自定义 verifier 至少有一个），把底层错误归一化成可读消息。</p>
+
+<p>从错误分支能反推底层校验了什么：</p>
+
+<table>
+<thead>
+<tr>
+<th>底层消息</th>
+<th>含义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>signature headers</code></td>
+<td>缺 <code>X-Slack-Signature</code> 或 <code>X-Slack-Request-Timestamp</code></td>
+</tr>
+
+<tr>
+<td><code>timestamp is invalid</code></td>
+<td>时间戳格式错</td>
+</tr>
+
+<tr>
+<td><code>timestamp is too old</code></td>
+<td>超出允许偏差，防重放</td>
+</tr>
+
+<tr>
+<td><code>signature is invalid</code></td>
+<td>签名不匹配</td>
+</tr>
+
+<tr>
+<td><code>verifier rejected</code></td>
+<td>自定义 verifier 拒绝</td>
+</tr>
+</tbody>
+</table>
+
+<p>52 行里没有一行密码学代码，但它是整条链路的安全边界。</p>
+
+<p><strong>平台通道的复杂度不在 eve 的抽象上，在平台协议上。</strong> 1529 行里真正跟 eve 相关的可能不到 300 行，其余是 Slack 的事件类型、线程语义、富文本格式、限流重试。</p>
+
+<h2 id="27-6-一个最小的自定义通道">27.6 一个最小的自定义通道</h2>
+
+<p>回到开头那个工单系统的需求。答案是：不需要写 1529 行。</p>
+
+<pre><code class="language-ts">// agent/channels/webhook.ts
+import { defineChannel, POST } from &quot;eve/channels&quot;;
+
+export default defineChannel({
+  routes: [
+    POST(&quot;/webhook&quot;, async (request, { attachSession }) =&gt; {
+      const { text, sessionId } = (await request.json()) as { text: string; sessionId?: string };
+      // 没带 sessionId 就新建一个：attachSession 不校验会话是否存在
+      const session = attachSession(sessionId ?? crypto.randomUUID());
+      await session.send(text, { auth: null });
+      // 202 表示已受理，回复稍后从事件流来
+      return Response.json({ ok: true, sessionId: session.id }, { status: 202 });
+    }),
+  ],
+});
+</code></pre>
+
+<p>这 12 行就是一个能用的通道。它没有鉴权（<code>auth: null</code>）、没有事件处理器、没有 adapter state。</p>
+
+<p>要加鉴权，在 handler 第一行判断 header；要加回复投递，在 adapter 里实现 <code>message.completed</code>；要保存状态，在 <code>defineChannel</code> 里加 <code>state</code> 和 adapter 字段。</p>
+
+<p>从 12 行到 1529 行的差距，全是平台协议。理解这一点，就知道什么时候该自己写通道，什么时候该用现成的：</p>
+
+<table>
+<thead>
+<tr>
+<th>你的场景</th>
+<th>建议</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>内部 webhook，格式自己定</td>
+<td>12 行自定义通道</td>
+</tr>
+
+<tr>
+<td>已有平台（Slack、Discord、Teams）</td>
+<td>用 <code>channel/slack</code> 之类</td>
+</tr>
+
+<tr>
+<td>平台没有官方通道，但协议简单</td>
+<td>自定义通道 + 平台文档</td>
+</tr>
+
+<tr>
+<td>平台有复杂交互（按钮、模态框、线程）</td>
+<td>参考 Slack 的实现，别从零写</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="27-7-五个注意事项">27.7 五个注意事项</h2>
+
+<ol>
+<li><strong>adapter state 必须能过 JSON。</strong> <code>Map</code>、<code>Date</code>、类实例在 step 边界会变形。要存复杂结构，先序列化成普通对象。</li>
+<li><strong>事件处理器抛错被吞。</strong> 只能从 <code>channel.adapter</code> 命名空间的日志里找。API 响应永远是成功的。</li>
+<li><strong><code>attachSession</code> 不校验会话是否存在。</strong> 它只是构造一个句柄，真正报错发生在 <code>send()</code> 时。</li>
+<li><strong><code>ctx.to()</code> 只能选有 <code>definition</code> 的通道。</strong> 框架内部通道（连接回调之类）不行。</li>
+<li><strong><code>deliver</code> 返回 <code>void</code> 和返回 <code>undefined</code> 是一回事。</strong> 都走默认投影，不会「清空输入」。</li>
+</ol>
+
+<h2 id="27-8-练习">27.8 练习</h2>
+
+<ol>
+<li>写 27.6 那个 12 行通道，<code>curl</code> 打一次，确认返回 202 并且会话能继续。</li>
+<li>在自定义通道里加一个 <code>message.completed</code> 事件处理器，故意 <code>throw new Error(&quot;test&quot;)</code>。确认请求仍然成功，并在 <code>EVE_LOG_LEVEL=debug</code> 的输出里找到那条被吞掉的错误。</li>
+<li>在 adapter 的 <code>state</code> 里放一个 <code>new Date()</code>，连续两轮对话后读出来，看它变成了什么。</li>
+<li>读 <code>slackChannel.ts</code> 的 <code>verifyInbound</code> 和 <code>verify.ts</code>，说出它防的是哪三种攻击。</li>
+</ol>
+
+<h2 id="下一章">下一章</h2>
+
+<p>通道写好了，请求能进来了。但进来的请求凭什么被信任？</p>
+
+<p>第 28 章讲鉴权和协议：<code>routeAuth</code> 怎么遍历 auth 数组，401 的 <code>WWW-Authenticate</code> 谁生成，<code>forwardedPrincipal</code> 什么时候可信，以及 <code>protocol/message.ts</code> 那 2080 行的事件类型为什么这么设计。</p>
+
+<hr />
+
+<p>返回：<a href="https://tangxusc.github.io/2026/10/eve-tutorial/">教程目录</a> · 上一章：<a href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/">26 默认 eve channel</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/">28 鉴权与协议</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">源码解析</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/" data-tooltip="eve 中文教程 · 第 28 章 鉴权、身份与协议">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/" data-tooltip="eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/" data-tooltip="eve 中文教程 · 第 28 章 鉴权、身份与协议">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/" data-tooltip="eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 <code>eve init</code> 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-29-world/">
+                <h3 class="media-heading">eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/">
+                <h3 class="media-heading">eve 中文教程 · 第 28 章 鉴权、身份与协议</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>auth</code> 不是中间件，是一个按顺序试的函数数组。全部返回空才 401，抛错则按错误里带的 Response 拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/">
+                <h3 class="media-heading">eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>defineChannel</code> 把「路由表 + adapter + 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/">
+                <h3 class="media-heading">eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>eveChannel()</code> 返回的不是一个 handler，是一张 23 条路由的表加一层统一的鉴权包装。其中 12 条给调用方用，11 条是内部回调和兼容路径。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-25-harness/">
+                <h3 class="media-heading">eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-24-workflow/">
+                <h3 class="media-heading">eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：step 不是「函数调用」，是「检查点边界」。step 内的代码在崩溃恢复时会重跑，step 之间的不会。这是 eve 里唯一必须记住的语义。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-23-runtime/">
+                <h3 class="media-heading">eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-22-compiler/">
+                <h3 class="media-heading">eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 <code>shadowed</code>。你的 <code>tools/bash.ts</code> 能覆盖框架默认工具，靠的就是这张优先级表。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-21-discover/">
+                <h3 class="media-heading">eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：文件名不是「约定」，是一张精确的分类表加一组正则。文件没被识别，九成是撞了表里的某一条——而且失败方式是静默的。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         136 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-27-channel-abstraction\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-27-channel-abstraction\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

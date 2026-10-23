@@ -592,21 +592,21 @@ npx eve info --agent research
 
 <p>显式 <code>import</code>、沙箱 workspace 文件、打包技能的附属文件不受这条规则影响。</p>
 
-<h2 id="3-8-常见坑">3.8 常见坑</h2>
+<h2 id="3-8-常见注意事项">3.8 常见注意事项</h2>
 
-<p><strong>坑：在 <code>agent/</code> 根目录同时放了 <code>instructions.md</code> 和 <code>instructions.ts</code>。</strong>
+<p><strong>注意：在 <code>agent/</code> 根目录同时放了 <code>instructions.md</code> 和 <code>instructions.ts</code>。</strong>
 编译错误。二选一。</p>
 
-<p><strong>坑：把技能写成了工具期望的行为。</strong>
+<p><strong>注意：把技能写成了工具期望的行为。</strong>
 技能只加文本，不加执行能力。技能里写「调用 <code>read_logs</code> 工具」是可以的（工具本来就在），写「运行这段 Python」不行——除非有 <code>bash</code> 工具且沙箱可用。</p>
 
-<p><strong>坑：<code>lib/</code> 里的文件在沙箱里找不到。</strong>
+<p><strong>注意：<code>lib/</code> 里的文件在沙箱里找不到。</strong>
 设计如此。要共享给模型看，走 workspace 种子。</p>
 
-<p><strong>坑：workspace 成员目录里放了 <code>package.json</code>。</strong>
+<p><strong>注意：workspace 成员目录里放了 <code>package.json</code>。</strong>
 <code>eve info</code> 里看不到这个 agent，且没有明显报错。</p>
 
-<p><strong>坑：改了目录名以为只是重命名。</strong>
+<p><strong>注意：改了目录名以为只是重命名。</strong>
 工具名、技能名、评测断言、审批策略里引用的名字全都跟着变。改名是 breaking change。</p>
 
 <h2 id="3-9-练习">3.9 练习</h2>
@@ -838,7 +838,7 @@ npx eve info --agent research
                   Oct 10, 2026
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 <code>eve init</code> 讲到上线。</p></div>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 <code>eve init</code> 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -847,8 +847,8 @@ npx eve info --agent research
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
-                <h3 class="media-heading">eve 中文教程 · 附录 C 环境变量与密钥</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-29-world/">
+                <h3 class="media-heading">eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -856,7 +856,7 @@ npx eve info --agent research
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p><code>process.env</code> 只在<strong>应用运行时</strong>存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。</p>
+<p>一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -866,42 +866,8 @@ npx eve info --agent research
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">
-                <h3 class="media-heading">eve 中文教程 · 附录 B 事件与 CLI</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Oct 10, 2026
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather">完整事件表、CLI 命令、HTTP 路由。写客户端、排查事件流、核对某个字段时对着这张表看。</div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">
-                <h3 class="media-heading">eve 中文教程 · 附录 A 术语与速查</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Oct 10, 2026
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather">概念对照、目录速查、常见错误码。读不懂某个词、找不到某个文件、看到一个陌生状态码时先查这里。</div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/">
-                <h3 class="media-heading">eve 中文教程 · 第 18 章 进阶与上线检查</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/">
+                <h3 class="media-heading">eve 中文教程 · 第 28 章 鉴权、身份与协议</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -909,7 +875,7 @@ npx eve info --agent research
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>这一章把散落在前面的进阶能力收在一起，然后给一份能逐条打勾的上线清单。清单比概念重要。</p>
+<p>一句话结论：<code>auth</code> 不是中间件，是一个按顺序试的函数数组。全部返回空才 401，抛错则按错误里带的 Response 拒绝。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -919,8 +885,8 @@ npx eve info --agent research
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
-                <h3 class="media-heading">eve 中文教程 · 第 17 章 前端与部署</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/">
+                <h3 class="media-heading">eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -928,7 +894,7 @@ npx eve info --agent research
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。</p>
+<p>一句话结论：<code>defineChannel</code> 把「路由表 + adapter + 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -938,8 +904,8 @@ npx eve info --agent research
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-16-evals/">
-                <h3 class="media-heading">eve 中文教程 · 第 16 章 评测</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/">
+                <h3 class="media-heading">eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -947,7 +913,7 @@ npx eve info --agent research
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。</p>
+<p>一句话结论：<code>eveChannel()</code> 返回的不是一个 handler，是一张 23 条路由的表加一层统一的鉴权包装。其中 12 条给调用方用，11 条是内部回调和兼容路径。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -957,8 +923,8 @@ npx eve info --agent research
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
-                <h3 class="media-heading">eve 中文教程 · 第 15 章 定时与钩子</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-25-harness/">
+                <h3 class="media-heading">eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -966,7 +932,7 @@ npx eve info --agent research
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。</p>
+<p>一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -976,8 +942,8 @@ npx eve info --agent research
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-14-channels/">
-                <h3 class="media-heading">eve 中文教程 · 第 14 章 通道</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-24-workflow/">
+                <h3 class="media-heading">eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -985,7 +951,7 @@ npx eve info --agent research
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。</p>
+<p>一句话结论：step 不是「函数调用」，是「检查点边界」。step 内的代码在崩溃恢复时会重跑，step 之间的不会。这是 eve 里唯一必须记住的语义。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -995,8 +961,8 @@ npx eve info --agent research
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-13-connections/">
-                <h3 class="media-heading">eve 中文教程 · 第 13 章 连接</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-23-runtime/">
+                <h3 class="media-heading">eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -1004,7 +970,45 @@ npx eve info --agent research
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 <code>eve__search</code> 找到工具，用 <code>eve__tool</code> 调用，凭据由 eve 在应用侧注入。</p>
+<p>一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-22-compiler/">
+                <h3 class="media-heading">eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 <code>shadowed</code>。你的 <code>tools/bash.ts</code> 能覆盖框架默认工具，靠的就是这张优先级表。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-21-discover/">
+                <h3 class="media-heading">eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：文件名不是「约定」，是一张精确的分类表加一组正则。文件没被识别，九成是撞了表里的某一条——而且失败方式是静默的。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -1018,7 +1022,7 @@ npx eve info --agent research
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         125 posts found
+         136 posts found
       </p>
     </div>
   </div>

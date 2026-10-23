@@ -4,55 +4,116 @@
   
   <url>
     <loc>https://tangxusc.github.io/categories/</loc>
-    <lastmod>2026-10-22T10:00:00+08:00</lastmod>
+    <lastmod>2026-10-23T09:30:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/post/</loc>
-    <lastmod>2026-10-22T10:00:00+08:00</lastmod>
+    <lastmod>2026-10-23T09:30:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/tags/</loc>
-    <lastmod>2026-10-22T10:00:00+08:00</lastmod>
+    <lastmod>2026-10-23T09:30:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/tags/agent/</loc>
-    <lastmod>2026-10-22T10:00:00+08:00</lastmod>
+    <lastmod>2026-10-23T09:30:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/categories/eve/</loc>
-    <lastmod>2026-10-22T10:00:00+08:00</lastmod>
+    <lastmod>2026-10-23T09:30:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/tags/eve/</loc>
-    <lastmod>2026-10-22T10:00:00+08:00</lastmod>
+    <lastmod>2026-10-23T09:30:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/2026/10/eve-tutorial/</loc>
-    <lastmod>2026-10-22T10:00:00+08:00</lastmod>
+    <lastmod>2026-10-23T09:30:00+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/</loc>
-    <lastmod>2026-10-22T10:00:00+08:00</lastmod>
+    <lastmod>2026-10-23T09:30:00+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://tangxusc.github.io/</loc>
-    <lastmod>2026-10-22T10:00:00+08:00</lastmod>
+    <lastmod>2026-10-23T09:30:00+08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2026/10/eve-29-world/</loc>
+    <lastmod>2026-10-23T09:10:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
+    <lastmod>2026-10-23T09:10:00+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/</loc>
+    <lastmod>2026-10-23T09:09:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/</loc>
+    <lastmod>2026-10-23T09:08:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2026/10/eve-26-eve-channel/</loc>
+    <lastmod>2026-10-23T09:07:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2026/10/eve-25-harness/</loc>
+    <lastmod>2026-10-23T09:06:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2026/10/eve-24-workflow/</loc>
+    <lastmod>2026-10-23T09:05:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2026/10/eve-23-runtime/</loc>
+    <lastmod>2026-10-23T09:04:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2026/10/eve-22-compiler/</loc>
+    <lastmod>2026-10-23T09:03:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2026/10/eve-21-discover/</loc>
+    <lastmod>2026-10-23T09:02:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2026/10/eve-20-cli-internals/</loc>
+    <lastmod>2026-10-23T09:01:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tangxusc.github.io/2026/10/eve-19-reading-the-source/</loc>
+    <lastmod>2026-10-23T09:00:00+08:00</lastmod>
   </url>
   
   <url>

@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+一句话结论：eve 的代码按「执行时机」分层，不按功能分层。找代码先问「这段什么时候跑」，比按目录翻快十倍。
+">
+
+
+<meta property="og:description" content="
+一句话结论：eve 的代码按「执行时机」分层，不按功能分层。找代码先问「这段什么时候跑」，比按目录翻快十倍。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 19 章 怎么读 eve 的源码">
+<meta name="twitter:title" content="eve 中文教程 · 第 19 章 怎么读 eve 的源码">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-19-reading-the-source/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-19-reading-the-source/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+一句话结论：eve 的代码按「执行时机」分层，不按功能分层。找代码先问「这段什么时候跑」，比按目录翻快十倍。
+">
+<meta name="twitter:description" content="
+一句话结论：eve 的代码按「执行时机」分层，不按功能分层。找代码先问「这段什么时候跑」，比按目录翻快十倍。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-23T09:00:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-23T09:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+      <meta property="article:tag" content="源码解析">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 19 章 怎么读 eve 的源码</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-19-reading-the-source/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 19 章 怎么读 eve 的源码
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-23T09:00:00&#43;08:00">
+        
+  October 23, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>一句话结论：eve 的代码按「执行时机」分层，不按功能分层。找代码先问「这段什么时候跑」，比按目录翻快十倍。</p>
+</blockquote>
+
+<h2 id="一个具体的困惑">一个具体的困惑</h2>
+
+<p>假设你遇到这么一件事：给 <code>agent/tools/read_logs.ts</code> 加了一行日志，<code>eve dev</code> 重启了，但日志没出现。你确认文件路径没错，<code>eve info</code> 里也能看到这个工具。</p>
+
+<p>问题出在哪？可能是文件名被识别成了别的名字，可能是模块没被加载，也可能这行代码根本没执行到。三种原因在三个不同的层。</p>
+
+<p>想搞清楚，只能读源码。</p>
+
+<p>打开 <code>github.com/vercel/eve</code>，<code>packages/eve/src</code> 下有 1816 个源文件、约 28 万行，另有 1064 个测试文件。通读不现实。</p>
+
+<p>这一章不教任何具体机制，只教方法：<strong>读哪一份、怎么看懂一个 import、从哪个目录找起、怎么确认代码真的在跑</strong>。后面十章都建立在这套方法上，方法不对，读十遍也记不住。</p>
+
+<h2 id="19-1-先解决-读哪一份">19.1 先解决「读哪一份」</h2>
+
+<p>源码有三个来源，用途完全不同。选错来源，会浪费几个小时。</p>
+
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>路径</th>
+<th>能回答什么</th>
+<th>不能回答什么</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>GitHub 源码</td>
+<td><code>packages/eve/src/**/*.ts</code></td>
+<td>实现怎么写、为什么这么写</td>
+<td>与安装版本的差异</td>
+</tr>
+
+<tr>
+<td>本地类型声明</td>
+<td><code>node_modules/eve/dist/src/**/*.d.ts</code></td>
+<td>安装版本的确切契约、字段、默认值</td>
+<td>函数体</td>
+</tr>
+
+<tr>
+<td>本地编译产物</td>
+<td><code>node_modules/eve/dist/src/**/*.js</code></td>
+<td>导出名是否存在</td>
+<td><strong>几乎什么都回答不了</strong></td>
+</tr>
+</tbody>
+</table>
+
+<p>第三条反直觉，值得展开。</p>
+
+<p>很多人以为 <code>dist</code> 是「编译后的 TS」，可以当源码读。eve 不是。发布前做了压缩：</p>
+
+<pre><code class="language-js">// node_modules/eve/dist/src/cli/run.js —— 全文 1 行，9895 字节
+import{Command,CommanderError}from&quot;#compiled/commander/index.js&quot;;import{agentCommand}from&quot;#cli/agent-command.js&quot;;import{parseDevelopmentServerUrl}from&quot;#cli/dev/url.js&quot;;...
+</code></pre>
+
+<p>变量名缩成 <code>e</code>、<code>t</code>、<code>n</code>，换行和空格全没了，<code>find dist -name &quot;*.map&quot;</code> 返回 0——发布包里没有 sourcemap。这份代码只能执行，不能阅读。</p>
+
+<p>但同一目录下的 <code>.d.ts</code> 是完整的：</p>
+
+<pre><code class="language-ts">// node_modules/eve/dist/src/internal/logging.d.ts
+// 只有类型和 JSDoc，没有函数体——发布包里可读性最好的一层
+/**
+ * Framework-internal structured logger.
+ *
+ * Not public API; authors should use their own logger or Vercel
+ * observability primitives.
+ */
+export type LogLevel = &quot;debug&quot; | &quot;info&quot; | &quot;warn&quot; | &quot;error&quot;;
+
+/**
+ * Builds a logger bound to a stable namespace (e.g. `&quot;slack.route&quot;` or
+ * `&quot;harness.tool-loop&quot;`). The namespace appears in every rendered line
+ * and is threaded through to OTel span events so a single grep can
+ * correlate structured logs with traces.
+ */
+export function createLogger(namespace: string): Logger;
+</code></pre>
+
+<p>注释、类型、默认值都在，还和安装的版本严格一致。</p>
+
+<p>所以规则是：<strong>读实现去 GitHub，读契约读本地 <code>.d.ts</code></strong>。两者对照，能同时确认「代码想干什么」和「安装版本实际是什么」。</p>
+
+<p>本教程基于 <code>eve@0.81.1</code>。把 GitHub 源码对齐到该版本，三条命令：</p>
+
+<pre><code class="language-bash">git clone --depth 1 https://github.com/vercel/eve.git
+cd eve
+git fetch --depth 1 origin refs/tags/eve@0.81.1:refs/tags/eve@0.81.1
+git checkout eve@0.81.1
+</code></pre>
+
+<p>小版本之间函数名基本稳定，行号会漂——所以教程引用一律用「文件 + 函数名」，行号只作参考。</p>
+
+<h2 id="19-2-再解决-看懂一个-import">19.2 再解决「看懂一个 import」</h2>
+
+<p>选好来源，打开任意一个源文件。第一屏几乎全是这种导入：</p>
+
+<pre><code class="language-ts">// packages/eve/src/eve-channel/index.ts:1
+// 五个 import 对应五个子系统：工具桩、workflow 运行时、流式响应头、路由前缀。
+// 读一个模块的 import，就知道它跨了哪些层。
+import { InvalidToolStubTargetError } from &quot;#tool-stubs/validate-targets.js&quot;;
+import { readStubFailure, readMatchedStubRules } from &quot;#execution/tool-stubs/steps.js&quot;;
+import { getRun } from &quot;#internal/workflow/runtime.js&quot;;
+import { proxyStreamHeaders } from &quot;#eve-channel/stream-headers.js&quot;;
+import { EVE_ROUTE_PREFIX } from &quot;#protocol/routes.js&quot;;
+</code></pre>
+
+<p>不搞懂这几行，后面每读一个文件都要卡一次。拆开看，每一行说了三件事。</p>
+
+<p><strong>一、<code>#</code> 开头 = 包内私有路径。</strong></p>
+
+<p>这不是公开 API。你在自己的 <code>agent/</code> 里写 <code>import ... from &quot;#internal/logging.js&quot;</code> 会失败，因为 <code>#</code> 只在包内部解析。对外暴露的入口走 <code>package.json</code> 的 <code>exports</code>，也就是 <code>eve/channels/eve</code>、<code>eve/tools/bash</code> 这种。</p>
+
+<p><strong>二、写 <code>.js</code>，文件却是 <code>.ts</code>。</strong></p>
+
+<p>靠 <code>package.json</code> 的 <code>imports</code> 字段做映射：</p>
+
+<pre><code class="language-json">{
+  &quot;imports&quot;: {
+    &quot;#compiled/*&quot;: {
+      &quot;eve-source&quot;: &quot;./.generated/compiled/*&quot;,
+      &quot;default&quot;: &quot;./dist/src/compiled/*&quot;
+    },
+    &quot;#*.js&quot;: {
+      &quot;eve-source&quot;: &quot;./src/*.ts&quot;,
+      &quot;default&quot;: &quot;./dist/src/*.js&quot;
+    }
+  }
+}
+</code></pre>
+
+<p><code>#cli/run.js</code> 里的 <code>*</code> 匹配 <code>cli/run</code>，在 <code>eve-source</code> 条件下解析到 <code>./src/cli/run.ts</code>，否则解析到 <code>./dist/src/cli/run.js</code>。同一个 import 说明符，在 eve 仓库里指向 TS，在发布包里指向编译产物。</p>
+
+<p><code>eve-source</code> 是自定义条件，由 <code>packages/eve/tsconfig.json</code> 声明：</p>
+
+<pre><code class="language-json">{
+  &quot;compilerOptions&quot;: {
+    &quot;outDir&quot;: &quot;./dist&quot;,
+    &quot;allowImportingTsExtensions&quot;: true,
+    &quot;rewriteRelativeImportExtensions&quot;: true,
+    &quot;customConditions&quot;: [&quot;eve-source&quot;]
+  }
+}
+</code></pre>
+
+<p><code>rewriteRelativeImportExtensions</code> 负责把源码里的 <code>.ts</code> 后缀在编译时改成 <code>.js</code>。所以你看到的源文件里两种写法都有，都是对的。</p>
+
+<p><strong>三、前缀就是分层。</strong></p>
+
+<p><code>#cli/</code>、<code>#internal/</code>、<code>#execution/</code>、<code>#harness/</code> 各管一段，下一节展开。</p>
+
+<p>顺带说一个例外：<code>#compiled/*</code> 不是 eve 自己的代码，是 vendored 的第三方依赖（commander、semver、opentelemetry）。看到 <code>#compiled/commander/index.js</code> 直接当 npm 包理解，不用读。</p>
+
+<h2 id="19-3-然后解决-从哪找">19.3 然后解决「从哪找」</h2>
+
+<p>这是本章最有用的部分。回到开头那个困惑：日志没出现，该去哪个目录找？</p>
+
+<p>答案是：先问这段代码<strong>什么时候执行</strong>。</p>
+
+<p>eve 的目录不是按功能分的，是按执行时机分的：</p>
+
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>执行时机</th>
+<th>触发频率</th>
+<th>改这里会影响</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>discover/</code></td>
+<td>编译期：扫描 <code>agent/</code> 目录</td>
+<td>源码或目录结构变更</td>
+<td>哪些文件被认成能力</td>
+</tr>
+
+<tr>
+<td><code>compiler/</code></td>
+<td>编译期：生成 manifest 与 module map</td>
+<td>同上</td>
+<td>产物结构、能力归一化</td>
+</tr>
+
+<tr>
+<td><code>cli/</code></td>
+<td>进程启动：命令解析、起服务</td>
+<td>每条命令一次</td>
+<td>命令行为、dev server 生命周期</td>
+</tr>
+
+<tr>
+<td><code>runtime/</code></td>
+<td>进程启动后：module map → 活对象</td>
+<td>每个产物版本一次</td>
+<td>模块求值时机、配置合并</td>
+</tr>
+
+<tr>
+<td><code>execution/</code></td>
+<td>每个 workflow step</td>
+<td>每个 step</td>
+<td>检查点、事件落库、恢复</td>
+</tr>
+
+<tr>
+<td><code>harness/</code></td>
+<td>每次模型调用 / 每次工具调用</td>
+<td>每个 turn 内多次</td>
+<td>循环、工具调度、压缩</td>
+</tr>
+
+<tr>
+<td><code>channel/</code> <code>eve-channel/</code></td>
+<td>每次 HTTP 请求</td>
+<td>每个请求</td>
+<td>路由、鉴权、流</td>
+</tr>
+
+<tr>
+<td><code>public/</code></td>
+<td>作者代码 import 时</td>
+<td>编译期 + 运行时</td>
+<td>对外 API 的形状</td>
+</tr>
+
+<tr>
+<td><code>internal/</code></td>
+<td>跨层：宿主、日志、workflow、打包</td>
+<td>视调用方</td>
+<td>基础设施</td>
+</tr>
+</tbody>
+</table>
+
+<p>有了这张表，开头的困惑就有了排查顺序：</p>
+
+<ol>
+<li>文件被识别了吗？→ <code>discover/</code></li>
+<li>编译产物里有它吗？→ <code>compiler/</code> 和 <code>.eve/compile/</code></li>
+<li>运行期加载了吗？→ <code>runtime/</code></li>
+<li>代码真的执行到了吗？→ 下一节的三个手段</li>
+</ol>
+
+<p>这张表还解释了几个常见现象：</p>
+
+<ul>
+<li>改 <code>compiler/</code> 里的东西，要等 dev server 重建产物。改完立刻发请求可能还是旧代码。</li>
+<li>改 <code>harness/</code> 里的东西，只影响<strong>新开的 session</strong>。已经在跑的 session 用它启动时的产物快照（第 22 章讲这个机制）。</li>
+<li>改 <code>public/definitions/*</code> 里的类型，影响的是作者代码的编译，不是运行时行为。</li>
+</ul>
+
+<h2 id="19-4-最后解决-怎么确认">19.4 最后解决「怎么确认」</h2>
+
+<p>读源码最容易犯的错是「以为这段在跑，其实没走这条分支」。三个办法验证，从轻到重。</p>
+
+<p><strong>一、<code>EVE_LOG_LEVEL=debug</code>。</strong></p>
+
+<p>日志阈值在 <code>src/internal/logging.ts:257</code> 的 <code>resolveThreshold()</code>：</p>
+
+<pre><code class="language-ts">// 每次写日志都现读环境变量：改了级别不用重启，代价是每条日志多一次 getenv
+function resolveThreshold(): number {
+  const configured = process.env.EVE_LOG_LEVEL?.toLowerCase();
+
+  // 只认这四个值。拼错（比如写成 EVE_LOG=debug）不报错，静默落回 info
+  if (
+    configured === &quot;debug&quot; ||
+    configured === &quot;info&quot; ||
+    configured === &quot;warn&quot; ||
+    configured === &quot;error&quot;
+  ) {
+    return LEVEL_SEVERITY[configured];
+  }
+
+  // 未设置时的默认值：info 及以上才输出，debug 默认关
+  return LEVEL_SEVERITY.info;
+}
+</code></pre>
+
+<p>默认 <code>info</code>，<code>debug</code> 被吞掉。设成 <code>debug</code> 后，<code>write()</code> 走 <code>console.log</code>：</p>
+
+<pre><code class="language-ts">// src/internal/logging.ts:308
+function write(level: LogLevel, namespace: string, message: string, fields?: LogFields): void {
+  // 低于阈值直接返回：过滤发生在拼字符串之前，被关掉的日志几乎不花钱
+  if (LEVEL_SEVERITY[level] &lt; resolveThreshold()) {
+    return;
+  }
+  // ...
+  // 按级别选输出流：error 走 stderr，其余走 stdout，方便分开重定向
+  const sink = level === &quot;error&quot; ? console.error : level === &quot;warn&quot; ? console.warn : console.log;
+
+  // 固定前缀 [eve:命名空间]，所以 grep &quot;eve:channel&quot; 能捞出整条链路
+  const line = `[eve:${namespace}] ${message}`;
+
+  // 没有结构化字段就只打一行；有字段时作为第二个参数交给 console
+  if (fields === undefined) {
+    sink(line);
+    return;
+  }
+  sink(line, renderFields(fields));
+}
+</code></pre>
+
+<p>输出长这样，方括号里是命名空间，可以直接 grep（字段部分省略）：</p>
+
+<pre><code class="language-text">[eve:eve.channel] serving a remote agent protocol 1 caller
+[eve:channel.adapter] adapter event handler threw — event swallowed
+</code></pre>
+
+<p>命名空间就是源码里 <code>createLogger(&quot;xxx&quot;)</code> 的参数。想知道某个模块有没有跑，先搜它的命名空间字符串。</p>
+
+<p><strong>二、<code>.eve/logs/*.dump</code>。</strong></p>
+
+<p>每次 <code>eve dev</code> 在项目里留一对文件：<code>*.log</code> 记录终端输出，<code>*.dump</code> 是诊断快照。没输出时 <code>.log</code> 是 0 字节，<code>.dump</code> 一定有内容。</p>
+
+<pre><code class="language-json">{
+  &quot;updatedAt&quot;: &quot;2026-10-20T06:30:24.622Z&quot;,
+  &quot;durationMs&quot;: 58469,
+  &quot;environment&quot;: {
+    &quot;eveVersion&quot;: &quot;0.81.1&quot;,
+    &quot;nodeVersion&quot;: &quot;v24.14.0&quot;,
+    &quot;platform&quot;: &quot;darwin arm64&quot;
+  },
+  &quot;session&quot;: null
+}
+</code></pre>
+
+<p><code>session</code> 为 <code>null</code> 的那次 dev 进程没跑过会话。跑过对话之后再来看这个字段，结构会不一样。</p>
+
+<p><strong>三、<code>node --inspect</code>。</strong></p>
+
+<p>CLI 是普通 Node 进程，可以直接断点：</p>
+
+<pre><code class="language-bash">node --inspect-brk node_modules/eve/bin/eve.js dev
+</code></pre>
+
+<p>然后 Chrome 打开 <code>chrome://inspect</code>，在 <code>src</code>（本地开发）或 <code>dist/src</code>（发布包）里下断。压缩过的 dist 断点会落在整行上，变量名是 <code>e</code>/<code>t</code>，只能看调用栈，不能看逻辑——这也是为什么读实现必须用 GitHub 源码。</p>
+
+<h2 id="19-5-一张随时能查的索引">19.5 一张随时能查的索引</h2>
+
+<p>前面讲的是方法，这一节给工具。下面这张表按「你遇到的现象」组织，遇到问题直接查，不用从头想。</p>
+
+<table>
+<thead>
+<tr>
+<th>现象 / 需求</th>
+<th>起点文件</th>
+<th>下一层</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>我加的文件没被识别成工具</td>
+<td><code>discover/grammar.ts</code></td>
+<td><code>discover/slots.ts</code> → <code>discover-agent.ts</code></td>
+</tr>
+
+<tr>
+<td><code>eve info</code> 显示的能力和预期不符</td>
+<td><code>cli/commands/info.ts</code></td>
+<td><code>services/inspect-application.ts</code></td>
+</tr>
+
+<tr>
+<td>工具参数校验失败，想看 schema 怎么生成</td>
+<td><code>runtime/resolve-tool.ts</code></td>
+<td><code>harness/provider-tool-schemas.ts</code></td>
+</tr>
+
+<tr>
+<td>工具被调用了两次</td>
+<td><code>execution/node-step.ts</code></td>
+<td><code>execution/session.ts</code>（重放语义）</td>
+</tr>
+
+<tr>
+<td>审批之后上下文丢了</td>
+<td><code>harness/hitl/</code></td>
+<td><code>execution/session.ts</code></td>
+</tr>
+
+<tr>
+<td>会话恢复失败、报 stranded</td>
+<td><code>execution/session-inbox/stranded-replay-guard.ts</code></td>
+<td><code>internal/workflow/</code></td>
+</tr>
+
+<tr>
+<td>路由 404</td>
+<td><code>protocol/routes.ts</code></td>
+<td><code>eve-channel/index.ts</code></td>
+</tr>
+
+<tr>
+<td>路由 401，想知道为什么</td>
+<td><code>public/channels/auth.ts</code></td>
+<td><code>channel/auth/result.ts</code></td>
+</tr>
+
+<tr>
+<td>流断了，<code>startIndex</code> 没生效</td>
+<td><code>eve-channel/request.ts</code></td>
+<td><code>execution/session-event-stream.ts</code></td>
+</tr>
+
+<tr>
+<td>事件少了一个字段</td>
+<td><code>protocol/message.ts</code></td>
+<td>对应 <code>publish-session-events.ts</code></td>
+</tr>
+
+<tr>
+<td><code>turnPolicy</code> 行为不对</td>
+<td><code>channel/session.ts</code></td>
+<td><code>execution/session-inbox/</code></td>
+</tr>
+
+<tr>
+<td>dev 改代码不生效</td>
+<td><code>internal/nitro/dev-runtime-artifacts.ts</code></td>
+<td><code>compiler/module-map.ts</code></td>
+</tr>
+
+<tr>
+<td>部署后行为和本地不一样</td>
+<td><code>internal/workflow/world-compatibility.ts</code></td>
+<td><code>execution/install-workflow-world.ts</code></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="19-6-三条经验">19.6 三条经验</h2>
+
+<p>方法之外，还有三条经验。它们不是规则，是反复排查中养成的习惯。</p>
+
+<p><strong>一、先读类型，再读实现。</strong></p>
+
+<p><code>src/public/**/types.ts</code> 或 <code>.d.ts</code> 是契约，实现只是契约的一种满足方式。先看契约能省掉一半阅读量：很多分支是在处理契约允许、但你没想过的输入。</p>
+
+<p><strong>二、先读测试，再读实现。</strong></p>
+
+<p>1064 个测试文件、28 万行，和源码行数几乎一比一。这是 eve 最诚实的行为文档。测试名字直接描述行为：</p>
+
+<pre><code class="language-ts">// src/channel/adapter.test.ts
+// 测试名就是行为契约：可选字段、返回值必须是 Buffer。
+describe(&quot;ChannelAdapter (fetchFile field)&quot;, () =&gt; {
+  it(&quot;treats the fetchFile field as optional&quot;, () =&gt; {
+    const adapter: ChannelAdapter = { kind: &quot;noop&quot; };
+    expect(adapter.fetchFile).toBeUndefined();
+  });
+
+  // 自定义通道实现 fetchFile 时，入参只有 url，返回值必须是 Buffer 而不是流
+  it(&quot;accepts a fetchFile function that returns a Buffer&quot;, async () =&gt; {
+    const adapter: ChannelAdapter = {
+      kind: &quot;custom&quot;,
+      async fetchFile(url) {
+        return Buffer.from(`url=${url}`);
+      },
+    };
+    // ...
+  });
+});
+</code></pre>
+
+<p>想知道「<code>fetchFile</code> 返回 <code>null</code> 会怎样」，搜 <code>fetchFile</code> 的测试比读 300 行实现快。文档会过期，测试不会——测试挂了 CI 就红。</p>
+
+<p><strong>三、不信注释，信调用点。</strong></p>
+
+<p>源码注释描述的是作者的意图，不是当前行为。判断一段代码有没有用，搜它的调用点：</p>
+
+<pre><code class="language-bash"># 这个函数到底谁在调
+rg &quot;callAdapterEventHandler&quot; packages/eve/src --type ts -g '!*.test.ts'
+</code></pre>
+
+<p>零调用点 + 只有测试在用 = 兼容层或已废弃。这种情况在 eve 里不少，因为它在 beta 期要保持向后兼容。</p>
+
+<p>第 21 章会给你一个现成的例子：<code>named-source-directory.ts</code> 的注释说 <code>tools/</code> 是 flat 的，调用点传的是 <code>recursive: true</code>。注释过期了，代码没改。</p>
+
+<h2 id="19-7-练习">19.7 练习</h2>
+
+<ol>
+<li>把 <code>EVE_LOG_LEVEL</code> 设成 <code>debug</code>，跑 <code>eve dev</code>，找出输出里出现过的所有命名空间。对照 <code>src/**/</code> 里 <code>createLogger(</code> 的参数，看哪些模块这次没跑。</li>
+<li>打开 <code>node_modules/eve/dist/src/internal/logging.d.ts</code>，找到 <code>Logger</code> 接口。再去 GitHub 找 <code>src/internal/logging.ts</code> 的同名接口，对比两者是否一致。</li>
+<li>打开 <code>node_modules/eve/package.json</code> 的 <code>exports</code>，找到 <code>./channels/eve</code> 指向哪个文件。再顺着那个文件读下去，看 <code>eveChannel</code> 经过几层才到真正的实现。这条路径就是「公开 API 怎么包一层」的样板。</li>
+<li>打开 <code>.eve/logs/</code> 里最新的一份 <code>.dump</code>，说出这次 dev 进程跑了多久、用的哪个 eve 版本。</li>
+</ol>
+
+<h2 id="下一章">下一章</h2>
+
+<p>方法有了，从哪开始走？</p>
+
+<p>第 20 章从你在终端敲下的第一行命令 <code>eve dev</code> 开始。你会看到它在进入命令行解析之前先检查 Node 版本、按需重编译自己，然后 fork 一个子进程跑服务器——以及为什么必须 fork。</p>
+
+<hr />
+
+<p>返回：<a href="https://tangxusc.github.io/2026/10/eve-tutorial/">教程目录</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-20-cli-internals/">20 CLI 启动链路</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">源码解析</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-20-cli-internals/" data-tooltip="eve 中文教程 · 第 20 章 CLI 启动链路">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/" data-tooltip="eve 中文教程 · 附录 C 环境变量与密钥">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-20-cli-internals/" data-tooltip="eve 中文教程 · 第 20 章 CLI 启动链路">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/" data-tooltip="eve 中文教程 · 附录 C 环境变量与密钥">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 <code>eve init</code> 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-29-world/">
+                <h3 class="media-heading">eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/">
+                <h3 class="media-heading">eve 中文教程 · 第 28 章 鉴权、身份与协议</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>auth</code> 不是中间件，是一个按顺序试的函数数组。全部返回空才 401，抛错则按错误里带的 Response 拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/">
+                <h3 class="media-heading">eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>defineChannel</code> 把「路由表 + adapter + 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/">
+                <h3 class="media-heading">eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>eveChannel()</code> 返回的不是一个 handler，是一张 23 条路由的表加一层统一的鉴权包装。其中 12 条给调用方用，11 条是内部回调和兼容路径。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-25-harness/">
+                <h3 class="media-heading">eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-24-workflow/">
+                <h3 class="media-heading">eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：step 不是「函数调用」，是「检查点边界」。step 内的代码在崩溃恢复时会重跑，step 之间的不会。这是 eve 里唯一必须记住的语义。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-23-runtime/">
+                <h3 class="media-heading">eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-22-compiler/">
+                <h3 class="media-heading">eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 <code>shadowed</code>。你的 <code>tools/bash.ts</code> 能覆盖框架默认工具，靠的就是这张优先级表。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-21-discover/">
+                <h3 class="media-heading">eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：文件名不是「约定」，是一张精确的分类表加一组正则。文件没被识别，九成是撞了表里的某一条——而且失败方式是静默的。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         136 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-19-reading-the-source\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-19-reading-the-source\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

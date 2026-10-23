@@ -8,25 +8,25 @@
 <meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
 <meta name="author" content="苏连云">
 <meta name="keywords" content="eve, agent framework, AI agent">
-<meta name="description" content="这套教程是 eve 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 eve init 讲到上线。">
+<meta name="description" content="这套教程是 eve 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 eve init 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。">
 
 
-<meta property="og:description" content="这套教程是 eve 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 eve init 讲到上线。">
+<meta property="og:description" content="这套教程是 eve 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 eve init 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="eve 中文教程 · 总目录">
 <meta name="twitter:title" content="eve 中文教程 · 总目录">
 <meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-tutorial/">
 <meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-tutorial/">
 <meta property="og:site_name" content="苏连云的博客">
-<meta property="og:description" content="这套教程是 eve 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 eve init 讲到上线。">
-<meta name="twitter:description" content="这套教程是 eve 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 eve init 讲到上线。">
+<meta property="og:description" content="这套教程是 eve 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 eve init 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。">
+<meta name="twitter:description" content="这套教程是 eve 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 eve init 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。">
 <meta property="og:locale" content="en-us">
 
   
-    <meta property="article:published_time" content="2026-10-22T10:00:00">
+    <meta property="article:published_time" content="2026-10-23T09:30:00">
   
   
-    <meta property="article:modified_time" content="2026-10-22T10:00:00">
+    <meta property="article:modified_time" content="2026-10-23T09:30:00">
   
   
   
@@ -224,9 +224,9 @@
   
   <div class="postShorten-meta post-meta">
     
-      <time itemprop="datePublished" datetime="2026-10-22T10:00:00&#43;08:00">
+      <time itemprop="datePublished" datetime="2026-10-23T09:30:00&#43;08:00">
         
-  October 22, 2026
+  October 23, 2026
 
       </time>
     
@@ -245,111 +245,15 @@
           
           <div class="post-content markdown" itemprop="articleBody">
             <div class="main-content-wrap">
-              <p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 <code>eve init</code> 讲到上线。</p>
+              <p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 <code>eve init</code> 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。</p>
 
-<p>写给要动手做事的人。每一章都能跑起来，讲清楚「为什么这样设计」，也讲清楚哪里会踩坑。</p>
+<p>写给要动手做事的人。每一章都能跑起来，讲清楚「为什么这样设计」，也讲清楚哪里容易出错。</p>
 
 <ul>
 <li>依据：<a href="https://eve.dev">eve.dev</a> 官方文档与 <a href="https://github.com/vercel/eve">github.com/vercel/eve</a> 源码，逐条对照 <code>eve@0.81.1</code> 的类型定义（<code>dist/src/**/*.d.ts</code>）与本地 <code>node_modules/eve/docs/</code></li>
-<li>对照版本：<code>eve@0.81.x</code>（beta）。API 仍在变，升级后先看 <code>node_modules/eve/CHANGELOG.md</code> 和本地 <code>node_modules/eve/docs/</code>，那份文档跟安装版本严格对齐。</li>
+<li>基于版本：<code>eve@0.81.1</code>（beta）。<code>0.81.x</code> 小版本之间 API 基本一致，行为可能有差异。升级后先看 <code>node_modules/eve/CHANGELOG.md</code> 和本地 <code>node_modules/eve/docs/</code>，那份文档跟安装版本严格对齐。</li>
 <li>示例项目：全教程共用一个「值班助手 opsbot」，从一句话提示词长到带工具、沙箱、审批、子代理、Slack、定时任务和评测的完整 agent。</li>
 </ul>
-
-<h3 id="相对-0-79-的行为变化">相对 0.79 的行为变化</h3>
-
-<p>如果你手上的项目还钉在 0.79，下面这些差异会影响教程里的代码和结论。已在对应章节标注。</p>
-
-<table>
-<thead>
-<tr>
-<th>变化</th>
-<th>出现在</th>
-<th>章节</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td><code>ctx.approval.responder</code> 可用：能读审批人身份，也能用 <code>responder.getToken()</code> 取他的凭据</td>
-<td>0.79.1</td>
-<td>4、11</td>
-</tr>
-
-<tr>
-<td>审批的第一个答案生效，重复提交被丢弃（双击不会再覆盖已做的决定）</td>
-<td>0.81</td>
-<td>11</td>
-</tr>
-
-<tr>
-<td>登录中断的调用在回调后自己续跑，不再多一次模型调用；<code>retryable: false</code> 失败不再在同一 turn 重复弹登录</td>
-<td>0.81</td>
-<td>13</td>
-</tr>
-
-<tr>
-<td>MCP 凭据每次请求前解析，<code>expiresAt</code> 过期即换；服务端 401 会驱逐缓存并重试一次，403 不重试</td>
-<td>0.81</td>
-<td>13</td>
-</tr>
-
-<tr>
-<td>MCP 连接可以订阅服务端事件（<code>experimental_events</code>）</td>
-<td>0.80</td>
-<td>13</td>
-</tr>
-
-<tr>
-<td>部署/压缩交接期间消息立即接受、地址始终有主，不再返回 <code>409 session_not_ready</code>；需要 world 具备 <code>hookForceClaim</code> / <code>hookRetention</code></td>
-<td>0.81</td>
-<td>10</td>
-</tr>
-
-<tr>
-<td>run 数据保留默认由追踪策略推导；私有会话在开发环境外默认结束即删</td>
-<td>0.80</td>
-<td>10、18</td>
-</tr>
-
-<tr>
-<td>读超出保留期的会话流返回 <code>410 session_expired</code></td>
-<td>0.79.1</td>
-<td>9、附录 A</td>
-</tr>
-
-<tr>
-<td><code>useEveAgent</code> 新增 <code>followIdle: false</code>，空闲时关流</td>
-<td>0.79.1</td>
-<td>17</td>
-</tr>
-
-<tr>
-<td>模型支持 AI Gateway 的会话亲和，可用 <code>sessionAffinity: false</code> 关掉</td>
-<td>0.81</td>
-<td>2</td>
-</tr>
-
-<tr>
-<td>OpenAPI path 参数拒绝 <code>.</code> 和 <code>..</code></td>
-<td>0.80.1</td>
-<td>13</td>
-</tr>
-
-<tr>
-<td>评测可以断言推理内容（<code>reasoning.completed</code>）</td>
-<td>文档 0.81</td>
-<td>16</td>
-</tr>
-
-<tr>
-<td>扩展的 git 包支持 <code>github.authorize</code>（0.80）/ <code>github.attribution</code>（0.81）</td>
-<td>0.80、0.81</td>
-<td>18</td>
-</tr>
-</tbody>
-</table>
-
-<p>核对方法：<code>node_modules/eve/dist/src/**/*.d.ts</code> 是最终事实来源；文档与类型冲突时以类型为准，再翻 CHANGELOG 确认是不是版本差异。教程里所有 <code>import ... from &quot;eve/...&quot;</code> 都在包的 <code>exports</code> 里存在，具名导出都能在对应 <code>.d.ts</code> 里找到。</p>
 
 <h2 id="先读这三段">先读这三段</h2>
 
@@ -511,12 +415,100 @@
 </tbody>
 </table>
 
+<h3 id="第四部分-源码解析">第四部分：源码解析</h3>
+
+<p>每章从一个具体问题出发，讲到代码里哪一行让它成立。按「一个 prompt 的完整旅程」组织，不按目录结构。</p>
+
+<p>读实现用 GitHub 对应 tag 的 <code>src</code>，读契约用本地 <code>.d.ts</code>——发布包里的 <code>.js</code> 压缩成单行，读不了。</p>
+
+<table>
+<thead>
+<tr>
+<th>章节</th>
+<th>从一个问题出发</th>
+<th>讲清楚什么</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><a href="https://tangxusc.github.io/2026/10/eve-19-reading-the-source/">19 怎么读 eve 的源码</a></td>
+<td>加了一行日志，为什么没出现？1816 个文件从哪读起</td>
+<td>三个源码来源的注意事项、<code>#</code> 导入的三层信息、按执行时机分层、三个验证手段</td>
+</tr>
+
+<tr>
+<td><a href="https://tangxusc.github.io/2026/10/eve-20-cli-internals/">20 CLI 启动链路</a></td>
+<td>第一次跑命令为什么卡十几秒？Ctrl-C 为什么要按两次</td>
+<td><code>bin/eve.js</code> 的两道关、命令分发、<code>eve dev</code> 为什么 fork 子进程、三级关闭</td>
+</tr>
+
+<tr>
+<td><a href="https://tangxusc.github.io/2026/10/eve-21-discover/">21 discover</a></td>
+<td>文件放进 <code>agent/</code> 为什么毫无反应</td>
+<td>根目录分类表、扩展名与排除、递归槽位、名字推导、三种冲突、诊断级别</td>
+</tr>
+
+<tr>
+<td><a href="https://tangxusc.github.io/2026/10/eve-22-compiler/">22 compiler</a></td>
+<td>写 <code>tools/bash.ts</code> 会不会冲突？改了代码老会话为什么不变</td>
+<td>六个产物、四层候选优先级、<code>shadowed</code>、module map 的两种加载、dev 快照</td>
+</tr>
+
+<tr>
+<td><a href="https://tangxusc.github.io/2026/10/eve-23-runtime/">23 runtime</a></td>
+<td>工具里的计数器为什么串会话</td>
+<td>声明与实现分离、工具装配的三个分支、模块级状态共享、context key</td>
+</tr>
+
+<tr>
+<td><a href="https://tangxusc.github.io/2026/10/eve-24-workflow/">24 workflow</a></td>
+<td>同一封邮件为什么发了两遍</td>
+<td>会话就是一个 workflow、step 的七阶段、检查点存什么、重放边界</td>
+</tr>
+
+<tr>
+<td><a href="https://tangxusc.github.io/2026/10/eve-25-harness/">25 harness</a></td>
+<td>一次问答为什么有三个 <code>step.started</code></td>
+<td><code>stopWhen: isStepCount(1)</code>、工具错误回灌、压缩在调用前、停泊与续跑</td>
+</tr>
+
+<tr>
+<td><a href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/">26 默认 eve channel</a></td>
+<td>401 到底是谁拒的？重连为什么收到重复事件</td>
+<td>23 条路由、鉴权不是中间件、建会话的十一道关、<code>startIndex</code> 与 tail index</td>
+</tr>
+
+<tr>
+<td><a href="https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/">27 channel 抽象</a></td>
+<td>接内部 webhook，要写多少代码</td>
+<td><code>defineChannel</code> 的三个产物、路由 handler 的十一个参数、adapter 持久状态、Slack 的 1529 行</td>
+</tr>
+
+<tr>
+<td><a href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/">28 鉴权与协议</a></td>
+<td>401 分不清是没带 token 还是密码错</td>
+<td><code>routeAuth</code> 的遍历语义、<code>http-basic</code> 全文、转发身份的信任边界、37 个事件类型</td>
+</tr>
+
+<tr>
+<td><a href="https://tangxusc.github.io/2026/10/eve-29-world/">29 world</a></td>
+<td>部署新版本后，老会话为什么报 <code>CORRUPTED_EVENT_LOG</code></td>
+<td><code>installWorkflowWorld</code> 的四步、版本兼容、stranded run 的三类处理</td>
+</tr>
+</tbody>
+</table>
+
+<p>每章的结构是固定的：<strong>一个具体场景 → 这条链路上每一站做了什么 → 回到场景给出答案 → 注意事项 → 练习</strong>。代码块标了文件路径和行号，与 <code>eve@0.81.1</code> 逐行对照过。</p>
+
+<p>完整规划（每章要读的源码文件、关键片段、验证实验）见 <a href="https://github.com/tangxusc/eve-tutorial-zh/blob/main/SOURCE-READING-PLAN.md">SOURCE-READING-PLAN.md</a>。</p>
+
 <h3 id="附录">附录</h3>
 
 <ul>
 <li><a href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">A 术语与速查</a>：概念对照、目录速查、常见错误码</li>
 <li><a href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">B 事件与 CLI</a>：完整事件表、CLI 命令、HTTP 路由</li>
-<li><a href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">C 环境变量与密钥</a>：<code>process.env</code> 在哪个进程里存在、<code>.env</code> 什么时候被读、编译期求值的坑、沙箱边界、排查表</li>
+<li><a href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">C 环境变量与密钥</a>：<code>process.env</code> 在哪个进程里存在、<code>.env</code> 什么时候被读、编译期求值的问题、沙箱边界、排查表</li>
 </ul>
 
 <h2 id="怎么用这份教程">怎么用这份教程</h2>
@@ -533,7 +525,7 @@
 <li>代码块标题里的路径都是相对项目根目录，例如 <code>agent/tools/read_logs.ts</code>。</li>
 <li>命令默认在项目根目录执行。</li>
 <li>流程图用 Mermaid 写（代码块语言标 <code>mermaid</code>），GitHub、VS Code、Obsidian 都能直接渲染；纯文本终端里会显示成代码。</li>
-<li>「坑」标记的是官方文档里散落各处、但实际会让人卡住的点，不是猜测。</li>
+<li>「注意事项」标记的是官方文档里散落各处、但实际会让人卡住的点，不是猜测。</li>
 <li>涉及钱的、涉及删除的、涉及对外发消息的例子，一律标了审批。这不是啰嗦，是 eve 的设计意图：默认不信任模型。</li>
 </ul>
 
@@ -576,7 +568,7 @@
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/" data-tooltip="eve 中文教程 · 附录 C 环境变量与密钥">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-29-world/" data-tooltip="eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -644,7 +636,7 @@
             </li>
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/" data-tooltip="eve 中文教程 · 附录 C 环境变量与密钥">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-29-world/" data-tooltip="eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复">
               
                   <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
                   <i class="fa fa-angle-right"></i>
@@ -749,7 +741,7 @@
                   Oct 10, 2026
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 <code>eve init</code> 讲到上线。</p></div>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 <code>eve init</code> 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -758,8 +750,8 @@
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
-                <h3 class="media-heading">eve 中文教程 · 附录 C 环境变量与密钥</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-29-world/">
+                <h3 class="media-heading">eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -767,7 +759,7 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p><code>process.env</code> 只在<strong>应用运行时</strong>存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。</p>
+<p>一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -777,42 +769,8 @@
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">
-                <h3 class="media-heading">eve 中文教程 · 附录 B 事件与 CLI</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Oct 10, 2026
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather">完整事件表、CLI 命令、HTTP 路由。写客户端、排查事件流、核对某个字段时对着这张表看。</div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">
-                <h3 class="media-heading">eve 中文教程 · 附录 A 术语与速查</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Oct 10, 2026
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather">概念对照、目录速查、常见错误码。读不懂某个词、找不到某个文件、看到一个陌生状态码时先查这里。</div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/">
-                <h3 class="media-heading">eve 中文教程 · 第 18 章 进阶与上线检查</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/">
+                <h3 class="media-heading">eve 中文教程 · 第 28 章 鉴权、身份与协议</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -820,7 +778,7 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>这一章把散落在前面的进阶能力收在一起，然后给一份能逐条打勾的上线清单。清单比概念重要。</p>
+<p>一句话结论：<code>auth</code> 不是中间件，是一个按顺序试的函数数组。全部返回空才 401，抛错则按错误里带的 Response 拒绝。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -830,8 +788,8 @@
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
-                <h3 class="media-heading">eve 中文教程 · 第 17 章 前端与部署</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/">
+                <h3 class="media-heading">eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -839,7 +797,7 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。</p>
+<p>一句话结论：<code>defineChannel</code> 把「路由表 + adapter + 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -849,8 +807,8 @@
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-16-evals/">
-                <h3 class="media-heading">eve 中文教程 · 第 16 章 评测</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/">
+                <h3 class="media-heading">eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -858,7 +816,7 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。</p>
+<p>一句话结论：<code>eveChannel()</code> 返回的不是一个 handler，是一张 23 条路由的表加一层统一的鉴权包装。其中 12 条给调用方用，11 条是内部回调和兼容路径。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -868,8 +826,8 @@
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
-                <h3 class="media-heading">eve 中文教程 · 第 15 章 定时与钩子</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-25-harness/">
+                <h3 class="media-heading">eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -877,7 +835,7 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。</p>
+<p>一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -887,8 +845,8 @@
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-14-channels/">
-                <h3 class="media-heading">eve 中文教程 · 第 14 章 通道</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-24-workflow/">
+                <h3 class="media-heading">eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -896,7 +854,7 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。</p>
+<p>一句话结论：step 不是「函数调用」，是「检查点边界」。step 内的代码在崩溃恢复时会重跑，step 之间的不会。这是 eve 里唯一必须记住的语义。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -906,8 +864,8 @@
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-13-connections/">
-                <h3 class="media-heading">eve 中文教程 · 第 13 章 连接</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-23-runtime/">
+                <h3 class="media-heading">eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -915,7 +873,45 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 <code>eve__search</code> 找到工具，用 <code>eve__tool</code> 调用，凭据由 eve 在应用侧注入。</p>
+<p>一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-22-compiler/">
+                <h3 class="media-heading">eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 <code>shadowed</code>。你的 <code>tools/bash.ts</code> 能覆盖框架默认工具，靠的就是这张优先级表。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-21-discover/">
+                <h3 class="media-heading">eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：文件名不是「约定」，是一张精确的分类表加一组正则。文件没被识别，九成是撞了表里的某一条——而且失败方式是静默的。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -929,7 +925,7 @@
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         125 posts found
+         136 posts found
       </p>
     </div>
   </div>

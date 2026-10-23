@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。
+">
+
+
+<meta property="og:description" content="
+一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环">
+<meta name="twitter:title" content="eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-25-harness/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-25-harness/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。
+">
+<meta name="twitter:description" content="
+一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-23T09:06:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-23T09:06:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+      <meta property="article:tag" content="源码解析">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-25-harness/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-23T09:06:00&#43;08:00">
+        
+  October 23, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。</p>
+</blockquote>
+
+<h2 id="三个-step-started">三个 step.started</h2>
+
+<p>你问 agent 一句「现在几点了」。看事件流，<code>step.started</code> 出现了三次：</p>
+
+<pre><code class="language-text">step.started          ← 第 1 次
+actions.requested     get_current_time
+action.result         ...
+step.completed
+step.started          ← 第 2 次
+message.appended      &quot;现在是下午三点二十。&quot;
+step.completed
+</code></pre>
+
+<p>问题：一次问答，为什么要调三次模型？</p>
+
+<p>答案是两次。第三次是最后那个空转的 step（用来收尾）。但重点是：<strong>每调一次模型就是一个 step</strong>，不是「一个 turn 一个 step」。</p>
+
+<p>第 24 章讲过 step 是检查点边界。这一章拆开 step 内部，看它到底跑了什么，以及为什么 eve 要放弃 AI SDK 的自动循环，自己管这件事。</p>
+
+<h2 id="25-1-一个-step-的七个阶段">25.1 一个 step 的七个阶段</h2>
+
+<pre><code class="language-ts">// packages/eve/src/harness/tool-loop.ts · executeStepBody()
+async function executeStepBody(initialSession, generation, live, input, instrumentation) {
+  // 历史视图按当前投影重建：上一次 step 写进去的内容，到这里才可见
+  const prepareHistory = createHistoryViewPreparer({ previous: config.historyView, projector: config.historyProjector });
+  prepareHistory(initialSession.history, initialSession.state);
+  // ...
+
+  // 两个只做单一动作的入口：清空、压缩，都不跑模型
+  if (config.clearOnly === true) return clearContext(step);
+  if (config.compactOnly === true) return compactHistory(step);
+
+  // 先把「等着的工作」结算掉：审批结果、排队消息、定时任务
+  const runtime = await settleRuntimeWork(step, input);
+  // undefined 表示这一轮没有要跑模型的工作，不消耗模型调用
+  if (runtime === undefined) return { next: null, session: step.session };
+
+  const intake = await acceptHumanInput(step, runtime.input, { takeQueued: !runtime.waited });
+  // stop：这一轮到此结束（比如用户取消）
+  if (intake.kind === &quot;stop&quot;) return intake.result;
+
+  const turn = await prepareTurnInput(step, intake.input, { consumedMessage: intake.consumedMessage });
+  // 只有新消息才开新 turn；审批续跑不开
+  if (intake.opensTurn) {
+    const failed = await openTurn(step, { input: [...turn.ephemeral, ...turn.messages], message: intake.message });
+    if (failed !== undefined) return failed;
+  }
+  // 审批通过的工作在这里放行
+  await admitApprovedWork(step, intake.approved);
+
+  return runModelStep(step, {
+    approved: intake.approved,
+    onResponse: (response) =&gt; handleStepResult(step, response),
+    generation,
+    hidesHeldText: step.hasDelegatedCaller || ctx?.get(ScheduleIdKey) !== undefined,
+    setAttemptScope: (scope) =&gt; { attemptScope = scope; },
+    turn,
+  });
+}
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>函数</th>
+<th>做什么</th>
+<th>可能提前返回</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td><code>clearContext</code> / <code>compactHistory</code></td>
+<td><code>session.clear()</code> / <code>compact()</code> 的专用路径</td>
+<td>是</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td><code>settleRuntimeWork</code></td>
+<td>结算上一个 step 停泊的工作</td>
+<td>是（返回 <code>undefined</code> 表示无事可做）</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td><code>acceptHumanInput</code></td>
+<td>接收审批、问题回答、排队消息</td>
+<td>是（<code>kind === &quot;stop&quot;</code>）</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td><code>prepareTurnInput</code></td>
+<td>把输入转成消息，处理临时消息</td>
+<td>否</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td><code>openTurn</code></td>
+<td>需要时开新 turn</td>
+<td>是（失败时返回错误结果）</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td><code>admitApprovedWork</code></td>
+<td>执行已批准的工作</td>
+<td>否</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td><code>runModelStep</code></td>
+<td>调一次模型，处理响应</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+
+<p>第 0 阶段的短路很有意思：<code>clearOnly</code> 和 <code>compactOnly</code> 是<strong>独立的 step</strong>，不夹在正常流程里。所以 <code>POST /session/:id/clear</code> 不会消耗一次模型调用。</p>
+
+<h2 id="25-2-为什么每步只调一次模型">25.2 为什么每步只调一次模型</h2>
+
+<p>AI SDK 的 <code>ToolLoopAgent</code> 默认会一直循环：调模型 → 执行工具 → 再调模型 → …… 直到模型不再要求调工具。</p>
+
+<p>eve 把它关掉了：</p>
+
+<pre><code class="language-ts">// packages/eve/src/harness/model-call/call.ts:393
+const agent = new ToolLoopAgent({
+  // ...
+  onStepEnd: hooks.onStepEnd,
+  onStepStart: hooks.onStepStart,
+  prepareStep: hooks.prepareStep,
+  // reasoning 先取模型引用上的配置，再退回会话级
+  reasoning: step.session.agent.modelReference?.reasoning ?? step.session.agent.reasoning,
+  runtimeContext,
+  // 一次模型调用就是一个 SDK step，自动循环关掉
+  stopWhen: isStepCount(1),
+  telemetry: toEntryTelemetry(attempt?.telemetry, catalog.resolve),
+  // 首块和块间用同一个超时：流卡住比整体慢更常见
+  timeout: { chunkMs: MODEL_OUTPUT_TIMEOUT_MS, firstChunkMs: MODEL_OUTPUT_TIMEOUT_MS },
+  toolApproval: buildToolApproval({ ... }),
+  tools,
+});
+</code></pre>
+
+<p><code>stopWhen: isStepCount(1)</code> —— 跑一步就停。</p>
+
+<p>对比一下两种设计：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>AI SDK 默认</th>
+<th>eve</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>一次 <code>stream()</code> 调用</td>
+<td>循环到结束</td>
+<td>只跑一步</td>
+</tr>
+
+<tr>
+<td>模型调用次数</td>
+<td>N</td>
+<td>每步 1 次</td>
+</tr>
+
+<tr>
+<td>检查点</td>
+<td>无（在内存里）</td>
+<td>每步一个</td>
+</tr>
+
+<tr>
+<td>崩溃恢复</td>
+<td>整个 turn 重来</td>
+<td>最多重跑一个模型调用</td>
+</tr>
+
+<tr>
+<td>事件粒度</td>
+<td>只有最终结果</td>
+<td>每次调用都有 <code>step.started</code> / <code>step.completed</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>eve 用「更多 step」换「更细的恢复粒度」。代价是每个 step 都要序列化一次会话状态——第 24 章的 <code>projectToDurableSession</code> 每步都跑。</p>
+
+<p>这个交换在长任务上划算：一个跑了 20 轮的 turn，崩溃后最多损失一轮。在短任务上不划算：一次问答也要写一次检查点。</p>
+
+<p><code>experimental.workflow.modelCallsPerStep</code> 就是给这个交换调参的（附录 B，默认 1）。改成 2 会让一次 <code>stream()</code> 跑两步，检查点变少，恢复变粗。</p>
+
+<h2 id="25-3-工具出错时会发生什么">25.3 工具出错时会发生什么</h2>
+
+<p>模型返回的响应不一定合法。工具参数不符合 schema 是常事。</p>
+
+<p>eve 的处理是：<strong>不抛异常，合成一条 tool error 消息塞回历史，让模型自己纠正。</strong></p>
+
+<pre><code class="language-ts">// packages/eve/src/harness/step/after-model.ts:73
+export async function handleStepResult(step: Step, input: ModelResponse): Promise&lt;StepResult&gt; {
+  const { promptMessages, result } = input;
+
+  // 取出这一步的助手文本：多段 message 合并成一段
+  const stepOutput = resolveAssistantStepText(result.response.messages, result.text);
+
+  // 参数不合法的工具调用：不抛错，转成 tool error 让模型自己改
+  const invalidInputToolErrors = getInvalidToolCallInputErrors({
+    toolCalls: result.toolCalls as TypedToolCall&lt;ToolSet&gt;[],
+  });
+  // Unions every invalid-input signal: SDK-marked invalid calls (which get
+  // SDK-synthesized tool errors), non-object inputs caught by
+  // getInvalidToolCallInputErrors, and ids the stream consumer observed.
+  const invalidInputToolCallIds = new Set([
+    ...(result.invalidInputToolCallIds ?? []),
+    ...result.toolCalls.filter(isInvalidToolCall).map((toolCall) =&gt; toolCall.toolCallId),
+    ...invalidInputToolErrors.map((toolError) =&gt; toolError.toolCallId),
+  ]);
+
+  // 给每个工具调用补一条结果消息：下一轮请求要求历史里每个 call 都有 result
+  const rawResponseMessages = appendMissingToolResultMessages({
+    append: invalidInputToolErrors.map((toolError) =&gt; createToolResultMessagePartFromToolError(toolError)),
+    responseMessages: result.response.messages,
+  });
+  // ...
+}
+</code></pre>
+
+<p>三个来源的无效调用被合并：</p>
+
+<ol>
+<li>AI SDK 自己标记的（<code>result.invalidInputToolCallIds</code>）</li>
+<li><code>getInvalidToolCallInputErrors</code> 检查出的（输入不是对象之类）</li>
+<li>流式消费时观察到的</li>
+</ol>
+
+<p>合并后统一补一条 tool result 消息，<code>isError: true</code>。模型下一轮看到这条错误，自己改参数重试。</p>
+
+<p>这意味着：<strong>工具参数错误不会让 turn 失败。</strong> 它会被模型当成反馈消化掉。你在日志里看到的是 <code>action.result</code> 带 <code>isError: true</code>，不是 <code>turn.failed</code>。</p>
+
+<p>这个设计有代价：如果模型一直改不对，它会反复重试，消耗 token。所以工具的描述和 schema 要写清楚，别指望模型从错误里猜出正确用法。</p>
+
+<p>另一类工具是 <code>providerExecuted</code>：</p>
+
+<pre><code class="language-ts">// 厂商侧执行的工具（web_search 之类）不会回到本地：按 id 记下来，跳过本地执行
+const providerExecutedOutcomeIds = new Set&lt;string&gt;();
+for (const part of [...(result.content ?? []), ...(result.toolResults ?? [])]) {
+  if ((part.type === &quot;tool-result&quot; || part.type === &quot;tool-error&quot;) &amp;&amp; part.providerExecuted === true) {
+    providerExecutedOutcomeIds.add(part.toolCallId);
+  }
+}
+</code></pre>
+
+<p>这类工具（web search 之类）由模型厂商执行，结果直接从响应里来，eve 不执行也不记录耗时。它们对应第 23 章的 <code>hasExecute: false</code>。</p>
+
+<h2 id="25-4-压缩发生在模型调用之前">25.4 压缩发生在模型调用之前</h2>
+
+<p>不是「历史太长就压缩」，是「调模型前量一下，超了就压缩，然后重新构造请求」：</p>
+
+<pre><code class="language-ts">// packages/eve/src/harness/model-call/call.ts
+/** Compacts the prompt when it's over the threshold, then rebuilds what depends on it. */
+private async compact(options: ModelCallOptions, tools: ToolSet): Promise&lt;ToolSet&gt; {
+  const { step, prompt } = this;
+  const { config } = step;
+  let compaction: Awaited&lt;ReturnType&lt;typeof maybeCompact&gt;&gt;;
+  try {
+    compaction = await maybeCompact({
+      abortSignal: config.abortSignal,
+      auth: step.ctx?.get(AuthKey) ?? null,
+      emissionState: step.position(),
+      messages: [...prompt.messages],
+      model: this.input.model,
+      promptMessages: withClientContext(prompt),
+      publish: step.publish,
+      requestEnvelopeTokens: this.requestEnvelopeTokens,
+      // ...
+    });
+    // 压缩失败不吞：记下来，这一轮直接失败
+    if (compaction.failure !== undefined) throw compaction.failure.error;
+  } catch (error) {
+    this.compactionFailure = { error };
+    throw error;
+  }
+
+  // 压缩会改写 session：历史被换成摘要 + 保留的尾部
+  step.session = compaction.session;
+  // 没压成（比如没超阈值）就原样返回工具集
+  if (!compaction.compacted) return tools;
+
+  compactPrompt(step, prompt, compaction.messages);
+  // ... 重建工具集
+}
+</code></pre>
+
+<p>判定函数在 <code>compaction/engine.ts</code>：</p>
+
+<pre><code class="language-ts">export function shouldCompact(
+  messages: readonly ModelMessage[],
+  config: CompactionConfig,
+  requestEnvelopeTokens = 0,
+  previousEnvelopeTokens = 0,
+): boolean {
+  // 三个数相加：消息本身的 token + 请求信封 + 压缩提示的固定开销
+  return (
+    messages.length &gt; 0 &amp;&amp;
+    getInputTokenCount(messages, config, requestEnvelopeTokens, previousEnvelopeTokens) +
+      COMPACTION_PROMPT_OVERHEAD_TOKENS &gt;
+      config.threshold
+  );
+}
+</code></pre>
+
+<p>注意 <code>+ COMPACTION_PROMPT_OVERHEAD_TOKENS</code>：压缩本身要消耗 token（要调压缩模型生成摘要），所以阈值判断里预留了这部分。不预留的话，会在「刚好卡在阈值下」时反复触发压缩但压不下去。</p>
+
+<p><code>config.threshold</code> 由 <code>thresholdPercent</code> 乘上下文窗口得到，默认 0.9（<code>session.ts</code> 里的 <code>DEFAULT_COMPACTION_THRESHOLD_PERCENT</code>，附录 B 也有）。</p>
+
+<p>压缩完成后，<code>compactPrompt</code> 替换 prompt 里的消息，<code>tools</code> 也要重建——因为工具列表里可能包含依赖历史的 deferred 工具。</p>
+
+<p><strong>压缩发生在模型调用之前，不是之后。</strong> 所以事件顺序是：</p>
+
+<pre><code class="language-text">step.started
+compaction.requested
+compaction.completed
+message.appended      ← 压缩后的第一次模型输出
+step.completed
+</code></pre>
+
+<h2 id="25-5-停泊与续跑">25.5 停泊与续跑</h2>
+
+<p><code>turn.waiting</code> 不是「模型在思考」，是「这个 turn 主动停下了，等外部输入」：</p>
+
+<pre><code class="language-ts">// 先结算「等着的工作」：审批结果、排队消息、定时任务
+const runtime = await settleRuntimeWork(step, input);
+// 没有要跑的东西：直接返回，不消耗模型调用
+if (runtime === undefined) return { next: null, session: step.session };
+
+const intake = await acceptHumanInput(step, runtime.input, { takeQueued: !runtime.waited });
+// stop：这一轮结束（比如用户取消）
+if (intake.kind === &quot;stop&quot;) return intake.result;
+</code></pre>
+
+<p><code>settleRuntimeWork</code> 返回 <code>undefined</code> 表示这个 step 没有可做的事——比如会话还在等审批，而这次 step 是定时器触发的。这时 step 直接返回，不消耗模型调用。</p>
+
+<p><code>acceptHumanInput</code> 的 <code>takeQueued: !runtime.waited</code> 决定要不要消费排队的消息：如果上一次是「等输入」，这次有新消息就取；如果不是，就跳过队列。</p>
+
+<p>停泊状态存在会话的 <code>turn</code> 字段里，<code>turn.waiting</code> 事件的 <code>on</code> 字段说明在等什么：</p>
+
+<ul>
+<li><code>on: &quot;input&quot;</code> —— 等审批或问题回答</li>
+<li><code>on: &quot;tasks&quot;</code> —— 等子代理任务</li>
+</ul>
+
+<p>第 11 章讲的四种审批策略，最终都落在这里：策略决定的是「停下时状态怎么记」，续跑路径只有这一条。</p>
+
+<h2 id="25-6-回到那三个-step-started">25.6 回到那三个 step.started</h2>
+
+<p>现在能解释了。</p>
+
+<p>「现在几点了」需要调一个工具，所以：</p>
+
+<ol>
+<li><strong>第一个 step</strong>：调模型，模型说「我要用 <code>get_current_time</code>」。工具执行完，step 结束，写检查点。</li>
+<li><strong>第二个 step</strong>：调模型，模型看到工具结果，说「现在是下午三点二十」。没有更多工具调用，step 结束。</li>
+<li><strong>第三个 step</strong>：收尾（发 <code>session.waiting</code>、结算停泊工作），不调模型或只调一次空转。</li>
+</ol>
+
+<p>如果模型一次就回答，只有两个 step。如果它连续调三个工具，就是四个。</p>
+
+<p>所以「step 数」约等于「模型调用数 + 收尾」。看到事件流里 step 很多，说明模型在反复调工具，不是框架有问题。</p>
+
+<h2 id="25-7-五个注意事项">25.7 五个注意事项</h2>
+
+<ol>
+<li><strong>工具参数错误不会让 turn 失败。</strong> 它变成 <code>isError: true</code> 的 tool result，模型自己重试。想看真实失败，查 <code>turn.failed</code>，不是 <code>action.result</code>。</li>
+<li><strong>一个 turn 的 step 数 = 模型调用数 + 辅助 step。</strong> 20 轮工具调用就是 20 个 step，每个都写检查点。长任务的开销主要在序列化上。</li>
+<li><strong>压缩在模型调用前，且会重建工具集。</strong> 自定义工具的 schema 如果依赖历史，压缩后要能重新生成。</li>
+<li><strong><code>providerExecuted</code> 的工具没有本地耗时。</strong> 追踪里看不到它们的执行时间，因为执行发生在厂商那边。</li>
+<li><strong><code>settleRuntimeWork</code> 返回 <code>undefined</code> 时 step 不消耗模型调用。</strong> 如果你的定时任务看起来「跑了但没反应」，先确认它是不是走了这条空转路径。</li>
+</ol>
+
+<h2 id="25-8-练习">25.8 练习</h2>
+
+<ol>
+<li>让模型连续调三次同一个工具（提示词里明确要求），数一下流里有几个 <code>step.started</code>。对照 25.2 的表解释。</li>
+<li>故意给一个工具传错参数（在提示词里指定一个不存在的字段），观察事件流里出现的是 <code>turn.failed</code> 还是 <code>action.result</code> 带 <code>isError</code>。</li>
+<li>把 <code>thresholdPercent</code> 调到 0.1，跑几轮对话，看 <code>compaction.requested</code> 出现在哪个事件之后。</li>
+<li>读 <code>harness/step/after-model.ts</code> 的 <code>appendMissingToolResultMessages</code>，说出它解决的是什么问题——什么情况下模型会返回一个没有对应结果的工具调用。</li>
+</ol>
+
+<h2 id="下一章">下一章</h2>
+
+<p>模型和工具的循环讲完了。但这一切都发生在服务端内部，外部世界怎么进来、怎么出去？</p>
+
+<p>第 26 章进到 HTTP 表面：默认 eve channel 的 750 行怎么组织 23 条路由，流式响应的 <code>startIndex</code> 怎么实现重放，以及 <code>turnPolicy</code> 的 <code>steer</code> 和 <code>queue</code> 差在哪一行。</p>
+
+<hr />
+
+<p>返回：<a href="https://tangxusc.github.io/2026/10/eve-tutorial/">教程目录</a> · 上一章：<a href="https://tangxusc.github.io/2026/10/eve-24-workflow/">24 workflow</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/">26 eve channel</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">源码解析</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/" data-tooltip="eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-24-workflow/" data-tooltip="eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/" data-tooltip="eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-24-workflow/" data-tooltip="eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 <code>eve init</code> 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-29-world/">
+                <h3 class="media-heading">eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/">
+                <h3 class="media-heading">eve 中文教程 · 第 28 章 鉴权、身份与协议</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>auth</code> 不是中间件，是一个按顺序试的函数数组。全部返回空才 401，抛错则按错误里带的 Response 拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/">
+                <h3 class="media-heading">eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>defineChannel</code> 把「路由表 + adapter + 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/">
+                <h3 class="media-heading">eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>eveChannel()</code> 返回的不是一个 handler，是一张 23 条路由的表加一层统一的鉴权包装。其中 12 条给调用方用，11 条是内部回调和兼容路径。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-25-harness/">
+                <h3 class="media-heading">eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-24-workflow/">
+                <h3 class="media-heading">eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：step 不是「函数调用」，是「检查点边界」。step 内的代码在崩溃恢复时会重跑，step 之间的不会。这是 eve 里唯一必须记住的语义。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-23-runtime/">
+                <h3 class="media-heading">eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-22-compiler/">
+                <h3 class="media-heading">eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 <code>shadowed</code>。你的 <code>tools/bash.ts</code> 能覆盖框架默认工具，靠的就是这张优先级表。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-21-discover/">
+                <h3 class="media-heading">eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：文件名不是「约定」，是一张精确的分类表加一组正则。文件没被识别，九成是撞了表里的某一条——而且失败方式是静默的。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         136 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-25-harness\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-25-harness\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

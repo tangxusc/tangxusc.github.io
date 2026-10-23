@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+一句话结论：eve 不是薄封装。它在进 commander 之前先检查 Node 版本、按需重编译自己；eve dev 会 fork 一个 detached 子进程跑服务器，然后用 IPC 而不是信号管理这个子进程的生死。
+">
+
+
+<meta property="og:description" content="
+一句话结论：eve 不是薄封装。它在进 commander 之前先检查 Node 版本、按需重编译自己；eve dev 会 fork 一个 detached 子进程跑服务器，然后用 IPC 而不是信号管理这个子进程的生死。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 20 章 CLI 启动链路">
+<meta name="twitter:title" content="eve 中文教程 · 第 20 章 CLI 启动链路">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-20-cli-internals/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-20-cli-internals/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+一句话结论：eve 不是薄封装。它在进 commander 之前先检查 Node 版本、按需重编译自己；eve dev 会 fork 一个 detached 子进程跑服务器，然后用 IPC 而不是信号管理这个子进程的生死。
+">
+<meta name="twitter:description" content="
+一句话结论：eve 不是薄封装。它在进 commander 之前先检查 Node 版本、按需重编译自己；eve dev 会 fork 一个 detached 子进程跑服务器，然后用 IPC 而不是信号管理这个子进程的生死。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-23T09:01:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-23T09:01:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+      <meta property="article:tag" content="源码解析">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 20 章 CLI 启动链路</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-20-cli-internals/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 20 章 CLI 启动链路
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-23T09:01:00&#43;08:00">
+        
+  October 23, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>一句话结论：<code>eve</code> 不是薄封装。它在进 commander 之前先检查 Node 版本、按需重编译自己；<code>eve dev</code> 会 fork 一个 detached 子进程跑服务器，然后用 IPC 而不是信号管理这个子进程的生死。</p>
+</blockquote>
+
+<h2 id="三个日常困惑">三个日常困惑</h2>
+
+<p>用 eve 久了，会遇到三个说不清的现象：</p>
+
+<ol>
+<li>第一次在 clone 下来的 eve 仓库里跑命令，卡十几秒才出结果。第二次就快了。</li>
+<li>在项目目录里敲 <code>eve</code>，它起 dev；在空目录里敲 <code>eve</code>，它跑 init。没人告诉你它怎么判断。</li>
+<li><code>eve dev</code> 按一次 Ctrl-C 有时退不掉，要按两次。<code>ps</code> 里还能看到两个 eve 进程。</li>
+</ol>
+
+<p>这三个现象对应同一条链路上的三段代码。这一章从终端敲下命令开始，一路跟到 TUI 出现，把这三段都讲清楚。</p>
+
+<h2 id="20-1-命令进来之前-先过两道关">20.1 命令进来之前，先过两道关</h2>
+
+<p><code>package.json</code> 的 <code>bin</code> 字段指向 <code>bin/eve.js</code>。这个文件不包含任何业务逻辑，只做四件事。</p>
+
+<pre><code class="language-js">// packages/eve/bin/eve.js · runEveCli()
+export async function runEveCli(argv = process.argv.slice(2), overrides = {}, dependencies = {}) {
+  const options = createBootstrapOptions(overrides);
+
+  // 第一道关：Node 版本不满足 engines.node 就直接报错，不进 commander
+  await assertSupportedNodeVersion(
+    dependencies.nodeVersion,
+    dependencies.nodeEngineRequirement,
+    options,
+    dependencies,
+  );
+
+  // 第二道关：dist 比源码旧时先编译；npm 安装的包没有源码，直接返回现成产物
+  const cliEntrypointPath = await ensureBuiltCli(options, dependencies);
+  const importModule = dependencies.importModule ?? ((specifier) =&gt; import(specifier));
+
+  // 到这一步才真正加载 CLI：--help 不会把 TUI、eval runner、Vercel SDK 拉进内存
+  const cliModule = await importModule(pathToFileURL(cliEntrypointPath).href);
+
+  // 导出契约：bin 只认 runCli 这一个名字，改掉整个 CLI 起不来
+  if (typeof cliModule.runCli !== &quot;function&quot;) {
+    throw new Error(`The eve CLI module at ${cliEntrypointPath} does not export runCli().`);
+  }
+
+  await cliModule.runCli(argv);
+}
+</code></pre>
+
+<p><strong>第一关：Node 版本。</strong></p>
+
+<p><code>assertSupportedNodeVersion</code> 读 <code>package.json</code> 的 <code>engines.node</code>，用 vendored 的 semver 比对。不满足就直接抛错，不进 commander。</p>
+
+<p>为什么放在最前面？因为代码里有硬性的版本依赖。<code>engines.node</code> 要求 <code>&gt;=24</code>，实际用到的 API 也在这个量级——<code>shutdown.ts</code> 里的 <code>Promise.withResolvers()</code> 是 Node 22 才有的。版本不够时，你希望看到的是 <code>eve requires Node.js &gt;=24.</code>，而不是运行到一半报 <code>Promise.withResolvers is not a function</code>。</p>
+
+<p><strong>第二关：按需重编译自己。</strong></p>
+
+<p>这一关解释了本章开头的第一个困惑。</p>
+
+<pre><code class="language-js">// packages/eve/bin/eve.js · ensureBuiltCli()
+// 产物在，且这个包能构建（源码或 workspace 安装），才需要比时间戳
+if (await exists(options.cliEntrypointPath)) {
+  if (!packageCanBuildCli) {
+    return options.cliEntrypointPath;
+  }
+
+  // 取「所有源码里最新的 mtime」和 dist 入口的 mtime 比
+  const [latestBuildInputMtimeMs, cliEntrypointMtimeMs] = await Promise.all([
+    getBuildInputMtimeMs({ packageRoot: options.packageRoot }),
+    getEntrypointMtimeMs(options.cliEntrypointPath),
+  ]);
+
+  // 用 &gt;= 而不是 &gt;：同一毫秒内完成的构建不会被误判成过期，否则每次执行都重编
+  if (cliEntrypointMtimeMs !== undefined &amp;&amp; cliEntrypointMtimeMs &gt;= latestBuildInputMtimeMs) {
+    return options.cliEntrypointPath;
+  }
+}
+// ... 否则依次跑 vendor-compiled、tsc、四个 post-build 脚本
+</code></pre>
+
+<p>逻辑是：<code>dist/src/cli/run.js</code> 存在，并且比 <code>src</code>、<code>bin</code>、<code>scripts</code> 里最新的文件还新，就直接用；否则重新编译整个包。</p>
+
+<p><code>packageCanBuildCli</code> 会检查 <code>bin</code>、<code>tsconfig.json</code>、<code>src</code>、<code>scripts/vendor-compiled.mjs</code> 是否存在。<strong>发布包里没有 <code>src</code></strong>，所以这段分支永远不会在 npm 安装的项目里触发。只有从源码跑（workspace 开发、<code>git clone</code> 后 <code>npm link</code>）才会。</p>
+
+<p>这就是「改了 eve 源码，第一次跑命令会卡十几秒」的原因——它在跑 tsc。第二次跑，<code>dist</code> 已经比 <code>src</code> 新，直接跳过。</p>
+
+<p><strong>后面两件事：导入和退出。</strong></p>
+
+<p>用 <code>pathToFileURL</code> 动态导入 <code>runCli</code>，因为路径是运行时算出来的。</p>
+
+<p>命令跑完后，先 flush 再退出：</p>
+
+<pre><code class="language-js">// packages/eve/bin/eve.js 末尾
+} finally {
+  // 先冲刷：管道是异步写，process.exit 会丢掉还在队列里的数据。
+  // 大输出（比如 eve info --json 被父进程读取）会被截断在半截。
+  await Promise.all([flushWritable(process.stdout), flushWritable(process.stderr)]);
+
+  // 再退出：dev 构建链会留下 native handle，不显式退，命令结束后进程会挂住。
+  // 所以 `eve dev` + `/exit` 不会卡在那里。
+  process.exit(process.exitCode ?? 0);
+}
+</code></pre>
+
+<p>两段注释就是全部理由。前者解释为什么不能直接 <code>process.exit</code>（会截断管道里的 JSON），后者解释为什么必须 <code>process.exit</code>（构建工具链会留下 native handle，不主动退进程就挂着）。</p>
+
+<p>顺序不能反：先 flush 再 exit。</p>
+
+<p><strong>注意</strong>：<code>flushWritable</code> 只对 stdout/stderr 的 <code>write</code> 回调做等待，不覆盖 <code>fs.writeSync</code> 之类的同步写。如果你在命令里用 <code>process.stdout.fd</code> 直接写，这部分不受保护。</p>
+
+<h2 id="20-2-命令怎么被分发">20.2 命令怎么被分发</h2>
+
+<p>过了两道关，进入 <code>src/cli/run.ts</code>。这个文件建 commander 实例，按顺序注册全部命令。</p>
+
+<p>所有命令的 action 都是同一个形状：</p>
+
+<pre><code class="language-ts">// packages/eve/src/cli/run.ts · createCliProgram()
+// 每个命令都是同一个形状：声明选项 → action 里动态 import 实现 → 执行
+agentCommand(program.command(&quot;start&quot;), applicationContext)
+  .description(&quot;Start a built eve application.&quot;)
+  .option(&quot;--host &lt;host&gt;&quot;, &quot;Host interface to bind&quot;)
+  .option(&quot;--port &lt;port&gt;&quot;, &quot;Port to listen on (defaults to $PORT, then 3000)&quot;, parsePortOption)
+  .action(async (options: ProductionCliOptions) =&gt; {
+    const { loadDevelopmentEnvironmentFiles } = await import(&quot;#cli/dev/environment.js&quot;);
+
+    // 生产启动也读 .env：eve start 不是「什么都不加载」
+    await loadDevelopmentEnvironmentFiles(applicationContext.root);
+    // ... 起生产服务器
+  });
+</code></pre>
+
+<p><code>await import()</code> 写在 action 里面，不在模块顶层。这样 <code>eve --version</code> 只加载 commander 和注册代码，不会把 Vercel SDK、TUI 渲染器、eval runner 一起拉起来。启动时间差在这里，不在内存。</p>
+
+<h3 id="eve-不带参数时跑什么"><code>eve</code> 不带参数时跑什么</h3>
+
+<p>这是本章开头的第二个困惑。</p>
+
+<pre><code class="language-ts">// packages/eve/src/cli/run.ts:385 · runCli()
+let input = argv;
+
+// argv 为空时，用「当前目录是不是应用根」决定跑什么
+if (input.length === 0) {
+  const findApplicationRoot = runtime.findApplicationRoot ?? findCliApplicationRoot;
+  const appRoot = await findApplicationRoot(applicationContext.root);
+
+  if (appRoot === undefined) {
+    // 不在应用里：agents/ 工作区跑 dev，其余情况跑 init
+    const projectContext = await findEveProjectContext(applicationContext.root);
+    input = projectContext?.kind === &quot;workspace&quot; ? [&quot;dev&quot;] : [&quot;init&quot;];
+  } else {
+    // 在应用里：先把根切过去，再跑 dev
+    applicationContext.root = appRoot;
+    input = [&quot;dev&quot;];
+  }
+}
+</code></pre>
+
+<p>翻译成行为：</p>
+
+<table>
+<thead>
+<tr>
+<th>当前目录</th>
+<th><code>eve</code> 等价于</th>
+<th>为什么</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>有 <code>agent/</code> 或 <code>agents/</code> 的 eve 项目内</td>
+<td><code>eve dev</code></td>
+<td>已经初始化过</td>
+</tr>
+
+<tr>
+<td>在 <code>agents/</code> 工作区根目录</td>
+<td><code>eve dev</code></td>
+<td>工作区也是项目</td>
+</tr>
+
+<tr>
+<td>什么都没有的空目录</td>
+<td><code>eve init</code></td>
+<td>第一次用</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>findCliApplicationRoot</code> 会向上找最近的 eve 应用根，所以你在 <code>agent/tools/</code> 子目录里敲 <code>eve</code> 也能起 dev。</p>
+
+<h3 id="工作区里选哪个-agent">工作区里选哪个 agent</h3>
+
+<p><code>dev</code>、<code>build</code>、<code>start</code>、<code>info</code>、<code>eval</code>、<code>logs</code>、<code>traces</code> 都经过 <code>agentCommand</code> 包一层：</p>
+
+<pre><code class="language-ts">// packages/eve/src/cli/agent-command.ts · agentCommand()
+export function agentCommand(
+  command: Command,
+  applicationContext: CliApplicationContext,
+  requirement: AgentCommandRequirement = () =&gt; true,
+): Command {
+  // 所有命令共享 --agent，只注册一次，靠 preAction 在动作之前解析
+  command.option(&quot;--agent &lt;name&gt;&quot;, &quot;Select an agent from an agents/ workspace&quot;);
+
+  return command.hook(&quot;preAction&quot;, async (_command, actionCommand) =&gt; {
+    const requestedName = actionCommand.opts&lt;{ agent?: string }&gt;().agent;
+    if (!requirement(actionCommand)) { /* ... */ return; }
+
+    const initialSelection = await applicationContext.resolveAgent();
+
+    // 工作区：按 --agent 选成员，没给名字就交互式问
+    if (initialSelection.kind === &quot;workspace&quot;) {
+      applicationContext.root = await selectWorkspaceAgent(initialSelection.workspace, requestedName);
+      await applicationContext.resolve();
+      return;
+    }
+    // ... 非 workspace 时校验 --agent 只能指向工作区成员
+  });
+}
+</code></pre>
+
+<p>它做两件事：给命令加 <code>--agent</code> 选项；在 action 执行前把 <code>applicationContext.root</code> 改写成具体 agent 的目录。</p>
+
+<p><code>selectWorkspaceAgent</code> 的选择顺序值得记住：</p>
+
+<ol>
+<li>传了 <code>--agent &lt;name&gt;</code> → 按名字找，找不到直接报错并列出可选项。</li>
+<li>工作区只有一个成员 → 用它。</li>
+<li>多个成员且终端是 TTY → 弹交互选择。</li>
+<li>多个成员且不是 TTY（CI、管道）→ 报错，要求显式传 <code>--agent</code>。</li>
+</ol>
+
+<p>第 4 条是给 CI 用的。在流水线里跑 <code>eve build</code> 而不指定 agent，不会静默选第一个，会失败。</p>
+
+<h3 id="参数写错时会发生什么">参数写错时会发生什么</h3>
+
+<p>commander 默认在参数错误时自己 <code>process.exit(1)</code>。eve 关掉了这个行为：</p>
+
+<pre><code class="language-ts">// packages/eve/src/cli/run.ts · createCliProgram()
+program
+  .name(&quot;eve&quot;)
+  .version(packageVersion)
+  .showHelpAfterError()
+  // 不让 commander 自己 process.exit：错误要回到 runCli，由它统一决定退出码
+  .exitOverride()
+  // 输出交给 logger：和框架日志同格式、同一个出口，测试里也好捕获
+  .configureOutput({
+    writeErr: (message) =&gt; {
+      logger.error(message.trimEnd());
+    },
+    writeOut: (message) =&gt; {
+      logger.log(message.trimEnd());
+    },
+  });
+</code></pre>
+
+<p><code>.exitOverride()</code> 让 commander 抛 <code>CommanderError</code> 而不是直接退出。这样 <code>runCli</code> 的 try/catch 能接住，做三件事：记遥测（<code>usage_error</code> 还是 <code>error</code>）、决定是否补打帮助、最后统一抛出。</p>
+
+<p><code>.showHelpAfterError()</code> 是「参数写错时顺便打印用法」。<code>.configureOutput</code> 把 commander 的输出接到 eve 自己的 logger 上，保证 <code>--json</code> 模式下 stdout 只有 JSON，不会被用法说明污染。</p>
+
+<p>catch 里有个专门的补丁：</p>
+
+<pre><code class="language-ts">if (error instanceof CommanderError) {
+  const detectCodingAgentLaunch = runtime.isCodingAgentLaunch ?? isCodingAgentLaunch;
+  const agentLaunched = await detectCodingAgentLaunch();
+
+  // 在 AI coding agent 里跑 init 失败时，补一段给 agent 看的下一步指引
+  if (input[0] === &quot;init&quot; &amp;&amp; agentLaunched) {
+    const { initAgentInstructions } = await import(&quot;#cli/commands/agent-instructions.js&quot;);
+    logger.log(initAgentInstructions());
+  }
+
+  // 转成普通 Error：退出码由外层统一处理，commander 的 exitCode 不再生效
+  throw new Error(error.message);
+}
+</code></pre>
+
+<p><code>eve init</code> 因为参数错误被 commander 拒掉时，如果调用方是 AI agent，会补一段「你应该怎么初始化这个项目」的说明。因为 agent 拿到的错误信息如果只有 <code>unknown option</code>，它没法自己纠偏。</p>
+
+<h2 id="20-3-eve-dev-为什么是两个进程">20.3 <code>eve dev</code>：为什么是两个进程</h2>
+
+<p>这是本章开头第三个困惑的答案，也是整章最核心的一段。</p>
+
+<p><code>eve dev</code> 不是「在一个进程里起个 HTTP server」，它 fork 一个子进程。原因写在 <code>local-server-process.ts</code> 的文件头：</p>
+
+<pre><code class="language-ts">// 这段注释就是 fork 子进程的全部理由，三条各对应一种失败模式：
+// TUI 的 raw mode 关掉 ISIG、headless 下同组信号父子竞争、macOS 没有父进程死亡信号。
+/**
+ * The `eve dev` server child: forked `detached` (its own process group) and
+ * bound to the CLI's lifetime through the IPC channel, never through the OS.
+ *
+ * Why the child is not bound to the parent at the OS level (shared process
+ * group, inherited terminal signals):
+ *
+ * - The TUI puts stdin in raw mode, which disables ISIG: Ctrl+C never becomes
+ *   a terminal-generated SIGINT, so same-group signal delivery does nothing in
+ *   the mode where Ctrl+C matters most.
+ * - In headless mode, same-group delivery would signal parent and child
+ *   simultaneously, racing the parent's graceful IPC shutdown against the
+ *   child's own signal handler.
+ * - macOS has no parent-death signal. IPC `disconnect` is the portable
+ *   equivalent: the child self-stops whenever this process exits, for any
+ *   reason including SIGKILL (see local-server-child.ts).
+ */
+</code></pre>
+
+<p>三条理由，每条都对应一个真实约束：</p>
+
+<ol>
+<li><strong>TUI 把 stdin 设成 raw mode，禁用了 ISIG。</strong> Ctrl+C 不再产生 SIGINT，靠进程组投递信号在 TUI 里完全无效。这是最反直觉的一条：你以为 Ctrl+C 会杀进程组，实际上在 raw mode 下它只是一个字节 <code>\x03</code>。</li>
+<li><strong>headless 模式下同组投递会同时打到父子进程。</strong> 父进程正在走优雅关闭，子进程自己的 handler 也在跑，两边竞争。</li>
+<li><strong>macOS 没有 parent-death signal。</strong> Linux 有 <code>PR_SET_PDEATHSIG</code>，macOS 没有。可移植的替代是 IPC channel 断开。</li>
+</ol>
+
+<p><code>detached: true</code> 让子进程成为进程组组长。这样 <code>close()</code> 可以用 <code>process.kill(-pid, ...)</code> 一次性收掉整棵进程树——包括子进程再拉起的沙箱进程。</p>
+
+<h3 id="启动时的握手">启动时的握手</h3>
+
+<p><code>start()</code> 用 <code>fork</code> 拉起子进程，stdio 是 <code>[&quot;ignore&quot;, &quot;pipe&quot;, &quot;pipe&quot;, &quot;ipc&quot;]</code>，然后等一条 IPC 消息：</p>
+
+<pre><code class="language-ts">// packages/eve/src/cli/dev/local-server-process.ts · start()
+// 父子之间只有 IPC 一条通道：启动进度、启动结果、关闭请求都走它
+spawned.on(&quot;message&quot;, (message: ChildMessage) =&gt; {
+  if (message.type === &quot;progress&quot;) options.onBootProgress?.(message.event);
+
+  // started 只认第一次，重复消息不会二次 resolve
+  if (message.type === &quot;started&quot; &amp;&amp; !settled) {
+    settled = true;
+    resolve(message.handle);
+
+    // existing：已有 server 在跑，这个子进程探测完就该退，退出不算异常
+    if (message.handle.kind === &quot;existing&quot;) {
+      expectedExit = true;
+      release();
+    }
+  }
+
+  // failed：把子进程的原始错误抛给调用方，不再二次包装
+  if (message.type === &quot;failed&quot; &amp;&amp; !settled) {
+    settled = true;
+    reject(new Error(message.message));
+  }
+});
+</code></pre>
+
+<p>三种消息：<code>progress</code>（启动进度，喂给 TUI 的进度行）、<code>started</code>（带 handle，含 url）、<code>failed</code>。</p>
+
+<p><code>handle.kind === &quot;existing&quot;</code> 时子进程会主动断开 IPC 退出——因为已经有另一个 server 在跑，这个子进程只是去探测了一下。这对应 TUI 模式的 <code>existing: &quot;attach-if-unconfigured&quot;</code>。</p>
+
+<p>实际效果和直觉相反，值得记清楚：</p>
+
+<table>
+<thead>
+<tr>
+<th>第二个终端执行的命令</th>
+<th>结果</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>eve dev</code></td>
+<td>附着到已有实例，TUI 连过去，不再起 server</td>
+</tr>
+
+<tr>
+<td><code>eve dev --port 3001</code></td>
+<td><strong>报错</strong>：已有实例在跑，并打印连接命令</td>
+</tr>
+
+<tr>
+<td><code>eve dev --no-ui</code></td>
+<td>报错（<code>existing: &quot;reject&quot;</code>）</td>
+</tr>
+</tbody>
+</table>
+
+<p>判定在 <code>start-development-server.ts</code>：</p>
+
+<pre><code class="language-ts">// 只要显式指定了任何一项 server 配置，就当作「你想自己控制」，不再自动附着
+const hasExplicitServerConfiguration =
+  options.resume === true ||
+  options.developmentExtensions !== undefined ||
+  options.host !== undefined ||
+  options.port !== undefined ||
+  environmentPort !== undefined;
+
+// 什么都没指定：附着到已有实例，复用它的 URL，不再起第二个 server
+if (options.existing === &quot;attach-if-unconfigured&quot; &amp;&amp; !hasExplicitServerConfiguration) {
+  return { handle: { kind: &quot;existing&quot;, appRoot: project.appRoot, url: existingServerUrl }, close: undefined };
+}
+
+// 指定了配置还撞端口：直接报错，让用户换端口或先关掉旧实例
+throw await createDevelopmentServerAlreadyRunningError(project.appRoot, existingServerUrl);
+</code></pre>
+
+<p>只要传了 <code>--port</code>、<code>--host</code>、<code>--resume</code> 或设了 <code>PORT</code>，就被当成「你想控制 server 配置」，不再自动附着。想同时跑两个实例，得让它们各自有独立的项目目录。</p>
+
+<h3 id="关闭时的三级升级">关闭时的三级升级</h3>
+
+<pre><code class="language-ts">// packages/eve/src/cli/dev/local-server-process.ts:47
+// 三级关闭的时间预算：550 + 150 + 100 = 800ms。
+// 必须小于 shutdown.ts 里 900ms 的兜底，否则 Ctrl+C 后 eve dev 会以非 0 退出。
+const IPC_SHUTDOWN_GRACE_MS = 550;
+const SIGTERM_GRACE_MS = 150;
+const SIGKILL_REAP_MS = 100;
+
+export const DEV_SERVER_CLOSE_BUDGET_MS =
+  IPC_SHUTDOWN_GRACE_MS + SIGTERM_GRACE_MS + SIGKILL_REAP_MS;
+</code></pre>
+
+<p><code>close()</code> 里的三级升级：</p>
+
+<pre><code class="language-ts">// packages/eve/src/cli/dev/local-server-process.ts · close()
+// 一级：请子进程自己优雅关闭，给 550ms
+if (active.connected) active.send({ type: &quot;shutdown&quot; });
+if (
+  await terminatesWithin(active, terminated.promise, () =&gt; childExited, IPC_SHUTDOWN_GRACE_MS)
+)
+  return;
+
+// 二级：整个进程组 SIGTERM，给 150ms（子进程可能又 fork 了孙进程）
+signalProcessGroup(active, &quot;SIGTERM&quot;);
+if (await terminatesWithin(active, terminated.promise, () =&gt; childExited, SIGTERM_GRACE_MS))
+  return;
+
+// 三级：SIGKILL，只等内核回收，不再等它清理资源
+signalProcessGroup(active, &quot;SIGKILL&quot;);
+await terminatesWithin(active, terminated.promise, () =&gt; childExited, SIGKILL_REAP_MS);
+</code></pre>
+
+<p>先礼后兵：IPC <code>shutdown</code> 消息 → 整个进程组 SIGTERM → 整个进程组 SIGKILL。每级都有超时，总和 800ms。</p>
+
+<p>这个 800 不是随便定的。<code>shutdown.ts</code> 里的 <code>FORCED_EXIT_BACKSTOP_MS = 900</code>，注释写明：</p>
+
+<blockquote>
+<p>Must stay below the forced-exit backstop the dev command arms on its lifecycle, so a graceful close always beats the backstop and <code>eve dev</code> exits 0 after Ctrl+C.</p>
+</blockquote>
+
+<p>优雅关闭必须跑在兜底之前，否则 Ctrl+C 后 <code>eve dev</code> 会以非 0 退出。这个约束有测试守着（<code>local-server-process.test.ts</code>）。</p>
+
+<h3 id="子进程这一侧">子进程这一侧</h3>
+
+<pre><code class="language-ts">// packages/eve/src/cli/dev/local-server-child.ts
+const stop = () =&gt; {
+  // 幂等：shutdown 消息、disconnect、信号可能同时到达
+  if (stopping) return;
+  stopping = true;
+
+  // 父进程可能已经没了，继续写 stdout 会 EPIPE：先把三个输出通道静音
+  console.log = console.warn = console.error = () =&gt; {};
+  process.stdout.on(&quot;error&quot;, () =&gt; {});
+  process.stderr.on(&quot;error&quot;, () =&gt; {});
+
+  const cleanup = server.close();
+  if (process.connected) process.disconnect?.();
+
+  // 等清理意图写完再退：下次启动要靠这个文件回收沙箱资源
+  void cleanup.then(
+    async () =&gt; {
+      await intentReady.catch(() =&gt; undefined);
+      await removeCleanupIntent?.().catch(() =&gt; undefined);
+      process.exit(0);
+    },
+    () =&gt; process.exit(1),
+  );
+};
+
+process.on(&quot;message&quot;, (message) =&gt; { if (message.type === &quot;shutdown&quot;) stop(); });
+// IPC disconnect 就是父进程死亡信号：父进程被 kill -9 也会触发，OS 层没有等价机制
+process.once(&quot;disconnect&quot;, stop);
+process.once(&quot;SIGINT&quot;, stop);
+process.once(&quot;SIGTERM&quot;, stop);
+</code></pre>
+
+<p>四个细节：</p>
+
+<ol>
+<li><strong>先静音 console。</strong> 关闭过程中 server 还在写日志，父进程可能已经关了管道，继续写会抛 EPIPE。先换成空函数，再给 stdout/stderr 挂 error 监听吞掉。</li>
+<li><strong>先 <code>server.close()</code> 再 <code>disconnect</code>。</strong> 顺序反了父进程会以为子进程已死，但其实资源还没释放。</li>
+<li><strong><code>disconnect</code> 是父进程死亡的唯一可靠信号。</strong> 父进程被 <code>kill -9</code> 时没有信号发给子进程，只有 IPC channel 关闭。这是 macOS 上唯一可移植的方案。</li>
+<li><strong><code>recordCleanupIntent</code>。</strong> 启动成功后写一个清理意图文件，正常退出时删掉。如果进程被 SIGKILL（连 <code>disconnect</code> 都来不及处理），文件留着，下次启动时 <code>reconcileCleanupIntents</code> 会发现并清理沙箱资源。</li>
+</ol>
+
+<p>第 4 条解释了「为什么我的沙箱容器在异常退出后还留着」——它在等下一次 <code>eve dev</code> 来收尸。</p>
+
+<h2 id="20-4-为什么-ctrl-c-要按两次">20.4 为什么 Ctrl-C 要按两次</h2>
+
+<pre><code class="language-ts">// packages/eve/src/cli/shutdown.ts · installShutdownSignal()
+const handleSignal = (signal: NodeJS.Signals) =&gt; {
+  // TUI 占着终端时不响应信号，交给租约持有者处理
+  if (terminalLeaseDepth &gt; 0) return;
+
+  signalCount += 1;
+
+  // 第二次 Ctrl+C 不再等待：SIGINT 退 130、SIGTERM 退 143，都是 shell 的惯例值
+  if (signalCount &gt; 1) process.exit(signal === &quot;SIGINT&quot; ? 130 : 143);
+  stop(signal);
+};
+</code></pre>
+
+<p>第一次收到 SIGINT：<code>stop()</code> 里 abort controller、resolve <code>stopped</code>、挂 900ms 兜底定时器。第二次：立刻 <code>process.exit(130)</code>，不等任何清理。</p>
+
+<p>设计意图是「第一次给优雅关闭机会，第二次你说了算」。130 和 143 是 shell 约定的退出码（128 + 信号编号），<code>2</code> 是 SIGINT，<code>15</code> 是 SIGTERM。</p>
+
+<p><code>withTerminalLease</code> 是配套机制：</p>
+
+<pre><code class="language-ts">async withTerminalLease&lt;T&gt;(task: () =&gt; Promise&lt;T&gt;): Promise&lt;T&gt; {
+  // 用深度计数而不是布尔：嵌套调用时，只有最外层结束才真正释放终端
+  terminalLeaseDepth += 1;
+  try {
+    return await task();
+  } finally {
+    terminalLeaseDepth -= 1;
+  }
+}
+</code></pre>
+
+<p>在 lease 期间，SIGINT 被忽略（<code>terminalLeaseDepth &gt; 0</code> 直接 return）。用途是把终端临时交给一个继承 stdio 的子进程——比如 <code>eve init</code> 装依赖时，包管理器的交互提示需要独占 Ctrl-C。这时按 Ctrl-C 应该中断 npm，而不是中断 eve。</p>
+
+<h2 id="20-5-eve-init-生成什么-为什么自动进-dev">20.5 <code>eve init</code>：生成什么，为什么自动进 dev</h2>
+
+<p><code>eve init</code> 的结尾有一段容易误读的逻辑：</p>
+
+<pre><code class="language-ts">// packages/eve/src/cli/commands/init.ts · runInitCommand()
+const agentLaunched = await dependencies.isCodingAgentLaunch();
+const interactive = dependencies.hasInteractiveTerminal();
+
+// 三个条件同时成立才自动起 dev：有终端、不在 AI coding agent 里、没传 --non-interactive
+const startDevelopment = interactive &amp;&amp; !agentLaunched &amp;&amp; !options.nonInteractive;
+</code></pre>
+
+<p>三个条件同时成立才会在脚手架完成后直接拉起 dev：</p>
+
+<ul>
+<li>终端是 TTY；</li>
+<li><strong>不是在 AI coding agent 里启动的</strong>（<code>isCodingAgentLaunch()</code> 调用 vendored 的 <code>@vercel/detect-agent</code>）；</li>
+<li>没传 <code>-n</code> / <code>--non-interactive</code>。</li>
+</ul>
+
+<p>第二条是关键。你在 Claude Code、Cursor、Codex 的终端里跑 <code>eve init</code>，它不会去起一个交互式 TUI（那会卡住调用方），而是打印一段给 agent 看的指引，包含下一步该读哪些文档、该改哪个文件。同一段文字也写进了 <code>AGENTS.md</code>。</p>
+
+<p><code>agent/agent.ts</code> 来自 <code>BASE_AGENT_TEMPLATE</code>（选网关模型）或 <code>BYOK_AGENT_TEMPLATE</code>（自带 key，多一层 <code>modelOptions.providerOptions.gateway.byok</code>）。其余文件在 <code>src/setup/scaffold/create/project.ts</code> 的 <code>SHARED_TEMPLATE_FILES</code> 里，是一张 <code>Record&lt;string, string&gt;</code>：</p>
+
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>内容要点</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>agent/agent.ts</code></td>
+<td><code>defineAgent({ model })</code>，模型由 init 时的选择决定</td>
+</tr>
+
+<tr>
+<td><code>agent/instructions.md</code></td>
+<td>身份与行为，从模板生成</td>
+</tr>
+
+<tr>
+<td><code>agent/channels/eve.ts</code></td>
+<td>默认 HTTP 通道</td>
+</tr>
+
+<tr>
+<td><code>package.json</code></td>
+<td>依赖 <code>eve</code>、<code>ai</code>、<code>zod</code>、<code>@vercel/connect</code>，脚本 <code>dev</code>/<code>build</code>/<code>start</code>/<code>eval</code></td>
+</tr>
+
+<tr>
+<td><code>tsconfig.json</code></td>
+<td><code>moduleResolution: &quot;bundler&quot;</code>，<code>types: [&quot;node&quot;, &quot;eve/workflow-modules&quot;]</code></td>
+</tr>
+
+<tr>
+<td><code>AGENTS.md</code></td>
+<td>给 AI coding agent 的项目说明</td>
+</tr>
+
+<tr>
+<td><code>CLAUDE.md</code></td>
+<td>一行 <code>@AGENTS.md</code>，复用同一份内容</td>
+</tr>
+
+<tr>
+<td><code>.gitignore</code></td>
+<td>包含 <code>.eve</code>、<code>.vercel</code>、<code>.output</code>、<code>.nitro</code></td>
+</tr>
+
+<tr>
+<td><code>.vercelignore</code></td>
+<td>单独一份，因为 Vercel CLI 默认不忽略裸 <code>.env</code></td>
+</tr>
+</tbody>
+</table>
+
+<p><code>package.json</code> 里还有一段容易和 eve 内部别名混淆的配置：</p>
+
+<pre><code class="language-json">{
+  &quot;imports&quot;: {
+    &quot;#*&quot;: &quot;./agent/*&quot;,
+    &quot;#evals/*&quot;: &quot;./evals/*&quot;
+  }
+}
+</code></pre>
+
+<p>这是<strong>项目侧</strong>的别名：<code>#tools/read_logs.js</code> 指向 <code>agent/tools/read_logs.ts</code>。和 eve 包内部的 <code>#cli/</code>、<code>#internal/</code> 是两套独立的映射，只是语法相同。读源码时看到 <code>#execution/</code>，那是 eve 自己的；看到 <code>#tools/</code>，那是项目作者写的。</p>
+
+<p>最后一条 <code>.vercelignore</code> 有注释解释：Vercel CLI 默认忽略 <code>.env.local</code> 和 <code>.env.*.local</code>，但<strong>不忽略裸 <code>.env</code></strong>。不写进 <code>.vercelignore</code>，源码部署会把 <code>.env</code> 一起上传。</p>
+
+<p><code>package.json</code> 里的版本号是占位符（<code>__EVE_INIT_PACKAGE_VERSION__</code> 之类），在生成时替换成执行 <code>eve init</code> 的那个 CLI 的版本。所以脚手架建出来的项目，钉的版本和生成它的 CLI 一致。</p>
+
+<h2 id="20-6-build-start-info">20.6 build / start / info</h2>
+
+<p><strong><code>build</code></strong> 有两条路径，按项目形态分：</p>
+
+<pre><code class="language-ts">// packages/eve/src/cli/commands/build.ts
+const projectContext = await input.applicationContext.resolveAgent();
+
+// 工作区：逐成员构建，产物落在各自目录下
+if (projectContext.kind === &quot;workspace&quot;) {
+  const { buildAgentWorkspace } = await import(&quot;#internal/vercel/build-agent-workspace.js&quot;);
+  const outputDir = await buildAgentWorkspace(projectContext.workspace, {
+    skipSandboxPrewarm: options.skipSandboxPrewarm,
+  });
+  // ...
+  return;
+}
+
+// 单 agent：走 nitro 的构建入口，测试里可以注入别的实现
+const buildHost =
+  input.buildHost ?? (await import(&quot;#internal/nitro/host.js&quot;)).buildApplication;
+</code></pre>
+
+<p><code>agents/</code> 工作区走 <code>buildAgentWorkspace</code>，单个 agent 走 <code>buildApplication</code>（Nitro 宿主）。工作区构建不支持 <code>--profile</code>，会直接抛错——因为一次要构建多个 agent，单份 profile 没有意义。</p>
+
+<p><code>--skip-sandbox-prewarm</code> 会跳过沙箱预热。产物仍然能构建，但可能不可部署——部署环境缺少预热好的沙箱镜像。</p>
+
+<p><strong><code>start</code></strong> 是生产模式：</p>
+
+<pre><code class="language-ts">const server = await startProductionHost(applicationContext.root, {
+  host: options.host,
+  port: options.port,
+});
+logger.log(renderCliTaggedLine(theme, { message: `server listening at ${server.url}`, tag: &quot;start&quot; }));
+
+// 挂起等关闭信号。close 和 wait 分开传：先停止接收新请求，再等存量收尾
+await waitForShutdownSignal({ close: () =&gt; server.close(), wait: () =&gt; server.wait() });
+</code></pre>
+
+<p>注意它用的是 <code>waitForShutdownSignal</code>（不带 <code>exitAfterMs</code>），没有 900ms 兜底。生产进程退出时宁可慢，也不能截断正在写的会话检查点。</p>
+
+<p><strong><code>info</code></strong> 输出 <code>ApplicationInfoJson</code>，字段在 <code>src/cli/commands/info.ts</code> 的接口里定义。几个容易忽略的：</p>
+
+<ul>
+<li><code>toolInputSchemas.root</code> / <code>toolInputSchemas.subagents</code>：每个工具<strong>发给模型的</strong> schema，不是你在 <code>defineTool</code> 里写的那个。中间经过了归一化和 JSON Schema 转换。</li>
+<li><code>artifacts</code>：五个产物的绝对路径（compiledManifest、discoveryManifest、diagnostics、moduleMap、metadata）。排查产物问题时直接 <code>cat</code> 这些路径。</li>
+<li><code>channels[].urlPath</code>：每个通道注册的实际路由。默认 eve 通道是 <code>/eve/v1</code>。</li>
+</ul>
+
+<h2 id="20-7-回到开头那三个困惑">20.7 回到开头那三个困惑</h2>
+
+<p>现在可以完整回答了。</p>
+
+<p><strong>第一次跑命令为什么慢？</strong> <code>ensureBuiltCli</code> 发现 <code>src</code> 比 <code>dist</code> 新，跑了 tsc 和四个 post-build 脚本。改完源码第一次执行卡十几秒是正常的，不是卡死。</p>
+
+<p><strong><code>eve</code> 怎么判断跑 init 还是 dev？</strong> 向上找最近的 eve 应用根。找到就 dev，找不到就看是不是工作区，都不是就跑 init。</p>
+
+<p><strong>为什么 Ctrl-C 要按两次？</strong> 第一次给优雅关闭 900ms，第二次直接 <code>exit(130)</code>。子进程那侧靠 IPC <code>disconnect</code> 感知父进程死亡，即使父进程被 <code>kill -9</code> 也能退。</p>
+
+<p>另外三处需要注意：</p>
+
+<ol>
+<li><strong><code>eve dev --no-ui</code> 和 <code>eve dev</code> 对「已有 server」的处理不同。</strong> 前者传 <code>existing: &quot;reject&quot;</code>，端口被占直接失败；后者传 <code>existing: &quot;attach-if-unconfigured&quot;</code>，会尝试附着到已有实例。CI 里用 <code>--no-ui</code> 时要自己保证端口空闲。</li>
+<li><strong><code>kill -9</code> 父进程后，子进程靠 <code>disconnect</code> 退出，但沙箱资源要等下次启动才清理。</strong> <code>recordCleanupIntent</code> 写的 <code>.eve/dev-cleanup-intent.&lt;runId&gt;.json</code> 留在磁盘上，<code>reconcileCleanupIntents</code> 在下一次 <code>eve dev</code> 启动时处理。</li>
+<li><strong>Ctrl-C 第二次是硬退。</strong> 如果第一次之后 900ms 内没关完，兜底会 <code>process.exit(0)</code>；如果连兜底都没触发（比如子进程卡在 uninterruptible sleep），第二次 Ctrl-C 直接 <code>exit(130)</code>，会话检查点可能没写完。</li>
+</ol>
+
+<h2 id="20-8-练习">20.8 练习</h2>
+
+<ol>
+<li>在 eve 源码目录里 <code>touch packages/eve/src/cli/run.ts</code>，再跑 <code>eve --version</code>。用 <code>time</code> 量一下耗时，对照 <code>ensureBuiltCli</code> 的分支解释为什么慢。</li>
+<li><code>eve dev</code> 起来后，另开终端 <code>ps -ef | grep local-server-child</code>。记下 PID，然后 <code>kill -9</code> 那个父进程（不是子进程），看子进程多久消失。对照 <code>disconnect</code> 的处理逻辑。</li>
+<li>在 <code>agents/</code> 工作区里建两个成员，用 <code>eve info</code> 不带 <code>--agent</code> 跑一次（管道重定向到文件，模拟非 TTY）。看报错内容。</li>
+<li>读 <code>eve info --json</code> 的输出，找出 <code>toolInputSchemas.root</code> 里 <code>bash</code> 工具的 schema。和你印象里 <code>defineTool</code> 的写法对比，看多了哪些字段。</li>
+</ol>
+
+<h2 id="下一章">下一章</h2>
+
+<p>命令跑起来了，dev server 在跑，TUI 连上了。但服务器启动时会先做一件事：扫描 <code>agent/</code> 目录。</p>
+
+<p>第 21 章进到这一步。你会看到「文件名即能力名」这条规则到底是怎么实现的，以及为什么有些文件放进去毫无反应——连报错都没有。</p>
+
+<hr />
+
+<p>返回：<a href="https://tangxusc.github.io/2026/10/eve-tutorial/">教程目录</a> · 上一章：<a href="https://tangxusc.github.io/2026/10/eve-19-reading-the-source/">19 怎么读 eve 的源码</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-21-discover/">21 discover</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">源码解析</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-21-discover/" data-tooltip="eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-19-reading-the-source/" data-tooltip="eve 中文教程 · 第 19 章 怎么读 eve 的源码">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-21-discover/" data-tooltip="eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-19-reading-the-source/" data-tooltip="eve 中文教程 · 第 19 章 怎么读 eve 的源码">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 <code>eve init</code> 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-29-world/">
+                <h3 class="media-heading">eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/">
+                <h3 class="media-heading">eve 中文教程 · 第 28 章 鉴权、身份与协议</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>auth</code> 不是中间件，是一个按顺序试的函数数组。全部返回空才 401，抛错则按错误里带的 Response 拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/">
+                <h3 class="media-heading">eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>defineChannel</code> 把「路由表 + adapter + 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/">
+                <h3 class="media-heading">eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>eveChannel()</code> 返回的不是一个 handler，是一张 23 条路由的表加一层统一的鉴权包装。其中 12 条给调用方用，11 条是内部回调和兼容路径。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-25-harness/">
+                <h3 class="media-heading">eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-24-workflow/">
+                <h3 class="media-heading">eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：step 不是「函数调用」，是「检查点边界」。step 内的代码在崩溃恢复时会重跑，step 之间的不会。这是 eve 里唯一必须记住的语义。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-23-runtime/">
+                <h3 class="media-heading">eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-22-compiler/">
+                <h3 class="media-heading">eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 <code>shadowed</code>。你的 <code>tools/bash.ts</code> 能覆盖框架默认工具，靠的就是这张优先级表。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-21-discover/">
+                <h3 class="media-heading">eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：文件名不是「约定」，是一张精确的分类表加一组正则。文件没被识别，九成是撞了表里的某一条——而且失败方式是静默的。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         136 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-20-cli-internals\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-20-cli-internals\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 shadowed。你的 tools/bash.ts 能覆盖框架默认工具，靠的就是这张优先级表。
+">
+
+
+<meta property="og:description" content="
+一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 shadowed。你的 tools/bash.ts 能覆盖框架默认工具，靠的就是这张优先级表。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物">
+<meta name="twitter:title" content="eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-22-compiler/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-22-compiler/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 shadowed。你的 tools/bash.ts 能覆盖框架默认工具，靠的就是这张优先级表。
+">
+<meta name="twitter:description" content="
+一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 shadowed。你的 tools/bash.ts 能覆盖框架默认工具，靠的就是这张优先级表。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-23T09:03:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-23T09:03:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+      <meta property="article:tag" content="源码解析">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-22-compiler/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-23T09:03:00&#43;08:00">
+        
+  October 23, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 <code>shadowed</code>。你的 <code>tools/bash.ts</code> 能覆盖框架默认工具，靠的就是这张优先级表。</p>
+</blockquote>
+
+<h2 id="两个反直觉的现象">两个反直觉的现象</h2>
+
+<p>第一个：你在 <code>agent/tools/</code> 下写了一个 <code>bash.ts</code>，心里没底——会不会和内置的 bash 冲突？会不会报错？</p>
+
+<p>答案是都不。它<strong>覆盖</strong>了内置的 bash，被换掉的那个悄悄记在编译产物的某个字段里，没有任何提示。</p>
+
+<p>第二个：你改了一行工具代码，<code>eve dev</code> 的 HMR 提示更新了，但在 TUI 里接着聊，行为还是旧的。开一个新会话，新代码才生效。</p>
+
+<p>这两个现象都出在编译这一层。第 21 章结束时，discover 交出一份 <code>AgentSourceManifest</code>，里面只有「作者写了什么」——纯数据，没有函数、没有默认能力。这一章讲它怎么变成 <code>.eve/compile/</code> 下能跑的东西，以及上面两个现象为什么会发生。</p>
+
+<h2 id="22-1-一次编译做了什么">22.1 一次编译做了什么</h2>
+
+<p>入口很短：</p>
+
+<pre><code class="language-ts">// packages/eve/src/compiler/compile-agent.ts:79
+export async function compileAgent(input: CompileAgentInput = {}): Promise&lt;CompileAgentResult&gt; {
+  // 第一步永远是重新发现：编译不信任上一次留下的 discovery 产物
+  const discovered = await discoverAgentForCompilation(input);
+
+  // 读写都在 .eve/ 下；两个 root 分开是为了支持「先写临时目录、再发布」
+  const artifactsRoot = join(discovered.project.appRoot, &quot;.eve&quot;);
+  const result = await writeAgentCompilation(discovered, {
+    publishedRoot: artifactsRoot,
+    writeRoot: artifactsRoot,
+  });
+
+  // 有一条 error 就在这里抛；产物仍留在磁盘上供排查
+  return finishAgentCompilation(result, CompileAgentError.fromDurableArtifacts);
+}
+</code></pre>
+
+<p>三步：discover → 写产物 → 检查诊断（有 error 就抛）。</p>
+
+<p>产物路径集中在一个函数里：</p>
+
+<pre><code class="language-ts">// packages/eve/src/compiler/artifacts.ts:130
+function resolveCompilerArtifactPathsAt(appRoot, artifactsRoot): CompilerArtifactPaths {
+  // 两个目录：discovery 放扫描结果，compile 放编译产物
+  const discoveryDirectoryPath = join(resolvedArtifactsRoot, &quot;discovery&quot;);
+  const compileDirectoryPath = join(resolvedArtifactsRoot, &quot;compile&quot;);
+
+  // 所有路径只在这里算一次，其他模块从这里取，避免各写各的相对路径
+  return {
+    appRoot: resolvedAppRoot,
+    compiledManifestPath: join(compileDirectoryPath, &quot;compiled-agent-manifest.json&quot;),
+    compileDirectoryPath,
+    compileMetadataPath: join(compileDirectoryPath, &quot;compile-metadata.json&quot;),
+    diagnosticsPath: join(discoveryDirectoryPath, &quot;diagnostics.json&quot;),
+    discoveryManifestPath: join(discoveryDirectoryPath, &quot;agent-discovery-manifest.json&quot;),
+    discoveryDirectoryPath,
+    moduleMapPath: join(compileDirectoryPath, &quot;module-map.mjs&quot;),
+    sandboxPreparedArtifactsPath: join(compileDirectoryPath, &quot;sandbox-prepared-artifacts.json&quot;),
+  };
+}
+</code></pre>
+
+<p>六个文件，分两个目录：</p>
+
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>内容</th>
+<th>谁读</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>discovery/agent-discovery-manifest.json</code></td>
+<td>作者写了什么（第 21 章）</td>
+<td><code>eve info</code>、调试</td>
+</tr>
+
+<tr>
+<td><code>discovery/diagnostics.json</code></td>
+<td>诊断列表</td>
+<td><code>eve info --json</code></td>
+</tr>
+
+<tr>
+<td><code>compile/compiled-agent-manifest.json</code></td>
+<td>编译后的完整配置，含默认能力</td>
+<td>runtime（第 23 章）</td>
+</tr>
+
+<tr>
+<td><code>compile/module-map.mjs</code></td>
+<td>源码模块的导入表</td>
+<td>Node ESM loader</td>
+</tr>
+
+<tr>
+<td><code>compile/compile-metadata.json</code></td>
+<td>四个产物的 sha256</td>
+<td>dev HMR</td>
+</tr>
+
+<tr>
+<td><code>compile/sandbox-prepared-artifacts.json</code></td>
+<td>沙箱预热产物清单</td>
+<td>沙箱启动</td>
+</tr>
+</tbody>
+</table>
+
+<p>前两个是 discover 的产物，后四个才是编译的产物。分开的原因：discovery 只关心「文件在哪」，编译关心「代码是什么」。</p>
+
+<h2 id="22-2-九个步骤">22.2 九个步骤</h2>
+
+<pre><code class="language-ts">// packages/eve/src/compiler/artifacts.ts:221
+export async function writeCompilerArtifacts(
+  input: WriteCompilerArtifactsInput,
+): Promise&lt;WriteCompilerArtifactsResult&gt; {
+  // 写位置和发布位置分别解析：两者可以不同
+  const paths = resolveCompilerArtifactPathsAt(input.appRoot, input.artifactLocations.writeRoot);
+  const publishedPaths = resolveCompilerArtifactPathsAt(
+    input.appRoot,
+    input.artifactLocations.publishedRoot,
+  );
+
+  // discovery 的诊断挂到根节点下，稍后整体写进 diagnostics.json
+  const diagnostics = input.diagnostics.map((diagnostic) =&gt;
+    projectDiscoverDiagnostic(diagnostic, ROOT_COMPILED_AGENT_NODE_ID),
+  );
+
+  // 先编译 manifest，再把 workspace 资源和技能文件复制进编译目录
+  const compiledManifest = await materializeWorkspaceResources({
+    compileDirectoryPath: paths.compileDirectoryPath,
+    manifest: await compileAgentManifest(input.manifest, {
+      developmentExtensions: input.developmentExtensions,
+      diagnostics,
+    }),
+  });
+  const diagnosticsArtifact = createCompilerDiagnosticsArtifact(diagnostics);
+  // ... 序列化、算 hash、写文件
+}
+</code></pre>
+
+<p>展开成步骤：</p>
+
+<ol>
+<li>解析写入路径和发布路径。dev 下两者相同；构建到临时目录时不同（写进去的是临时目录，metadata 里记的是发布位置）。</li>
+<li>把 discover 诊断转成 compiler 诊断，挂上 node id（根节点是 <code>__root__</code>）。</li>
+<li><code>compileAgentManifest</code> —— 核心，下一节展开。</li>
+<li><code>materializeWorkspaceResources</code> —— 把沙箱 workspace 和技能文件复制到 <code>.eve/compile/workspace-resources/&lt;node&gt;/</code>。</li>
+<li>生成 diagnostics artifact。</li>
+<li>序列化三份 JSON（compiled manifest、discovery manifest、diagnostics）。</li>
+<li><code>createCompiledModuleMapSource</code> —— 生成 <code>module-map.mjs</code>。</li>
+<li><code>createCompileMetadata</code> —— 算四个 sha256 和 <code>sourceGraphHash</code>。</li>
+<li>并发写六个文件。</li>
+</ol>
+
+<p>第 1 步的两个 root 值得注意：<code>writeRoot</code> 和 <code>publishedRoot</code>。<code>compileAgentInWorkspace</code> 用它们把产物写到一个地方、却记录另一个地方的路径。这是给「先在临时目录构建，再整体搬到输出目录」的场景用的。</p>
+
+<h2 id="22-3-为什么需要-合并">22.3 为什么需要「合并」</h2>
+
+<p>如果编译只是「把 manifest 转成另一种 JSON」，那 207 行就够了。真正复杂的是：<strong>同一个 slot 可以有多个来源</strong>。</p>
+
+<p>比如 <code>tools/bash</code>，至少有两份：</p>
+
+<ul>
+<li><code>eve:defaults:tools/bash.ts</code> —— 框架自带的</li>
+<li><code>tools/bash.ts</code> —— 你写的</li>
+</ul>
+
+<p>还有可能来自扩展包。编译器的任务是选一个，并且让被选中的那个能跑。</p>
+
+<p>选法是一张优先级表：</p>
+
+<pre><code class="language-ts">// packages/eve/src/compiler/source-graph.ts:262
+// 第一维：谁提供的。数字大的赢
+const LAYER_PRECEDENCE: Readonly&lt;Record&lt;AgentSourceLayer, number&gt;&gt; = {
+  &quot;framework-default&quot;: 0,
+  &quot;extension-package&quot;: 1,
+  &quot;extension-override&quot;: 2,
+  application: 3,
+};
+
+// 第二维：同一层内，直接声明的赢过从目录结构推导出来的
+const FORM_PRECEDENCE: Readonly&lt;Record&lt;AgentSourceForm, number&gt;&gt; = {
+  derived: 0,
+  direct: 1,
+};
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>谁提供</th>
+<th>例子</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>framework-default</code></td>
+<td>eve 自己</td>
+<td><code>eve:defaults:tools/bash.ts</code></td>
+</tr>
+
+<tr>
+<td><code>extension-package</code></td>
+<td>安装的扩展包</td>
+<td>扩展自带的工具</td>
+</tr>
+
+<tr>
+<td><code>extension-override</code></td>
+<td>扩展的覆盖声明</td>
+<td>扩展替换另一个扩展的槽位</td>
+</tr>
+
+<tr>
+<td><code>application</code></td>
+<td>你的 <code>agent/</code> 目录</td>
+<td><code>tools/bash.ts</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>数字大的赢。所以你的 <code>tools/bash.ts</code>（3）覆盖框架默认的 bash（0）——这就是本章开头第一个现象的答案。</p>
+
+<p>同层同槽位有两个候选会怎样？直接报错：</p>
+
+<pre><code class="language-ts">// 同一个 slot 不允许出现「同层同形态」的两个候选：那是作者写重了，直接报错
+for (const candidate of slotCandidates) {
+  const precedence = `${candidate.layer}:${candidate.form}`;
+  if (seenPrecedence.has(precedence)) {
+    throw new Error(`Agent source slot &quot;${slot}&quot; has more than one ${candidate.layer} ${candidate.form} candidate.`);
+  }
+  seenPrecedence.add(precedence);
+}
+</code></pre>
+
+<p>这是 discovery 阶段那个 <code>slot-collision</code> 之外的<strong>第二道防线</strong>。discover 抓的是同一目录下的同名文件，这里抓的是跨层同优先级冲突。</p>
+
+<p>选完赢家，输家不会被丢掉，而是记一条 <code>shadowed</code>：</p>
+
+<pre><code class="language-ts">// 排完序取第一个，其余全部记成 shadowed：被覆盖不是错误，但要看得见
+const winner = ordered[0]!;
+selected.set(slot, winner);
+
+for (const loser of ordered.slice(1)) {
+  entries.push({
+    kind: &quot;shadowed&quot;,
+    source: describeAgentSourceCandidate(loser),
+    winnerSourceId: winner.sourceId,   // 指向赢家，能回答「谁把它盖掉了」
+  });
+}
+</code></pre>
+
+<p>所以「我覆盖了默认 bash，怎么确认」的答案是：在 <code>compiled-agent-manifest.json</code> 里搜 <code>shadowed</code>，看被换掉的是哪个 sourceId。</p>
+
+<h2 id="22-4-每个节点怎么编译">22.4 每个节点怎么编译</h2>
+
+<p>一个 agent 加上它的所有子代理，构成一棵树。编译是按节点递归的：</p>
+
+<pre><code class="language-ts">// packages/eve/src/compiler/normalize-manifest.ts:172
+async compileStaticNode(input: NodeCompileInput): Promise&lt;CompiledLocalNodeResult&gt; {
+  // 第一阶段：选候选、算依赖，不执行任何用户代码
+  const phaseOne = await this.createPhaseOneNodeSourceState(input, input.inheritedExternalDependencies);
+  let config = await compileAgentConfig(input.manifest, this.context, {
+    binding: phaseOne.selectedConfig.binding,
+    definition: phaseOne.selectedConfig.definition,
+    source: phaseOne.selectedConfig.source,
+  });
+
+  // 有些配置只允许出现在根节点，子代理里写了直接报错
+  assertRootOnlyConfig(config, input.isRoot, input.manifest.agentId);
+  // 工具策略两层：先叠作者写的覆盖规则，再叠框架默认
+  applyAgentToolPolicy(phaseOne, config);
+  applyDefaultToolPolicy(phaseOne, config);
+
+  // 第二阶段：定稿依赖集合、标出运行期入口、复制资源、递归编译子节点
+  const externalDependencies = mergeExternalDependencies(...);
+  const state = finalizeNodeSourceState(phaseOne, externalDependencies);
+  markConfigRuntimeEntries(config, state.evaluation);
+  const resources = await this.compileResources(input, state);
+  const children = await this.compileChildren(input, state, externalDependencies);
+  const manifest = createCompiledAgentNodeManifest({ ...resources, config, remoteAgents: children.remoteAgents });
+  return { descendants: children.nodes, manifest };
+}
+</code></pre>
+
+<p>七个动作，顺序不能换：</p>
+
+<ol>
+<li><strong>phase one</strong>：收集这个节点的全部候选（作者的 + 框架默认的 + 扩展的）。这时还没求值任何模块。</li>
+<li><strong><code>compileAgentConfig</code></strong>：求值 <code>agent.ts</code>，拿到 <code>defineAgent</code> 的返回值。这是唯一在编译期执行作者代码的地方。</li>
+<li><strong><code>assertRootOnlyConfig</code></strong>：检查只有根节点能用的配置（比如 <code>channels</code>），子代理写了就报错。</li>
+<li><strong>两个 policy</strong>：<code>tool: false</code> 时移除 <code>tools/agent</code>；<code>defaultTools: false</code> 时移除所有框架默认工具，但保留被作者覆盖过的 slot。</li>
+<li><strong><code>finalizeNodeSourceState</code></strong>：按优先级选赢家，产出 <code>selected</code> 和 <code>shadowed</code>。</li>
+<li><strong><code>compileResources</code></strong>：逐类能力归一化（tool / channel / schedule / skill / subagent / memory / sandbox）。</li>
+<li><strong><code>compileChildren</code></strong>：递归子代理，每个子代理一个 node id。</li>
+</ol>
+
+<p>第 6 步里每个 <code>normalize-*.ts</code> 负责一类能力。它们的共同职责：把作者写的定义（可能是 <code>defineTool</code> 返回值，也可能是 markdown）转成产物里的稳定结构，并在形状不对时给出可读的报错。</p>
+
+<p>举个例子，<code>normalize-tool.ts</code> 会把 <code>defineTool</code> 的结果拆成「模型看的 schema」和「运行时用的 handler 引用」两部分。前者进 manifest，后者进 module map 的绑定表。这就是为什么 <code>eve info --json</code> 里 <code>toolInputSchemas</code> 和你在 <code>defineTool</code> 里写的不完全一样——中间经过了这一步转换。</p>
+
+<h2 id="22-5-module-map-两种加载方式">22.5 module map：两种加载方式</h2>
+
+<p><code>module-map.mjs</code> 是编译产物里最特殊的一个：它不是 JSON，是可执行的 ESM。</p>
+
+<pre><code class="language-ts">// packages/eve/src/compiler/module-map.ts:60
+export function createCompiledModuleMapSource(input: CreateCompiledModuleMapSourceInput): string {
+  // 生成的是源码文本，不是对象：产物要能被 Node 直接 import
+  const importSpecifierStyle = input.importSpecifierStyle ?? &quot;relative&quot;;
+  let index = 0;
+  // 只要有一个模块走 programmatic loader，产物顶部就要引入那个 loader
+  let usesProgrammaticLoader = false;
+  const scopes: RenderedNodeScope[] = collectBoundNodeScopes(input.manifest).map((scope) =&gt; {
+    // ... 每个 binding 生成一个 module_N
+  });
+</code></pre>
+
+<p>生成规则只有两条分支：</p>
+
+<pre><code class="language-ts">if (binding.backing.kind === &quot;filesystem&quot;) {
+  // 用户代码：静态 import，路径相对产物文件算
+  const specifier = /* 相对路径 */;
+  // → import * as imported_module_N from &quot;../../agent/tools/read_logs.ts&quot;
+} else {
+  // backing.kind === &quot;programmatic&quot;：框架默认能力没有稳定路径，只能按 id 取
+  usesProgrammaticLoader = true;
+  // → const module_N = await loadProgrammaticModule({ kind: &quot;programmatic&quot;, ... })
+}
+</code></pre>
+
+<p>真实产物长这样：</p>
+
+<pre><code class="language-js">// .eve/compile/module-map.mjs
+// 两种加载方式并存：用户代码静态 import，框架默认能力走 loader
+import { loadFrameworkProgrammaticModule as loadProgrammaticModule, memoizeModuleNamespaceFactories } from &quot;eve/internal/programmatic-source-loader&quot;;
+import * as imported_module_0 from &quot;../../agent/channels/eve.ts&quot;;
+
+// 用户模块包一层 memoize：无参工厂只算一次
+const module_0 = memoizeModuleNamespaceFactories(imported_module_0);
+// 框架模块按 registryId + moduleId 取，revision 锁版本
+const module_1 = await loadProgrammaticModule({&quot;kind&quot;:&quot;programmatic&quot;,&quot;moduleId&quot;:&quot;sandbox.ts&quot;,&quot;registryId&quot;:&quot;eve:defaults&quot;,&quot;revision&quot;:&quot;eve@0.81.1:compiled-manifest-v53&quot;,&quot;semanticRevision&quot;:&quot;eve:default-sandbox:v1&quot;}, Object.freeze({}));
+const module_2 = await loadProgrammaticModule({&quot;kind&quot;:&quot;programmatic&quot;,&quot;moduleId&quot;:&quot;tools/bash.ts&quot;,&quot;registryId&quot;:&quot;eve:defaults&quot;,&quot;revision&quot;:&quot;eve@0.81.1:compiled-manifest-v53&quot;}, Object.freeze({}));
+
+// 三层索引：节点 → 槽位路径 → 模块命名空间
+export const moduleMap = Object.freeze({
+  &quot;nodes&quot;: Object.freeze({
+    &quot;__root__&quot;: Object.freeze({
+      &quot;modules&quot;: Object.freeze({
+        &quot;channels/eve.ts&quot;: module_0,
+        &quot;eve:defaults:sandbox.ts&quot;: module_1,
+        &quot;eve:defaults:tools/bash.ts&quot;: module_2,
+      })
+    })
+  })
+});
+</code></pre>
+
+<p>两种加载方式的理由：</p>
+
+<ul>
+<li><strong>你的代码走静态 import。</strong> 打包器能分析、能 tree-shake、能给你精确的报错行号。</li>
+<li><strong>框架默认能力走 <code>loadProgrammaticModule</code>。</strong> 它们不在项目目录里，没有稳定的相对路径可写。loader 按 <code>registryId</code> + <code>moduleId</code> 从 eve 包里取。</li>
+</ul>
+
+<p>注意 <code>imported_module_0</code> 指向 <code>../../agent/channels/eve.ts</code>——<strong>带 <code>.ts</code> 后缀</strong>。这是 Node 的类型剥离在起作用，也是为什么 <code>engines.node</code> 要求 <code>&gt;=24</code>。</p>
+
+<p><code>memoizeModuleNamespaceFactories</code> 包了一层，但它做的事情比名字听起来窄：</p>
+
+<pre><code class="language-ts">// packages/eve/src/compiler/source-graph.ts:14
+export function memoizeModuleNamespaceFactories(namespace): ProgrammaticModuleNamespace {
+  return Object.freeze(
+    Object.fromEntries(
+      Object.entries(namespace).map(([exportName, exportValue]) =&gt; {
+        // 非函数原样保留
+        if (typeof exportValue !== &quot;function&quot;) return [exportName, exportValue];
+
+        let invocation: Promise&lt;unknown&gt; | undefined;
+        const memoized = new Proxy(exportValue, {
+          apply(target, thisArgument, argumentsList) {
+            // 带参数的调用每次都执行：参数不同，结果本来就该不同
+            if (argumentsList.length &gt; 0) {
+              return Reflect.apply(target, thisArgument, argumentsList);
+            }
+            // 无参调用只算第一次；缓存的是 Promise，并发调用也只执行一次
+            invocation ??= Promise.resolve().then(() =&gt;
+              Reflect.apply(target, thisArgument, argumentsList),
+            );
+            return invocation;
+          },
+        });
+        return [exportName, memoized];
+      }),
+    ),
+  );
+}
+</code></pre>
+
+<p>它缓存的是<strong>无参工厂函数的调用结果</strong>，不是模块求值。模块只执行一次是 ESM 的天然行为，跟这个函数无关。</p>
+
+<p>这个区别重要：<code>defineTool({...})</code> 在模块顶层调用一次，返回的对象被所有 session 共享。工具 handler 里的闭包状态是共享的，不是每个 session 一份。想按 session 隔离，状态得放进 <code>ctx</code>（第 8 章，第 23 章会再讲一次）。</p>
+
+<h2 id="22-6-compile-metadata-hash-决定重建">22.6 compile-metadata：hash 决定重建</h2>
+
+<pre><code class="language-ts">// packages/eve/src/compiler/artifacts.ts:170
+export function createCompileMetadata(input): CompileMetadata {
+  const generator = resolveInstalledPackageInfo();
+  // 四个产物各算一个 hash，拼起来再算 sourceGraphHash
+  const compiledManifestHash = createContentHash(input.compiledManifestJson);
+  const discoveryManifestHash = createContentHash(input.discoveryManifestJson);
+  const diagnosticsHash = createContentHash(input.diagnosticsArtifactJson);
+  const moduleMapHash = createContentHash(input.moduleMapSource);
+
+  return {
+    compile: {
+      manifest: { path: ..., sha256: compiledManifestHash },
+      moduleMap: { path: ..., sha256: moduleMapHash },
+    },
+    discovery: {
+      diagnostics: { path: ..., sha256: diagnosticsHash },
+      manifest: { path: ..., sha256: discoveryManifestHash },
+      // 四项一起算：任何一个变了，整张 source graph 就算变了
+      sourceGraphHash: createContentHash(
+        `${compiledManifestHash}:${discoveryManifestHash}:${diagnosticsHash}:${moduleMapHash}`,
+      ),
+      summary: input.diagnosticsSummary,
+    },
+    generator: { name: generator.name, version: generator.version },
+    kind: &quot;eve-compile-metadata&quot;,
+    // 有 error 也照样写文件，只是标成 failed：文件存在不等于编译成功
+    status: input.diagnosticsSummary.errors &gt; 0 ? &quot;failed&quot; : &quot;ready&quot;,
+    version: 6,
+  };
+}
+</code></pre>
+
+<p>真实文件：</p>
+
+<pre><code class="language-json">{
+  &quot;compile&quot;: {
+    &quot;manifest&quot;: { &quot;path&quot;: &quot;.eve/compile/compiled-agent-manifest.json&quot;, &quot;sha256&quot;: &quot;b42dbf2a...&quot; },
+    &quot;moduleMap&quot;: { &quot;path&quot;: &quot;.eve/compile/module-map.mjs&quot;, &quot;sha256&quot;: &quot;6c5eae09...&quot; }
+  },
+  &quot;discovery&quot;: {
+    &quot;diagnostics&quot;: { &quot;path&quot;: &quot;.eve/discovery/diagnostics.json&quot;, &quot;sha256&quot;: &quot;da80f365...&quot; },
+    &quot;manifest&quot;: { &quot;path&quot;: &quot;.eve/discovery/agent-discovery-manifest.json&quot;, &quot;sha256&quot;: &quot;2aba6069...&quot; },
+    &quot;sourceGraphHash&quot;: &quot;fba3817b...&quot;,
+    &quot;summary&quot;: { &quot;errors&quot;: 0, &quot;warnings&quot;: 0 }
+  },
+  &quot;generator&quot;: { &quot;name&quot;: &quot;eve&quot;, &quot;version&quot;: &quot;0.81.1&quot; },
+  &quot;kind&quot;: &quot;eve-compile-metadata&quot;,
+  &quot;status&quot;: &quot;ready&quot;,
+  &quot;version&quot;: 6
+}
+</code></pre>
+
+<p>三个用途：</p>
+
+<ol>
+<li><strong><code>sourceGraphHash</code> 是重建判断依据。</strong> 四个 hash 拼起来再 hash 一次。任何一个产物变了，这个值就变。</li>
+<li><strong><code>status</code> 记录这次编译是否成功。</strong> <code>failed</code> 时产物仍然写盘了——这是故意的，让你能在编译失败后检查产物。</li>
+<li><strong><code>generator.version</code> 记录编译用的 eve 版本。</strong> 升级 eve 后即使源码没变，这个字段也会变，触发重建。</li>
+</ol>
+
+<p>一个容易误解的点：hash 算的是<strong>序列化后的 JSON 文本</strong>，不是语义。改一个字段的顺序、加一个空格，hash 就变。所以不要手工编辑 <code>.eve/compile/*.json</code>——下次编译会被覆盖，而且中间这段时间的 hash 是对不上的。</p>
+
+<h2 id="22-7-dev-下的快照-为什么改代码不影响运行中的会话">22.7 dev 下的快照：为什么改代码不影响运行中的会话</h2>
+
+<p>生产环境只有一份产物。dev 环境每次重建都生成一个完整快照：</p>
+
+<pre><code class="language-ts">// packages/eve/src/internal/nitro/dev-runtime-artifacts.ts:82
+export async function stageDevelopmentRuntimeArtifactsSnapshot(
+  compileResult: CompileAgentResult,
+): Promise&lt;DevelopmentRuntimeArtifactsSnapshot&gt; {
+  // 目录名 = 时间戳(36 进制) + uuid：天然按时间排序，也不会撞
+  const snapshotRoot = join(
+    resolveDevelopmentRuntimeArtifactsSnapshotsDirectory(compileResult.project.appRoot),
+    `${Date.now().toString(36)}-${randomUUID()}`,
+  );
+  const sourceSnapshotPlan = await createDevelopmentSourceSnapshotPlan({ ... });
+
+  // 复制源码 → 挂框架包 → 挂扩展依赖 → 复制编译产物 → 改写 manifest 里的绝对路径 → 校验
+  await copyDevelopmentSourceSnapshot(sourceSnapshotPlan);
+  await mountFrameworkPackage(sourceSnapshotPlan.runtimeAppRoot);
+  await mountExtensionExternalDependencies({ ... });
+  await cp(compileResult.paths.compileDirectoryPath, join(sourceSnapshotPlan.runtimeAppRoot, &quot;.eve&quot;, &quot;compile&quot;), { recursive: true });
+  await rewriteSnapshotCompiledManifest({ ... });
+  await validateSnapshotCompiledManifestRoots({ ... });
+  // ...
+}
+</code></pre>
+
+<p>一次快照包含：</p>
+
+<pre><code class="language-text">.eve/dev-runtime/
+├── current.json                                    ← 指针，指向当前活跃快照
+└── snapshots/
+    └── mvgazeec-d0df0027-7e5a-49d6-b772-5bf1b5f4b1a3/
+        ├── source/                                 ← 你的源码副本
+        │   ├── agent/
+        │   ├── node_modules/eve -&gt; ...             ← 软链到框架包
+        │   └── .eve/compile/                       ← 编译产物副本
+        └── ...generation metadata
+</code></pre>
+
+<p><code>current.json</code>：</p>
+
+<pre><code class="language-json">{
+  &quot;appRoot&quot;: &quot;/path/to/app&quot;,
+  &quot;kind&quot;: &quot;eve-dev-runtime-artifacts-pointer&quot;,
+  &quot;runtimeAppRoot&quot;: &quot;/path/to/app/.eve/dev-runtime/snapshots/mvgb5tkl-.../source&quot;,
+  &quot;snapshotRoot&quot;: &quot;/path/to/app/.eve/dev-runtime/snapshots/mvgb5tkl-...&quot;,
+  &quot;version&quot;: 2
+}
+</code></pre>
+
+<p>为什么这么做：<strong>运行中的 session 需要一份不会被下一次编辑改掉的源码。</strong></p>
+
+<p>你在 TUI 里聊到一半，改了一行工具代码，这个 session 的 module map 仍然指向旧快照。新开的 session 才用新快照。这就是本章开头第二个现象的答案。</p>
+
+<p>代价是磁盘。一个快照约 960 KB（不含 <code>node_modules</code> 软链）。<code>pruneDevelopmentRuntimeArtifactsSnapshots</code> 按 <code>retainCount</code> 和 <code>gracePeriodMs</code> 清理，<code>current.json</code> 指向的那个永远保护。</p>
+
+<p><code>.eve/dev-runtime/snapshots/</code> 堆到几十个，说明 prune 没跑起来——通常是 dev server 被 <code>kill -9</code>，清理逻辑没机会执行。</p>
+
+<h2 id="22-8-回到开头那两个现象">22.8 回到开头那两个现象</h2>
+
+<p><strong>写 <code>tools/bash.ts</code> 会不会冲突？</strong> 不会。<code>application</code> 层（3）高于 <code>framework-default</code> 层（0），你的实现直接覆盖内置的。被换掉的那个记作 <code>shadowed</code>，在 <code>compiled-agent-manifest.json</code> 里能查到。想确认覆盖生效了，搜这个字段。</p>
+
+<p><strong>为什么改了代码老会话不变？</strong> dev 下每次重建生成新快照，老会话绑定的是旧快照。新会话用新快照。想看新代码，开个新会话，或者看 <code>current.json</code> 指向的 snapshot 时间戳。</p>
+
+<h2 id="22-9-五个注意事项">22.9 五个注意事项</h2>
+
+<ol>
+<li><strong><code>compiled-agent-manifest.json</code> 不是给人读的。</strong> 它包含完整的内联 schema、每个工具的输出整形配置、每个通道的路由表。看结构可以，别指望通读。</li>
+<li><strong>改 <code>agent.ts</code> 会触发全量重编译，改 <code>instructions.md</code> 也会。</strong> 因为 markdown 内容被内联进 discovery manifest，hash 变了。</li>
+<li><strong><code>shadowed</code> 条目只在有覆盖时出现。</strong> 没覆盖就没有这个字段，不是空数组。</li>
+<li><strong>dev 快照会让「改了但没生效」变得难判断。</strong> 老 session 用老快照，行为不变是正常的。判断是否生效要看新 session，或者看 <code>current.json</code> 指向的 snapshot 时间戳。</li>
+<li><strong><code>compile-metadata.json</code> 的 <code>status: &quot;failed&quot;</code> 时产物仍然存在。</strong> 别看到文件在就以为编译成功了。</li>
+</ol>
+
+<h2 id="22-10-练习">22.10 练习</h2>
+
+<ol>
+<li>在 <code>agent/tools/</code> 下写一个 <code>bash.ts</code>，导出任意 <code>defineTool</code>。跑 <code>eve build</code>，然后在 <code>compiled-agent-manifest.json</code> 里搜 <code>shadowed</code>，找到被覆盖的 <code>eve:defaults:tools/bash.ts</code>。</li>
+<li>跑一次 <code>eve dev</code>，记下 <code>current.json</code> 的 <code>snapshotRoot</code>。改一行 <code>agent/instructions.md</code>，等 HMR 完成后再看 <code>current.json</code>，确认指针变了、旧快照还在。</li>
+<li>打开 <code>module-map.mjs</code>，数一下有几个 <code>import * as</code>，几个 <code>loadProgrammaticModule</code>。对照 <code>agent/</code> 下的文件数解释这个比例。</li>
+<li>删掉 <code>.eve/compile/compile-metadata.json</code>，跑 <code>eve info</code>。看它是否重新生成，以及 <code>sourceGraphHash</code> 是否和之前一样。</li>
+<li>在 <code>agent/agent.ts</code> 里加 <code>defaultTools: false</code>，重新编译，看 <code>compiled-agent-manifest.json</code> 里还剩几个工具。</li>
+</ol>
+
+<h2 id="下一章">下一章</h2>
+
+<p>产物有了：一份 JSON 描述「有什么」，一个 ESM 模块提供「怎么加载」。</p>
+
+<p>但 JSON 里没有函数。工具的执行逻辑、通道的 handler、指令的渲染函数，都还没挂上去。</p>
+
+<p>第 23 章讲 runtime 怎么把这些声明变成活的 agent 对象，以及为什么工具里的模块级变量会在所有会话之间共享。</p>
+
+<hr />
+
+<p>返回：<a href="https://tangxusc.github.io/2026/10/eve-tutorial/">教程目录</a> · 上一章：<a href="https://tangxusc.github.io/2026/10/eve-21-discover/">21 discover</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-23-runtime/">23 runtime</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">源码解析</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-23-runtime/" data-tooltip="eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-21-discover/" data-tooltip="eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-23-runtime/" data-tooltip="eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-21-discover/" data-tooltip="eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 <code>eve init</code> 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-29-world/">
+                <h3 class="media-heading">eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/">
+                <h3 class="media-heading">eve 中文教程 · 第 28 章 鉴权、身份与协议</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>auth</code> 不是中间件，是一个按顺序试的函数数组。全部返回空才 401，抛错则按错误里带的 Response 拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/">
+                <h3 class="media-heading">eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>defineChannel</code> 把「路由表 + adapter + 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/">
+                <h3 class="media-heading">eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>eveChannel()</code> 返回的不是一个 handler，是一张 23 条路由的表加一层统一的鉴权包装。其中 12 条给调用方用，11 条是内部回调和兼容路径。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-25-harness/">
+                <h3 class="media-heading">eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-24-workflow/">
+                <h3 class="media-heading">eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：step 不是「函数调用」，是「检查点边界」。step 内的代码在崩溃恢复时会重跑，step 之间的不会。这是 eve 里唯一必须记住的语义。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-23-runtime/">
+                <h3 class="media-heading">eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-22-compiler/">
+                <h3 class="media-heading">eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 <code>shadowed</code>。你的 <code>tools/bash.ts</code> 能覆盖框架默认工具，靠的就是这张优先级表。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-21-discover/">
+                <h3 class="media-heading">eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：文件名不是「约定」，是一张精确的分类表加一组正则。文件没被识别，九成是撞了表里的某一条——而且失败方式是静默的。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         136 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-22-compiler\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-22-compiler\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

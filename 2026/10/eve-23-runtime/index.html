@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。
+">
+
+
+<meta property="og:description" content="
+一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent">
+<meta name="twitter:title" content="eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-23-runtime/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-23-runtime/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。
+">
+<meta name="twitter:description" content="
+一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-23T09:04:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-23T09:04:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+      <meta property="article:tag" content="源码解析">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-23-runtime/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-23T09:04:00&#43;08:00">
+        
+  October 23, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。</p>
+</blockquote>
+
+<h2 id="一个诡异的计数器">一个诡异的计数器</h2>
+
+<p>你在工具里写了个计数器，想统计调用次数：</p>
+
+<pre><code class="language-ts">// agent/tools/counter.ts
+// 模块级变量：整个进程只有一份，所有会话共用（这就是计数器串号的原因）
+let count = 0;
+
+export default defineTool({
+  async execute() {
+    count += 1;
+    return { count };
+  },
+});
+</code></pre>
+
+<p>测试的时候一切正常：第一次返回 1，第二次 2，第三次 3。</p>
+
+<p>上线后有人报告：他第一次用这个工具，返回的是 47。</p>
+
+<p>这不是 bug，是你把状态放错了地方。<code>count</code> 是模块级变量，而模块在整个进程里只执行一次。所有用户、所有会话共享同一个 <code>count</code>。</p>
+
+<p>这一章要回答的就是这类问题：<strong>编译产物里的声明，怎么变成能跑的对象，以及这个对象的生命周期有多长</strong>。搞清楚了，你会知道状态该放哪。</p>
+
+<h2 id="23-1-两个输入-一个输出">23.1 两个输入，一个输出</h2>
+
+<p>第 22 章留下了两份东西：一份纯 JSON 的 <code>compiled-agent-manifest.json</code>，一份可执行的 <code>module-map.mjs</code>。</p>
+
+<p>runtime 把它们合成一个对象：</p>
+
+<pre><code class="language-ts">// packages/eve/src/runtime/resolve-agent.ts
+interface ResolveAgentInput {
+  manifest: CompiledAgentNodeManifest | CompiledAgentResources;   // 声明：编译产物
+  moduleMap: CompiledModuleMap;                                   // 实现：模块命名空间
+  nodeId?: string;
+}
+
+export async function resolveAgent(input: ResolveAgentInput): Promise&lt;ResolvedAgent&gt; {
+  // 技能不加载模块，只把元数据搬过来
+  const resolvedSkills = input.manifest.skills.map((skill) =&gt; ({ ... }));
+
+  // 通道和工具要真的加载模块：并发解析，顺序不影响结果
+  const resolvedChannels = await Promise.all(
+    input.manifest.channelRoutes.effective.map((channelEntry) =&gt;
+      resolveChannelDefinition(channelEntry, input.moduleMap, input.nodeId),
+    ),
+  );
+  const resolvedTools = await Promise.all(
+    input.manifest.tools.map((toolDefinition) =&gt;
+      resolveToolDefinition(toolDefinition, input.moduleMap, input.nodeId, ...),
+    ),
+  );
+  // ... 连接、动态解析器、钩子、记忆、沙箱、指令
+}
+</code></pre>
+
+<p>一个很直白的函数：遍历 manifest 的每一类资源，调用对应的 <code>resolveXxxDefinition</code>，把结果拼成 <code>ResolvedAgent</code>。</p>
+
+<p><code>Promise.all</code> 意味着各类资源<strong>并行解析</strong>，但每类内部的顺序被保留（<code>map</code> 保序）。这个顺序不是随机的——它来自 discovery 阶段的字母序，第 21 章提过。</p>
+
+<h2 id="23-2-声明与实现分离">23.2 声明与实现分离</h2>
+
+<p>为什么不能一步到位？因为编译产物要能存进 JSON，而 JSON 存不了函数。</p>
+
+<p>对比同一个工具在两份产物里的样子：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>compiled-agent-manifest.json</code></th>
+<th><code>ResolvedToolDefinition</code></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>形态</td>
+<td>JSON，可序列化</td>
+<td>对象，含函数</td>
+</tr>
+
+<tr>
+<td><code>inputSchema</code></td>
+<td>序列化的 JSON Schema</td>
+<td>活的 zod/JSON Schema 校验器</td>
+</tr>
+
+<tr>
+<td><code>execute</code></td>
+<td><code>hasExecute: true</code>（只是一个布尔）</td>
+<td>真实的 <code>execute</code> 函数</td>
+</tr>
+
+<tr>
+<td><code>approval</code></td>
+<td>归一化后的配置</td>
+<td>加上 <code>approvalKey</code> 函数</td>
+</tr>
+
+<tr>
+<td><code>toModelOutput</code></td>
+<td>标记存在</td>
+<td>真实函数</td>
+</tr>
+</tbody>
+</table>
+
+<p>manifest 只能存能过 JSON 的东西。函数、类实例、Symbol 都不行。所以编译期把「有哪些函数」记成布尔标志，运行期再按标志去 module map 里取。</p>
+
+<p>这个拆分还有一个副作用：<strong>编译产物可以跨进程传输</strong>。检查点、快照、部署产物都是 JSON，运行时在另一个进程里重新挂函数。这是 eve 能做持久化执行的前提。</p>
+
+<h2 id="23-3-一个工具怎么被装回来">23.3 一个工具怎么被装回来</h2>
+
+<pre><code class="language-ts">// packages/eve/src/runtime/resolve-tool.ts:23
+export async function resolveToolDefinition(
+  definition: CompiledToolDefinition,
+  moduleMap: CompiledModuleMap,
+  nodeId: string | undefined,
+  owner: AgentSourceOwner,
+): Promise&lt;ResolvedToolDefinition&gt; {
+  // 分支一：不需要本地 execute 的工具，压根不加载模块
+  if (!definition.hasExecute) {
+    const resolved: ResolvedToolDefinition = {
+      availableInSubagents: definition.availableInSubagents,
+      behavior: definition.behavior,
+      deferred: definition.deferred,
+      description: definition.description,
+      inputSchema: toInputSchema(definition.inputSchema),
+      logicalPath: definition.logicalPath,
+      name: definition.name,
+      outputSchema: toOutputSchema(definition.outputSchema),
+      owner,
+      sourceId: definition.sourceId,
+      sourceKind: &quot;module&quot;,
+    };
+    // provider-tool 再包一层：执行发生在厂商那边，本地只留声明
+    return definition.behavior?.handling?.kind === &quot;provider-tool&quot;
+      ? frameworkTool(resolved)
+      : resolved;
+  }
+
+  // 分支二：普通工具，按 sourceId 从 module map 取命名空间
+  const resolvedExportValue = await loadResolvedModuleExport({
+    definition,
+    kindLabel: &quot;tool&quot;,
+    moduleMap,
+    nodeId,
+  });
+  const resolvedRecord = expectObjectRecord(resolvedExportValue, describe(definition, &quot;to return an object&quot;));
+
+  // workflow-tool 的 execute 永远是 undefined：执行交给 workflow，不在这里跑
+  const execute =
+    definition.behavior?.handling?.kind === &quot;workflow-tool&quot;
+      ? undefined
+      : (expectFunction(resolvedRecord.execute, describe(definition, &quot;to provide an execute function&quot;)) as ...);
+
+  // 模块自己导出了 schema 就用它，否则退回编译期序列化的那份
+  const inputSchema = isToolSchema(resolvedRecord.inputSchema)
+    ? resolvedRecord.inputSchema
+    : toInputSchema(definition.inputSchema);
+  // ...
+}
+</code></pre>
+
+<p>三个分支值得注意：</p>
+
+<p><strong>一、<code>hasExecute: false</code> 直接返回声明。</strong></p>
+
+<p>这类工具没有本地执行函数。典型是 provider tool——模型厂商托管的工具（比如 web search），执行发生在厂商那边，eve 只负责把声明发给模型。</p>
+
+<p>顺带解释了一个现象：你在这类工具的模块顶层写的副作用代码<strong>不会执行</strong>，因为整个模块都没被加载。</p>
+
+<p><strong>二、<code>workflow-tool</code> 的 <code>execute</code> 是 <code>undefined</code>。</strong></p>
+
+<p>它的入口在 workflow registry 里，不在进程内。这是第 11 章 <code>defineWorkflowTool</code> 的实现方式：编译期把它注册成一个 workflow，运行期这里故意不挂 execute。</p>
+
+<p><strong>三、schema 有两条来源。</strong></p>
+
+<pre><code class="language-ts">// 优先用模块导出的 schema：它可能带 .refine 之类的运行时约束
+const inputSchema = isToolSchema(resolvedRecord.inputSchema)
+  ? resolvedRecord.inputSchema
+  : toInputSchema(definition.inputSchema);
+</code></pre>
+
+<p>模块导出的 <code>inputSchema</code> 如果是活的 <code>ToolSchema</code>，优先用它；否则用 manifest 里序列化的那份重建。</p>
+
+<p>为什么要两条？因为 schema 可能是动态的（依赖运行时值），也可能是纯静态的。静态的走 manifest 更快，动态的只能重新求值。</p>
+
+<h2 id="23-4-module-map-的查找路径">23.4 module map 的查找路径</h2>
+
+<pre><code class="language-ts">// packages/eve/src/runtime/resolve-helpers.ts:65
+export async function loadResolvedModuleExport(input: {
+  readonly definition: {
+    readonly exportName?: string;
+    readonly logicalPath: string;
+    readonly sourceId: string;
+  };
+  readonly kindLabel: string;
+  readonly moduleMap: CompiledModuleMap;
+  readonly nodeId: string | undefined;
+}): Promise&lt;unknown&gt; {
+  // nodeId 缺省落到根节点：只有子代理会显式传
+  const resolvedNodeId = input.nodeId ?? ROOT_COMPILED_AGENT_NODE_ID;
+
+  // 两级查找：先按节点，再按 sourceId
+  const moduleNamespace = input.moduleMap.nodes[resolvedNodeId]?.modules[input.definition.sourceId];
+
+  // 找不到多半是产物过期（编译过，但 module map 没重新生成）
+  if (moduleNamespace === undefined) {
+    throw new ResolveAgentError(
+      `Missing compiled module namespace for ${input.kindLabel} source &quot;${input.definition.sourceId}&quot; in node &quot;${resolvedNodeId}&quot;.`,
+      { logicalPath: input.definition.logicalPath, sourceId: input.definition.sourceId },
+    );
+  }
+
+  // 导出名默认 default，也支持具名导出
+  const moduleRecord = expectObjectRecord(moduleNamespace, ...);
+  const exportValue = getAuthoredModuleExport(moduleRecord, {
+    exportName: input.definition.exportName,
+    logicalPath: input.definition.logicalPath,
+  });
+
+  // 允许导出工厂函数：在这里统一求值，调用方拿到的就是值
+  return await materializeAuthoredModuleExport(exportValue);
+}
+</code></pre>
+
+<p>两级查找：<code>nodeId</code> 再 <code>sourceId</code>。</p>
+
+<p><code>nodeId</code> 是 <code>__root__</code> 或子代理的 id。子代理有独立的 module map scope，所以同名工具在不同子代理里可以是不同的实现。</p>
+
+<p><code>sourceId</code> 是 manifest 里的稳定标识，大多数时候等于 <code>logicalPath</code>，扩展挂载时带命名空间前缀。</p>
+
+<p>查不到就抛 <code>Missing compiled module namespace</code>。这个错误几乎总是意味着产物和源码不一致——改了文件但没重新编译，或者手工删了 <code>module-map.mjs</code> 的一部分。</p>
+
+<h2 id="23-5-模块什么时候求值-求值几次">23.5 模块什么时候求值，求值几次</h2>
+
+<p>现在回到开头那个计数器。</p>
+
+<p>编译产物里每个模块都带 <code>usage</code> 标记：</p>
+
+<pre><code class="language-json">{
+  &quot;backing&quot;: { &quot;kind&quot;: &quot;programmatic&quot;, &quot;moduleId&quot;: &quot;tools/bash.ts&quot;, &quot;registryId&quot;: &quot;eve:defaults&quot; },
+  &quot;logicalPath&quot;: &quot;tools/bash.ts&quot;,
+  &quot;owner&quot;: { &quot;feature&quot;: &quot;eve:defaults&quot;, &quot;kind&quot;: &quot;framework&quot; },
+  &quot;usage&quot;: { &quot;compile&quot;: true, &quot;runtimeEntry&quot;: true }
+}
+</code></pre>
+
+<p>两个标志来自 <code>NodeModuleLifecycle</code>：</p>
+
+<pre><code class="language-ts">// packages/eve/src/compiler/module-lifecycle.ts
+class NodeModuleLifecycle {
+  // 两本账：编译期被读过的、运行期要当入口的
+  readonly #compileLoads = new Set&lt;string&gt;();
+  readonly #runtimeRoots = new Set&lt;string&gt;();
+
+  recordCompileLoad(sourceId: string): void {
+    this.#compileLoads.add(sourceId);
+  }
+
+  requireRuntimeEntry(sourceId: string): void {
+    this.#runtimeRoots.add(sourceId);
+  }
+
+  finalize(
+    bindings: Readonly&lt;Record&lt;string, AgentModuleBinding&gt;&gt;,
+  ): Record&lt;string, CompiledModuleBinding&gt; {
+    // 运行期入口要连依赖闭包一起算：它 import 的模块也得能加载
+    const runtimeEntries = collectRuntimeEntryClosure(bindings, this.#runtimeRoots);
+    const compiled: Record&lt;string, CompiledModuleBinding&gt; = {};
+
+    for (const [sourceId, binding] of Object.entries(bindings)) {
+      const usage = {
+        compile: this.#compileLoads.has(sourceId),
+        runtimeEntry: runtimeEntries.has(sourceId),
+      };
+      // 两本账都没记上：这个模块不会进产物，直接失败，不留僵尸条目
+      if (!usage.compile &amp;&amp; !usage.runtimeEntry) {
+        throw new Error(`Selected module binding &quot;${sourceId}&quot; has no compile or runtime usage.`);
+      }
+      // usage 冻结后写进 manifest，运行期据此判断要不要加载
+      compiled[sourceId] = Object.freeze({ ...binding, usage: Object.freeze(usage) });
+    }
+
+    return compiled;
+  }
+}
+</code></pre>
+
+<ul>
+<li><code>compile: true</code>：编译期求值过（比如 <code>agent.ts</code>，要读它的配置）。</li>
+<li><code>runtimeEntry: true</code>：运行期还要再求值一次（比如工具的 <code>execute</code>，编译期只是检查形状）。</li>
+</ul>
+
+<p><code>collectRuntimeEntryClosure</code> 会把依赖闭包一起标上——一个 runtime entry 依赖的模块也必须能在运行期加载。</p>
+
+<p>注意那个 <code>throw</code>：两个标志都为 <code>false</code> 的 binding 会让编译直接失败。所以产物里每个模块至少有一个 <code>usage</code> 为 <code>true</code>，不存在「编译期用过、运行期不用、但还留在产物里」的僵尸条目。</p>
+
+<p><strong>关键推论：模块只求值一次，全局共享。</strong></p>
+
+<p>ESM 保证一个模块在同一个进程里只执行一次。所以开头那个 <code>count</code>：</p>
+
+<ul>
+<li>不是「每个会话一份」</li>
+<li>不是「每个用户一份」</li>
+<li>是「整个进程一份」</li>
+</ul>
+
+<p>dev 下重启进程会归零，生产下所有用户共享同一个计数器。</p>
+
+<p>要按会话隔离，状态必须放进 <code>ctx</code>（第 8 章的 <code>defineState</code>）或者沙箱文件系统。模块级变量在 eve 里是最容易误用的东西，因为它看起来像「文件私有」，实际是「进程全局」。</p>
+
+<h2 id="23-6-状态该放哪-context-key">23.6 状态该放哪：context key</h2>
+
+<p><code>ctx</code> 的键不是字符串，是 <code>ContextKey</code> 实例：</p>
+
+<pre><code class="language-ts">// packages/eve/src/context/key.ts:16
+// 注册表挂在 globalThis 上：同一进程里多个模块副本共用一份
+const KEY_REGISTRY_GLOBAL_KEY = Symbol.for(&quot;eve.context-key-registry&quot;);
+const globalKeyRegistryContainer = globalThis as KeyRegistryGlobal;
+
+if (globalKeyRegistryContainer[KEY_REGISTRY_GLOBAL_KEY] === undefined) {
+  globalKeyRegistryContainer[KEY_REGISTRY_GLOBAL_KEY] = new Map&lt;string, ContextKey&lt;unknown&gt;&gt;();
+}
+
+const keyRegistry = globalKeyRegistryContainer[KEY_REGISTRY_GLOBAL_KEY];
+
+export class ContextKey&lt;T&gt; {
+  readonly name: string;
+  readonly codec?: ContextKeyCodec&lt;T&gt;;
+
+  constructor(name: string, options: ContextKeyOptions&lt;T&gt; = {}) {
+    this.name = name;
+    this.codec = options.codec;
+
+    // 同名但 codec 对不上：直接抛错。序列化会不兼容，静默覆盖更难查
+    const existing = keyRegistry.get(name);
+    if (existing !== undefined &amp;&amp; (existing.codec === undefined) !== (this.codec === undefined)) {
+      throw new Error(
+        `ContextKey name collision: &quot;${name}&quot; is already registered ${
+          existing.codec ? &quot;with&quot; : &quot;without&quot;
+        } a codec, but a key ${this.codec ? &quot;with&quot; : &quot;without&quot;} a codec is being registered under the same name. This silently breaks context serialization — use a distinct name.`,
+      );
+    }
+
+    // 同名同 codec 允许重复注册：热重载时模块会被重新求值
+    keyRegistry.set(name, this as ContextKey&lt;unknown&gt;);
+  }
+}
+</code></pre>
+
+<p>两个设计点：</p>
+
+<p><strong>一、注册表挂在 <code>globalThis</code> 上，用 <code>Symbol.for</code> 做键。</strong></p>
+
+<p>注释解释了原因：Nitro 会把 eve 内联进构建产物，磁盘导入的 eve 是另一份。两份代码各有一份 <code>key.ts</code> 的模块实例，但 <code>Symbol.for</code> 是全局符号表，两边拿到同一个 Map。不这么做，A chunk 注册的 key 在 B chunk 里 <code>resolveKey</code> 找不到，序列化时会静默丢数据。</p>
+
+<p><strong>二、同名 key 但 codec 不一致直接抛错。</strong></p>
+
+<p>这是防「静默损坏」：如果带 codec 的 key 先注册，然后一个不带 codec 的同名 key 覆盖了注册表，序列化时值会以原始形式存储，读回来就不是原来的类型了。这种 bug 极难查，所以选择在注册时就炸。</p>
+
+<p>写自定义 context key 时，名字要足够独特。<code>&quot;state&quot;</code>、<code>&quot;config&quot;</code> 这种一定会撞。</p>
+
+<h2 id="23-7-有效配置-manifest-之上还有一层">23.7 有效配置：manifest 之上还有一层</h2>
+
+<p><code>resolveAgent</code> 产出的是「编译时确定的配置」。运行时还有一层覆盖：</p>
+
+<pre><code class="language-ts">// packages/eve/src/execution/effective-agent-config.ts
+export function resolveEffectiveAgentRuntimeFromConfig(
+  bundle: Pick&lt;CompiledBundle, &quot;resolvedAgent&quot; | &quot;turnAgent&quot;&gt;,
+  config: DynamicSubagentAgentConfig | undefined,
+): EffectiveAgentRuntime {
+  // 没有动态配置：用编译期那份。但解析器还挂着，说明调用方漏选了具体配置
+  if (config === undefined) {
+    if (bundle.turnAgent.configResolver === true) {
+      throw new Error(&quot;Dynamic subagent execution requires a selected concrete agent config.&quot;);
+    }
+    return {
+      limits: bundle.resolvedAgent.config?.limits,
+      thresholdPercent: bundle.resolvedAgent.config?.compaction?.thresholdPercent,
+      turnAgent: bundle.turnAgent,
+    };
+  }
+
+  // 有动态配置：先剥掉旧的模型字段，再用新配置覆盖，避免残留
+  const { compactionModel: _c, configResolver: _r, dynamicModel: _d, model: _m, ...turnAgent } = bundle.turnAgent;
+  return {
+    limits: config.limits,
+    thresholdPercent: config.compaction?.thresholdPercent,
+    turnAgent: {
+      ...turnAgent,
+      compactionModel: config.compaction?.model,
+      model: config.model,
+      reasoning: config.reasoning,
+    },
+  };
+}
+</code></pre>
+
+<p>配置来源从 context 的 <code>DynamicSubagentAgentConfigKey</code> 读。动态子代理（第 18 章）在运行时决定用哪个模型，覆盖就发生在这里。</p>
+
+<p><code>configResolver === true</code> 却没有具体配置时抛错——这是防止「声明了动态配置但没选具体值」的中间状态被当成正常情况跑下去。</p>
+
+<h2 id="23-8-回到那个计数器">23.8 回到那个计数器</h2>
+
+<p><code>count</code> 的问题出在 23.5：模块只求值一次，<code>let count = 0</code> 只执行一次，之后所有调用共享同一个闭包。</p>
+
+<p>三种改法，按推荐顺序：</p>
+
+<ol>
+<li><strong>放 <code>ctx</code>。</strong> 用 <code>defineState</code> 声明会话级状态，eve 负责在 step 边界序列化、恢复。这是标准做法。</li>
+<li><strong>放沙箱文件。</strong> 如果状态需要跨进程共享（比如多个副本），写进沙箱文件系统。</li>
+<li><strong>放外部存储。</strong> Redis、数据库。适合真正需要全局共享的计数。</li>
+</ol>
+
+<p>模块级变量只在一种情况下合理：<strong>只读的常量</strong>。比如预编译的正则、静态配置表。任何可变的都不要放在模块顶层。</p>
+
+<h2 id="23-9-五个注意事项">23.9 五个注意事项</h2>
+
+<ol>
+<li><strong>模块级变量全进程共享。</strong> 见 23.5。这是 eve 里最常见的状态隔离 bug。</li>
+<li><strong><code>hasExecute: false</code> 的工具不会加载模块。</strong> 你在模块顶层写的副作用代码不会执行。判断依据是编译产物里的这个布尔值，不是你写了什么。</li>
+<li><strong><code>workflow-tool</code> 的 <code>execute</code> 永远是 <code>undefined</code>。</strong> 别在代码里判断 <code>tool.execute === undefined</code> 就认为是配置错误——先看 <code>behavior.handling.kind</code>。</li>
+<li><strong>同名 context key 且 codec 不一致会直接抛错。</strong> 名字起得越通用，越容易撞。</li>
+<li><strong><code>Missing compiled module namespace</code> 通常意味着产物过期。</strong> 删掉 <code>.eve/compile/</code> 重新编译，比读代码快。</li>
+</ol>
+
+<h2 id="23-10-练习">23.10 练习</h2>
+
+<ol>
+<li>在 <code>agent/tools/</code> 下写一个带模块级计数器的工具，连续调用三次，看返回值。再开一个新会话调用，看计数器是否重置。</li>
+<li>在 <code>compiled-agent-manifest.json</code> 里搜 <code>&quot;kind&quot;: &quot;provider-tool&quot;</code>，找到对应的工具，确认它的 <code>hasExecute</code> 是 <code>false</code>。再解释为什么这类工具不需要 module map 里的绑定。</li>
+<li>在 <code>agent/lib/</code> 下定义两个同名但 codec 不同的 <code>ContextKey</code>，跑 <code>eve dev</code>，看报错信息。</li>
+<li>打开 <code>compiled-agent-manifest.json</code>，找出 <code>usage.compile</code> 和 <code>usage.runtimeEntry</code> 都为 <code>true</code> 的模块，解释为什么它两边都要加载。</li>
+</ol>
+
+<h2 id="下一章">下一章</h2>
+
+<p>对象装好了，能跑了。但「跑」这件事在 eve 里不是一次函数调用，而是一串 step。</p>
+
+<p>第 24 章讲 workflow：一个会话为什么被切成很多步，每步结束时存了什么，以及为什么崩溃之后你的工具可能被执行两次。</p>
+
+<hr />
+
+<p>返回：<a href="https://tangxusc.github.io/2026/10/eve-tutorial/">教程目录</a> · 上一章：<a href="https://tangxusc.github.io/2026/10/eve-22-compiler/">22 compiler</a> · 下一章：<a href="https://tangxusc.github.io/2026/10/eve-24-workflow/">24 workflow</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">源码解析</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-24-workflow/" data-tooltip="eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-22-compiler/" data-tooltip="eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-24-workflow/" data-tooltip="eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-22-compiler/" data-tooltip="eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 <code>eve init</code> 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-29-world/">
+                <h3 class="media-heading">eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/">
+                <h3 class="media-heading">eve 中文教程 · 第 28 章 鉴权、身份与协议</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>auth</code> 不是中间件，是一个按顺序试的函数数组。全部返回空才 401，抛错则按错误里带的 Response 拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/">
+                <h3 class="media-heading">eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>defineChannel</code> 把「路由表 + adapter + 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/">
+                <h3 class="media-heading">eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>eveChannel()</code> 返回的不是一个 handler，是一张 23 条路由的表加一层统一的鉴权包装。其中 12 条给调用方用，11 条是内部回调和兼容路径。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-25-harness/">
+                <h3 class="media-heading">eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-24-workflow/">
+                <h3 class="media-heading">eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：step 不是「函数调用」，是「检查点边界」。step 内的代码在崩溃恢复时会重跑，step 之间的不会。这是 eve 里唯一必须记住的语义。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-23-runtime/">
+                <h3 class="media-heading">eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-22-compiler/">
+                <h3 class="media-heading">eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 <code>shadowed</code>。你的 <code>tools/bash.ts</code> 能覆盖框架默认工具，靠的就是这张优先级表。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-21-discover/">
+                <h3 class="media-heading">eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：文件名不是「约定」，是一张精确的分类表加一组正则。文件没被识别，九成是撞了表里的某一条——而且失败方式是静默的。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         136 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-23-runtime\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-23-runtime\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

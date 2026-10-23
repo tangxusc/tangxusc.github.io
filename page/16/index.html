@@ -212,66 +212,8 @@
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8go-mod1.11%E5%AE%89%E8%A3%85grpc/">
-          使用go mod(1.11)安装grpc
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
-        
-  March 20, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/categories/golang">golang</a>, 
-    
-      <a class="category-link" href="https://tangxusc.github.io/categories/grpc">grpc</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        <p>使用go mod(1.11)安装grpc</p>
-      
-      <p>
-        <a href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8go-mod1.11%E5%AE%89%E8%A3%85grpc/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-          
-            
-  
-    
-      
-        
-      
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/">
-          使用nfs作为k8s的PersistentVolume
+        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/jaeger-operator%E5%AE%89%E8%A3%85/">
+          jaeger-operator安装
         </a>
       </h1>
       
@@ -292,7 +234,7 @@
     
       <a class="category-link" href="https://tangxusc.github.io/categories/k8s">k8s</a>, 
     
-      <a class="category-link" href="https://tangxusc.github.io/categories/nfs">nfs</a>
+      <a class="category-link" href="https://tangxusc.github.io/categories/jaeger">jaeger</a>
     
   
 
@@ -301,14 +243,14 @@
     </div>
     <div class="postShorten-excerpt" itemprop="articleBody">
       
-        <p>使用nfs作为k8s的PersistentVolume</p>
+        <p>jaeger-operator安装</p>
 
-<p>在较小规模的生产和开发的过程中,对于k8s的某些应用可能我们需要提供存储的支持,在初期我们可能并不需要性能那么高,扩展性那么强的存储,那么这个时候nfs就成了我们的首选</p>
+<p>在一个成规模的微服务系统中,一个功能不单由这一个服务完成,而是多个服务协作来共同完成,但是如果其中一个服务出现了错误,对于错误的追踪,对于整个调用链的追踪便成为了难题.</p>
 
-<p>本文将引导各位在服务器中部署nfs服务,并在k8s中使用nfs服务</p>
+<p>好在外国佬遇到了这些问题,指定了<code>opentracing</code>规范,并且提供了例如<code>zipkin</code>,<code>pinpoint</code>,<code>jaeger</code>等工具供我们使用</p>
       
       <p>
-        <a href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8nfs%E4%BD%9C%E4%B8%BAk8s%E7%9A%84persistentvolume/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/2019/03/jaeger-operator%E5%AE%89%E8%A3%85/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -334,8 +276,193 @@
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/">
-          使用rook搭建存储集群
+        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/jgit%E8%8E%B7%E5%8F%96git%E4%BB%93%E5%BA%93%E4%B8%AD%E7%9A%84%E9%83%A8%E5%88%86%E6%96%87%E4%BB%B6/">
+          jgit获取git仓库中的部分文件
+        </a>
+      </h1>
+      
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
+        
+  March 20, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/java">java</a>
+    
+  
+
+  </div>
+
+    </div>
+    <div class="postShorten-excerpt" itemprop="articleBody">
+      
+        <p>jgit在获取文件时,只能获取仓库中的全部文件,本文提供一种方法,使用jgit获取仓库中的部分文件.</p>
+
+<p>适用场景:</p>
+
+<ul>
+<li>用户提交git仓库地址,文件地址,需要读取仓库中的远程文件</li>
+</ul>
+      
+      <p>
+        <a href="https://tangxusc.github.io/2019/03/jgit%E8%8E%B7%E5%8F%96git%E4%BB%93%E5%BA%93%E4%B8%AD%E7%9A%84%E9%83%A8%E5%88%86%E6%96%87%E4%BB%B6/" class="postShorten-excerpt_link link">Continue reading</a>
+        
+      </p>
+    </div>
+  </div>
+  
+</article>
+
+          
+            
+  
+    
+      
+        
+      
+    
+  
+
+
+  
+
+<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+  <div class="postShorten-wrap">
+    
+    <div class="postShorten-header">
+      <h1 class="postShorten-title" itemprop="headline">
+        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/kubeadm%E5%AE%89%E8%A3%85ha%E9%9B%86%E7%BE%A4/">
+          kubeadm安装HA集群
+        </a>
+      </h1>
+      
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
+        
+  March 20, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/kubeadm">kubeadm</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/k8s">k8s</a>
+    
+  
+
+  </div>
+
+    </div>
+    <div class="postShorten-excerpt" itemprop="articleBody">
+      
+        <p>鉴于使用二进制的方式安装较为复杂,且不太好处理证书的生成,分发等问题,并且对性能没有较高的要求,所以强烈推荐使用此模式,具体下来这个模式的好处为:</p>
+
+<ul>
+<li>官方提供的工具,有官方的文档支持</li>
+<li>安装贼简单,没有其他的依赖</li>
+<li>扩展性强,有官方的一些扩展支持</li>
+<li>集群全部以容器启动,所以没那么多你需要管理的service</li>
+</ul>
+      
+      <p>
+        <a href="https://tangxusc.github.io/2019/03/kubeadm%E5%AE%89%E8%A3%85ha%E9%9B%86%E7%BE%A4/" class="postShorten-excerpt_link link">Continue reading</a>
+        
+      </p>
+    </div>
+  </div>
+  
+</article>
+
+          
+            
+  
+    
+      
+        
+      
+    
+  
+
+
+  
+
+<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+  <div class="postShorten-wrap">
+    
+    <div class="postShorten-header">
+      <h1 class="postShorten-title" itemprop="headline">
+        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/kubeadm%E7%94%9F%E6%88%90%E7%9A%84token%E8%BF%87%E6%9C%9F%E5%90%8E%E9%9B%86%E7%BE%A4%E5%A2%9E%E5%8A%A0%E8%8A%82%E7%82%B9/">
+          kubeadm生成的token过期后，集群增加节点
+        </a>
+      </h1>
+      
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
+        
+  March 20, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/kubeadm">kubeadm</a>, 
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/k8s">k8s</a>
+    
+  
+
+  </div>
+
+    </div>
+    <div class="postShorten-excerpt" itemprop="articleBody">
+      
+        <p>kubeadm生成的token过期后，集群增加节点</p>
+      
+      <p>
+        <a href="https://tangxusc.github.io/2019/03/kubeadm%E7%94%9F%E6%88%90%E7%9A%84token%E8%BF%87%E6%9C%9F%E5%90%8E%E9%9B%86%E7%BE%A4%E5%A2%9E%E5%8A%A0%E8%8A%82%E7%82%B9/" class="postShorten-excerpt_link link">Continue reading</a>
+        
+      </p>
+    </div>
+  </div>
+  
+</article>
+
+          
+            
+  
+    
+      
+        
+      
+    
+  
+
+
+  
+
+<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
+  <div class="postShorten-wrap">
+    
+    <div class="postShorten-header">
+      <h1 class="postShorten-title" itemprop="headline">
+        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/prometheus%E5%92%8Calertmanager%E7%9B%91%E6%8E%A7%E5%B9%B6%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/">
+          prometheus和alertmanager监控并发送邮件
         </a>
       </h1>
       
@@ -356,7 +483,7 @@
     
       <a class="category-link" href="https://tangxusc.github.io/categories/k8s">k8s</a>, 
     
-      <a class="category-link" href="https://tangxusc.github.io/categories/rook">rook</a>
+      <a class="category-link" href="https://tangxusc.github.io/categories/prometheus">prometheus</a>
     
   
 
@@ -365,14 +492,10 @@
     </div>
     <div class="postShorten-excerpt" itemprop="articleBody">
       
-        <p>rook是云原生的存储<strong>协调器</strong>,为各种存储提供解决方案,提供自我管理,自我扩展,自我修复的存储服务,在kubernetes中实际实现是operator方式.</p>
-
-<p>在rook 0.9版本中,Ceph已经是<strong>beta</strong>支持状态了.</p>
-
-<p>Ceph是一种高度可扩展的分布式存储解决方案，适用于具有多年生产部署的块存储，对象存储和共享文件系统.</p>
+        <p>prometheus和alertmanager监控并发送邮件</p>
       
       <p>
-        <a href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8rook%E6%90%AD%E5%BB%BA%E5%AD%98%E5%82%A8%E9%9B%86%E7%BE%A4/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/2019/03/prometheus%E5%92%8Calertmanager%E7%9B%91%E6%8E%A7%E5%B9%B6%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -398,8 +521,8 @@
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8shipyard-proxy%E5%BC%80%E5%90%AFdocker-remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A32375/">
-          使用shipyard proxy开启docker remote远程端口(2375)
+        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/redis%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/">
+          redis配置详解
         </a>
       </h1>
       
@@ -416,7 +539,7 @@
   
     <span>in</span>
     
-      <a class="category-link" href="https://tangxusc.github.io/categories/docker">docker</a>
+      <a class="category-link" href="https://tangxusc.github.io/categories/redis">redis</a>
     
   
 
@@ -425,10 +548,10 @@
     </div>
     <div class="postShorten-excerpt" itemprop="articleBody">
       
-        <p>使用shipyard proxy开启docker remote远程端口(2375)</p>
+        <p>redis配置详解</p>
       
       <p>
-        <a href="https://tangxusc.github.io/2019/03/%E4%BD%BF%E7%94%A8shipyard-proxy%E5%BC%80%E5%90%AFdocker-remote%E8%BF%9C%E7%A8%8B%E7%AB%AF%E5%8F%A32375/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/2019/03/redis%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -454,8 +577,8 @@
     
     <div class="postShorten-header">
       <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F/">
-          分布式事务Saga模式
+        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/sonarqube%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">
+          sonarqube使用指南
         </a>
       </h1>
       
@@ -472,7 +595,7 @@
   
     <span>in</span>
     
-      <a class="category-link" href="https://tangxusc.github.io/categories/ddd">DDD</a>
+      <a class="category-link" href="https://tangxusc.github.io/categories/sonarqube">sonarqube</a>
     
   
 
@@ -481,123 +604,12 @@
     </div>
     <div class="postShorten-excerpt" itemprop="articleBody">
       
-        <p>两阶段提交2PC是分布式事务中最强大的事务类型之一，两段提交就是分两个阶段提交，第一阶段询问各个事务数据源是否准备好，第二阶段才真正将数据提交给事务数据源，当需要同时更新多个数据源实体时，例如确认订单并立即更新库存时，它非常有用。</p>
+        <h2 id="简介">简介</h2>
+
+<p>​   Sonar是一个用于代码质量管理的开源平台，用于管理源代码的质量，可以从多个维度检测代码质量通过插件形式，可以支持包括java,C#,C/C++,PL/SQL,Cobol,JavaScrip,Groovy等等二十几种编程语言的代码质量管理与检测</p>
       
       <p>
-        <a href="https://tangxusc.github.io/2019/03/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1saga%E6%A8%A1%E5%BC%8F/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-          
-            
-  
-    
-      
-        
-      
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/%E5%89%8D%E7%AB%AF%E5%8A%A0%E8%BD%BD%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E9%9A%8F%E6%83%B3/">
-          前端加载私有文件随想
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
-        
-  March 20, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/categories/%e5%89%8d%e7%ab%af">前端</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        <p>在前后端分离的工程中,前后端通信链路由前端调用后端,变成了前端&ndash;&gt;api gateway&ndash;&gt;后端,那么前端在加载一些私有资源(需要权限,需要认证)等文件时会存在无法传入token的问题
-本文是针对前端加载资源的随想</p>
-      
-      <p>
-        <a href="https://tangxusc.github.io/2019/03/%E5%89%8D%E7%AB%AF%E5%8A%A0%E8%BD%BD%E7%A7%81%E6%9C%89%E6%96%87%E4%BB%B6%E9%9A%8F%E6%83%B3/" class="postShorten-excerpt_link link">Continue reading</a>
-        
-      </p>
-    </div>
-  </div>
-  
-</article>
-
-          
-            
-  
-    
-      
-        
-      
-    
-  
-
-
-  
-
-<article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-  <div class="postShorten-wrap">
-    
-    <div class="postShorten-header">
-      <h1 class="postShorten-title" itemprop="headline">
-        <a class="link-unstyled" href="https://tangxusc.github.io/2019/03/%E5%9C%A8golang%E4%B8%AD%E5%88%9B%E5%BB%BA%E8%B0%83%E7%94%A8%E5%9B%BE/">
-          在golang中创建调用图
-        </a>
-      </h1>
-      
-  <div class="postShorten-meta post-meta">
-    
-      <time itemprop="datePublished" datetime="2019-03-20T14:15:59&#43;08:00">
-        
-  March 20, 2019
-
-      </time>
-    
-    
-  
-  
-    <span>in</span>
-    
-      <a class="category-link" href="https://tangxusc.github.io/categories/golang">golang</a>
-    
-  
-
-  </div>
-
-    </div>
-    <div class="postShorten-excerpt" itemprop="articleBody">
-      
-        <p>在golang中创建调用图</p>
-      
-      <p>
-        <a href="https://tangxusc.github.io/2019/03/%E5%9C%A8golang%E4%B8%AD%E5%88%9B%E5%BB%BA%E8%B0%83%E7%94%A8%E5%9B%BE/" class="postShorten-excerpt_link link">Continue reading</a>
+        <a href="https://tangxusc.github.io/2019/03/sonarqube%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" class="postShorten-excerpt_link link">Continue reading</a>
         
       </p>
     </div>
@@ -627,7 +639,7 @@
           </li>
         
       
-      <li class="pagination-number">page 16 of 18</li>
+      <li class="pagination-number">page 16 of 20</li>
     </ul>
   </div>
 
@@ -701,7 +713,7 @@
                   Oct 10, 2026
                 </span>
               </span>
-              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 <code>eve init</code> 讲到上线。</p></div>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 <code>eve init</code> 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。</p></div>
             </div>
             <div style="clear:both;"></div>
             <hr>
@@ -710,8 +722,8 @@
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-c-env-and-secrets/">
-                <h3 class="media-heading">eve 中文教程 · 附录 C 环境变量与密钥</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-29-world/">
+                <h3 class="media-heading">eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -719,7 +731,7 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p><code>process.env</code> 只在<strong>应用运行时</strong>存在且可信。它会在三个地方骗你：编译期就被读掉、沙箱里根本没有、浏览器里根本不存在。</p>
+<p>一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -729,42 +741,8 @@
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-b-events-and-cli/">
-                <h3 class="media-heading">eve 中文教程 · 附录 B 事件与 CLI</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Oct 10, 2026
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather">完整事件表、CLI 命令、HTTP 路由。写客户端、排查事件流、核对某个字段时对着这张表看。</div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-appendix-a-glossary/">
-                <h3 class="media-heading">eve 中文教程 · 附录 A 术语与速查</h3>
-              </a>
-              <span class="media-meta">
-                <span class="media-date text-small">
-                  Oct 10, 2026
-                </span>
-              </span>
-              <div class="media-content hide-xs font-merryweather">概念对照、目录速查、常见错误码。读不懂某个词、找不到某个文件、看到一个陌生状态码时先查这里。</div>
-            </div>
-            <div style="clear:both;"></div>
-            <hr>
-          </div>
-        
-          <div class="media">
-            
-            <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-18-advanced-and-production/">
-                <h3 class="media-heading">eve 中文教程 · 第 18 章 进阶与上线检查</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/">
+                <h3 class="media-heading">eve 中文教程 · 第 28 章 鉴权、身份与协议</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -772,7 +750,7 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>这一章把散落在前面的进阶能力收在一起，然后给一份能逐条打勾的上线清单。清单比概念重要。</p>
+<p>一句话结论：<code>auth</code> 不是中间件，是一个按顺序试的函数数组。全部返回空才 401，抛错则按错误里带的 Response 拒绝。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -782,8 +760,8 @@
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-17-frontend-and-deploy/">
-                <h3 class="media-heading">eve 中文教程 · 第 17 章 前端与部署</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/">
+                <h3 class="media-heading">eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -791,7 +769,7 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>前端只需要一个 hook；部署只需要两条命令——但鉴权和模型凭据必须自己配，因为默认策略在生产环境一律拒绝。</p>
+<p>一句话结论：<code>defineChannel</code> 把「路由表 + adapter + 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -801,8 +779,8 @@
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-16-evals/">
-                <h3 class="media-heading">eve 中文教程 · 第 16 章 评测</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/">
+                <h3 class="media-heading">eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -810,7 +788,7 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>评测用真实会话跑 agent 并打分。它跑的是用户会打到的同一套 HTTP 接口，所以一个通过的评测意味着「agent 启动了、接受了请求、给出了你断言的结果」。</p>
+<p>一句话结论：<code>eveChannel()</code> 返回的不是一个 handler，是一张 23 条路由的表加一层统一的鉴权包装。其中 12 条给调用方用，11 条是内部回调和兼容路径。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -820,8 +798,8 @@
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-15-schedules-and-hooks/">
-                <h3 class="media-heading">eve 中文教程 · 第 15 章 定时与钩子</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-25-harness/">
+                <h3 class="media-heading">eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -829,7 +807,7 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>定时任务让 agent 自己开工，钩子让你在 agent 干活时旁观并记录。前者是「主动」，后者是「被动」，两者都不经过用户消息。</p>
+<p>一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -839,8 +817,8 @@
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-14-channels/">
-                <h3 class="media-heading">eve 中文教程 · 第 14 章 通道</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-24-workflow/">
+                <h3 class="media-heading">eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -848,7 +826,7 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>通道决定 agent 在哪里和用户见面，也决定「谁在说话」。同一份 agent 代码可以同时挂到 HTTP、Slack、Discord、Telegram。这一章讲默认 HTTP 通道的鉴权，以及怎么接 Slack、写自定义通道。</p>
+<p>一句话结论：step 不是「函数调用」，是「检查点边界」。step 内的代码在崩溃恢复时会重跑，step 之间的不会。这是 eve 里唯一必须记住的语义。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -858,8 +836,8 @@
           <div class="media">
             
             <div class="media-body">
-              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-13-connections/">
-                <h3 class="media-heading">eve 中文教程 · 第 13 章 连接</h3>
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-23-runtime/">
+                <h3 class="media-heading">eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent</h3>
               </a>
               <span class="media-meta">
                 <span class="media-date text-small">
@@ -867,7 +845,45 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>连接把外部服务的能力交给模型，但不把 URL 和 token 交给模型。模型用 <code>eve__search</code> 找到工具，用 <code>eve__tool</code> 调用，凭据由 eve 在应用侧注入。</p>
+<p>一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-22-compiler/">
+                <h3 class="media-heading">eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 <code>shadowed</code>。你的 <code>tools/bash.ts</code> 能覆盖框架默认工具，靠的就是这张优先级表。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-21-discover/">
+                <h3 class="media-heading">eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：文件名不是「约定」，是一张精确的分类表加一组正则。文件没被识别，九成是撞了表里的某一条——而且失败方式是静默的。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
@@ -881,7 +897,7 @@
          data-message-zero="no post found"
          data-message-one="1 post found"
          data-message-other="{n} posts found">
-         125 posts found
+         136 posts found
       </p>
     </div>
   </div>

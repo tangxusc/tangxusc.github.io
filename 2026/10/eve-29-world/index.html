@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.55.0 with theme Tranquilpeak 0.4.3-SNAPSHOT">
+<meta name="author" content="苏连云">
+<meta name="keywords" content="eve, agent framework, AI agent">
+<meta name="description" content="
+一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。
+">
+
+
+<meta property="og:description" content="
+一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。
+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复">
+<meta name="twitter:title" content="eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复">
+<meta property="og:url" content="https://tangxusc.github.io/2026/10/eve-29-world/">
+<meta property="twitter:url" content="https://tangxusc.github.io/2026/10/eve-29-world/">
+<meta property="og:site_name" content="苏连云的博客">
+<meta property="og:description" content="
+一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。
+">
+<meta name="twitter:description" content="
+一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。
+">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2026-10-23T09:10:00">
+  
+  
+    <meta property="article:modified_time" content="2026-10-23T09:10:00">
+  
+  
+  
+    
+      <meta property="article:section" content="eve">
+    
+  
+  
+    
+      <meta property="article:tag" content="eve">
+    
+      <meta property="article:tag" content="agent">
+    
+      <meta property="article:tag" content="教程">
+    
+      <meta property="article:tag" content="源码解析">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://tangxusc.github.io/photo.png">
+  <meta property="twitter:image" content="https://tangxusc.github.io/photo.png">
+
+
+    <title>eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复</title>
+
+    <link rel="icon" href="https://tangxusc.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://tangxusc.github.io/2026/10/eve-29-world/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://tangxusc.github.io/css/style-nnm2spxvve8onlujjlegkkytaehyadd4ksxc1hyzzq9a2wvtrgbljqyulomn.min.css" />
+    
+    
+
+    
+      
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="4">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://tangxusc.github.io/">苏连云的博客</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://tangxusc.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="4">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://tangxusc.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">苏连云</h4>
+        
+          <h5 class="sidebar-profile-bio">酒剑仙,醉仙酒</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://tangxusc.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/tangxusc" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://shang.qq.com/wpa/qunwpa?idkey=927a7bf9677916a933d37dd47c45793d995d9af556579ca633ce0a7af2084d41" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-qq"></i>
+      
+      <span class="sidebar-button-desc">QQG:59593364</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="4"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2026-10-23T09:10:00&#43;08:00">
+        
+  October 23, 2026
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://tangxusc.github.io/categories/eve">eve</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <blockquote>
+<p>一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。</p>
+</blockquote>
+
+<h2 id="一次部署引发的故障">一次部署引发的故障</h2>
+
+<p>周五下午发版，v2 上线。周一早上有人报告：上周五聊到一半的那个会话，现在一打开就报错，<code>CORRUPTED_EVENT_LOG</code>。</p>
+
+<p>你查了 v2 的代码，没动过事件格式。查了数据库，那条 run 的记录还在。</p>
+
+<p>真正的原因是：<strong>v2 的进程把 v1 留下的活跃 run 重新捡起来跑了。</strong></p>
+
+<p>local world 和 Postgres world 在启动时会重新入队所有活跃的 run。v1 的检查点是 v1 的格式，v2 的代码解析不了，于是报「事件日志损坏」。</p>
+
+<p>这一章讲 eve 怎么处理这个场景，以及 world 在代码里怎么被装上。第 10 章讲过行为和选型，这一章讲实现。</p>
+
+<h2 id="29-1-installworkflowworld-19-行">29.1 installWorkflowWorld：19 行</h2>
+
+<pre><code class="language-ts">// packages/eve/src/execution/install-workflow-world.ts
+import { getWorld, setWorld } from &quot;#internal/workflow/runtime.js&quot;;
+import { guardStrandedSessionReplay } from &quot;#execution/session-inbox/stranded-replay-guard.js&quot;;
+import { validateWorkflowWorld, type ValidateWorkflowWorldInput } from &quot;#internal/workflow/validate-world.js&quot;;
+
+/**
+ * Validates a Workflow World, installs it as the runtime singleton, and
+ * starts it. Generated World plugins call this so eve owns what wraps the
+ * World before its queue begins delivering.
+ */
+export async function installWorkflowWorld(input: ValidateWorkflowWorldInput): Promise&lt;void&gt; {
+  // 顺序不能换：先校验，再包装（guard 会替换 createQueueHandler），最后才启动
+  validateWorkflowWorld(input);
+  const world = guardStrandedSessionReplay(input.world);
+  setWorld(world);
+  await getWorld();
+  // start 之后队列就开始投递，包装必须在这之前完成
+  await world.start?.();
+}
+</code></pre>
+
+<p>四步，顺序不能换：</p>
+
+<ol>
+<li><strong><code>validateWorkflowWorld</code></strong> —— 版本兼容和形状检查。不通过就抛错，不让一个有问题的 world 进到运行时。</li>
+<li><strong><code>guardStrandedSessionReplay</code></strong> —— 包装 <code>createQueueHandler</code>，在队列投递前拦截「不属于这个版本的 run」。</li>
+<li><strong><code>setWorld</code></strong> —— 设为全局单例。</li>
+<li><strong><code>world.start?.()</code></strong> —— 启动。</li>
+</ol>
+
+<p>注释里那句「eve owns what wraps the World before its queue begins delivering」是重点：<strong>包装必须在 start 之前</strong>。一旦 start 了，队列可能立刻开始投递，那时候再包就晚了。</p>
+
+<h2 id="29-2-world-必须长什么样">29.2 world 必须长什么样</h2>
+
+<pre><code class="language-ts">// packages/eve/src/internal/workflow/validate-world.ts:23
+// asserts：校验通过后，TypeScript 也认为 world 一定存在
+export function validateWorkflowWorld(input: ValidateWorkflowWorldInput): asserts input is {
+  readonly packageName?: string;
+  readonly world: World;
+} {
+  // 版本不兼容在这里抛，不等到队列投递时才发现
+  assertConfiguredWorldCompatibility(input.packageName);
+
+  if (!isWorkflowWorld(input.world)) {
+    throw new Error(&quot;Configured Workflow world factory did not return a valid World.&quot;);
+  }
+}
+</code></pre>
+
+<p><code>asserts</code> 关键字让它成为类型守卫——校验通过后，TypeScript 知道 <code>input.world</code> 是 <code>World</code>。</p>
+
+<p><code>isWorkflowWorld</code> 做形状检查（有哪些必需方法）。具体的接口定义在 <code>@workflow/world</code> 里，eve 不重新定义。</p>
+
+<h2 id="29-3-版本兼容-只比-major-和预发布标签">29.3 版本兼容：只比 major 和预发布标签</h2>
+
+<pre><code class="language-ts">// packages/eve/src/internal/workflow/world-compatibility.ts
+// 只关心这两个包的版本：world 的实现契约由它们定义
+const WORKFLOW_COMPATIBILITY_PACKAGES = [&quot;@workflow/core&quot;, &quot;@workflow/world&quot;] as const;
+
+export interface WorkflowWorldManifest {
+  readonly dependencies?: Readonly&lt;Record&lt;string, string&gt;&gt;;
+  readonly peerDependencies?: Readonly&lt;Record&lt;string, string&gt;&gt;;
+}
+
+function parseVersionLine(value: string): VersionLine | undefined {
+  // 只取 major 和预发布标签，补丁号直接忽略
+  const match = /(\d+)\.(?:\d+|x|\*)(?:\.(?:\d+|x|\*))?(?:-([0-9A-Za-z.-]+))?/.exec(value.trim());
+  if (match === null) return undefined;
+
+  const major = Number(match[1]);
+  if (!Number.isInteger(major)) return undefined;
+
+  // 预发布标签只取第一段：1.2.0-beta.3 → beta
+  const prerelease = match[2];
+  const prereleaseTag = prerelease === undefined ? undefined : prerelease.split(&quot;.&quot;)[0];
+
+  return { major, prereleaseTag };
+}
+</code></pre>
+
+<p>检查逻辑：</p>
+
+<ol>
+<li>读 world 包的 <code>package.json</code>。</li>
+<li>找它声明的 <code>@workflow/core</code> 或 <code>@workflow/world</code> 依赖（按顺序，先找到先用）。</li>
+<li>解析版本，只取 <strong>major 号</strong>和<strong>预发布标签</strong>。</li>
+<li>和 eve 内置的 <code>@workflow/core</code> 版本比对。</li>
+</ol>
+
+<p>为什么不用完整 semver 解析？注释写得很直白：</p>
+
+<blockquote>
+<p>This is intentionally tiny: eve only needs the major number and any prerelease tag to detect a definite line mismatch, so we avoid pulling in a full semver parser.</p>
+</blockquote>
+
+<p>只检测「明确不兼容」，不做「可能兼容」的推断。major 不同 = 一定不兼容；预发布标签不同（比如 <code>1.0.0-alpha</code> vs <code>1.0.0-beta</code>）= 一定不兼容。其余情况放行。</p>
+
+<p>这个策略的好处是不会因为一个补丁版本差异就拒绝启动。代价是真正的不兼容可能漏过去——所以 <code>installWorkflowWorld</code> 之后还有运行时的错误处理兜底。</p>
+
+<h2 id="29-4-stranded-部署交接的真正风险">29.4 stranded：部署交接的真正风险</h2>
+
+<p>这是开头那个故障的答案，也是整章最重要的部分。</p>
+
+<pre><code class="language-ts">/**
+ * Makes the World acknowledge, without replaying, queue deliveries for
+ * top-level eve session runs that another eve version started. Worlds that
+ * re-enqueue their active runs at startup (local, Postgres) would otherwise
+ * replay such a run on this build's code and fail it as `CORRUPTED_EVENT_LOG`.
+ * A top-level session stays active until ingress replaces it or its timeout
+ * ends it. Subagent sessions and workflow tool runs are cancelled instead:
+ * no later user message can replace their interrupted work. Ingress refuses
+ * the same owners by the same verdict, so preserved owners cannot admit work.
+ * Timeout workflows remain runnable so they can end preserved sessions.
+ *
+ * Mutates and returns `world`; only its `createQueueHandler` changes. Worlds
+ * that replay each run on its own deployment are returned untouched.
+ */
+export function guardStrandedSessionReplay&lt;TWorld extends World&gt;(world: TWorld): TWorld {
+  // 能按 run 路由回原部署的 world 不需要这层保护
+  if (routesToOwnerDeployment(world)) return world;
+
+  const { name } = resolveInstalledPackageInfo();
+  // 只盯两类 run：顶层会话（保留）和工具 run（取消）
+  const guardedWorkflows = new Map&lt;string, GuardedWorkflow&gt;([
+    [`workflow//${name}//${WORKFLOW_ENTRY_NAME}`, &quot;session&quot;],
+    [`workflow//${name}//${WORKFLOW_TOOL_RUN_WORKFLOW_NAME}`, &quot;tool&quot;],
+  ]);
+
+  // 包一层 createQueueHandler：投递前先看这个 run 是不是别的版本留下的
+  const createQueueHandler = world.createQueueHandler.bind(world);
+  world.createQueueHandler = (queueNamePrefix, handler) =&gt;
+    createQueueHandler(queueNamePrefix, async (message, meta) =&gt; {
+      const workflow = guardedWorkflows.get(meta.queueName.slice(queueNamePrefix.length));
+      const runId = readRunId(message);
+      // 确认是退休 run 就吞掉这次投递，不执行 handler
+      if (workflow !== undefined &amp;&amp; runId !== undefined &amp;&amp; (await skipRetiredRun(world, runId, workflow))) {
+        return undefined;
+      }
+      return await handler(message, meta);
+    });
+  return world;
+}
+</code></pre>
+
+<p>先把问题说清楚。</p>
+
+<p><strong>场景</strong>：你在跑 v1，一个会话正在等审批。这时候部署 v2。</p>
+
+<ul>
+<li>v1 的进程被替换，但那个会话的 run 还在 world 的队列里，状态是「活跃」。</li>
+<li>local world 和 Postgres world 在启动时会<strong>重新入队所有活跃的 run</strong>。</li>
+<li>v2 的进程拿到这个 run，用 v2 的代码重放 v1 的检查点。</li>
+<li>检查点里的事件格式是 v1 的，v2 的代码解析不了，报 <code>CORRUPTED_EVENT_LOG</code>。</li>
+</ul>
+
+<p><strong>解决</strong>：在队列投递前检查这个 run 是不是「别的版本创建的」。是就<strong>确认收到但不重放</strong>（acknowledge without replaying）。</p>
+
+<p>三类 run 的处理不一样：</p>
+
+<table>
+<thead>
+<tr>
+<th>run 类型</th>
+<th>处理</th>
+<th>理由</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>顶层 session（<code>workflowEntry</code>）</td>
+<td>确认不重放</td>
+<td>用户的下一条消息会替换它，或者超时结束它</td>
+</tr>
+
+<tr>
+<td>子代理 session</td>
+<td><strong>取消</strong></td>
+<td>没有后续用户消息能替换它，留着就是死锁</td>
+</tr>
+
+<tr>
+<td>workflow tool run</td>
+<td><strong>取消</strong></td>
+<td>同上</td>
+</tr>
+
+<tr>
+<td>timeout workflow</td>
+<td>保持可运行</td>
+<td>它要负责结束那些被保留的 session</td>
+</tr>
+</tbody>
+</table>
+
+<p>「确认不重放」是什么意思：队列消息被 ack，不再投递，但 run 本身不取消。它处于「保留」状态，等外部事件（新消息、超时）来处理。</p>
+
+<p><code>skipRetiredRun</code> 判断一个 run 是否属于当前版本：</p>
+
+<pre><code class="language-ts">async function skipRetiredRun(world: World, runId: string, workflow: GuardedWorkflow): Promise&lt;boolean&gt; {
+  // 读不到 run 记录：当成本版本的，正常执行
+  const run = await readRetiredRun(world, runId);
+  if (run === undefined) return false;
+  switch (strandedReplayAction(run, workflow)) {
+  // ...
+}
+</code></pre>
+
+<p><code>readRetiredRun</code> 读 run 的属性，比对 <code>EVE_VERSION_ATTRIBUTE</code>（run 创建时写入的 eve 版本）。版本不匹配就是「retired」。</p>
+
+<p>这个机制解释了第 10 章的一个行为：<strong>部署交接期间消息立即接受、地址始终有主</strong>。因为旧 run 被保留而不是取消，新消息进来时可以接管它。</p>
+
+<p><code>routesToOwnerDeployment(world)</code> 那个提前返回也值得注意：有些 world 实现能把每个 run 路由到它原来的部署（比如 Vercel 的 world）。这种 world 不需要 guard，因为旧 run 会被路由回旧部署，不会在新代码上重放。</p>
+
+<h2 id="29-5-dev-下的-world">29.5 dev 下的 world</h2>
+
+<p><code>.eve/.workflow-data/</code> 里只有一个 <code>version.txt</code>：</p>
+
+<pre><code class="language-text">.eve/.workflow-data/version.txt
+</code></pre>
+
+<p>会话数据不在这里。dev 模式用的是 <code>development-world-server</code>：CLI 父进程里跑一个 world 服务，子进程通过 HTTP 或 IPC 访问它。</p>
+
+<p>这么设计的原因：dev 下每次重建都产生新快照（第 22 章），如果把数据放在快照目录里，每次重建都会丢会话。放在父进程里，重建不影响数据。</p>
+
+<p>对应地，<code>eve dev</code> 退出时 world 服务也退出。想保留会话跨重启，要用 <code>--resume</code>（第 20 章的 <code>existing</code> 参数），或者改用 Postgres world。</p>
+
+<h2 id="29-6-回到那次部署故障">29.6 回到那次部署故障</h2>
+
+<p>现在能说清整个过程了。</p>
+
+<p>v1 的会话在等审批，run 处于活跃状态。部署 v2 后，v2 的 world 启动，队列重新入队这个 run。</p>
+
+<p><code>guardStrandedSessionReplay</code> 的包装生效：<code>createQueueHandler</code> 先查这个 run 的 <code>EVE_VERSION_ATTRIBUTE</code>，发现是 v1 的，于是 ack 但不重放。</p>
+
+<p>那个会话在新版本里变成「保留」状态。用户下次发消息，ingress 用同样的判定拒绝旧 owner，然后创建一个新 run 接管。</p>
+
+<p>所以正确的观察是：<strong>会话看起来「卡住」了几秒，然后恢复</strong>，而不是报 <code>CORRUPTED_EVENT_LOG</code>。</p>
+
+<p>如果你看到了 <code>CORRUPTED_EVENT_LOG</code>，说明 guard 没生效。三种可能：</p>
+
+<ol>
+<li>你用的 world 不支持 <code>createQueueHandler</code> 包装（自定义 world 常见）。</li>
+<li>你用了 <code>routesToOwnerDeployment</code> 返回 true 的 world，但实际路由没生效。</li>
+<li>版本判定读不到 <code>EVE_VERSION_ATTRIBUTE</code>（run 是很老的版本创建的，没写这个属性）。</li>
+</ol>
+
+<h2 id="29-7-五个注意事项">29.7 五个注意事项</h2>
+
+<ol>
+<li><strong>包装必须在 <code>world.start()</code> 之前。</strong> 顺序错了，队列可能已经投递了 retired run。</li>
+<li><strong>版本检查只比 major 和预发布标签。</strong> 补丁版本不兼容不会被拦，只能靠运行时错误暴露。</li>
+<li><strong>子代理 run 会被取消，不是保留。</strong> 部署交接时正在跑的子代理任务会丢失，不会恢复。</li>
+<li><strong><code>.eve/.workflow-data</code> 里没有会话数据。</strong> 想备份 dev 会话，备份那个目录没用。</li>
+<li><strong><code>routesToOwnerDeployment</code> 为真的 world 不走 guard。</strong> 如果你自己实现 world 且支持按 run 路由到原部署，记得实现这个能力，否则会走保守路径。</li>
+</ol>
+
+<h2 id="29-8-练习">29.8 练习</h2>
+
+<ol>
+<li>打开 <code>.eve/.workflow-data/version.txt</code>，看里面是什么。再 <code>ls .eve/</code> 找会话数据实际存在哪。</li>
+<li>在 <code>agent/agent.ts</code> 里配一个不存在的 world 包名，跑 <code>eve dev</code>，记录报错信息。</li>
+<li>读 <code>strandedReplayAction</code> 的实现，列出它对三类 run 分别返回什么动作。</li>
+<li><code>eve dev</code> 起来后跑一轮对话，<code>kill -9</code> 父进程，重启后看会话是否还在。再用 <code>--resume</code> 试一次。</li>
+</ol>
+
+<h2 id="收尾-一条完整的链路">收尾：一条完整的链路</h2>
+
+<p>到这里，源码解析部分走完了。</p>
+
+<pre><code class="language-text">CLI（20）→ discover（21）→ compiler（22）→ runtime（23）
+  → workflow（24）→ harness（25）→ eve channel（26）
+  → channel 抽象（27）→ 鉴权与协议（28）→ world（29）
+</code></pre>
+
+<p>回顾一下这条链路上每一环回答的问题：</p>
+
+<table>
+<thead>
+<tr>
+<th>章</th>
+<th>问题</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>19</td>
+<td>1816 个文件，从哪读起</td>
+</tr>
+
+<tr>
+<td>20</td>
+<td>敲下 <code>eve dev</code> 之后发生了什么</td>
+</tr>
+
+<tr>
+<td>21</td>
+<td>文件名怎么变成能力名，为什么有些文件没反应</td>
+</tr>
+
+<tr>
+<td>22</td>
+<td>声明怎么变成产物，为什么改代码老会话不变</td>
+</tr>
+
+<tr>
+<td>23</td>
+<td>产物怎么变成活对象，模块级状态为什么串会话</td>
+</tr>
+
+<tr>
+<td>24</td>
+<td>会话为什么是一串 step，为什么工具会重跑</td>
+</tr>
+
+<tr>
+<td>25</td>
+<td>一个 turn 里模型和工具怎么循环</td>
+</tr>
+
+<tr>
+<td>26</td>
+<td>HTTP 表面长什么样，401 和断流怎么排查</td>
+</tr>
+
+<tr>
+<td>27</td>
+<td>平台通道怎么复用同一套抽象</td>
+</tr>
+
+<tr>
+<td>28</td>
+<td>请求凭什么被信任，事件协议怎么演进</td>
+</tr>
+
+<tr>
+<td>29</td>
+<td>检查点存在哪，部署交接为什么不丢消息</td>
+</tr>
+</tbody>
+</table>
+
+<p>每一章都回答同一个问题的不同侧面：<strong>这段代码为什么必须这么写，出问题时该看哪里</strong>。</p>
+
+<p>源码会变，函数名和目录结构大体稳定。读的方法（第 19 章）比具体结论更耐用。</p>
+
+<hr />
+
+<p>返回：<a href="https://tangxusc.github.io/2026/10/eve-tutorial/">教程目录</a> · 上一章：<a href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/">28 鉴权与协议</a></p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/eve/">eve</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/agent/">agent</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%95%99%E7%A8%8B/">教程</a>
+
+  <a class="tag tag--primary tag--small" href="https://tangxusc.github.io/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">源码解析</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-tutorial/" data-tooltip="eve 中文教程 · 总目录">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/" data-tooltip="eve 中文教程 · 第 28 章 鉴权、身份与协议">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2026 苏连云. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-tutorial/" data-tooltip="eve 中文教程 · 总目录">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/" data-tooltip="eve 中文教程 · 第 28 章 鉴权、身份与协议">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://tangxusc.github.io/photo.png" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">苏连云</h4>
+    
+      <div id="about-card-bio">酒剑仙,醉仙酒</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        小农民
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        chengdu
+      </div>
+    
+  </div>
+</div>
+
+    <div id="algolia-search-modal" class="modal-container">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="close-button"><i class="fa fa-close"></i></span>
+      <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+        <span class="searchby-algolia-text text-color-light text-small">by</span>
+        <img class="searchby-algolia-logo" src="https://www.algolia.com/static_assets/images/press/downloads/algolia-light.svg">
+      </a>
+      <i class="search-icon fa fa-search"></i>
+      <form id="algolia-search-form">
+        <input type="text" id="algolia-search-input" name="search"
+          class="form-control input--large search-input" placeholder="Search" />
+      </form>
+    </div>
+    <div class="modal-body">
+      <div class="no-result text-color-light text-center">no post found</div>
+      <div class="results">
+        
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-tutorial/">
+                <h3 class="media-heading">eve 中文教程 · 总目录</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><p>这套教程是 <a href="https://eve.dev">eve</a> 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 <code>eve init</code> 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。</p></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-29-world/">
+                <h3 class="media-heading">eve 中文教程 · 第 29 章 world：检查点存在哪、怎么恢复</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：world 是 eve 对 workflow 引擎的存储抽象。安装时做三件事：校验版本兼容、包一层 stranded 保护、启动。部署交接时最危险的不是崩溃，是新版本重放旧版本留下的 run。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-28-auth-and-protocol/">
+                <h3 class="media-heading">eve 中文教程 · 第 28 章 鉴权、身份与协议</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>auth</code> 不是中间件，是一个按顺序试的函数数组。全部返回空才 401，抛错则按错误里带的 Response 拒绝。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-27-channel-abstraction/">
+                <h3 class="media-heading">eve 中文教程 · 第 27 章 channel 抽象：平台通道怎么复用同一套</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>defineChannel</code> 把「路由表 + adapter + 事件处理器」打成一个带哨兵的对象。平台通道不特殊，只是路由更多、事件处理器更厚、状态更复杂。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-26-eve-channel/">
+                <h3 class="media-heading">eve 中文教程 · 第 26 章 默认 eve channel：23 条路由的源码</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：<code>eveChannel()</code> 返回的不是一个 handler，是一张 23 条路由的表加一层统一的鉴权包装。其中 12 条给调用方用，11 条是内部回调和兼容路径。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-25-harness/">
+                <h3 class="media-heading">eve 中文教程 · 第 25 章 harness：一个 turn 里的模型与工具循环</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：eve 不用 AI SDK 的自动循环。每次模型调用是一个 step，工具执行完就结束，下一轮模型调用是新 step。这就是「每步一次模型调用」的全部含义。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-24-workflow/">
+                <h3 class="media-heading">eve 中文教程 · 第 24 章 workflow：会话为什么是一串 step</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：step 不是「函数调用」，是「检查点边界」。step 内的代码在崩溃恢复时会重跑，step 之间的不会。这是 eve 里唯一必须记住的语义。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-23-runtime/">
+                <h3 class="media-heading">eve 中文教程 · 第 23 章 runtime：产物怎么变成活的 agent</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译产物是名词，runtime 负责把名词变成动词——给每个声明挂回真实的函数。挂不回去的，就是运行时错误。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-22-compiler/">
+                <h3 class="media-heading">eve 中文教程 · 第 22 章 compiler：manifest 怎么变成产物</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：编译不是「把文件转成另一种格式」，是四层候选按优先级合并——赢家写进产物，输家记作 <code>shadowed</code>。你的 <code>tools/bash.ts</code> 能覆盖框架默认工具，靠的就是这张优先级表。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+          <div class="media">
+            
+            <div class="media-body">
+              <a class="link-unstyled" href="https://tangxusc.github.io/2026/10/eve-21-discover/">
+                <h3 class="media-heading">eve 中文教程 · 第 21 章 discover：文件系统怎么变成 manifest</h3>
+              </a>
+              <span class="media-meta">
+                <span class="media-date text-small">
+                  Oct 10, 2026
+                </span>
+              </span>
+              <div class="media-content hide-xs font-merryweather"><blockquote>
+<p>一句话结论：文件名不是「约定」，是一张精确的分类表加一组正则。文件没被识别，九成是撞了表里的某一条——而且失败方式是静默的。</p>
+</blockquote></div>
+            </div>
+            <div style="clear:both;"></div>
+            <hr>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p class="results-count text-medium"
+         data-message-zero="no post found"
+         data-message-one="1 post found"
+         data-message-other="{n} posts found">
+         136 posts found
+      </p>
+    </div>
+  </div>
+</div>
+    
+  
+    
+    <div id="cover" style="background-image:url('https://tangxusc.github.io/images/cover.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://tangxusc.github.io/js/script-qi9wbxp2ya2j6p7wx1i6tgavftewndznf4v0hy2gvivk1rxgc3lm7njqb6bz.min.js"></script>
+
+
+  
+    <script src="https://tangxusc.github.io/js/mermaid-init.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/tangxusc.github.io\/2026\/10\/eve-29-world\/';
+          
+            this.page.identifier = '\/2026\/10\/eve-29-world\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tangxu-blog';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
