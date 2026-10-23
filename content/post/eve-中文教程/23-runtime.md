@@ -426,7 +426,7 @@ export function resolveEffectiveAgentRuntimeFromConfig(
 
 对象装好了，能跑了。但「跑」这件事在 eve 里不是一次函数调用，而是一串 step。
 
-第 24 章讲 workflow：一个会话为什么被切成很多步，每步结束时存了什么，以及为什么崩溃之后你的工具可能被执行两次。
+第 24 章讲 workflow：它为什么是 eve 和其他 agent 框架最大的区别，一个会话怎么变成一个 workflow run，以及为什么崩溃之后你的工具可能被执行两次。
 
 ---
 
