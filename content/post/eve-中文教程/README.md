@@ -1,6 +1,6 @@
 ---
 title: "eve 中文教程 · 总目录"
-date: 2026-10-22T10:00:00+08:00
+date: 2026-10-23T09:30:00+08:00
 draft: false
 slug: "eve-tutorial"
 categories:
@@ -14,37 +14,15 @@ keywords:
 - agent framework
 - AI agent
 ---
-这套教程是 [eve](https://eve.dev) 的中文教程，只有文档，没有可执行代码。18 章正文加 3 个附录，从 `eve init` 讲到上线。
+这套教程是 [eve](https://eve.dev) 的中文教程，只有文档，没有可执行代码。29 章正文加 3 个附录：前 18 章从 `eve init` 讲到上线，第 19 到 29 章是源码解析，按一个 prompt 的完整旅程走一遍实现。
 
 <!--more-->
 
-写给要动手做事的人。每一章都能跑起来，讲清楚「为什么这样设计」，也讲清楚哪里会踩坑。
+写给要动手做事的人。每一章都能跑起来，讲清楚「为什么这样设计」，也讲清楚哪里容易出错。
 
 - 依据：[eve.dev](https://eve.dev) 官方文档与 [github.com/vercel/eve](https://github.com/vercel/eve) 源码，逐条对照 `eve@0.81.1` 的类型定义（`dist/src/**/*.d.ts`）与本地 `node_modules/eve/docs/`
-- 对照版本：`eve@0.81.x`（beta）。API 仍在变，升级后先看 `node_modules/eve/CHANGELOG.md` 和本地 `node_modules/eve/docs/`，那份文档跟安装版本严格对齐。
+- 基于版本：`eve@0.81.1`（beta）。`0.81.x` 小版本之间 API 基本一致，行为可能有差异。升级后先看 `node_modules/eve/CHANGELOG.md` 和本地 `node_modules/eve/docs/`，那份文档跟安装版本严格对齐。
 - 示例项目：全教程共用一个「值班助手 opsbot」，从一句话提示词长到带工具、沙箱、审批、子代理、Slack、定时任务和评测的完整 agent。
-
-### 相对 0.79 的行为变化
-
-如果你手上的项目还钉在 0.79，下面这些差异会影响教程里的代码和结论。已在对应章节标注。
-
-| 变化 | 出现在 | 章节 |
-| --- | --- | --- |
-| `ctx.approval.responder` 可用：能读审批人身份，也能用 `responder.getToken()` 取他的凭据 | 0.79.1 | 4、11 |
-| 审批的第一个答案生效，重复提交被丢弃（双击不会再覆盖已做的决定） | 0.81 | 11 |
-| 登录中断的调用在回调后自己续跑，不再多一次模型调用；`retryable: false` 失败不再在同一 turn 重复弹登录 | 0.81 | 13 |
-| MCP 凭据每次请求前解析，`expiresAt` 过期即换；服务端 401 会驱逐缓存并重试一次，403 不重试 | 0.81 | 13 |
-| MCP 连接可以订阅服务端事件（`experimental_events`） | 0.80 | 13 |
-| 部署/压缩交接期间消息立即接受、地址始终有主，不再返回 `409 session_not_ready`；需要 world 具备 `hookForceClaim` / `hookRetention` | 0.81 | 10 |
-| run 数据保留默认由追踪策略推导；私有会话在开发环境外默认结束即删 | 0.80 | 10、18 |
-| 读超出保留期的会话流返回 `410 session_expired` | 0.79.1 | 9、附录 A |
-| `useEveAgent` 新增 `followIdle: false`，空闲时关流 | 0.79.1 | 17 |
-| 模型支持 AI Gateway 的会话亲和，可用 `sessionAffinity: false` 关掉 | 0.81 | 2 |
-| OpenAPI path 参数拒绝 `.` 和 `..` | 0.80.1 | 13 |
-| 评测可以断言推理内容（`reasoning.completed`） | 文档 0.81 | 16 |
-| 扩展的 git 包支持 `github.authorize`（0.80）/ `github.attribution`（0.81） | 0.80、0.81 | 18 |
-
-核对方法：`node_modules/eve/dist/src/**/*.d.ts` 是最终事实来源；文档与类型冲突时以类型为准，再翻 CHANGELOG 确认是不是版本差异。教程里所有 `import ... from "eve/..."` 都在包的 `exports` 里存在，具名导出都能在对应 `.d.ts` 里找到。
 
 ## 先读这三段
 
@@ -89,11 +67,35 @@ keywords:
 | [17 前端与部署](/2026/10/eve-17-frontend-and-deploy/) | `useEveAgent`、`withEve`、Vercel / 自托管 | 交付一个真实可用的应用 |
 | [18 进阶与上线检查](/2026/10/eve-18-advanced-and-production/) | 动态能力、扩展包、远程 agent、安全与成本 | 上线前逐条过一遍 |
 
+### 第四部分：源码解析
+
+每章从一个具体问题出发，讲到代码里哪一行让它成立。按「一个 prompt 的完整旅程」组织，不按目录结构。
+
+读实现用 GitHub 对应 tag 的 `src`，读契约用本地 `.d.ts`——发布包里的 `.js` 压缩成单行，读不了。
+
+| 章节 | 从一个问题出发 | 讲清楚什么 |
+| --- | --- | --- |
+| [19 怎么读 eve 的源码](/2026/10/eve-19-reading-the-source/) | 加了一行日志，为什么没出现？1816 个文件从哪读起 | 三个源码来源的注意事项、`#` 导入的三层信息、按执行时机分层、三个验证手段 |
+| [20 CLI 启动链路](/2026/10/eve-20-cli-internals/) | 第一次跑命令为什么卡十几秒？Ctrl-C 为什么要按两次 | `bin/eve.js` 的两道关、命令分发、`eve dev` 为什么 fork 子进程、三级关闭 |
+| [21 discover](/2026/10/eve-21-discover/) | 文件放进 `agent/` 为什么毫无反应 | 根目录分类表、扩展名与排除、递归槽位、名字推导、三种冲突、诊断级别 |
+| [22 compiler](/2026/10/eve-22-compiler/) | 写 `tools/bash.ts` 会不会冲突？改了代码老会话为什么不变 | 六个产物、四层候选优先级、`shadowed`、module map 的两种加载、dev 快照 |
+| [23 runtime](/2026/10/eve-23-runtime/) | 工具里的计数器为什么串会话 | 声明与实现分离、工具装配的三个分支、模块级状态共享、context key |
+| [24 workflow](/2026/10/eve-24-workflow/) | 同一封邮件为什么发了两遍 | 会话就是一个 workflow、step 的七阶段、检查点存什么、重放边界 |
+| [25 harness](/2026/10/eve-25-harness/) | 一次问答为什么有三个 `step.started` | `stopWhen: isStepCount(1)`、工具错误回灌、压缩在调用前、停泊与续跑 |
+| [26 默认 eve channel](/2026/10/eve-26-eve-channel/) | 401 到底是谁拒的？重连为什么收到重复事件 | 23 条路由、鉴权不是中间件、建会话的十一道关、`startIndex` 与 tail index |
+| [27 channel 抽象](/2026/10/eve-27-channel-abstraction/) | 接内部 webhook，要写多少代码 | `defineChannel` 的三个产物、路由 handler 的十一个参数、adapter 持久状态、Slack 的 1529 行 |
+| [28 鉴权与协议](/2026/10/eve-28-auth-and-protocol/) | 401 分不清是没带 token 还是密码错 | `routeAuth` 的遍历语义、`http-basic` 全文、转发身份的信任边界、37 个事件类型 |
+| [29 world](/2026/10/eve-29-world/) | 部署新版本后，老会话为什么报 `CORRUPTED_EVENT_LOG` | `installWorkflowWorld` 的四步、版本兼容、stranded run 的三类处理 |
+
+每章的结构是固定的：**一个具体场景 → 这条链路上每一站做了什么 → 回到场景给出答案 → 注意事项 → 练习**。代码块标了文件路径和行号，与 `eve@0.81.1` 逐行对照过。
+
+完整规划（每章要读的源码文件、关键片段、验证实验）见 [SOURCE-READING-PLAN.md](https://github.com/tangxusc/eve-tutorial-zh/blob/main/SOURCE-READING-PLAN.md)。
+
 ### 附录
 
 - [A 术语与速查](/2026/10/eve-appendix-a-glossary/)：概念对照、目录速查、常见错误码
 - [B 事件与 CLI](/2026/10/eve-appendix-b-events-and-cli/)：完整事件表、CLI 命令、HTTP 路由
-- [C 环境变量与密钥](/2026/10/eve-appendix-c-env-and-secrets/)：`process.env` 在哪个进程里存在、`.env` 什么时候被读、编译期求值的坑、沙箱边界、排查表
+- [C 环境变量与密钥](/2026/10/eve-appendix-c-env-and-secrets/)：`process.env` 在哪个进程里存在、`.env` 什么时候被读、编译期求值的问题、沙箱边界、排查表
 
 ## 怎么用这份教程
 
@@ -108,7 +110,7 @@ keywords:
 - 代码块标题里的路径都是相对项目根目录，例如 `agent/tools/read_logs.ts`。
 - 命令默认在项目根目录执行。
 - 流程图用 Mermaid 写（代码块语言标 `mermaid`），GitHub、VS Code、Obsidian 都能直接渲染；纯文本终端里会显示成代码。
-- 「坑」标记的是官方文档里散落各处、但实际会让人卡住的点，不是猜测。
+- 「注意事项」标记的是官方文档里散落各处、但实际会让人卡住的点，不是猜测。
 - 涉及钱的、涉及删除的、涉及对外发消息的例子，一律标了审批。这不是啰嗦，是 eve 的设计意图：默认不信任模型。
 
 ## 一句话版本
