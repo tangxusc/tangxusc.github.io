@@ -811,7 +811,7 @@
                 </span>
               </span>
               <div class="media-content hide-xs font-merryweather"><blockquote>
-<p>一句话结论：step 不是「函数调用」，是「检查点边界」。step 内的代码在崩溃恢复时会重跑，step 之间的不会。这是 eve 里唯一必须记住的语义。</p>
+<p>一句话结论：eve 把「一个会话」建模成「一个 workflow run」，step 是这个 run 的记账单位。step 内的代码崩溃后会重跑，step 之间的不会。这一层决定了 eve 的恢复、停泊、部署交接和事件流长什么样。</p>
 </blockquote></div>
             </div>
             <div style="clear:both;"></div>
